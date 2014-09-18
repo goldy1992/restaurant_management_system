@@ -6,11 +6,38 @@
 
 package XML;
 
+import java.net.InetAddress;
+
 /**
  *
  * @author Goldy
  */
 public abstract class Message 
 {
+    private InetAddress fromAddress;
+    private InetAddress toAddress;
+    private String messageID;
+    
+    public Message(InetAddress from, InetAddress to, String messageID)
+    {
+        this.fromAddress = from;
+        this.toAddress = to;
+        this.messageID = messageID;
+    } // constructor
+    
+    public InetAddress getFromAddress()
+    {
+        return fromAddress;
+    } // getFromAddress
+    
+    public InetAddress getToAddress()
+    {
+        return toAddress;
+    } // getToAddress
+    
+    public String getMessageID()
+    {
+        return messageID;
+    } // getMessageID 
     
 }

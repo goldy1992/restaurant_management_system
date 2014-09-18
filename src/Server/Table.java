@@ -12,8 +12,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.Clock;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -82,7 +80,6 @@ public class Table implements Runnable
                 if ((inputLine = in.readLine()) != null) 
                 {
                     
-                    out.println(LocalDateTime.now(Clock.systemDefaultZone()));
                 } // if
             } // TRY
             catch (IOException e)
