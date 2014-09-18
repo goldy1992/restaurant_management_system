@@ -32,7 +32,7 @@ public class MyClient
         try
         {
             serverAddress = InetAddress.getByName(null);
-            serverPort = MyServer.lowerBoundPortRange;
+            serverPort = MyServer.LB_PORT_RANGE;
             System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
             System.out.println(client);

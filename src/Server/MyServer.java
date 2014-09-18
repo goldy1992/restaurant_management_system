@@ -38,21 +38,25 @@ import java.util.ArrayList;
 
 public class MyServer
 {
-    public static ArrayList<ClientCommunicationThread> clients;
-
     // the lower bound of the port range
-    public static int lowerBoundPortRange = 11000;
+    public static final int LB_PORT_RANGE = 11000;
+    public static final int NUM_OF_TABLES = 30;
+    
+    private static ArrayList<ClientCommunicationThread> clients;
+    private static Table[] tables;
     
     public static void main(String[] args)
     {
-        
         clients = new ArrayList<>();
-        Table[] tables = new Table[31];
-        for (int i = 1; i <= 30; i++)
+        tables = new Table[NUM_OF_TABLES + 1];
+        
+        // creates a thread for each table
+        for (int i = 1; i <= NUM_OF_TABLES; i++)
         {
             tables[i] = new Table(i);
             new Thread(tables[i]).start();
         } // for
+        
         
         ServerSocket mySocket;
         boolean socketListening;
@@ -60,10 +64,10 @@ public class MyServer
         try
         {
             System.out.println("got here");
-            mySocket = new ServerSocket(lowerBoundPortRange);
+            mySocket = new ServerSocket(LB_PORT_RANGE);
                 System.out.println("socket listening");
             socketListening = true;
-            System.out.println("Currently listening on port " + lowerBoundPortRange);
+            System.out.println("Currently listening on port " + LB_PORT_RANGE);
             
             long clientNumber = 0;
             
@@ -90,5 +94,12 @@ public class MyServer
         } // catch   
         
     } // main
+    
+    public static Table getTable(int number)
+    {
+        if (number < 1 || number > NUM_OF_TABLES)
+            return null;
+        else return tables[number];
+    } // table
         
 } // MySocket class

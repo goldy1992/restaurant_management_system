@@ -35,7 +35,7 @@ public class Table implements Runnable
     {
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
-        this.tableNumberPort = tableNumber + MyServer.lowerBoundPortRange;
+        this.tableNumberPort = tableNumber + MyServer.LB_PORT_RANGE;
         
     } // constructor
     
