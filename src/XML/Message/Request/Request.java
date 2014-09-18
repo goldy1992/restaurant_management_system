@@ -12,7 +12,7 @@ import java.net.InetAddress;
  *
  * @author mbbx9mg3
  */
-public abstract class RequestMessage extends Message 
+public abstract class Request extends Message 
 {
     public static enum RequestType 
     {
@@ -21,7 +21,7 @@ public abstract class RequestMessage extends Message
     
     public RequestType type;
     
-    public RequestMessage(InetAddress from, 
+    public Request(InetAddress from, 
                           InetAddress to, 
                           String messageID, 
                           RequestType type)

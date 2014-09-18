@@ -6,13 +6,18 @@
 
 package XML;
 
+import XML.Message.Request.Request;
+import XML.Message.Request.TableStatusRequest;
 import java.io.BufferedReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
 /**
@@ -25,7 +30,10 @@ public class XMLMessageParse
     XMLInputFactory factory;
     XMLEventFactory  eventFactory;
     XMLEventReader reader;
-    XMLEvent event;    
+    XMLEvent event;   
+    InetAddress fromAddress;
+    InetAddress toAddress;
+    String messageID;
     
     /**
      *
@@ -37,11 +45,7 @@ public class XMLMessageParse
     }
     
     public void parse() throws XMLStreamException, UnknownHostException
-    {
-        InetAddress fromAddress;
-        InetAddress toAddress;
-        String messageID;
-        
+    {       
         factory      = XMLInputFactory.newInstance();
         eventFactory = XMLEventFactory.newInstance();
         reader = factory.createXMLEventReader(inStream);
@@ -80,8 +84,17 @@ public class XMLMessageParse
                        if (event.asStartElement().getName().getLocalPart().equals("type"))
                        {
                            event = reader.nextEvent();
-                           if (event.asCharacters().getData().equals("TABLE_STATUS"));
-                           System.out.println("valid message");
+                           boolean validXML = true;
+                           if (event.asCharacters().getData().equals("TABLE_STATUS"))
+                           {
+                               
+                                System.out.println("valid message");
+                                event = reader.nextEvent();
+                                parseTableStatus();
+                                
+                           }
+                           else validXML = false;
+ 
                        } // inner if
                        else
                        {
@@ -93,8 +106,54 @@ public class XMLMessageParse
         } // while
     } // parse
     
-    private void parseTableStatus()
+    private TableStatusRequest parseTableStatus() throws XMLStreamException
     {
+        ArrayList<Integer> list = null; 
+        int listSize = 0;
+        event = reader.nextEvent();
+        //if (event.asStartElement().getName().getLocalPart().equals("type")
+              //      &&
+        Iterator<Attribute> x = event.asStartElement().getAttributes();
+        while(x.hasNext())
+        {
+            Attribute a = x.next();
+            System.out.println(a.getName().getLocalPart() + " " + a.getValue());
+            if( a.getName().getLocalPart().equals("type"))
+            {
+                if (a.getValue().equals("Array"))
+                {
+                    System.out.println("found array type");
+                    list = new ArrayList();
+                }
+            }
+            else if( a.getName().getLocalPart().equals("total"))
+                listSize = Integer.parseInt(a.getValue());
+        } // while
+        
+        if (list == null)
+        {
+            System.err.println("Invalid XML message");
+            return null;
+        } // if
+        
+            event = reader.nextEvent();
+            while (event.isStartElement() 
+                   && event.asStartElement().getName().getLocalPart().equals("value"))
+            {
+                event = reader.nextEvent();
+                list.add(Integer.parseInt(event.asCharacters().getData()));
+                event = reader.nextEvent(); // reads end Element
+                event = reader.nextEvent(); // reads possibleNext startElement
+            } // while
+            
+            if (list.size() == listSize)
+                System.out.println("Everything went well!");
+
+        
+        System.out.println(list);
+        Request.RequestType requestType = Request.RequestType.TABLE_STATUS;
+        return new TableStatusRequest(fromAddress, toAddress, 
+                                      messageID, requestType, list);
         
     } // parseTableStatus
     

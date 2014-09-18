@@ -5,7 +5,7 @@
  */
 package XML.Message.Response;
 
-import XML.Message.Request.RequestMessage;
+import XML.Message.Request.Request;
 import XML.Message.Message;
 import java.net.InetAddress;
 
@@ -16,7 +16,7 @@ import java.net.InetAddress;
 public abstract class ResponseMessage extends Message {
     
     
-    private RequestMessage request;
+    private Request request;
     
     public ResponseMessage(InetAddress from, InetAddress to, String messageID)
     {
