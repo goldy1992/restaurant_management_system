@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package XML;
+package XML.Message;
 
 import java.net.InetAddress;
 

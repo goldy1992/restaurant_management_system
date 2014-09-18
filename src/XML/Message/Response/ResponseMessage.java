@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package XML;
+package XML.Message.Response;
 
+import XML.Message.Request.RequestMessage;
+import XML.Message.Message;
 import java.net.InetAddress;
 
 /**
