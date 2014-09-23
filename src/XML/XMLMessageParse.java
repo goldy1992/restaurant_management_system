@@ -6,6 +6,7 @@
 
 package XML;
 
+import XML.Message.Message;
 import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
 import java.io.BufferedReader;
@@ -44,13 +45,13 @@ public class XMLMessageParse
         inStream = stream;
     }
     
-    public Request parse() throws XMLStreamException, UnknownHostException
+    public Message parse() throws XMLStreamException, UnknownHostException
     {       
         factory      = XMLInputFactory.newInstance();
         eventFactory = XMLEventFactory.newInstance();
         reader = factory.createXMLEventReader(inStream);
         
-        Request returnRequest = null;
+        Message message = null;
 
         int i = 0 ;
         while (reader.hasNext())
@@ -62,78 +63,72 @@ public class XMLMessageParse
             switch(event.getEventType())
             {
                 case XMLEvent.START_ELEMENT:
-            switch (event.asStartElement().getName().getLocalPart()) {
-            // if
-                case "to":
-                    event = reader.nextEvent();
-                    toAddress= InetAddress.getByName(event.asCharacters().getData());
-                    System.out.println("to: " + toAddress);
-                    break;
-            // if
-                case "from":
-                    event = reader.nextEvent();
-                    fromAddress= InetAddress.getByName(event.asCharacters().getData());
-                    System.out.println("from: " + fromAddress);
-                    break;
-            // if
-                case "id":
-                    event = reader.nextEvent();
-                    messageID = event.asCharacters().getData();
-                    System.out.println("id: " + messageID);
-                    break;
-            // if
-                case "body":
-                    event = reader.nextEvent();
-                    if (event.asStartElement().getName().getLocalPart().equals("type"))
+                    switch (event.asStartElement().getName().getLocalPart()) 
                     {
-                        event = reader.nextEvent();
-                        boolean validXML = true;
-                        if (event.asCharacters().getData().equals("TABLE_STATUS"))
-                        {
-                            
-                            System.out.println("valid message");
+
+                        case "to":
                             event = reader.nextEvent();
-                            returnRequest = parseTableStatus();
+                            toAddress= InetAddress.getByName(event.asCharacters().getData());
+                            System.out.println("to: " + toAddress);
+                            break;
+
+                        case "from":
+                            event = reader.nextEvent();
+                            fromAddress= InetAddress.getByName(event.asCharacters().getData());
+                            System.out.println("from: " + fromAddress);
+                            break;
+      
+                        case "id":
+                            event = reader.nextEvent();
+                            messageID = event.asCharacters().getData();
+                            System.out.println("id: " + messageID);
+                            break;
+ 
+                        case "body":
+                            parseBodyTag(message);
+                            break;
                             
-                        }
-                        else validXML = false;
-                        
-                    } // inner if
-                    else
-                    {
-                        System.out.println("invalid message no type after body");
-                    } // else
+                    } // inner switch
                     break;
-            }
-                    break;
+                case XMLEvent.END_ELEMENT:
+                    if (event.asEndElement().getName().getLocalPart().equals("/request")) 
+                        return message;
+
+                break;    
+                    
             } // switch
         } // while
         
-        return returnRequest;
+
+        return message;
     } // parse
     
     private TableStatusRequest parseTableStatus() throws XMLStreamException
     {
         ArrayList<Integer> list = null; 
         int listSize = 0;
+        
+        // holds the table element
         event = reader.nextEvent();
-        //if (event.asStartElement().getName().getLocalPart().equals("type")
-              //      &&
+ 
         Iterator<Attribute> x = event.asStartElement().getAttributes();
         while(x.hasNext())
         {
             Attribute a = x.next();
             System.out.println(a.getName().getLocalPart() + " " + a.getValue());
-            if( a.getName().getLocalPart().equals("type"))
+            switch (a.getName().getLocalPart()) 
             {
-                if (a.getValue().equals("Array"))
-                {
-                    System.out.println("found array type");
-                    list = new ArrayList();
-                }
+                case "type":
+                    if (a.getValue().equals("Array"))
+                    {
+                        System.out.println("found array type");
+                        list = new ArrayList();
+                    }   
+                    break;
+                case "total":
+                    listSize = Integer.parseInt(a.getValue());
+                    break;
             }
-            else if( a.getName().getLocalPart().equals("total"))
-                listSize = Integer.parseInt(a.getValue());
         } // while
         
         if (list == null)
@@ -142,10 +137,13 @@ public class XMLMessageParse
             return null;
         } // if
         
+            // holds the first value element
             event = reader.nextEvent();
+            
             while (event.isStartElement() 
                    && event.asStartElement().getName().getLocalPart().equals("value"))
             {
+                // the value
                 event = reader.nextEvent();
                 list.add(Integer.parseInt(event.asCharacters().getData()));
                 event = reader.nextEvent(); // reads end Element
@@ -158,9 +156,37 @@ public class XMLMessageParse
         
         System.out.println(list);
         Request.RequestType requestType = Request.RequestType.TABLE_STATUS;
+        
         return new TableStatusRequest(fromAddress, toAddress, 
                                       messageID, requestType, list);
         
     } // parseTableStatus
+    
+    private Message parseBodyTag(Message message) throws XMLStreamException
+    {
+        event = reader.nextEvent();
+        if (event.asStartElement().getName().getLocalPart().equals("type"))
+        {
+            event = reader.nextEvent();
+            boolean validXML = true;
+            if (event.asCharacters().getData().equals("TABLE_STATUS"))
+            {
+                System.out.println("valid message");
+                            
+                // reads end of type element
+                event = reader.nextEvent();
+                message = parseTableStatus();
+                            
+            } // inner if
+            else validXML = false;
+                        
+        } // outer if
+        else
+        {
+            System.out.println("invalid message no type after body");
+            return null;
+        } // else           
+        return message;
+    }
     
 } // XMLMessageParse
