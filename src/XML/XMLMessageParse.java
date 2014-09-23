@@ -60,47 +60,49 @@ public class XMLMessageParse
             switch(event.getEventType())
             {
                 case XMLEvent.START_ELEMENT:
-                    if (event.asStartElement().getName().getLocalPart().equals("to"))
+            switch (event.asStartElement().getName().getLocalPart()) {
+            // if
+                case "to":
+                    event = reader.nextEvent();
+                    toAddress= InetAddress.getByName(event.asCharacters().getData());
+                    System.out.println("to: " + toAddress);
+                    break;
+            // if
+                case "from":
+                    event = reader.nextEvent();
+                    fromAddress= InetAddress.getByName(event.asCharacters().getData());
+                    System.out.println("from: " + fromAddress);
+                    break;
+            // if
+                case "id":
+                    event = reader.nextEvent();
+                    messageID = event.asCharacters().getData();
+                    System.out.println("id: " + messageID);
+                    break;
+            // if
+                case "body":
+                    event = reader.nextEvent();
+                    if (event.asStartElement().getName().getLocalPart().equals("type"))
                     {
-                       event = reader.nextEvent();
-                       toAddress= InetAddress.getByName(event.asCharacters().getData());
-                       System.out.println("to: " + toAddress);
-                    } // if
-                    else if (event.asStartElement().getName().getLocalPart().equals("from"))
+                        event = reader.nextEvent();
+                        boolean validXML = true;
+                        if (event.asCharacters().getData().equals("TABLE_STATUS"))
+                        {
+                            
+                            System.out.println("valid message");
+                            event = reader.nextEvent();
+                            parseTableStatus();
+                            
+                        }
+                        else validXML = false;
+                        
+                    } // inner if
+                    else
                     {
-                       event = reader.nextEvent();
-                       fromAddress= InetAddress.getByName(event.asCharacters().getData());
-                       System.out.println("from: " + fromAddress);
-                    } // if
-                    else if (event.asStartElement().getName().getLocalPart().equals("id"))
-                    {
-                       event = reader.nextEvent();
-                       messageID = event.asCharacters().getData();
-                       System.out.println("id: " + messageID);
-                    } // if
-                    else if (event.asStartElement().getName().getLocalPart().equals("body"))
-                    {
-                       event = reader.nextEvent();
-                       if (event.asStartElement().getName().getLocalPart().equals("type"))
-                       {
-                           event = reader.nextEvent();
-                           boolean validXML = true;
-                           if (event.asCharacters().getData().equals("TABLE_STATUS"))
-                           {
-                               
-                                System.out.println("valid message");
-                                event = reader.nextEvent();
-                                parseTableStatus();
-                                
-                           }
-                           else validXML = false;
- 
-                       } // inner if
-                       else
-                       {
-                           System.out.println("invalid message no type after body");
-                       } // else
-                    } // if
+                        System.out.println("invalid message no type after body");
+                    } // else
+                    break;
+            }
                     break;
             } // switch
         } // while
