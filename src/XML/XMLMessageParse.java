@@ -85,7 +85,7 @@ public class XMLMessageParse
                             break;
  
                         case "body":
-                            parseBodyTag(message);
+                            message = parseBodyTag(message);
                             break;
                             
                     } // inner switch
@@ -151,11 +151,11 @@ public class XMLMessageParse
                 event = reader.nextEvent(); // reads possibleNext startElement
             } // while
             
-            if (list.size() == listSize)
-                System.out.println("Everything went well!");
+          //  if (list.size() == listSize)
+          //      System.out.println("Everything went well!");
 
         
-        System.out.println(list);
+        //System.out.println(list);
         Request.RequestType requestType = Request.RequestType.TABLE_STATUS;
         
         return new TableStatusRequest(fromAddress, toAddress, 
@@ -177,6 +177,7 @@ public class XMLMessageParse
                 // reads end of type element
                 event = reader.nextEvent();
                 message = parseTableStatus();
+                  
                             
             } // inner if
             else validXML = false;
