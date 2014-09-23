@@ -44,11 +44,13 @@ public class XMLMessageParse
         inStream = stream;
     }
     
-    public void parse() throws XMLStreamException, UnknownHostException
+    public Request parse() throws XMLStreamException, UnknownHostException
     {       
         factory      = XMLInputFactory.newInstance();
         eventFactory = XMLEventFactory.newInstance();
         reader = factory.createXMLEventReader(inStream);
+        
+        Request returnRequest = null;
 
         int i = 0 ;
         while (reader.hasNext())
@@ -91,7 +93,7 @@ public class XMLMessageParse
                             
                             System.out.println("valid message");
                             event = reader.nextEvent();
-                            parseTableStatus();
+                            returnRequest = parseTableStatus();
                             
                         }
                         else validXML = false;
@@ -106,6 +108,8 @@ public class XMLMessageParse
                     break;
             } // switch
         } // while
+        
+        return returnRequest;
     } // parse
     
     private TableStatusRequest parseTableStatus() throws XMLStreamException
