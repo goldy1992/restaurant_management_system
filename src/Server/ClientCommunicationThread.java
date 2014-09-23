@@ -6,6 +6,7 @@
 
 package Server;
 
+import XML.Message.Request.Request;
 import XML.XMLMessageParse;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class ClientCommunicationThread implements Runnable
             {
                 System.out.println("read message");
                 XMLMessageParse newMessage = new XMLMessageParse(in);
-                newMessage.parse();
+                Request request = newMessage.parse();
                 while(true);
             }           
             catch(IOException e)
