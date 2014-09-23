@@ -57,7 +57,7 @@ public class XMLMessageParse
         while (reader.hasNext())
         {
             event = reader.nextEvent();
-           // System.out.println(i + ":  " + event.getEventType() + "   " + event);
+            //System.out.println(i + ":  " + event.getEventType() + "   " + event);
             i++;
                                 
             switch(event.getEventType())
@@ -91,7 +91,8 @@ public class XMLMessageParse
                     } // inner switch
                     break;
                 case XMLEvent.END_ELEMENT:
-                    if (event.asEndElement().getName().getLocalPart().equals("/request")) 
+                    // remember that the name of an end element does not include the "/"
+                    if (event.asEndElement().getName().getLocalPart().equals("request")) 
                         return message;
 
                 break;    

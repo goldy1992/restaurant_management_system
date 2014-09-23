@@ -63,7 +63,7 @@ public class ClientCommunicationThread implements Runnable
             }
             catch (XMLStreamException e) 
             {
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
         while (true);
