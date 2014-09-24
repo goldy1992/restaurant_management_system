@@ -21,6 +21,11 @@ import java.net.Socket;
  */
 public class Table implements Runnable
 {
+    
+    public static enum TableStatus 
+    {
+        FREE, OCCUPIED, IN_USE, 
+    }
     // the table number
     private int tableNumber;
     
@@ -29,13 +34,14 @@ public class Table implements Runnable
     
     
     // is boolean
-    boolean isFree = false;
+    private TableStatus tableStatus;
     
     public Table(int tableNumber)
     {
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
         this.tableNumberPort = tableNumber + MyServer.LB_PORT_RANGE;
+        tableStatus = TableStatus.FREE;
         
     } // constructor
     
@@ -48,6 +54,16 @@ public class Table implements Runnable
     {
         return tableNumberPort;
     } // getTablePortNumber
+    
+    public TableStatus getTableStatus()
+    {
+        return tableStatus;
+    }
+    
+    public void setTableStatus(TableStatus status)
+    {
+        tableStatus = status;
+    }
     
     public void run()
     {
