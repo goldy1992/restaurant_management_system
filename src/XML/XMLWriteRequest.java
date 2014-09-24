@@ -29,7 +29,7 @@ import javax.xml.stream.events.XMLEvent;
  *
  * @author Goldy
  */
-public class XMLRequest 
+public class XMLWriteRequest 
 {
     PrintWriter outStream;
     XMLOutputFactory factory;
@@ -37,7 +37,7 @@ public class XMLRequest
     XMLEventWriter writer;
     XMLEvent event;
     
-    public XMLRequest(PrintWriter outStream)
+    public XMLWriteRequest(PrintWriter outStream)
     {
         this.outStream = outStream;
     } // constructor

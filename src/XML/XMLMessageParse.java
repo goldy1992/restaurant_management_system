@@ -57,7 +57,7 @@ public class XMLMessageParse
         while (reader.hasNext())
         {
             event = reader.nextEvent();
-            //System.out.println(i + ":  " + event.getEventType() + "   " + event);
+            System.out.println(i + ":  " + event.getEventType() + "   " + event);
             i++;
                                 
             switch(event.getEventType())

@@ -7,13 +7,15 @@
 package Client;
 
 import Server.MyServer;
-import XML.XMLRequest;
+import XML.XMLMessageParse;
+import XML.XMLWriteRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import javax.xml.stream.XMLStreamException;
 
 
 /**
@@ -53,11 +55,17 @@ public class MyClient
                     new InputStreamReader(client.getInputStream()));        
             )
             {
-                XMLRequest request = new XMLRequest(out);
+                XMLWriteRequest request = new XMLWriteRequest(out);
+
                 int[] tables = new int[30];
-                        for(int  i = 1 ; i < tables.length; i++ )
-                            tables[i] = i; 
+                        for(int  i = 0 ; i < tables.length; i++ )
+                            tables[i] = i+1; 
                 request.tableStatusRequest(tables);
+                                System.out.println("got here1");
+                XMLMessageParse response = new XMLMessageParse(in);
+                response.parse();
+                
+
 
                 
                 while(true);
@@ -65,6 +73,10 @@ public class MyClient
             catch(IOException e)
             {
                 System.out.println("Failed to set up buffers");
+            }
+            catch (XMLStreamException e) 
+            {
+                e.printStackTrace();
             }
             
         } // if`    

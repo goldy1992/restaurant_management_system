@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Goldy
  */
-public class TableStatusResponse extends ResponseMessage
+public class TableStatusResponse extends Response
 {
     public TableStatusResponse(TableStatusRequest request)
     {
@@ -23,8 +23,12 @@ public class TableStatusResponse extends ResponseMessage
         tableStatuses = new ArrayList();
     } // contructor
     
-    private ArrayList<Table.TableStatus> tableStatuses;
+    private final ArrayList<Table.TableStatus> tableStatuses;
     
+    /**
+     *
+     * @return
+     */
     public ArrayList<Table.TableStatus> getTableStatuses()
     {
         return tableStatuses;
@@ -36,10 +40,18 @@ public class TableStatusResponse extends ResponseMessage
         if(gotResponse)
             return;
         
+        // cast the request to a table request
         TableStatusRequest x = (TableStatusRequest)this.getRequest();
+ 
+        System.out.println("gettign statuses");
+        // for each table in the request, add its status to the ArrayList
+ 
         for (int i = 0; i < x.getTableList().size(); i++)
+        {
+            System.out.println(i + " table number: " + x.getTableList().get(i));
             tableStatuses.add(MyServer.getTable(x.getTableList().get(i)).getTableStatus());
-             
+        }    
+        // set response to true
         gotResponse = true;
     }
 }

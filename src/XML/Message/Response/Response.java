@@ -13,11 +13,11 @@ import XML.Message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class ResponseMessage extends Message 
+public abstract class Response extends Message 
 {    
     private Request request;
     protected boolean gotResponse;
-    public ResponseMessage(Request request)
+    public Response(Request request)
     {
        super(request.getToAddress(), request.getFromAddress(), request.getMessageID());
        this.request = request;
