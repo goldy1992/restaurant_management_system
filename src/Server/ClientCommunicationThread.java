@@ -7,6 +7,7 @@
 package Server;
 
 import XML.Message.Message;
+import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
 import XML.XMLMessageParse;
 import java.io.BufferedReader;
@@ -54,7 +55,11 @@ public class ClientCommunicationThread implements Runnable
                 System.out.println("read message");
                 XMLMessageParse newMessage = new XMLMessageParse(in);
                 Message request = newMessage.parse();
-                 
+                
+                if (request instanceof Request)
+                {
+                    
+                } // the respose if statement
                     
                 System.out.println("returned");
                 while(true);

@@ -16,11 +16,12 @@ import XML.Message.Message;
 public abstract class ResponseMessage extends Message 
 {    
     private Request request;
-    
+    protected boolean gotResponse;
     public ResponseMessage(Request request)
     {
        super(request.getToAddress(), request.getFromAddress(), request.getMessageID());
        this.request = request;
+       gotResponse = false;
     } // constructor
     
     public Request getRequest()
@@ -28,4 +29,11 @@ public abstract class ResponseMessage extends Message
         return request;
     } // getRequest
  
+    public boolean hasGotResponse()
+    {
+        return gotResponse;
+    }
+    
+    public abstract void parse();
+    
 } // class
