@@ -14,6 +14,10 @@ import java.net.InetAddress;
  */
 public abstract class Request extends Message 
 {
+
+    public Object getTableList() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public static enum RequestType 
     {
         TABLE_STATUS
