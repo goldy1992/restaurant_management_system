@@ -27,6 +27,11 @@ import javax.xml.stream.events.XMLEvent;
  */
 public class XMLMessageParse 
 {
+    
+    enum MessageType 
+    {
+        REQUEST, RESPONSE, EVNT_NTFCN
+    }
     BufferedReader inStream;
     XMLInputFactory factory;
     XMLEventFactory  eventFactory;
@@ -35,6 +40,8 @@ public class XMLMessageParse
     InetAddress fromAddress;
     InetAddress toAddress;
     String messageID;
+    MessageType messageType;
+    Message message = null;
     
     /**
      *
@@ -51,7 +58,7 @@ public class XMLMessageParse
         eventFactory = XMLEventFactory.newInstance();
         reader = factory.createXMLEventReader(inStream);
         
-        Message message = null;
+
 
         int i = 0 ;
         while (reader.hasNext())
@@ -63,38 +70,18 @@ public class XMLMessageParse
             switch(event.getEventType())
             {
                 case XMLEvent.START_ELEMENT:
-                    switch (event.asStartElement().getName().getLocalPart()) 
-                    {
-
-                        case "to":
-                            event = reader.nextEvent();
-                            toAddress= InetAddress.getByName(event.asCharacters().getData());
-                            System.out.println("to: " + toAddress);
-                            break;
-
-                        case "from":
-                            event = reader.nextEvent();
-                            fromAddress= InetAddress.getByName(event.asCharacters().getData());
-                            System.out.println("from: " + fromAddress);
-                            break;
-      
-                        case "id":
-                            event = reader.nextEvent();
-                            messageID = event.asCharacters().getData();
-                            System.out.println("id: " + messageID);
-                            break;
- 
-                        case "body":
-                            message = parseBodyTag(message);
-                            break;
-                            
-                    } // inner switch
+                    parseStartElements();
                     break;
                 case XMLEvent.END_ELEMENT:
                     // remember that the name of an end element does not include the "/"
-                    if (event.asEndElement().getName().getLocalPart().equals("request")) 
+                    switch (event.asEndElement().getName().getLocalPart())
+                    {
+                        case "request":
+                        case "response":
+                        case "event_notification":
                         return message;
-
+                        default: break;
+                    } // switch
                 break;    
                     
             } // switch
@@ -104,9 +91,46 @@ public class XMLMessageParse
         return message;
     } // parse
     
-    private TableStatusRequest parseTableStatus() throws XMLStreamException
+    private void parseStartElements() throws XMLStreamException, UnknownHostException
     {
-        ArrayList<Integer> list = null; 
+        switch (event.asStartElement().getName().getLocalPart()) 
+        {
+            case "request":
+                messageType = MessageType.REQUEST;
+                break;
+            case "response":
+                messageType = MessageType.RESPONSE;
+                break;
+            case "event_notification":
+                messageType = MessageType.EVNT_NTFCN;
+                break;                            
+            case "to":
+                event = reader.nextEvent();
+                toAddress= InetAddress.getByName(event.asCharacters().getData());
+                System.out.println("to: " + toAddress);
+                break;
+            case "from":
+                event = reader.nextEvent();
+                fromAddress= InetAddress.getByName(event.asCharacters().getData());
+                System.out.println("from: " + fromAddress);
+                break;
+      
+            case "id":
+                event = reader.nextEvent();
+                messageID = event.asCharacters().getData();
+                System.out.println("id: " + messageID);
+                break;
+ 
+            case "body":
+                parseBodyTag(message);
+                break;                       
+        } // inner switch
+        
+    }
+    private void parseTableStatus() throws XMLStreamException
+    {
+        ArrayList list = new ArrayList<>();
+
         int listSize = 0;
         
         // holds the table element
@@ -120,11 +144,6 @@ public class XMLMessageParse
             switch (a.getName().getLocalPart()) 
             {
                 case "type":
-                    if (a.getValue().equals("Array"))
-                    {
-                        System.out.println("found array type");
-                        list = new ArrayList();
-                    }   
                     break;
                 case "total":
                     listSize = Integer.parseInt(a.getValue());
@@ -135,7 +154,7 @@ public class XMLMessageParse
         if (list == null)
         {
             System.err.println("Invalid XML message");
-            return null;
+            message = null;
         } // if
         
             // holds the first value element
@@ -146,7 +165,10 @@ public class XMLMessageParse
             {
                 // the value
                 event = reader.nextEvent();
-                list.add(Integer.parseInt(event.asCharacters().getData()));
+                if (messageType == MessageType.REQUEST)
+                    list.add(Integer.parseInt(event.asCharacters().getData()));
+                else
+                    list.add(event.asCharacters().getData());
                 event = reader.nextEvent(); // reads end Element
                 event = reader.nextEvent(); // reads possibleNext startElement
             } // while
@@ -158,37 +180,39 @@ public class XMLMessageParse
         //System.out.println(list);
         Request.RequestType requestType = Request.RequestType.TABLE_STATUS;
         
-        return new TableStatusRequest(fromAddress, toAddress, 
+        message = new TableStatusRequest(fromAddress, toAddress, 
                                       messageID, requestType, list);
         
     } // parseTableStatus
     
-    private Message parseBodyTag(Message message) throws XMLStreamException
+
+    private void parseBodyTag(Message message) throws XMLStreamException
     {
         event = reader.nextEvent();
-        if (event.asStartElement().getName().getLocalPart().equals("type"))
+        switch (event.asStartElement().getName().getLocalPart())
         {
-            event = reader.nextEvent();
-            boolean validXML = true;
-            if (event.asCharacters().getData().equals("TABLE_STATUS"))
-            {
-                System.out.println("valid message");
-                            
-                // reads end of type element
+            case "type":
                 event = reader.nextEvent();
-                message = parseTableStatus();
-                  
+                boolean validXML = true;
+                switch (event.asCharacters().getData())
+                {
+                    case "TABLE_STATUS":
+                        System.out.println("valid message");
                             
-            } // inner if
-            else validXML = false;
-                        
-        } // outer if
-        else
-        {
-            System.out.println("invalid message no type after body");
-            return null;
-        } // else           
-        return message;
+                        // reads end of type element
+                        event = reader.nextEvent();
+                        parseTableStatus();           
+                        break;
+                    default: break;
+                } //switch
+
+            default:
+                System.out.println("invalid message no type after body");
+                //message = null;
+                break;
+        } // switch
+              
+
     }
     
 } // XMLMessageParse
