@@ -7,6 +7,7 @@
 package Client;
 
 import Server.MyServer;
+import Server.Table;
 import XML.Message.Message;
 import XML.Message.Request.NumOfTablesRequest;
 import XML.Message.Request.Request;
@@ -36,6 +37,10 @@ public class MyClient implements Runnable
     public static InetAddress serverAddress; 
     public static int serverPort;  
     public static Socket client;
+    public static boolean gotTableStatus = false;
+    public static int numberOfTables = -1;
+    public static ArrayList<Table.TableStatus> tableStatuses;
+    
     public boolean running = true;
     public final Thread thread;
     public MyClient()
@@ -57,15 +62,17 @@ public class MyClient implements Runnable
     
     public static void main(String[] args)
     {
-        
+        ObjectOutputStream out = null; 
         try
         {
+            
             SelectTable t = new SelectTable();
             t.setVisible(true);
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
+            out = new ObjectOutputStream(MyClient.client.getOutputStream());
             System.out.println(client);
             MyClient responseThread = new MyClient();
             responseThread.thread.start();
@@ -75,56 +82,35 @@ public class MyClient implements Runnable
             System.out.println("Could not connect to server");
         } // catch
         
-        if (client != null)
+        if (client == null)
+            System.exit(0);
+        
+        try
+        
         {
-            try
-            (
- 
-                ObjectOutputStream out = new ObjectOutputStream(MyClient.client.getOutputStream());
-            
-            )
-            {
+            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                 InetAddress.getByName(serverAddress.getHostName()),
+                                                 generateRequestID(),
+                                                 Request.RequestType.NUM_OF_TABLES);
+            out.writeObject(nTablesRequest);
+            System.out.println("sent num table request");
 
-                NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                                                                InetAddress.getByName(serverAddress.getHostName()),
-                                                                                generateRequestID(),
-                                                                                Request.RequestType.NUM_OF_TABLES);
-                 out.writeObject(nTablesRequest);
-                System.out.println("sent num table request");
-
-                ArrayList<Integer> tables = new ArrayList<>();
-                for(int  i = 0 ; i < MyServer.getNumOfTables(); i++ )
-                {
-                 
-                    tables.add(i + 1);
-                }
-                TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                                                                InetAddress.getByName(serverAddress.getHostName()),
-                                                                                generateRequestID(),
-                                                                                Request.RequestType.TABLE_STATUS,
-                                                                                tables);
+            ArrayList<Integer> tables = new ArrayList<>();
+            for(int  i = 0 ; i < MyServer.getNumOfTables(); i++ ) 
+                tables.add(i + 1);
                 
-                System.out.println(request);
-                
+            TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                          InetAddress.getByName(serverAddress.getHostName()),
+                                          generateRequestID(),
+                                          Request.RequestType.TABLE_STATUS,
+                                          tables);
+            out.writeObject(request);                
+        } // try // try // try // try
+        catch(IOException e)
+        {
+            System.out.println("Failed to set up buffers");
+        } 
 
-                out.writeObject(request);
-
-                
-
-
-                
-                while(true);
-            } // try // try // try // try
-            catch(IOException e)
-            {
-                System.out.println("Failed to set up buffers");
-            } 
-            /*catch (XMLStreamException e) 
-            {
-                e.printStackTrace();
-            }*/
-            
-        } // if`    
     } // main
     
     public void run()
@@ -142,12 +128,17 @@ public class MyClient implements Runnable
                 {
                     if (response instanceof TableStatusResponse)
                     {
-                        System.out.println(response);
-
+                        TableStatusResponse r = (TableStatusResponse)response;
+                        MyClient.tableStatuses = r.getTableStatuses();
+                        MyClient.gotTableStatus = true;
                     }
                     else if (response instanceof NumOfTablesResponse)
-                        System.out.println(response);
-                    
+                    {
+                        NumOfTablesResponse r = (NumOfTablesResponse)response;
+                        MyClient.numberOfTables = r.getNumOfTables();
+
+                    }
+                                            System.out.println(response);
                 }
             }
         } 

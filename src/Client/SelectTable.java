@@ -6,9 +6,10 @@
 
 package Client;
 
+import Server.Table;
+import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JButton;
-import java.awt.Color;
 
 /**
  *
@@ -16,7 +17,34 @@ import java.awt.Color;
  */
 public class SelectTable extends javax.swing.JFrame {
 
-    public JButton[] tableButtons;
+    private JButton[] tableButtons;
+    
+    public JButton[] getTableButtons()
+    {
+        return tableButtons;
+    }
+    
+    public void setButtonStatus(int index, Table.TableStatus t)
+    {
+        if (index < 0 || index >= tableButtons.length)
+            return;
+        
+        switch(t)
+        {
+            case FREE:
+                tableButtons[index].setBackground(Color.GREEN);
+                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Free</html>");
+                break;
+            case IN_USE:
+                tableButtons[index].setBackground(Color.YELLOW);
+                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Table in Use</html>");
+                break;
+            case OCCUPIED:
+                tableButtons[index].setBackground(Color.RED);
+                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Occupied</html>");
+                break;
+        }
+    }
     /**
      * Creates new form SelectTable
      */
