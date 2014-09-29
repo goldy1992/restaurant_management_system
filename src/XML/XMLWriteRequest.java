@@ -1,6 +1,7 @@
 package XML;
 
 import Client.MyClient;
+import XML.Message.Request.Request;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -36,23 +37,15 @@ public class XMLWriteRequest
     XMLEventFactory  eventFactory;
     XMLEventWriter writer;
     XMLEvent event;
+    Request request;
     
-    public XMLWriteRequest(PrintWriter outStream)
+    public XMLWriteRequest(PrintWriter outStream, Request request)
     {
         this.outStream = outStream;
+        this.request = request;
     } // constructor
     
-   public String generateRequestID()
-   {
-      String request_ID;
-      Random random = new Random();
-      int x = random.nextInt();
-      request_ID = "" + x;
-      Date currentDate = new Date();
-      Timestamp t = new Timestamp(currentDate.getTime());
-      request_ID = request_ID + t;
-      return request_ID;
-   } // generateRequestID
+
     
     public void tableStatusRequest(int[] tablesToCheck)
     {
@@ -64,7 +57,7 @@ public class XMLWriteRequest
             
             StartDocument open = eventFactory.createStartDocument("UTF-8", "1.0");
             
-            StartElement request = eventFactory.createStartElement("", "", "request");
+            StartElement requestTag = eventFactory.createStartElement("", "", "request");
             
             StartElement to = eventFactory.createStartElement("", "", "to");
             Characters toBody = eventFactory.createCharacters(MyClient.serverAddress.getHostName());
@@ -75,7 +68,7 @@ public class XMLWriteRequest
             EndElement endFrom = eventFactory.createEndElement("", "", "from");
             
             StartElement ID = eventFactory.createStartElement("", "", "id");
-            Characters IDBody = eventFactory.createCharacters(generateRequestID());
+            Characters IDBody = eventFactory.createCharacters(request.getMessageID());
             EndElement endID = eventFactory.createEndElement("", "", "id");
             
             StartElement bodyTag = eventFactory.createStartElement("", "", "body");
@@ -110,7 +103,7 @@ public class XMLWriteRequest
             EndElement endRequest = eventFactory.createEndElement("", "", "request");
             
             writer.add(open);
-            writer.add(request);
+            writer.add(requestTag);
             writer.add(to);
             writer.add(toBody);
             writer.add(endTo);

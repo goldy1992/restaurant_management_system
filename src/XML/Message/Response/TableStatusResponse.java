@@ -37,7 +37,7 @@ public class TableStatusResponse extends Response
     @Override
     public void parse()
     {
-        if(gotResponse)
+        if(parsedResponse)
             return;
         
         // cast the request to a table request
@@ -52,6 +52,6 @@ public class TableStatusResponse extends Response
             tableStatuses.add(MyServer.getTable(x.getTableList().get(i)).getTableStatus());
         }    
         // set response to true
-        gotResponse = true;
+        parsedResponse = true;
     }
 }

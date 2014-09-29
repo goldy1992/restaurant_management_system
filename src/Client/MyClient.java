@@ -7,6 +7,11 @@
 package Client;
 
 import Server.MyServer;
+import XML.Message.Message;
+import XML.Message.Request.Request;
+import XML.Message.Request.TableStatusRequest;
+import XML.Message.Response.Response;
+import XML.Message.Response.TableStatusResponse;
 import XML.XMLMessageParse;
 import XML.XMLWriteRequest;
 import java.io.BufferedReader;
@@ -60,10 +65,22 @@ public class MyClient
                 int[] tables = new int[30];
                         for(int  i = 0 ; i < tables.length; i++ )
                             tables[i] = i+1; 
+                Request request = new Request();
                 request.tableStatusRequest(tables);
                                 System.out.println("got here1");
-                XMLMessageParse response = new XMLMessageParse(in);
-                response.parse();
+                XMLMessageParse responseMessage = new XMLMessageParse(in, request);
+                
+                Message response = responseMessage.parse();
+                
+                if (response instanceof Response)
+                {
+                    if (response instanceof TableStatusResponse)
+                    {
+                        System.out.println("reponse");
+
+                    }
+                    
+                }
                 
 
 

@@ -7,6 +7,9 @@ package XML.Message.Request;
 
 import XML.Message.Message;
 import java.net.InetAddress;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Random;
 
 /**
  *
@@ -33,5 +36,17 @@ public abstract class Request extends Message
        super(from, to, messageID);
        this.type = type;
     }
+    
+   public String generateRequestID()
+   {
+      String request_ID;
+      Random random = new Random();
+      int x = random.nextInt();
+      request_ID = "" + x;
+      Date currentDate = new Date();
+      Timestamp t = new Timestamp(currentDate.getTime());
+      request_ID = request_ID + t;
+      return request_ID;
+   } // generateRequestID
     
 }

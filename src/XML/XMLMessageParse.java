@@ -9,6 +9,7 @@ package XML;
 import XML.Message.Message;
 import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
+import XML.Message.Response.TableStatusResponse;
 import java.io.BufferedReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -42,6 +43,7 @@ public class XMLMessageParse
     String messageID;
     MessageType messageType;
     Message message = null;
+    Request requestOfResponse;
     
     /**
      *
@@ -50,6 +52,12 @@ public class XMLMessageParse
     public XMLMessageParse(BufferedReader stream)
     {
         inStream = stream;
+    }
+    
+    public XMLMessageParse(BufferedReader stream, Request resquestOfResponse)
+    {
+        inStream = stream;
+        this.requestOfResponse = requestOfResponse;
     }
     
     public Message parse() throws XMLStreamException, UnknownHostException
@@ -127,6 +135,7 @@ public class XMLMessageParse
         } // inner switch
         
     }
+    
     private void parseTableStatus() throws XMLStreamException
     {
         ArrayList list = new ArrayList<>();
@@ -173,19 +182,25 @@ public class XMLMessageParse
                 event = reader.nextEvent(); // reads possibleNext startElement
             } // while
             
-          //  if (list.size() == listSize)
-          //      System.out.println("Everything went well!");
+            if (list.size() == listSize)
+                System.out.println("Everything went well!");
 
         
         //System.out.println(list);
         Request.RequestType requestType = Request.RequestType.TABLE_STATUS;
         
-        message = new TableStatusRequest(fromAddress, toAddress, 
+        if (messageType == MessageType.REQUEST)
+            message = new TableStatusRequest(fromAddress, toAddress, 
                                       messageID, requestType, list);
+        else
+        {
+            if (requestOfResponse instanceof TableStatusRequest)
+                message = new TableStatusResponse((TableStatusRequest)requestOfResponse);
+            
+        }   
         
     } // parseTableStatus
     
-
     private void parseBodyTag(Message message) throws XMLStreamException
     {
         event = reader.nextEvent();
