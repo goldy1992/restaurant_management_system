@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
@@ -82,30 +83,28 @@ public class MyClient
                 //XMLWriteRequest request = new XMLWriteRequest(out);
 
                 ArrayList<Integer> tables = new ArrayList<>();
-                        for(int  i = 0 ; i < tables.size(); i++ )
-                            //tables[i] = i+1; 
-                            tables.add(i);
+                for(int  i = 0 ; i < MyServer.NUM_OF_TABLES; i++ )
+                {
+                 
+                    tables.add(i + 1);
+                }
                 TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                                                 InetAddress.getByName(serverAddress.getHostName()),
                                                                                 generateRequestID(),
                                                                                 Request.RequestType.TABLE_STATUS,
                                                                                 tables);
                 
+                System.out.println(request);
+                
 
                 out.writeObject(request);
                 Object response = in.readObject();
-                /*
-                request.tableStatusRequest(tables);
-                  //              System.out.println("got here1");
-                XMLMessageParse responseMessage = new XMLMessageParse(in, request);
-                
-                Message response = responseMessage.parse();*/
                 
                 if (response instanceof Response)
                 {
                     if (response instanceof TableStatusResponse)
                     {
-                        System.out.println("reponse");
+                        System.out.println(response);
 
                     }
                     

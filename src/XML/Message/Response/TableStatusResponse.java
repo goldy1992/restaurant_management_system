@@ -43,12 +43,12 @@ public class TableStatusResponse extends Response
         // cast the request to a table request
         TableStatusRequest x = (TableStatusRequest)this.getRequest();
  
-        System.out.println("gettign statuses");
+        //System.out.println("gettign statuses");
         // for each table in the request, add its status to the ArrayList
  
         for (int i = 0; i < x.getTableList().size(); i++)
         {
-            System.out.println(i + " table number: " + x.getTableList().get(i));
+          //  System.out.println(i + " table number: " + x.getTableList().get(i));
             tableStatuses.add(MyServer.getTable(x.getTableList().get(i)).getTableStatus());
         }    
         // set response to true
@@ -57,6 +57,11 @@ public class TableStatusResponse extends Response
     
     public String toString()
     {
-        return super.toString() + "TABLES: " + tableStatuses.toString();
+        String x = super.toString() + "SUBTYPE: Table status\nTABLES: "; 
+         for (int i = 0; i < tableStatuses.size(); i++)
+            x += (tableStatuses.get(i) + " ");
+        x+= "\n";
+        
+        return x;
     }
 }

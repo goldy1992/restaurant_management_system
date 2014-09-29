@@ -6,17 +6,15 @@
 
 package XML.Message;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
  *
  * @author Goldy
  */
-public abstract class Message 
+public abstract class Message implements Serializable 
 {
-    public Message(){
-        
-    }
     private InetAddress fromAddress;
     private InetAddress toAddress;
     private String messageID;

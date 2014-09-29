@@ -14,7 +14,7 @@ import java.io.Serializable;
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message implements Serializable 
+public abstract class Response extends Message 
 {    
     private Request request = null;
     protected boolean parsedResponse;
@@ -24,11 +24,6 @@ public abstract class Response extends Message implements Serializable
        this.request = request;
        parsedResponse = false;
     } // constructor
-    
-    public Response()
-    {
-        
-    }
     
     public Request getRequest()
     {

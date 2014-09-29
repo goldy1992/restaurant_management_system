@@ -16,13 +16,9 @@ import java.util.Random;
  *
  * @author mbbx9mg3
  */
-public abstract class Request extends Message implements Serializable
+public abstract class Request extends Message
 {
 
-    public Request()
-    {
-        
-    }
     public Object getTableList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

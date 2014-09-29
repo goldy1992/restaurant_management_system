@@ -54,33 +54,26 @@ public class ClientCommunicationThread implements Runnable
                         System.out.println(socket);
             try
             (
-              /* PrintWriter out =
-                    new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = 
-                  new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));     */
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());    
 
             )
             {
                 System.out.println("read message");
-                //XMLMessageParse newMessage = new XMLMessageParse(in);
-                                    Message request = (Message) in.readObject();
-                                    System.out.println("gothere");
-                //Message request = newMessage.parse();
+                Message request = (Message) in.readObject();
+
                 
                 if (request instanceof Request)
                 {
                     Response response = null;  
                     if (request instanceof TableStatusRequest)
                     {
-                        System.out.println("reponse");
+                        System.out.println("reponse\n" + request);
                         response = new TableStatusResponse((TableStatusRequest)request);
                         response.parse();
+                        System.out.println(response);
                     }
-                    //XMLWriteResponse responseMessage = new XMLWriteResponse(out, response);
-                    //responseMessage.tableStatusRequest();
+
                     out.writeObject(response);
                 } // the respose if statement
                 

@@ -15,12 +15,8 @@ import java.util.ArrayList;
  */
 public class TableStatusRequest extends Request
 {
-    private ArrayList<Integer> tableList;
+    private final ArrayList<Integer> tableList;
     
-    public TableStatusRequest()
-    {
-        
-    }
     
     public TableStatusRequest(InetAddress from, 
                               InetAddress to, 
@@ -32,6 +28,7 @@ public class TableStatusRequest extends Request
         this.tableList = tableList;
     } // constructor
     
+    @Override
     public ArrayList<Integer> getTableList()
     {
         return tableList;
@@ -39,7 +36,13 @@ public class TableStatusRequest extends Request
     
     public String toString()
     {
-        return super.toString() + "TABLES: " + tableList.toString();
+        String x = super.toString() + "SUBTYPE: Table status\nTABLES: "; 
+         for (int i = 0; i < tableList.size(); i++)
+            x += (tableList.get(i) + " ");
+        x+= "\n";
+        
+        return x;
     }
+    
     
 }
