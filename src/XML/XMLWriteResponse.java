@@ -39,9 +39,8 @@ public class XMLWriteResponse
     XMLEventWriter writer;
     XMLEvent event;
     Response response;
-    public static int getLineNumber() {
-    return Thread.currentThread().getStackTrace()[2].getLineNumber();
-}
+    
+    
 
     public XMLWriteResponse(PrintWriter outStream, Response response)
     {
@@ -49,7 +48,7 @@ public class XMLWriteResponse
         this.response = response;
         
     } // constructor
-    
+      
     public void writeXMLHeader() throws XMLStreamException
     {
         StartDocument open = eventFactory.createStartDocument("UTF-8", "1.0");        
@@ -80,9 +79,7 @@ public class XMLWriteResponse
          writer.add(IDBody);
          writer.add(endID);
     } // write xml header
-    
-
-    
+      
     public void tableStatusRequest()
     {
         if (!(response instanceof TableStatusResponse))
@@ -167,10 +164,8 @@ public class XMLWriteResponse
         }  // try
         catch (XMLStreamException e)
         {
-                        XMLWriteResponse.getLineNumber();
             System.out.println(e);
 
-                    e.printStackTrace();
         } // catch        
     } // sendRequest
 } // class
