@@ -40,7 +40,7 @@ public class Table implements Runnable
     {
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
-        this.tableNumberPort = tableNumber + MyServer.LB_PORT_RANGE;
+        this.tableNumberPort = tableNumber + MyServer.getLowBoundPortRange();
         tableStatus = TableStatus.FREE;
         
     } // constructor

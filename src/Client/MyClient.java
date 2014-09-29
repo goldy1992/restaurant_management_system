@@ -12,24 +12,17 @@ import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
 import XML.Message.Response.Response;
 import XML.Message.Response.TableStatusResponse;
-import XML.XMLMessageParse;
-import XML.XMLWriteRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.stream.XMLStreamException;
 
 
 /**
@@ -59,8 +52,10 @@ public class MyClient
         
         try
         {
+            SelectTable t = new SelectTable();
+            t.setVisible(true);
             serverAddress = InetAddress.getByName(null);
-            serverPort = MyServer.LB_PORT_RANGE;
+            serverPort = MyServer.getLowBoundPortRange();
             System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
             System.out.println(client);
@@ -83,7 +78,7 @@ public class MyClient
                 //XMLWriteRequest request = new XMLWriteRequest(out);
 
                 ArrayList<Integer> tables = new ArrayList<>();
-                for(int  i = 0 ; i < MyServer.NUM_OF_TABLES; i++ )
+                for(int  i = 0 ; i < MyServer.getNumOfTables(); i++ )
                 {
                  
                     tables.add(i + 1);
@@ -98,7 +93,7 @@ public class MyClient
                 
 
                 out.writeObject(request);
-                Object response = in.readObject();
+                Message response = (Message)in.readObject();
                 
                 if (response instanceof Response)
                 {
@@ -114,7 +109,7 @@ public class MyClient
 
                 
                 while(true);
-            } // try
+            } // try // try // try // try
             catch(IOException e)
             {
                 System.out.println("Failed to set up buffers");

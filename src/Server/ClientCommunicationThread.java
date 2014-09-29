@@ -6,27 +6,18 @@
 
 package Server;
 
-import Client.MyClient;
-import static Client.MyClient.client;
 import XML.Message.Message;
 import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
 import XML.Message.Response.Response;
 import XML.Message.Response.TableStatusResponse;
-import XML.XMLMessageParse;
-import XML.XMLWriteResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.stream.XMLStreamException;
 
 /**
  *
@@ -56,7 +47,6 @@ public class ClientCommunicationThread implements Runnable
             (
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());    
-
             )
             {
                 System.out.println("read message");
@@ -81,7 +71,7 @@ public class ClientCommunicationThread implements Runnable
                     
                 System.out.println("returned");
                 while(true);
-            }           
+            } // try            // try            // try            // try           
             catch(IOException e)
             {
                 System.out.println("Failed to set up buffers" + "\n");

@@ -39,8 +39,8 @@ import java.util.ArrayList;
 public class MyServer
 {
     // the lower bound of the port range
-    public static final int LB_PORT_RANGE = 11000;
-    public static final int NUM_OF_TABLES = 30;
+    private static final int LB_PORT_RANGE = 11000;
+    private static final int NUM_OF_TABLES = 30;
     
     private static ArrayList<ClientCommunicationThread> clients;
     private static Table[] tables;
@@ -101,5 +101,15 @@ public class MyServer
             return null;
         else return tables[number];
     } // table
+    
+    public static int getNumOfTables()
+    {
+        return NUM_OF_TABLES;
+    }
+    
+    public static int getLowBoundPortRange()
+    {
+        return LB_PORT_RANGE;
+    }
         
 } // MySocket class
