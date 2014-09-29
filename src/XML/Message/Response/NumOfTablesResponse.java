@@ -7,9 +7,7 @@
 package XML.Message.Response;
 
 import Server.MyServer;
-import Server.Table;
-import XML.Message.Request.TableStatusRequest;
-import java.util.ArrayList;
+import XML.Message.Request.NumOfTablesRequest;
 
 /**
  *
@@ -17,7 +15,7 @@ import java.util.ArrayList;
  */
 public class NumOfTablesResponse extends Response
 {
-    public NumOfTablesResponse(TableStatusRequest request)
+    public NumOfTablesResponse(NumOfTablesRequest request)
     {
         super(request);
 

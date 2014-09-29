@@ -8,8 +8,10 @@ package Client;
 
 import Server.MyServer;
 import XML.Message.Message;
+import XML.Message.Request.NumOfTablesRequest;
 import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
+import XML.Message.Response.NumOfTablesResponse;
 import XML.Message.Response.Response;
 import XML.Message.Response.TableStatusResponse;
 import java.io.IOException;
@@ -29,11 +31,17 @@ import java.util.logging.Logger;
  *
  * @author Goldy
  */
-public class MyClient 
+public class MyClient implements Runnable
 {
     public static InetAddress serverAddress; 
     public static int serverPort;  
     public static Socket client;
+    public boolean running = true;
+    public final Thread thread;
+    public MyClient()
+    {
+        thread = new Thread(this);
+    }
     
    public static String generateRequestID()
    {
@@ -59,6 +67,8 @@ public class MyClient
             System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
             System.out.println(client);
+            MyClient responseThread = new MyClient();
+            responseThread.thread.start();
         } // try
         catch (IOException e)
         {
@@ -69,13 +79,18 @@ public class MyClient
         {
             try
             (
-                //PrintWriter out =
-                  //  new PrintWriter(client.getOutputStream(), true);
+ 
                 ObjectOutputStream out = new ObjectOutputStream(MyClient.client.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(client.getInputStream());        
+            
             )
             {
-                //XMLWriteRequest request = new XMLWriteRequest(out);
+
+                NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                                                InetAddress.getByName(serverAddress.getHostName()),
+                                                                                generateRequestID(),
+                                                                                Request.RequestType.NUM_OF_TABLES);
+                 out.writeObject(nTablesRequest);
+                System.out.println("sent num table request");
 
                 ArrayList<Integer> tables = new ArrayList<>();
                 for(int  i = 0 ; i < MyServer.getNumOfTables(); i++ )
@@ -93,17 +108,7 @@ public class MyClient
                 
 
                 out.writeObject(request);
-                Message response = (Message)in.readObject();
-                
-                if (response instanceof Response)
-                {
-                    if (response instanceof TableStatusResponse)
-                    {
-                        System.out.println(response);
 
-                    }
-                    
-                }
                 
 
 
@@ -114,9 +119,6 @@ public class MyClient
             {
                 System.out.println("Failed to set up buffers");
             } 
-            catch (ClassNotFoundException ex) {
-                Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
             /*catch (XMLStreamException e) 
             {
                 e.printStackTrace();
@@ -124,4 +126,35 @@ public class MyClient
             
         } // if`    
     } // main
+    
+    public void run()
+    {
+        
+        try 
+        {   
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            while(running)
+            {
+
+                Message response = (Message)in.readObject();
+                
+                if (response instanceof Response)
+                {
+                    if (response instanceof TableStatusResponse)
+                    {
+                        System.out.println(response);
+
+                    }
+                    else if (response instanceof NumOfTablesResponse)
+                        System.out.println(response);
+                    
+                }
+            }
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 } // MyClientSocketClass

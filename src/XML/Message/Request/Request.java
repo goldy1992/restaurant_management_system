@@ -24,7 +24,7 @@ public abstract class Request extends Message
     }
     public static enum RequestType 
     {
-        TABLE_STATUS
+        TABLE_STATUS, NUM_OF_TABLES
     }
     
     public RequestType type;

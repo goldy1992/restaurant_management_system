@@ -7,8 +7,10 @@
 package Server;
 
 import XML.Message.Message;
+import XML.Message.Request.NumOfTablesRequest;
 import XML.Message.Request.Request;
 import XML.Message.Request.TableStatusRequest;
+import XML.Message.Response.NumOfTablesResponse;
 import XML.Message.Response.Response;
 import XML.Message.Response.TableStatusResponse;
 import java.io.IOException;
@@ -17,7 +19,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
@@ -42,7 +43,7 @@ public class ClientCommunicationThread implements Runnable
         System.out.println("got here");
         if (socket != null)
         {
-                        System.out.println(socket);
+            System.out.println(socket);
             try
             (
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -50,27 +51,29 @@ public class ClientCommunicationThread implements Runnable
             )
             {
                 System.out.println("read message");
-                Message request = (Message) in.readObject();
-
-                
-                if (request instanceof Request)
+                               
+                while(true)
                 {
-                    Response response = null;  
-                    if (request instanceof TableStatusRequest)
+                    Message request = (Message) in.readObject();
+                
+                    if (request instanceof Request)
                     {
+                        Response response = null;  
+                        if (request instanceof TableStatusRequest)
+                            response = new TableStatusResponse((TableStatusRequest)request);
+                        else if (request instanceof NumOfTablesRequest)
+                            response = new NumOfTablesResponse((NumOfTablesRequest)request);
                         System.out.println("reponse\n" + request);
-                        response = new TableStatusResponse((TableStatusRequest)request);
-                        response.parse();
-                        System.out.println(response);
-                    }
 
-                    out.writeObject(response);
-                } // the respose if statement
+                        response.parse();
+                        out.writeObject(response);
+                    } // the respose if statement
                 
  
                     
                 System.out.println("returned");
-                while(true);
+                }
+                
             } // try            // try            // try            // try           
             catch(IOException e)
             {
