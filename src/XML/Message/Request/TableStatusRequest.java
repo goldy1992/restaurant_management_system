@@ -17,6 +17,11 @@ public class TableStatusRequest extends Request
 {
     private ArrayList<Integer> tableList;
     
+    public TableStatusRequest()
+    {
+        
+    }
+    
     public TableStatusRequest(InetAddress from, 
                               InetAddress to, 
                               String messageID, 
@@ -30,6 +35,11 @@ public class TableStatusRequest extends Request
     public ArrayList<Integer> getTableList()
     {
         return tableList;
+    }
+    
+    public String toString()
+    {
+        return super.toString() + "TABLES: " + tableList.toString();
     }
     
 }

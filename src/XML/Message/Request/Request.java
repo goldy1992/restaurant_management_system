@@ -6,6 +6,7 @@
 package XML.Message.Request;
 
 import XML.Message.Message;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,9 +16,13 @@ import java.util.Random;
  *
  * @author mbbx9mg3
  */
-public abstract class Request extends Message 
+public abstract class Request extends Message implements Serializable
 {
 
+    public Request()
+    {
+        
+    }
     public Object getTableList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -37,16 +42,10 @@ public abstract class Request extends Message
        this.type = type;
     }
     
-   public String generateRequestID()
-   {
-      String request_ID;
-      Random random = new Random();
-      int x = random.nextInt();
-      request_ID = "" + x;
-      Date currentDate = new Date();
-      Timestamp t = new Timestamp(currentDate.getTime());
-      request_ID = request_ID + t;
-      return request_ID;
-   } // generateRequestID
+    public String toString()
+    {
+        return super.toString() + "TYPE: Request\n";
+    }
+    
     
 }

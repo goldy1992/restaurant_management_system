@@ -17,9 +17,17 @@ import XML.XMLWriteRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
 
@@ -32,6 +40,18 @@ public class MyClient
     public static InetAddress serverAddress; 
     public static int serverPort;  
     public static Socket client;
+    
+   public static String generateRequestID()
+   {
+      String request_ID;
+      Random random = new Random();
+      int x = random.nextInt();
+      request_ID = "" + x;
+      Date currentDate = new Date();
+      Timestamp t = new Timestamp(currentDate.getTime());
+      request_ID = request_ID + t;
+      return request_ID;
+   } // generateRequestID
     
     public static void main(String[] args)
     {
@@ -53,24 +73,33 @@ public class MyClient
         {
             try
             (
-                PrintWriter out =
-                    new PrintWriter(client.getOutputStream(), true);
-                BufferedReader in = 
-                  new BufferedReader(
-                    new InputStreamReader(client.getInputStream()));        
+                //PrintWriter out =
+                  //  new PrintWriter(client.getOutputStream(), true);
+                ObjectOutputStream out = new ObjectOutputStream(MyClient.client.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(client.getInputStream());        
             )
             {
-                XMLWriteRequest request = new XMLWriteRequest(out);
+                //XMLWriteRequest request = new XMLWriteRequest(out);
 
-                int[] tables = new int[30];
-                        for(int  i = 0 ; i < tables.length; i++ )
-                            tables[i] = i+1; 
-                Request request = new Request();
+                ArrayList<Integer> tables = new ArrayList<>();
+                        for(int  i = 0 ; i < tables.size(); i++ )
+                            //tables[i] = i+1; 
+                            tables.add(i);
+                TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                                                InetAddress.getByName(serverAddress.getHostName()),
+                                                                                generateRequestID(),
+                                                                                Request.RequestType.TABLE_STATUS,
+                                                                                tables);
+                
+
+                out.writeObject(request);
+                Object response = in.readObject();
+                /*
                 request.tableStatusRequest(tables);
-                                System.out.println("got here1");
+                  //              System.out.println("got here1");
                 XMLMessageParse responseMessage = new XMLMessageParse(in, request);
                 
-                Message response = responseMessage.parse();
+                Message response = responseMessage.parse();*/
                 
                 if (response instanceof Response)
                 {
@@ -90,11 +119,14 @@ public class MyClient
             catch(IOException e)
             {
                 System.out.println("Failed to set up buffers");
+            } 
+            catch (ClassNotFoundException ex) {
+                Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
             }
-            catch (XMLStreamException e) 
+            /*catch (XMLStreamException e) 
             {
                 e.printStackTrace();
-            }
+            }*/
             
         } // if`    
     } // main

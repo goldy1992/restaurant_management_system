@@ -54,4 +54,9 @@ public class TableStatusResponse extends Response
         // set response to true
         parsedResponse = true;
     }
+    
+    public String toString()
+    {
+        return super.toString() + "TABLES: " + tableStatuses.toString();
+    }
 }

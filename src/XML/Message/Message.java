@@ -14,6 +14,9 @@ import java.net.InetAddress;
  */
 public abstract class Message 
 {
+    public Message(){
+        
+    }
     private InetAddress fromAddress;
     private InetAddress toAddress;
     private String messageID;
@@ -40,4 +43,10 @@ public abstract class Message
         return messageID;
     } // getMessageID 
     
+    public String toString()
+    {
+        return "TO: " + toAddress.toString()
+        + "\nFROM: " + fromAddress.toString()
+        + "\nMESSAGE ID: " + messageID + "\n";
+    }
 }

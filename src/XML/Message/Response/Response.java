@@ -7,15 +7,16 @@ package XML.Message.Response;
 
 import XML.Message.Request.Request;
 import XML.Message.Message;
+import java.io.Serializable;
 
 
 /**
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message 
+public abstract class Response extends Message implements Serializable 
 {    
-    private Request request;
+    private Request request = null;
     protected boolean parsedResponse;
     public Response(Request request)
     {
@@ -23,6 +24,11 @@ public abstract class Response extends Message
        this.request = request;
        parsedResponse = false;
     } // constructor
+    
+    public Response()
+    {
+        
+    }
     
     public Request getRequest()
     {
@@ -35,5 +41,10 @@ public abstract class Response extends Message
     }
     
     public abstract void parse();
+    
+    public String toString()
+    {
+        return super.toString() + "TYPE: Response\n";
+    }
     
 } // class
