@@ -38,27 +38,15 @@ public class MyClient implements Runnable
     public static int serverPort;  
     public static Socket client;
     private static int numberOfTables = -1;
-    private static ArrayList<Table.TableStatus> tableStatuses = null;
+    public static Object lock = new Object();
+    public static ArrayList<Table.TableStatus> tableStatuses = null;
     public static SelectTable selectTable;
     public static MyClient responseThread;
     public static ObjectOutputStream out = null;
     public boolean running = true;
     public final Thread thread;
     
-    public static synchronized ArrayList<Table.TableStatus> getTableStatuses()
-    {
-
-        return tableStatuses;
-        
-    }
     
-    public static synchronized void getTableStatuses(ArrayList<Table.TableStatus> x)
-    {
-        synchronized(tableStatuses)
-                {
-        tableStatuses = x;
-                }
-    }    
     public MyClient()
     {
         thread = new Thread(this);
@@ -75,6 +63,14 @@ public class MyClient implements Runnable
       request_ID = request_ID + t;
       return request_ID;
    } // generateRequestID
+   
+   public static ArrayList<Table.TableStatus> getTableStatuses()
+   {
+       synchronized(lock)
+       {
+           return tableStatuses;
+       }
+   }
    
    public static void initialiseProgram()
    {
@@ -126,6 +122,7 @@ public class MyClient implements Runnable
         
         while(getTableStatuses() == null && numberOfTables <= 0);
         
+        //System.out.println(getTableStatuses());
         
         SelectTable t = new SelectTable(tableStatuses);
             t.setVisible(true);
@@ -150,8 +147,10 @@ public class MyClient implements Runnable
                     {
                         TableStatusResponse r = (TableStatusResponse)response;
 
-                        MyClient.tableStatuses = r.getTableStatuses();
-                       
+                        synchronized(lock)
+                        {
+                            MyClient.tableStatuses = r.getTableStatuses();
+                        }
                         System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
                        
                     }
