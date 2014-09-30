@@ -67,7 +67,7 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="tableButtonPanel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="GridLayout tableGrid = new GridLayout(6, 5);&#xa;tableButtonPanel.setLayout(tableGrid);&#xa;&#xa;tableButtons = new JButton[30];&#xa;for (int i = 0; i &lt; 30; i++)&#xa;tableButtons[i] = new JButton(&quot;&lt;html&gt;Table &quot; + (i+1)+ &quot;&lt;br&gt;In Use&lt;/html&gt;&quot;);&#xa;&#xa;for (JButton button : tableButtons)&#xa;{&#xa;   tableButtonPanel.add(button);&#xa;   button.setBackground(Color.RED);&#xa;} // for"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="GridLayout tableGrid = null;&#xa;if (tableStatuses.size() &lt;= 30)&#xa;{&#xa;    tableGrid = new GridLayout(6, 5);&#xa;    tableButtonPanel.setLayout(tableGrid);&#xa;    for (int i = 0; i &lt; tableStatuses.size(); i++)&#xa;    {&#xa;        tableButtons[i] = new JButton();&#xa;        setTableStatus(i, tableStatuses.get(i));&#xa;        tableButtonPanel.add(tableButtons[i]);&#xa;&#xa;    } // for&#xa;}"/>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()"/>
       </AuxValues>
 

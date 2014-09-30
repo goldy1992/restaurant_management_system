@@ -37,12 +37,28 @@ public class MyClient implements Runnable
     public static InetAddress serverAddress; 
     public static int serverPort;  
     public static Socket client;
-    public static boolean gotTableStatus = false;
-    public static int numberOfTables = -1;
-    public static ArrayList<Table.TableStatus> tableStatuses;
-    
+    private static int numberOfTables = -1;
+    private static ArrayList<Table.TableStatus> tableStatuses = null;
+    public static SelectTable selectTable;
+    public static MyClient responseThread;
+    public static ObjectOutputStream out = null;
     public boolean running = true;
     public final Thread thread;
+    
+    public static synchronized ArrayList<Table.TableStatus> getTableStatuses()
+    {
+
+        return tableStatuses;
+        
+    }
+    
+    public static synchronized void getTableStatuses(ArrayList<Table.TableStatus> x)
+    {
+        synchronized(tableStatuses)
+                {
+        tableStatuses = x;
+                }
+    }    
     public MyClient()
     {
         thread = new Thread(this);
@@ -59,35 +75,23 @@ public class MyClient implements Runnable
       request_ID = request_ID + t;
       return request_ID;
    } // generateRequestID
-    
-    public static void main(String[] args)
-    {
-        ObjectOutputStream out = null; 
+   
+   public static void initialiseProgram()
+   {
         try
         {
-            
-            SelectTable t = new SelectTable();
-            t.setVisible(true);
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(MyClient.client.getOutputStream());
             System.out.println(client);
-            MyClient responseThread = new MyClient();
+            responseThread = new MyClient();
             responseThread.thread.start();
-        } // try
-        catch (IOException e)
-        {
-            System.out.println("Could not connect to server");
-        } // catch
-        
-        if (client == null)
-            System.exit(0);
-        
-        try
-        
-        {
+            
+            if (client == null)
+                System.exit(0);
+
             NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  generateRequestID(),
@@ -104,13 +108,29 @@ public class MyClient implements Runnable
                                           generateRequestID(),
                                           Request.RequestType.TABLE_STATUS,
                                           tables);
-            out.writeObject(request);                
-        } // try // try // try // try
-        catch(IOException e)
+            out.writeObject(request);  
+        } // try
+        catch (IOException e)
         {
-            System.out.println("Failed to set up buffers");
-        } 
+            System.out.println("Could not connect to server");
+        } // catch
+        
 
+   }
+    
+    public static void main(String[] args) throws InterruptedException
+    {
+        initialiseProgram();
+        System.out.println("pre while");
+        
+        
+        while(getTableStatuses() == null && numberOfTables <= 0);
+        
+        
+        SelectTable t = new SelectTable(tableStatuses);
+            t.setVisible(true);
+
+        
     } // main
     
     public void run()
@@ -129,12 +149,16 @@ public class MyClient implements Runnable
                     if (response instanceof TableStatusResponse)
                     {
                         TableStatusResponse r = (TableStatusResponse)response;
+
                         MyClient.tableStatuses = r.getTableStatuses();
-                        MyClient.gotTableStatus = true;
+                       
+                        System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
+                       
                     }
                     else if (response instanceof NumOfTablesResponse)
                     {
                         NumOfTablesResponse r = (NumOfTablesResponse)response;
+                        System.out.println("got  num of tables: " + r.getNumOfTables());
                         MyClient.numberOfTables = r.getNumOfTables();
 
                     }

@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 /**
  *
@@ -41,7 +42,11 @@ public class Table implements Runnable
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
         this.tableNumberPort = tableNumber + MyServer.getLowBoundPortRange();
-        tableStatus = TableStatus.FREE;
+        //tableStatus = TableStatus.FREE;
+        
+        /* TEST */
+        int pick = new Random().nextInt(TableStatus.values().length);
+        tableStatus =  TableStatus.values()[pick];
         
     } // constructor
     

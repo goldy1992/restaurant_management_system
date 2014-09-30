@@ -9,6 +9,7 @@ package Client;
 import Server.Table;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.JButton;
 
 /**
@@ -17,14 +18,15 @@ import javax.swing.JButton;
  */
 public class SelectTable extends javax.swing.JFrame {
 
-    private JButton[] tableButtons;
+    private final JButton[] tableButtons;
+    private final ArrayList<Table.TableStatus> tableStatuses;
     
     public JButton[] getTableButtons()
     {
         return tableButtons;
     }
     
-    public void setButtonStatus(int index, Table.TableStatus t)
+    public void setTableStatus(int index, Table.TableStatus t)
     {
         if (index < 0 || index >= tableButtons.length)
             return;
@@ -48,7 +50,11 @@ public class SelectTable extends javax.swing.JFrame {
     /**
      * Creates new form SelectTable
      */
-    public SelectTable() {
+    public SelectTable(ArrayList<Table.TableStatus> tableStatuses) 
+    {
+        this.tableStatuses = tableStatuses;
+        System.out.println("size " + tableStatuses.size());
+        tableButtons = new JButton[tableStatuses.size()];
         initComponents();
     }
 
@@ -109,18 +115,19 @@ public class SelectTable extends javax.swing.JFrame {
 
         setJMenuBar(MenuBar);
 
-        GridLayout tableGrid = new GridLayout(6, 5);
-        tableButtonPanel.setLayout(tableGrid);
-
-        tableButtons = new JButton[30];
-        for (int i = 0; i < 30; i++)
-        tableButtons[i] = new JButton("<html>Table " + (i+1)+ "<br>In Use</html>");
-
-        for (JButton button : tableButtons)
+        GridLayout tableGrid = null;
+        if (tableStatuses.size() <= 30)
         {
-            tableButtonPanel.add(button);
-            button.setBackground(Color.RED);
-        } // for
+            tableGrid = new GridLayout(6, 5);
+            tableButtonPanel.setLayout(tableGrid);
+            for (int i = 0; i < tableStatuses.size(); i++)
+            {
+                tableButtons[i] = new JButton();
+                setTableStatus(i, tableStatuses.get(i));
+                tableButtonPanel.add(tableButtons[i]);
+
+            } // for
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -174,7 +181,7 @@ public class SelectTable extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SelectTable().setVisible(true);
+                new SelectTable(null).setVisible(true);
             }
         });
     }
