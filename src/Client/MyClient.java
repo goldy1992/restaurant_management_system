@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +39,8 @@ public class MyClient implements Runnable
     public static int serverPort;  
     public static Socket client;
     private static int numberOfTables = -1;
-    public static Object lock = new Object();
+    public static Semaphore lock1 = new Semaphore(1, true);
+    public static Semaphore lock2 = new Semaphore(2, true);
     public static ArrayList<Table.TableStatus> tableStatuses = null;
     public static SelectTable selectTable;
     public static MyClient responseThread;
@@ -66,11 +68,69 @@ public class MyClient implements Runnable
    
    public static ArrayList<Table.TableStatus> getTableStatuses()
    {
-       synchronized(lock)
-       {
-           return tableStatuses;
-       }
+        ArrayList<Table.TableStatus> x = null;
+  
+        try 
+        {
+            lock1.acquire();
+            x = tableStatuses;
+            lock1.release();
+        } catch (InterruptedException ex) 
+        {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+          return x;
+       
    }
+   
+   public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
+   {
+        try 
+        {
+            lock1.acquire();
+            tableStatuses = x;
+            lock1.release();
+        } catch (InterruptedException ex) 
+        {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+   }
+   
+   public static int getNumTables()
+   {
+        int x = 0;
+  
+        try 
+        {
+            lock2.acquire();
+            x = numberOfTables;
+            lock2.release();
+        } catch (InterruptedException ex) 
+        {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+          return x;
+       
+   }
+   
+   public static void setNumTables(int x)
+   {
+        try 
+        {
+            lock2.acquire();
+            numberOfTables = x;
+            lock2.release();
+        } catch (InterruptedException ex) 
+        {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+   }
+   
+
    
    public static void initialiseProgram()
    {
@@ -124,7 +184,7 @@ public class MyClient implements Runnable
         
         //System.out.println(getTableStatuses());
         
-        SelectTable t = new SelectTable(tableStatuses);
+        SelectTable t = new SelectTable(getTableStatuses());
             t.setVisible(true);
 
         
@@ -147,18 +207,17 @@ public class MyClient implements Runnable
                     {
                         TableStatusResponse r = (TableStatusResponse)response;
 
-                        synchronized(lock)
-                        {
-                            MyClient.tableStatuses = r.getTableStatuses();
-                        }
-                        System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
+                                MyClient.setTableStatuses(r.getTableStatuses());
+                            
+                        
+                        //System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
                        
                     }
                     else if (response instanceof NumOfTablesResponse)
                     {
                         NumOfTablesResponse r = (NumOfTablesResponse)response;
                         System.out.println("got  num of tables: " + r.getNumOfTables());
-                        MyClient.numberOfTables = r.getNumOfTables();
+                        MyClient.setNumTables(r.getNumOfTables());
 
                     }
                                             System.out.println(response);

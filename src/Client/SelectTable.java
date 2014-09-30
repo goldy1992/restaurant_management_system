@@ -53,7 +53,7 @@ public class SelectTable extends javax.swing.JFrame {
     public SelectTable(ArrayList<Table.TableStatus> tableStatuses) 
     {
         this.tableStatuses = tableStatuses;
-        System.out.println("size " + tableStatuses.size());
+//        System.out.println("size " + tableStatuses.size());
         tableButtons = new JButton[tableStatuses.size()];
         initComponents();
     }
