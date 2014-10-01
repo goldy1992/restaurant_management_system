@@ -42,11 +42,11 @@ public class Table implements Runnable
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
         this.tableNumberPort = tableNumber + MyServer.getLowBoundPortRange();
-        //tableStatus = TableStatus.FREE;
+        tableStatus = TableStatus.FREE;
         
         /* TEST */
-        int pick = new Random().nextInt(TableStatus.values().length);
-        tableStatus =  TableStatus.values()[pick];
+        //int pick = new Random().nextInt(TableStatus.values().length);
+        //tableStatus =  TableStatus.values()[pick];
         
     } // constructor
     
