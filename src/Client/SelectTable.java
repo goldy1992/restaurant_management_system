@@ -18,10 +18,28 @@ import javax.swing.JButton;
  *
  * @author Goldy
  */
-public class SelectTable extends javax.swing.JFrame {
+public class SelectTable extends javax.swing.JFrame implements ActionListener {
+    
 
     private final JButton[] tableButtons;
     private final ArrayList<Table.TableStatus> tableStatuses;
+    private int tableSelected = -1;
+    
+    public JButton openTable = new JButton("Open Table");
+    public JButton moveTable = new JButton("Move Table");
+    
+    
+    public int getTableSelected()
+    {
+        return tableSelected;
+    }
+    
+    public void setTableSelected(int table)
+    {
+        tableSelected = table;
+        
+    }
+    
     
     public JButton[] getTableButtons()
     {
@@ -72,6 +90,7 @@ public class SelectTable extends javax.swing.JFrame {
 
         FormPanel = new javax.swing.JPanel();
         FormOutputPanel = new javax.swing.JPanel();
+        OutputLabel = new javax.swing.JLabel();
         TableNumPanel = new javax.swing.JPanel();
         ExternalOptionsPanel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
@@ -94,15 +113,17 @@ public class SelectTable extends javax.swing.JFrame {
         FormOutputPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         FormOutputPanel.setPreferredSize(new java.awt.Dimension(500, 100));
 
+        OutputLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout FormOutputPanelLayout = new javax.swing.GroupLayout(FormOutputPanel);
         FormOutputPanel.setLayout(FormOutputPanelLayout);
         FormOutputPanelLayout.setHorizontalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 472, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
         );
         FormOutputPanelLayout.setVerticalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 137, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -116,18 +137,7 @@ public class SelectTable extends javax.swing.JFrame {
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
-
-        javax.swing.GroupLayout TableNumPanelLayout = new javax.swing.GroupLayout(TableNumPanel);
-        TableNumPanel.setLayout(TableNumPanelLayout);
-        TableNumPanelLayout.setHorizontalGroup(
-            TableNumPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
-        );
-        TableNumPanelLayout.setVerticalGroup(
-            TableNumPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
+        TableNumPanel.setLayout(new java.awt.GridLayout(6, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -135,21 +145,17 @@ public class SelectTable extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.8;
         gridBagConstraints.weighty = 0.8333;
         FormPanel.add(TableNumPanel, gridBagConstraints);
+        for(int i = 0; i < tableButtons.length; i++)
+        {
+            tableButtons[i] = new JButton();
+            TableNumPanel.add(tableButtons[i]);
+            tableButtons[i].addActionListener(this);
+            setTableStatus(i, tableStatuses.get(i));
+        }
 
         ExternalOptionsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         ExternalOptionsPanel.setPreferredSize(new java.awt.Dimension(100, 500));
-
-        javax.swing.GroupLayout ExternalOptionsPanelLayout = new javax.swing.GroupLayout(ExternalOptionsPanel);
-        ExternalOptionsPanel.setLayout(ExternalOptionsPanelLayout);
-        ExternalOptionsPanelLayout.setHorizontalGroup(
-            ExternalOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        ExternalOptionsPanelLayout.setVerticalGroup(
-            ExternalOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
+        ExternalOptionsPanel.setLayout(new java.awt.GridLayout(6, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -157,6 +163,8 @@ public class SelectTable extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.weighty = 0.8333;
         FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
+        ExternalOptionsPanel.add(openTable);
+        ExternalOptionsPanel.add(moveTable);
 
         MenuBarFile.setText("File");
 
@@ -240,7 +248,24 @@ public class SelectTable extends javax.swing.JFrame {
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuBarFile;
     private javax.swing.JMenuItem MenuBarFileExit;
+    private javax.swing.JLabel OutputLabel;
     private javax.swing.JPanel TableNumPanel;
     private javax.swing.JMenu jMenu2;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        for (int i = 0; i < tableButtons.length; i++)
+        {
+            if (e.getSource() == tableButtons[i])
+            {
+                OutputLabel.setText("<html><b>Would you like to open Table " + (i+1) + "?</b></html>");
+                setTableSelected(i);
+            }
+        }
+        
+    }
 }
