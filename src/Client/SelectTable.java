@@ -99,6 +99,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(474, 625));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -119,7 +120,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormOutputPanel.setLayout(FormOutputPanelLayout);
         FormOutputPanelLayout.setHorizontalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
         );
         FormOutputPanelLayout.setVerticalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,13 +139,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         TableNumPanel.setLayout(new java.awt.GridLayout(6, 5));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.8;
-        gridBagConstraints.weighty = 0.8333;
-        FormPanel.add(TableNumPanel, gridBagConstraints);
+        FormPanel.add(TableNumPanel, new java.awt.GridBagConstraints());
         for(int i = 0; i < tableButtons.length; i++)
         {
             tableButtons[i] = new JButton();
@@ -191,7 +186,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
 
         pack();
