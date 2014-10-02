@@ -70,10 +70,10 @@ public class SelectTable extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel3 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        FormPanel = new javax.swing.JPanel();
+        FormOutputPanel = new javax.swing.JPanel();
+        TableNumPanel = new javax.swing.JPanel();
+        ExternalOptionsPanel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         MenuBarFile = new javax.swing.JMenu();
         MenuBarFileExit = new javax.swing.JMenuItem();
@@ -89,19 +89,19 @@ public class SelectTable extends javax.swing.JFrame {
         java.awt.GridBagLayout jPanel3Layout = new java.awt.GridBagLayout();
         jPanel3Layout.columnWeights = new double[] {0.25};
         jPanel3Layout.rowWeights = new double[] {0.25};
-        jPanel3.setLayout(jPanel3Layout);
+        FormPanel.setLayout(jPanel3Layout);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel5.setPreferredSize(new java.awt.Dimension(500, 100));
+        FormOutputPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        FormOutputPanel.setPreferredSize(new java.awt.Dimension(500, 100));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout FormOutputPanelLayout = new javax.swing.GroupLayout(FormOutputPanel);
+        FormOutputPanel.setLayout(FormOutputPanelLayout);
+        FormOutputPanelLayout.setHorizontalGroup(
+            FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 472, Short.MAX_VALUE)
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        FormOutputPanelLayout.setVerticalGroup(
+            FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 137, Short.MAX_VALUE)
         );
 
@@ -112,19 +112,19 @@ public class SelectTable extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.16666;
-        jPanel3.add(jPanel5, gridBagConstraints);
+        FormPanel.add(FormOutputPanel, gridBagConstraints);
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel6.setPreferredSize(new java.awt.Dimension(400, 500));
+        TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout TableNumPanelLayout = new javax.swing.GroupLayout(TableNumPanel);
+        TableNumPanel.setLayout(TableNumPanelLayout);
+        TableNumPanelLayout.setHorizontalGroup(
+            TableNumPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 376, Short.MAX_VALUE)
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        TableNumPanelLayout.setVerticalGroup(
+            TableNumPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 458, Short.MAX_VALUE)
         );
 
@@ -134,19 +134,19 @@ public class SelectTable extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.8;
         gridBagConstraints.weighty = 0.8333;
-        jPanel3.add(jPanel6, gridBagConstraints);
+        FormPanel.add(TableNumPanel, gridBagConstraints);
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel7.setPreferredSize(new java.awt.Dimension(100, 500));
+        ExternalOptionsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ExternalOptionsPanel.setPreferredSize(new java.awt.Dimension(100, 500));
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout ExternalOptionsPanelLayout = new javax.swing.GroupLayout(ExternalOptionsPanel);
+        ExternalOptionsPanel.setLayout(ExternalOptionsPanelLayout);
+        ExternalOptionsPanelLayout.setHorizontalGroup(
+            ExternalOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        ExternalOptionsPanelLayout.setVerticalGroup(
+            ExternalOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 458, Short.MAX_VALUE)
         );
 
@@ -156,7 +156,7 @@ public class SelectTable extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.weighty = 0.8333;
-        jPanel3.add(jPanel7, gridBagConstraints);
+        FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
 
         MenuBarFile.setText("File");
 
@@ -179,11 +179,11 @@ public class SelectTable extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -234,13 +234,13 @@ public class SelectTable extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ExternalOptionsPanel;
+    private javax.swing.JPanel FormOutputPanel;
+    private javax.swing.JPanel FormPanel;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuBarFile;
     private javax.swing.JMenuItem MenuBarFileExit;
+    private javax.swing.JPanel TableNumPanel;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     // End of variables declaration//GEN-END:variables
 }
