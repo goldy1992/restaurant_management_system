@@ -263,6 +263,16 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
                 OutputLabel.setText("<html><b>Would you like to open Table " + (i+1) + "?</b></html>");
                 setTableSelected(i);
             }
+        } // for
+        
+        if (e.getSource() == openTable)
+        {
+            
+        }
+        
+        if(e.getSource() == moveTable)
+        {
+            
         }
         
     }
