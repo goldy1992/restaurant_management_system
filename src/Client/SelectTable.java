@@ -91,8 +91,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormPanel = new javax.swing.JPanel();
         FormOutputPanel = new javax.swing.JPanel();
         OutputLabel = new javax.swing.JLabel();
-        TableNumPanel = new javax.swing.JPanel();
         ExternalOptionsPanel = new javax.swing.JPanel();
+        TableNumPanel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         MenuBarFile = new javax.swing.JMenu();
         MenuBarFileExit = new javax.swing.JMenuItem();
@@ -120,11 +120,11 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormOutputPanel.setLayout(FormOutputPanelLayout);
         FormOutputPanelLayout.setHorizontalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE)
         );
         FormOutputPanelLayout.setVerticalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -135,18 +135,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.16666;
         FormPanel.add(FormOutputPanel, gridBagConstraints);
-
-        TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
-        TableNumPanel.setLayout(new java.awt.GridLayout(6, 5));
-        FormPanel.add(TableNumPanel, new java.awt.GridBagConstraints());
-        for(int i = 0; i < tableButtons.length; i++)
-        {
-            tableButtons[i] = new JButton();
-            TableNumPanel.add(tableButtons[i]);
-            tableButtons[i].addActionListener(this);
-            setTableStatus(i, tableStatuses.get(i));
-        }
 
         ExternalOptionsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         ExternalOptionsPanel.setPreferredSize(new java.awt.Dimension(100, 500));
@@ -160,6 +148,22 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
         ExternalOptionsPanel.add(openTable);
         ExternalOptionsPanel.add(moveTable);
+
+        TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
+        TableNumPanel.setLayout(new java.awt.GridLayout(6, 5));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        FormPanel.add(TableNumPanel, gridBagConstraints);
+        for(int i = 0; i < tableButtons.length; i++)
+        {
+            tableButtons[i] = new JButton();
+            TableNumPanel.add(tableButtons[i]);
+            tableButtons[i].addActionListener(this);
+            setTableStatus(i, tableStatuses.get(i));
+        }
 
         MenuBarFile.setText("File");
 
@@ -199,7 +203,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
-
 
     /**
      * @param args the command line arguments
