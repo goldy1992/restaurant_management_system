@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package XML.Message.Response;
+package Message.Response;
 
-import XML.Message.Request.Request;
-import XML.Message.Message;
+import Message.Request.Request;
+import Message.Message;
 import java.io.Serializable;
 
 

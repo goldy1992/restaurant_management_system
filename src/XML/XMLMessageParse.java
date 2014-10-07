@@ -6,10 +6,10 @@
 
 package XML;
 
-import XML.Message.Message;
-import XML.Message.Request.Request;
-import XML.Message.Request.TableStatusRequest;
-import XML.Message.Response.TableStatusResponse;
+import Message.Message;
+import Message.Request.Request;
+import Message.Request.TableStatusRequest;
+import Message.Response.TableStatusResponse;
 import java.io.BufferedReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

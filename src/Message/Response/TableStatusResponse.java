@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-package XML.Message.Response;
+package Message.Response;
 
 import Server.MyServer;
 import Server.Table;
-import XML.Message.Request.TableStatusRequest;
+import Message.Request.TableStatusRequest;
 import java.util.ArrayList;
 
 /**

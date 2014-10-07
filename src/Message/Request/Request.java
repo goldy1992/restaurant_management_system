@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package XML.Message.Request;
+package Message.Request;
 
-import XML.Message.Message;
+import Message.Message;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.sql.Timestamp;

@@ -40,6 +40,14 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         
     }
     
+    public Table.TableStatus getTableStatus(int i)
+    {
+        if (i < 0 || i >= tableStatuses.size())
+            return null;
+        
+        else
+            return tableStatuses.get(i);
+    }
     
     public JButton[] getTableButtons()
     {
@@ -267,6 +275,11 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         
         if (e.getSource() == openTable)
         {
+            if (   (tableSelected != -1) 
+                    && 
+                    getTableStatus(tableSelected) != Table.TableStatus.OCCUPIED);
+            
+            // open the table menu but send a message to other clients to say that it is now occupied
             
         }
         

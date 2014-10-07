@@ -7,9 +7,9 @@
 package XML;
 
 import Client.MyClient;
-import XML.Message.Request.TableStatusRequest;
-import XML.Message.Response.Response;
-import XML.Message.Response.TableStatusResponse;
+import Message.Request.TableStatusRequest;
+import Message.Response.Response;
+import Message.Response.TableStatusResponse;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Arrays;

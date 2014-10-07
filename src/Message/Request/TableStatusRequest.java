@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package XML.Message.Request;
+package Message.Request;
 
 import java.net.InetAddress;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package XML;
 
 import Client.MyClient;
-import XML.Message.Request.Request;
+import Message.Request.Request;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Arrays;

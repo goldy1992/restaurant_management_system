@@ -6,13 +6,13 @@
 
 package Server;
 
-import XML.Message.Message;
-import XML.Message.Request.NumOfTablesRequest;
-import XML.Message.Request.Request;
-import XML.Message.Request.TableStatusRequest;
-import XML.Message.Response.NumOfTablesResponse;
-import XML.Message.Response.Response;
-import XML.Message.Response.TableStatusResponse;
+import Message.Message;
+import Message.Request.NumOfTablesRequest;
+import Message.Request.Request;
+import Message.Request.TableStatusRequest;
+import Message.Response.NumOfTablesResponse;
+import Message.Response.Response;
+import Message.Response.TableStatusResponse;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

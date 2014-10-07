@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-package XML.Message.Response;
+package Message.Response;
 
 import Server.MyServer;
-import XML.Message.Request.NumOfTablesRequest;
+import Message.Request.NumOfTablesRequest;
 
 /**
  *
