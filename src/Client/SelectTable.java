@@ -6,7 +6,6 @@
 
 package Client;
 
-import static Client.MyClient.client;
 import static Client.MyClient.generateRequestID;
 import static Client.MyClient.serverAddress;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -165,7 +164,9 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         gridBagConstraints.weighty = 0.8333;
         FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
         ExternalOptionsPanel.add(openTable);
+        openTable.addActionListener(this);
         ExternalOptionsPanel.add(moveTable);
+        moveTable.addActionListener(this);
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
@@ -208,7 +209,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -245,21 +246,23 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
             if (e.getSource() == tableButtons[i])
             {
                 OutputLabel.setText("<html><b>Would you like to open Table " + (i+1) + "?</b></html>");
-                setTableSelected(i);
+                setTableSelected(i+1);
             }
         } // for
         
         if (e.getSource() == openTable)
         {
+            System.out.println("algo");
             if (   (tableSelected != -1) 
-                    && 
-                    getTableStatus(tableSelected) != Table.TableStatus.OCCUPIED);
+                    || 
+                    getTableStatus(tableSelected) != Table.TableStatus.IN_USE);
             try 
             {
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.writeObject(newEvt);
+                    System.out.println("evt nfc set and sent");
                 // open the table menu but send a message to other clients to say that it is now occupied
             } // try 
             catch (UnknownHostException ex) 

@@ -214,6 +214,7 @@ public class MyClient implements Runnable
                     if (response instanceof TableStatusEvtNfn)
                     {
                         TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
+                        System.out.println("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
                         selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
                     }
                 } // evt ntfn if

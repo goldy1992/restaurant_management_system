@@ -58,7 +58,7 @@ public class MyServer
 
                 Socket acceptSocket = mySocket.accept();
                 ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
-                newThread.thread.start();
+                newThread.getThread().start();
                 clients.add(newThread);
                 clientNumber++;
             } // while
@@ -94,11 +94,11 @@ public class MyServer
         return LB_PORT_RANGE;
     }
 
-    public ArrayList<ClientCommunicationThread> getClients()
+    public static ArrayList<ClientCommunicationThread> getClients()
     {
         return clients;
     }
-    public Table[] getTables()
+    public static Table[] getTables()
     {
         return tables;
     }

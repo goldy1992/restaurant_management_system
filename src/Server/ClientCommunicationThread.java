@@ -29,8 +29,10 @@ import java.util.logging.Logger;
 public class ClientCommunicationThread implements Runnable
 {
     private final Socket socket;
-    public final Thread thread;
+    private final Thread thread;
     public long id;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;   
     
     public ClientCommunicationThread(Socket socket, long id)
     {
@@ -42,16 +44,15 @@ public class ClientCommunicationThread implements Runnable
     @Override
     public void run()
     {
+
         System.out.println("got here");
         if (socket != null)
         {
             System.out.println(socket);
             try
-            (
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());    
-            )
             {
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());    
                 System.out.println("read message");
                                
                 while(true)
@@ -77,10 +78,18 @@ public class ClientCommunicationThread implements Runnable
                             TableStatusEvtNfn event = (TableStatusEvtNfn)message;
                             int tableNumber = event.getTableNumber();
                             Table.TableStatus status = event.getTableStatus();
-                            
-                            for(int i =0; i < 10; i++)
+                            MyServer.getTable(tableNumber).setTableStatus(status);
+                                                        
+                            for(int i =0; i < MyServer.getClients().size(); i++)
                             {
-                                MyServer.getTable(i);
+                                ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
+                                TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+                                                                                    MyServer.getClients().get(i).getSocket().getInetAddress(),
+                                                                                    event.getMessageID(),
+                                                                                   tableNumber,
+                                                                                    status);
+                                
+                                otherClientOut.writeObject(msgToSend);
                             }
                         } // tstatusnfnif
                         
@@ -104,5 +113,24 @@ public class ClientCommunicationThread implements Runnable
         }
         while (true);
     } // run
+   
+    public Socket getSocket()
+    {
+        return socket;
+    }
     
+    public Thread getThread()
+    {
+        return thread;
+    }
+    
+    public ObjectOutputStream getOutStream()
+    {
+        return out;
+    }
+    
+    public ObjectInputStream getInStream()
+    {
+        return in;
+    }
 }
