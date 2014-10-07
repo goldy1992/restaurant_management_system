@@ -6,6 +6,8 @@
 
 package Client;
 
+import Message.EventNotification.EventNotification;
+import Message.EventNotification.TableStatusEvtNfn;
 import Server.MyServer;
 import Server.Table;
 import Message.Message;
@@ -24,7 +26,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,11 +39,14 @@ public class MyClient implements Runnable
     public static InetAddress serverAddress; 
     public static int serverPort;  
     public static Socket client;
+    
     private static int numberOfTables = -1;
     public static ArrayList<Table.TableStatus> tableStatuses = null;
+    
+    
     public static SelectTable selectTable;
     public static MyClient responseThread;
-    public static ObjectOutputStream out = null;
+    private static ObjectOutputStream out = null;
     public boolean running = true;
     public static Object lock = new Object();
     public final Thread thread;
@@ -86,6 +90,10 @@ public class MyClient implements Runnable
    }
    
 
+   public ObjectOutputStream getOutputStream()
+   {
+       return out;
+   }
    
    public static void initialiseProgram()
    {
@@ -153,12 +161,16 @@ public class MyClient implements Runnable
         } // synchronized
         System.out.println("post while");
         
-        SelectTable t = new SelectTable(getTableStatuses());
+        SelectTable t = new SelectTable(getTableStatuses(), out);
             t.setVisible(true);
 
         
     } // main
     
+    /**
+     *
+     */
+    @Override
     public void run()
     {
         
@@ -196,12 +208,18 @@ public class MyClient implements Runnable
 
                     }
                                             
-                }
-            }
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+                } // if response
+                else if(response instanceof EventNotification)
+                {
+                    if (response instanceof TableStatusEvtNfn)
+                    {
+                        TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
+                        selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
+                    }
+                } // evt ntfn if
+            } // while running
+        } // try
+        catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -19,6 +19,12 @@ public abstract class EventNotification extends Message
         super(from, to, messageID);
     }
     
+    /**
+     *
+     * @return the string to represent the object plus the information in the super 
+     * classes
+     */
+    @Override
     public String toString()
     {
         return super.toString() + "TYPE: Event Notification\n";

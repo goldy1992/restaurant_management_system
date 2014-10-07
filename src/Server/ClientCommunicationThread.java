@@ -6,6 +6,8 @@
 
 package Server;
 
+import Message.EventNotification.EventNotification;
+import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
 import Message.Request.NumOfTablesRequest;
 import Message.Request.Request;
@@ -54,23 +56,35 @@ public class ClientCommunicationThread implements Runnable
                                
                 while(true)
                 {
-                    Message request = (Message) in.readObject();
+                    Message message = (Message) in.readObject();
                 
-                    if (request instanceof Request)
+                    if (message instanceof Request)
                     {
                         Response response = null;  
-                        if (request instanceof TableStatusRequest)
-                            response = new TableStatusResponse((TableStatusRequest)request);
-                        else if (request instanceof NumOfTablesRequest)
-                            response = new NumOfTablesResponse((NumOfTablesRequest)request);
-                        System.out.println("reponse\n" + request);
+                        if (message instanceof TableStatusRequest)
+                            response = new TableStatusResponse((TableStatusRequest)message);
+                        else if (message instanceof NumOfTablesRequest)
+                            response = new NumOfTablesResponse((NumOfTablesRequest)message);
+                        System.out.println("reponse\n" + message);
 
                         response.parse();
                         out.writeObject(response);
-                    } // the respose if statement
-                
- 
-                    
+                    } // the respose if statement                    
+                    else if(message instanceof EventNotification)
+                    {
+                        if (message instanceof TableStatusEvtNfn)
+                        {
+                            TableStatusEvtNfn event = (TableStatusEvtNfn)message;
+                            int tableNumber = event.getTableNumber();
+                            Table.TableStatus status = event.getTableStatus();
+                            
+                            for(int i =0; i < 10; i++)
+                            {
+                                MyServer.getTable(i);
+                            }
+                        } // tstatusnfnif
+                        
+                    }
                 System.out.println("returned");
                 }
                 

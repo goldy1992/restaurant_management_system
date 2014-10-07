@@ -1,21 +1,3 @@
-/* USEFUL CODE
-            try
-            (
-
-                PrintWriter out =
-                    new PrintWriter(acceptSocket.getOutputStream(), true);                   
-                BufferedReader in = new BufferedReader(
-                    new InputStreamReader(acceptSocket.getInputStream()));   
-            ) // try open bracket
-            {
-                String inputLine;
-                if ((inputLine = in.readLine()) != null) 
-                {
-                    
-                    out.println(LocalDateTime.now(Clock.systemDefaultZone()));
-                } // if
-
-*/
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -111,5 +93,13 @@ public class MyServer
     {
         return LB_PORT_RANGE;
     }
-        
+
+    public ArrayList<ClientCommunicationThread> getClients()
+    {
+        return clients;
+    }
+    public Table[] getTables()
+    {
+        return tables;
+    }
 } // MySocket class

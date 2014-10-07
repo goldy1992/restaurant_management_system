@@ -6,12 +6,21 @@
 
 package Client;
 
+import static Client.MyClient.client;
+import static Client.MyClient.generateRequestID;
+import static Client.MyClient.serverAddress;
+import Message.EventNotification.TableStatusEvtNfn;
 import Server.Table;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 
 /**
@@ -21,6 +30,7 @@ import javax.swing.JButton;
 public class SelectTable extends javax.swing.JFrame implements ActionListener {
     
 
+    private final ObjectOutputStream out;
     private final JButton[] tableButtons;
     private final ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
@@ -37,14 +47,12 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
     public void setTableSelected(int table)
     {
         tableSelected = table;
-        
     }
     
     public Table.TableStatus getTableStatus(int i)
     {
         if (i < 0 || i >= tableStatuses.size())
-            return null;
-        
+            return null;       
         else
             return tableStatuses.get(i);
     }
@@ -57,8 +65,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
     public void setTableStatus(int index, Table.TableStatus t)
     {
         if (index < 0 || index >= tableButtons.length)
-            return;
-        
+            return;    
         switch(t)
         {
             case FREE:
@@ -73,14 +80,17 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
                 tableButtons[index].setBackground(Color.RED);
                 tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Occupied</html>");
                 break;
-        }
-    }
+        } // switch
+    } // setTableStatus
     /**
      * Creates new form SelectTable
+     * @param tableStatuses
+     * @param out
      */
-    public SelectTable(ArrayList<Table.TableStatus> tableStatuses) 
+    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out) 
     {
         this.tableStatuses = tableStatuses;
+        this.out = out;
 //        System.out.println("size " + tableStatuses.size());
         tableButtons = new JButton[this.tableStatuses.size()];
         initComponents();
@@ -212,40 +222,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SelectTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SelectTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SelectTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SelectTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SelectTable(null).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ExternalOptionsPanel;
@@ -278,8 +254,22 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
             if (   (tableSelected != -1) 
                     && 
                     getTableStatus(tableSelected) != Table.TableStatus.OCCUPIED);
-            
-            // open the table menu but send a message to other clients to say that it is now occupied
+            try 
+            {
+                    TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(serverAddress.getHostName()),
+                    MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
+                    out.writeObject(newEvt);
+                // open the table menu but send a message to other clients to say that it is now occupied
+            } // try 
+            catch (UnknownHostException ex) 
+            {
+                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+            } // catch 
+            catch (IOException ex) 
+            {
+                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+            } // catch
             
         }
         
