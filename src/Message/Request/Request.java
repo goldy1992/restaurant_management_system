@@ -6,11 +6,7 @@
 package Message.Request;
 
 import Message.Message;
-import java.io.Serializable;
 import java.net.InetAddress;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Random;
 
 /**
  *

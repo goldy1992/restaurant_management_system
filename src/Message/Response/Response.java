@@ -7,7 +7,6 @@ package Message.Response;
 
 import Message.Request.Request;
 import Message.Message;
-import java.io.Serializable;
 
 
 /**
