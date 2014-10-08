@@ -267,6 +267,10 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
                     System.out.println("evt nfc set and sent for table " + tableSelected);
                 // open the table menu but send a message to other clients to say that it is now occupied
                     
+                Menu m = new Menu(this, true);
+                m.setEnabled(true);
+                m.setModal(true);
+                m.setVisible(true);
                 
             } // try 
             catch (UnknownHostException ex) 
