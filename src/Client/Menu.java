@@ -35,6 +35,17 @@ public class Menu extends javax.swing.JDialog {
         jTextPane1 = new javax.swing.JTextPane();
         CardPanel = new javax.swing.JPanel();
         InitialCard = new javax.swing.JPanel();
+        MenuSelectPanel = new javax.swing.JPanel();
+        FoodMenuButton = new javax.swing.JButton();
+        SpritLiqButton = new javax.swing.JButton();
+        WinesButton = new javax.swing.JButton();
+        SendOrderButton = new javax.swing.JButton();
+        DeliveredButton = new javax.swing.JButton();
+        VoidButton = new javax.swing.JButton();
+        VoidLastItemButton = new javax.swing.JButton();
+        BottlesButton = new javax.swing.JButton();
+        MineralsMixersButton = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         FoodCard = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -58,7 +69,7 @@ public class Menu extends javax.swing.JDialog {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -74,16 +85,96 @@ public class Menu extends javax.swing.JDialog {
         CardPanel.setPreferredSize(new java.awt.Dimension(400, 350));
         CardPanel.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout InitialCardLayout = new javax.swing.GroupLayout(InitialCard);
-        InitialCard.setLayout(InitialCardLayout);
-        InitialCardLayout.setHorizontalGroup(
-            InitialCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+        InitialCard.setLayout(new java.awt.GridLayout());
+
+        MenuSelectPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        FoodMenuButton.setText("Food Menu");
+
+        SpritLiqButton.setText("Spirits/Liqueurs");
+
+        WinesButton.setText("Wines");
+
+        SendOrderButton.setText("Send Order");
+
+        DeliveredButton.setText("Delivered");
+
+        VoidButton.setText("Void");
+
+        VoidLastItemButton.setText("Void Last Item");
+
+        BottlesButton.setText("Bottles");
+
+        MineralsMixersButton.setText("Minerals/Mixers");
+        MineralsMixersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MineralsMixersButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MenuSelectPanelLayout = new javax.swing.GroupLayout(MenuSelectPanel);
+        MenuSelectPanel.setLayout(MenuSelectPanelLayout);
+        MenuSelectPanelLayout.setHorizontalGroup(
+            MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuSelectPanelLayout.createSequentialGroup()
+                .addComponent(VoidButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(VoidLastItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(MenuSelectPanelLayout.createSequentialGroup()
+                .addComponent(SendOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DeliveredButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
+            .addGroup(MenuSelectPanelLayout.createSequentialGroup()
+                .addComponent(SpritLiqButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BottlesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(MenuSelectPanelLayout.createSequentialGroup()
+                .addComponent(WinesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MineralsMixersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(FoodMenuButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        InitialCardLayout.setVerticalGroup(
-            InitialCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 214, Short.MAX_VALUE)
+        MenuSelectPanelLayout.setVerticalGroup(
+            MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuSelectPanelLayout.createSequentialGroup()
+                .addComponent(FoodMenuButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SpritLiqButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BottlesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(WinesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MineralsMixersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(VoidLastItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(VoidButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuSelectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SendOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(DeliveredButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        FoodMenuButton.getAccessibleContext().setAccessibleName("Food Menu");
+
+        InitialCard.add(MenuSelectPanel);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 226, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 224, Short.MAX_VALUE)
+        );
+
+        InitialCard.add(jPanel3);
 
         CardPanel.add(InitialCard, "card2");
 
@@ -95,7 +186,7 @@ public class Menu extends javax.swing.JDialog {
         );
         FoodCardLayout.setVerticalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 214, Short.MAX_VALUE)
+            .addGap(0, 226, Short.MAX_VALUE)
         );
 
         CardPanel.add(FoodCard, "card3");
@@ -130,6 +221,10 @@ public class Menu extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MineralsMixersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MineralsMixersButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MineralsMixersButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,14 +269,25 @@ public class Menu extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BottlesButton;
     private javax.swing.JPanel CardPanel;
+    private javax.swing.JButton DeliveredButton;
     private javax.swing.JPanel FoodCard;
+    private javax.swing.JButton FoodMenuButton;
     private javax.swing.JPanel FormPanel;
     private javax.swing.JPanel InitialCard;
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JPanel MenuSelectPanel;
+    private javax.swing.JButton MineralsMixersButton;
+    private javax.swing.JButton SendOrderButton;
+    private javax.swing.JButton SpritLiqButton;
+    private javax.swing.JButton VoidButton;
+    private javax.swing.JButton VoidLastItemButton;
+    private javax.swing.JButton WinesButton;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
