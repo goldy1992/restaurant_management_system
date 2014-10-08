@@ -45,8 +45,11 @@ public class TableStatusResponse extends Response
  
         //System.out.println("gettign statuses");
         // for each table in the request, add its status to the ArrayList
+        
+        
+        tableStatuses.add(null);
  
-        for (int i = 0; i < x.getTableList().size(); i++)
+        for (int i = 1; i < x.getTableList().size(); i++)
         {
           //  System.out.println(i + " table number: " + x.getTableList().get(i));
             tableStatuses.add(MyServer.getTable(x.getTableList().get(i)).getTableStatus());

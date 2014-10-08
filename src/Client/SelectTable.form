@@ -142,7 +142,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="for(int i = 0; i &lt; tableButtons.length; i++)&#xa;{&#xa;    tableButtons[i] = new JButton();&#xa;    TableNumPanel.add(tableButtons[i]); &#xa;    tableButtons[i].addActionListener(this);&#xa;    setTableStatus(i, tableStatuses.get(i));&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="for(int i = 1; i &lt; tableButtons.length; i++)&#xa;{&#xa;    tableButtons[i] = new JButton();&#xa;    TableNumPanel.add(tableButtons[i]); &#xa;    tableButtons[i].addActionListener(this);&#xa;    setTableStatus(i, tableStatuses.get(i));&#xa;}"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

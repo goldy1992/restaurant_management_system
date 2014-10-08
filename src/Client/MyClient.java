@@ -119,8 +119,10 @@ public class MyClient implements Runnable
             //System.out.println("sent num table request");
 
             ArrayList<Integer> tables = new ArrayList<>();
-            for(int  i = 0 ; i < MyServer.getNumOfTables(); i++ ) 
-                tables.add(i + 1);
+            // add null because there's no table zero
+            tables.add(null);
+            for(int  i = 1 ; i <= MyServer.getNumOfTables(); i++ ) 
+                tables.add(i);
                 
             TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                           InetAddress.getByName(serverAddress.getHostName()),
@@ -162,6 +164,7 @@ public class MyClient implements Runnable
         System.out.println("post while");
         
         SelectTable t = new SelectTable(getTableStatuses(), out);
+        selectTable = t;
             t.setVisible(true);
 
         

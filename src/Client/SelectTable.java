@@ -69,15 +69,15 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         {
             case FREE:
                 tableButtons[index].setBackground(Color.GREEN);
-                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Free</html>");
+                tableButtons[index].setText("<html>Table " + index + "<br>Free</html>");
                 break;
             case IN_USE:
                 tableButtons[index].setBackground(Color.YELLOW);
-                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Table in Use</html>");
+                tableButtons[index].setText("<html>Table " + index+ "<br>Table in Use</html>");
                 break;
             case OCCUPIED:
                 tableButtons[index].setBackground(Color.RED);
-                tableButtons[index].setText("<html>Table " + (index+1)+ "<br>Occupied</html>");
+                tableButtons[index].setText("<html>Table " + index + "<br>Occupied</html>");
                 break;
         } // switch
     } // setTableStatus
@@ -90,7 +90,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
     {
         this.tableStatuses = tableStatuses;
         this.out = out;
-//        System.out.println("size " + tableStatuses.size());
+        System.out.println("size " + tableStatuses.size());
         tableButtons = new JButton[this.tableStatuses.size()];
         initComponents();
     }
@@ -176,7 +176,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         FormPanel.add(TableNumPanel, gridBagConstraints);
-        for(int i = 0; i < tableButtons.length; i++)
+        for(int i = 1; i < tableButtons.length; i++)
         {
             tableButtons[i] = new JButton();
             TableNumPanel.add(tableButtons[i]);
@@ -245,9 +245,11 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         {
             if (e.getSource() == tableButtons[i])
             {
-                OutputLabel.setText("<html><b>Would you like to open Table " + (i+1) + "?</b></html>");
-                setTableSelected(i+1);
+                OutputLabel.setText("<html><b>Would you like to open Table " + i + "?</b></html>");
+                setTableSelected(i);
+                            System.out.println("select table" +  i);
             }
+
         } // for
         
         if (e.getSource() == openTable)
@@ -262,8 +264,10 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.writeObject(newEvt);
-                    System.out.println("evt nfc set and sent");
+                    System.out.println("evt nfc set and sent for table " + tableSelected);
                 // open the table menu but send a message to other clients to say that it is now occupied
+                    
+                
             } // try 
             catch (UnknownHostException ex) 
             {

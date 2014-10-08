@@ -78,6 +78,8 @@ public class ClientCommunicationThread implements Runnable
                             TableStatusEvtNfn event = (TableStatusEvtNfn)message;
                             int tableNumber = event.getTableNumber();
                             Table.TableStatus status = event.getTableStatus();
+                            
+                            System.out.println("requested table " + tableNumber);
                             MyServer.getTable(tableNumber).setTableStatus(status);
                                                         
                             for(int i =0; i < MyServer.getClients().size(); i++)
