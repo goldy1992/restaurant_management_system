@@ -247,7 +247,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
             {
                 OutputLabel.setText("<html><b>Would you like to open Table " + i + "?</b></html>");
                 setTableSelected(i);
-                            System.out.println("select table" +  i);
+                            System.out.println("select table " +  getTableSelected());
             }
 
         } // for
@@ -255,32 +255,40 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         if (e.getSource() == openTable)
         {
             System.out.println("algo");
-            if (   (tableSelected != -1) 
-                    || 
-                    getTableStatus(tableSelected) != Table.TableStatus.IN_USE);
-            try 
+            if ( tableSelected == -1)
+                OutputLabel.setText("You have no table selected yet!");
+            else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
+                System.out.println("tab in use");
+            else
             {
+                try 
+                {
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.writeObject(newEvt);
-                    System.out.println("evt nfc set and sent for table " + tableSelected);
-                // open the table menu but send a message to other clients to say that it is now occupied
                     
-                Menu m = new Menu(this, true);
-                m.setEnabled(true);
-                m.setModal(true);
-                m.setVisible(true);
+                    
+                    System.out.println("evt nfc set and sent for table " + tableSelected);
+                    // open the table menu but send a message to other clients to say that it is now occupied
+                    
+                    Menu m = new Menu(this, true);
+                    m.setEnabled(true);
+                    m.setModal(true);
+                    m.setVisible(true);
                 
-            } // try 
-            catch (UnknownHostException ex) 
-            {
-                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-            } // catch 
-            catch (IOException ex) 
-            {
-                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-            } // catch
+                    System.out.println("show");
+                
+                } // try 
+                catch (UnknownHostException ex) 
+                {
+                    Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                } // catch 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                } // catch
+            } // else
             
         }
         

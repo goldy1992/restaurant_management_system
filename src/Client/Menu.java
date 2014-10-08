@@ -57,7 +57,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         FormPanel.setLayout(new java.awt.GridBagLayout());
@@ -315,5 +315,10 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
             currentCard = "foodCard";
             
         } // if
+        else if (e.getSource() == SendOrderButton)
+        {
+            this.dispose();
+        }
+        
     } // actionPerformed
 }

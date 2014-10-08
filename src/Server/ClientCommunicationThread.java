@@ -82,6 +82,7 @@ public class ClientCommunicationThread implements Runnable
                             System.out.println("requested table " + tableNumber);
                             MyServer.getTable(tableNumber).setTableStatus(status);
                                                         
+                            System.out.println("number of clients to send to: " + MyServer.getClients().size());
                             for(int i =0; i < MyServer.getClients().size(); i++)
                             {
                                 ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
