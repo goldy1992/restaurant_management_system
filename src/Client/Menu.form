@@ -79,12 +79,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="398" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="444" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="104" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="72" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -96,7 +96,10 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextPane" name="jTextPane1">
+                <Component class="javax.swing.JTextPane" name="OutputArea">
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="OutputArea.addMouseListener(this);"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -124,7 +127,7 @@
             <Container class="javax.swing.JPanel" name="InitialCard">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                  <CardConstraints cardName="card2"/>
+                  <CardConstraints cardName="mainCard"/>
                 </Constraint>
               </Constraints>
 
@@ -142,60 +145,9 @@
                     </Property>
                   </Properties>
 
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="VoidButton" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="VoidLastItemButton" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="SendOrderButton" min="-2" pref="106" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="DeliveredButton" pref="114" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="SpritLiqButton" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="BottlesButton" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="WinesButton" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="MineralsMixersButton" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="FoodMenuButton" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="FoodMenuButton" pref="31" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="SpritLiqButton" alignment="3" max="32767" attributes="0"/>
-                                  <Component id="BottlesButton" alignment="3" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="WinesButton" alignment="3" max="32767" attributes="0"/>
-                                  <Component id="MineralsMixersButton" alignment="3" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="VoidLastItemButton" pref="46" max="32767" attributes="0"/>
-                                  <Component id="VoidButton" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="SendOrderButton" pref="65" max="32767" attributes="0"/>
-                                  <Component id="DeliveredButton" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                    <Property name="columns" type="int" value="2"/>
+                    <Property name="rows" type="int" value="5"/>
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="FoodMenuButton">
@@ -203,55 +155,78 @@
                         <Property name="text" type="java.lang.String" value="Food Menu"/>
                       </Properties>
                       <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Food Menu"/>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="" postCode="FoodMenuButton.addActionListener(this);"/>
                       </AccessibilityProperties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="SpritLiqButton">
+                    <Component class="javax.swing.JButton" name="SpiritLiqButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Spirits/Liqueurs"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SpiritLiqButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="WinesButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Wines"/>
                       </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="SendOrderButton">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Send Order"/>
-                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="WinesButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="DeliveredButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Delivered"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="DeliveredButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JButton" name="VoidButton">
+                    <Component class="javax.swing.JButton" name="MineralsMixersButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Void"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="&quot;Minerals/Mixers&quot;" type="code"/>
+                        </Property>
                       </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="VoidLastItemButton">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Void Last Item"/>
-                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="MineralsMixersButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="BottlesButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Bottles"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="BottlesButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JButton" name="MineralsMixersButton">
+                    <Component class="javax.swing.JButton" name="VoidButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Minerals/Mixers"/>
+                        <Property name="text" type="java.lang.String" value="Void"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MineralsMixersButtonActionPerformed"/>
-                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="VoidButton.addActionListener(this);"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="VoidLastItemButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Void Last Item"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="VoidLastItemButton.addActionListener(this);"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="SendOrderButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Send Order"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SendOrderButton.addActionListener(this);"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="jPanel3">
+                <Container class="javax.swing.JPanel" name="FoodMenuPanel">
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -263,12 +238,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="226" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="220" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="224" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="257" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -276,21 +251,24 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="FoodCard">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="FoodCard.addMouseListener(this);"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                  <CardConstraints cardName="card3"/>
+                  <CardConstraints cardName="foodCard"/>
                 </Constraint>
               </Constraints>
 
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="444" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="226" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="259" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
