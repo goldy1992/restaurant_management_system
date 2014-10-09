@@ -317,6 +317,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         } // if
         else if (e.getSource() == SendOrderButton)
         {
+            
             this.dispose();
         }
         
