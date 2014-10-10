@@ -24,6 +24,8 @@ public class MyServer
     private static final int LB_PORT_RANGE = 11000;
     private static final int NUM_OF_TABLES = 30;
     
+    private static final Object LOCK = new Object();
+    
     private static ArrayList<ClientCommunicationThread> clients;
     private static Table[] tables;
     
@@ -96,7 +98,22 @@ public class MyServer
 
     public static ArrayList<ClientCommunicationThread> getClients()
     {
-        return clients;
+        synchronized(LOCK)
+        {
+            return clients;
+        }
+    }
+    
+    public static void removeClient(ClientCommunicationThread client)
+    {
+        synchronized(LOCK)
+        {
+            for (int i = 0; i < clients.size(); i++)
+                if (client.equals(clients.get(i)))
+                    clients.remove(i);
+            
+            System.out.println("client removed");
+        } // synchronized
     }
     public static Table[] getTables()
     {

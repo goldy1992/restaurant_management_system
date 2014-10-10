@@ -14,6 +14,7 @@ import Message.Message;
 import Message.Request.NumOfTablesRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
+import Message.Response.LeaveResponse;
 import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;
 import Message.Response.TableStatusResponse;
@@ -209,6 +210,11 @@ public class MyClient implements Runnable
                         //System.out.println("got  num of tables: " + r.getNumOfTables());
                         MyClient.setNumTables(r.getNumOfTables());
 
+                    }
+                    if (response instanceof LeaveResponse)
+                    {
+                        System.out.println("reached exit");
+                        System.exit(0);
                     }
                                             
                 } // if response

@@ -9,9 +9,11 @@ package Server;
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
+import Message.Request.LeaveRequest;
 import Message.Request.NumOfTablesRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
+import Message.Response.LeaveResponse;
 import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;
 import Message.Response.TableStatusResponse;
@@ -70,7 +72,6 @@ public class ClientCommunicationThread implements Runnable
             catch(IOException e)
             {
                 System.out.println("Failed to set up buffers" + "\n");
-                e.printStackTrace();
             } 
             catch (ClassNotFoundException ex) {
                 Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,6 +107,15 @@ public class ClientCommunicationThread implements Runnable
             response = new TableStatusResponse((TableStatusRequest)message);
         else if (message instanceof NumOfTablesRequest)
             response = new NumOfTablesResponse((NumOfTablesRequest)message);
+        else if (message instanceof LeaveRequest)
+        {
+            response = new LeaveResponse((LeaveRequest)message);
+            MyServer.removeClient(this);
+            isRunning = false;
+        }
+        if (response == null)
+            return;
+        
         System.out.println("reponse\n" + message);
         response.parse();
         out.writeObject(response);        

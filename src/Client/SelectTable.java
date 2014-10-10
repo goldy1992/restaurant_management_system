@@ -6,13 +6,20 @@
 
 package Client;
 
+import static Client.MyClient.client;
 import static Client.MyClient.generateRequestID;
 import static Client.MyClient.serverAddress;
 import Message.EventNotification.TableStatusEvtNfn;
+import Message.Request.LeaveRequest;
+import Message.Request.NumOfTablesRequest;
+import Message.Request.Request;
 import Server.Table;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -21,14 +28,15 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Goldy
  */
-public class SelectTable extends javax.swing.JFrame implements ActionListener {
-    
-
+public class SelectTable extends javax.swing.JFrame implements ActionListener 
+{
+   
     private final ObjectOutputStream out;
     private final JButton[] tableButtons;
     private final ArrayList<Table.TableStatus> tableStatuses;
@@ -115,8 +123,14 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         MenuBarFileExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(474, 625));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(600, 650));
+        setPreferredSize(new java.awt.Dimension(600, 650));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -129,6 +143,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormPanel.setLayout(jPanel3Layout);
 
         FormOutputPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        FormOutputPanel.setMinimumSize(new java.awt.Dimension(500, 100));
         FormOutputPanel.setPreferredSize(new java.awt.Dimension(500, 100));
 
         OutputLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -137,11 +152,11 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormOutputPanel.setLayout(FormOutputPanelLayout);
         FormOutputPanelLayout.setHorizontalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
         FormOutputPanelLayout.setVerticalGroup(
             FormOutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(OutputLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -154,6 +169,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         FormPanel.add(FormOutputPanel, gridBagConstraints);
 
         ExternalOptionsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ExternalOptionsPanel.setMinimumSize(new java.awt.Dimension(100, 500));
         ExternalOptionsPanel.setPreferredSize(new java.awt.Dimension(100, 500));
         ExternalOptionsPanel.setLayout(new java.awt.GridLayout(6, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,6 +185,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         moveTable.addActionListener(this);
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TableNumPanel.setMinimumSize(new java.awt.Dimension(400, 500));
         TableNumPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         TableNumPanel.setLayout(new java.awt.GridLayout(6, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -205,7 +222,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,6 +239,33 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+                        int confirm = JOptionPane.showOptionDialog(null, 
+                   "Are You Sure to Close Application?", "Exit Confirmation", 
+                   JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                   null, null, null);
+                
+                if (confirm == 0) 
+                {
+                    try 
+                    {
+                        LeaveRequest leaveRequest = new LeaveRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                                InetAddress.getByName(MyClient.serverAddress.getHostName()),
+                                generateRequestID(),
+                                Request.RequestType.LEAVE);
+                        out.writeObject(leaveRequest);
+                    } // try 
+                    catch (UnknownHostException ex) 
+                    {
+                        Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                } // if
+    }//GEN-LAST:event_formWindowClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -278,6 +322,12 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
                     m.setVisible(true);
                 
                     System.out.println("show");
+
+                    TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(serverAddress.getHostName()),
+                    MyClient.generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
+                    out.writeObject(newEvt1);
+                    
                 
                 } // try 
                 catch (UnknownHostException ex) 
@@ -298,4 +348,5 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener {
         }
         
     }
+
 }
