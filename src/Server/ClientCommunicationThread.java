@@ -111,6 +111,7 @@ public class ClientCommunicationThread implements Runnable
         {
             response = new LeaveResponse((LeaveRequest)message);
             MyServer.removeClient(this);
+            System.out.println("client size " + MyServer.getClients().size());
             isRunning = false;
         }
         if (response == null)

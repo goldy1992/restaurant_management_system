@@ -63,6 +63,7 @@ public class MyServer
                 newThread.getThread().start();
                 clients.add(newThread);
                 clientNumber++;
+                System.out.println("client size " + clients.size());
             } // while
    
             mySocket.close();
