@@ -35,6 +35,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel2 = new javax.swing.JPanel();
         FormPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -45,17 +46,29 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodMenuButton = new javax.swing.JButton();
         SpiritLiqButton = new javax.swing.JButton();
         WinesButton = new javax.swing.JButton();
-        DeliveredButton = new javax.swing.JButton();
         MineralsMixersButton = new javax.swing.JButton();
         BottlesButton = new javax.swing.JButton();
+        FoodMenuPanel = new javax.swing.JPanel();
+        BillHandleFrame = new javax.swing.JPanel();
+        SendOrderButton = new javax.swing.JButton();
         VoidButton = new javax.swing.JButton();
         VoidLastItemButton = new javax.swing.JButton();
-        SendOrderButton = new javax.swing.JButton();
-        FoodMenuPanel = new javax.swing.JPanel();
+        DeliveredButton = new javax.swing.JButton();
         FoodCard = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 165, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 63, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -72,11 +85,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1254, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -92,7 +105,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         CardPanel.setPreferredSize(new java.awt.Dimension(400, 350));
         CardPanel.setLayout(new java.awt.CardLayout());
 
-        InitialCard.setLayout(new java.awt.GridLayout());
+        InitialCard.setLayout(new java.awt.GridLayout(1, 0));
 
         MenuSelectPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         MenuSelectPanel.setLayout(new java.awt.GridLayout(5, 2));
@@ -110,10 +123,6 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         MenuSelectPanel.add(WinesButton);
         WinesButton.addActionListener(this);
 
-        DeliveredButton.setText("Delivered");
-        MenuSelectPanel.add(DeliveredButton);
-        DeliveredButton.addActionListener(this);
-
         MineralsMixersButton.setText("Minerals/Mixers");
         MenuSelectPanel.add(MineralsMixersButton);
         MineralsMixersButton.addActionListener(this);
@@ -121,18 +130,6 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         BottlesButton.setText("Bottles");
         MenuSelectPanel.add(BottlesButton);
         BottlesButton.addActionListener(this);
-
-        VoidButton.setText("Void");
-        MenuSelectPanel.add(VoidButton);
-        VoidButton.addActionListener(this);
-
-        VoidLastItemButton.setText("Void Last Item");
-        MenuSelectPanel.add(VoidLastItemButton);
-        VoidLastItemButton.addActionListener(this);
-
-        SendOrderButton.setText("Send Order");
-        MenuSelectPanel.add(SendOrderButton);
-        SendOrderButton.addActionListener(this);
 
         InitialCard.add(MenuSelectPanel);
 
@@ -142,14 +139,35 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodMenuPanel.setLayout(FoodMenuPanelLayout);
         FoodMenuPanelLayout.setHorizontalGroup(
             FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
+            .addGap(0, 416, Short.MAX_VALUE)
         );
         FoodMenuPanelLayout.setVerticalGroup(
             FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
+            .addGap(0, 336, Short.MAX_VALUE)
         );
 
         InitialCard.add(FoodMenuPanel);
+
+        BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
+        BillHandleFrame.setLayout(new java.awt.GridLayout(10, 1));
+
+        SendOrderButton.setText("Send Order");
+        BillHandleFrame.add(SendOrderButton);
+        SendOrderButton.addActionListener(this);
+
+        VoidButton.setText("Void");
+        BillHandleFrame.add(VoidButton);
+        VoidButton.addActionListener(this);
+
+        VoidLastItemButton.setText("Void Last Item");
+        BillHandleFrame.add(VoidLastItemButton);
+        VoidLastItemButton.addActionListener(this);
+
+        DeliveredButton.setText("Delivered");
+        BillHandleFrame.add(DeliveredButton);
+        DeliveredButton.addActionListener(this);
+
+        InitialCard.add(BillHandleFrame);
 
         CardPanel.add(InitialCard, "mainCard");
 
@@ -157,11 +175,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodCard.setLayout(FoodCardLayout);
         FoodCardLayout.setHorizontalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 444, Short.MAX_VALUE)
+            .addGap(0, 1254, Short.MAX_VALUE)
         );
         FoodCardLayout.setVerticalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 259, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
 
         CardPanel.add(FoodCard, "foodCard");
@@ -188,11 +206,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1256, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
         );
 
         pack();
@@ -242,6 +260,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BillHandleFrame;
     private javax.swing.JButton BottlesButton;
     private javax.swing.JPanel CardPanel;
     private javax.swing.JButton DeliveredButton;
@@ -262,6 +281,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 

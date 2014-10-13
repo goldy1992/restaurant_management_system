@@ -298,7 +298,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             if ( tableSelected == -1)
                 OutputLabel.setText("You have no table selected yet!");
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
-                System.out.println("tab in use");
+                OutputLabel.setText("Table " + tableSelected + " in use");
             else
             {
                 try 
@@ -323,6 +323,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
                     out.writeObject(newEvt1);
+                    OutputLabel.setText("");
+                    tableSelected = -1;
                     
                 
                 } // try 
