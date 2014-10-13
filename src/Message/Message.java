@@ -15,9 +15,9 @@ import java.net.InetAddress;
  */
 public abstract class Message implements Serializable 
 {
-    private InetAddress fromAddress;
-    private InetAddress toAddress;
-    private String messageID;
+    private final InetAddress fromAddress;
+    private final InetAddress toAddress;
+    private final String messageID;
     
     public Message(InetAddress from, InetAddress to, String messageID)
     {

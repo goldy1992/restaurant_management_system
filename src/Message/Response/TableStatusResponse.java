@@ -17,13 +17,15 @@ import java.util.ArrayList;
  */
 public class TableStatusResponse extends Response
 {
+    
+    private final ArrayList<Table.TableStatus> tableStatuses;
     public TableStatusResponse(TableStatusRequest request)
     {
         super(request);
-        tableStatuses = new ArrayList();
+        tableStatuses = new ArrayList<Table.TableStatus>();
     } // contructor
     
-    private final ArrayList<Table.TableStatus> tableStatuses;
+
     
     /**
      *

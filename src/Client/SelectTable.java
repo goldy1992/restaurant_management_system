@@ -6,20 +6,15 @@
 
 package Client;
 
-import static Client.MyClient.client;
 import static Client.MyClient.generateRequestID;
 import static Client.MyClient.serverAddress;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
-import Message.Request.NumOfTablesRequest;
 import Message.Request.Request;
 import Server.Table;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -89,6 +84,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                 break;
         } // switch
     } // setTableStatus
+    
     /**
      * Creates new form SelectTable
      * @param tableStatuses
