@@ -13,25 +13,62 @@ import java.math.BigDecimal;
  */
 public class Item 
 {   
-    private int id;
-    private String message;
-    private String name;
-    private BigDecimal price;
+    public static enum Type 
+    {
+        DRINK, FOOD
+    }
     
-    public Item(int id, String name, String message, BigDecimal price)
+    public Type type;
+    private final int id;
+    private final String message;
+    private final String name;
+    private final BigDecimal price;
+    private final int quantity;
+    
+    
+    public Item(int id, String name, 
+                String message, BigDecimal price, 
+                Type type)
     {
         this.id = id;
         this.message = message;
         this.name = name;
         this.price = price;
+        this.type = type;
+        this.quantity = 1;
     } // item
     
-    public Item(int id, String name, BigDecimal price)
+    public Item(int id, String name, 
+                BigDecimal price, Type type)
     {
         this.id = id;
         this.message = null;
         this.name = name;
         this.price = price;
+        this.type = type;
+        this.quantity = 1;
+    } // item
+    
+    public Item(int id, String name, String message, 
+                BigDecimal price, Type type, int quantity)
+    {
+        this.id = id;
+        this.message = message;
+        this.name = name;
+        this.price = price;
+        this.type = type;
+        this.quantity = quantity;
+    } // item
+    
+    public Item(int id, String name, 
+                BigDecimal price, Type type, int quantity)
+    {
+        this.id = id;
+        this.message = null;
+        this.name = name;
+        this.price = price;
+        this.type = type;
+        this.quantity = quantity;
     } // item
     
     @Override
@@ -40,6 +77,7 @@ public class Item
         return "Food\nName: " + name + 
                 "\nid: " + id + 
                 "\nprice " + price +
+                "\nquantity " + quantity +
                 "\nmessage " + message;
     }
     

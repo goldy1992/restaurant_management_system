@@ -51,10 +51,13 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodMenuPanel = new javax.swing.JPanel();
         ColaPintButton = new javax.swing.JButton();
         HalfColaButton = new javax.swing.JButton();
-        HalfDietColaButton = new javax.swing.JButton();
-        ColaDietPintButton = new javax.swing.JButton();
         DashColaButton = new javax.swing.JButton();
+        ColaDietPintButton = new javax.swing.JButton();
+        HalfDietColaButton = new javax.swing.JButton();
         DashDietColaButton = new javax.swing.JButton();
+        LemonadePintButton = new javax.swing.JButton();
+        HalfLemonadeButton = new javax.swing.JButton();
+        DashLemonadeButton = new javax.swing.JButton();
         BillHandleFrame = new javax.swing.JPanel();
         PrintBillButton = new javax.swing.JButton();
         PrintLastReceiptButton = new javax.swing.JButton();
@@ -95,7 +98,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2652, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,57 +147,34 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         InitialCard.add(MenuSelectPanel);
 
         FoodMenuPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        FoodMenuPanel.setLayout(new java.awt.GridLayout(8, 3));
 
         ColaPintButton.setText("Pint Cola");
+        FoodMenuPanel.add(ColaPintButton);
 
         HalfColaButton.setText("14oz Cola");
-
-        HalfDietColaButton.setText("14oz Diet Cola");
-
-        ColaDietPintButton.setText("Pint Diet Cola");
+        FoodMenuPanel.add(HalfColaButton);
 
         DashColaButton.setText("4oz Dsh Cola");
+        FoodMenuPanel.add(DashColaButton);
 
-        DashDietColaButton.setText("4oz Dsh Diet Cola");
+        ColaDietPintButton.setText("Pint Diet Cola");
+        FoodMenuPanel.add(ColaDietPintButton);
 
-        javax.swing.GroupLayout FoodMenuPanelLayout = new javax.swing.GroupLayout(FoodMenuPanel);
-        FoodMenuPanel.setLayout(FoodMenuPanelLayout);
-        FoodMenuPanelLayout.setHorizontalGroup(
-            FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(FoodMenuPanelLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
-                        .addComponent(ColaPintButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(HalfColaButton))
-                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
-                        .addComponent(ColaDietPintButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(HalfDietColaButton))
-                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
-                        .addComponent(DashColaButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DashDietColaButton)))
-                .addContainerGap(29, Short.MAX_VALUE))
-        );
-        FoodMenuPanelLayout.setVerticalGroup(
-            FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(FoodMenuPanelLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ColaPintButton)
-                    .addComponent(HalfColaButton))
-                .addGap(37, 37, 37)
-                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DashColaButton)
-                    .addComponent(DashDietColaButton))
-                .addGap(37, 37, 37)
-                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ColaDietPintButton)
-                    .addComponent(HalfDietColaButton))
-                .addContainerGap(121, Short.MAX_VALUE))
-        );
+        HalfDietColaButton.setText("14oz Diet Cola");
+        FoodMenuPanel.add(HalfDietColaButton);
+
+        DashDietColaButton.setText("4oz Dash Diet Cola");
+        FoodMenuPanel.add(DashDietColaButton);
+
+        LemonadePintButton.setText("Print Lemonade");
+        FoodMenuPanel.add(LemonadePintButton);
+
+        HalfLemonadeButton.setText("14oz Lemonade");
+        FoodMenuPanel.add(HalfLemonadeButton);
+
+        DashLemonadeButton.setText("4oz Dash Lemonade");
+        FoodMenuPanel.add(DashLemonadeButton);
 
         InitialCard.add(FoodMenuPanel);
 
@@ -242,7 +222,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodCard.setLayout(FoodCardLayout);
         FoodCardLayout.setHorizontalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 845, Short.MAX_VALUE)
+            .addGap(0, 2652, Short.MAX_VALUE)
         );
         FoodCardLayout.setVerticalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,7 +253,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 2654, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,6 +318,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     private javax.swing.JButton ColaPintButton;
     private javax.swing.JButton DashColaButton;
     private javax.swing.JButton DashDietColaButton;
+    private javax.swing.JButton DashLemonadeButton;
     private javax.swing.JButton DeliveredButton;
     private javax.swing.JPanel FoodCard;
     private javax.swing.JButton FoodMenuButton;
@@ -345,7 +326,9 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     private javax.swing.JPanel FormPanel;
     private javax.swing.JButton HalfColaButton;
     private javax.swing.JButton HalfDietColaButton;
+    private javax.swing.JButton HalfLemonadeButton;
     private javax.swing.JPanel InitialCard;
+    private javax.swing.JButton LemonadePintButton;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel MenuSelectPanel;
     private javax.swing.JButton MineralsMixersButton;

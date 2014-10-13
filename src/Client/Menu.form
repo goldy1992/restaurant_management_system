@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+<Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="jPanel2">
 
@@ -55,7 +55,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="FormPanel" alignment="0" pref="847" max="32767" attributes="0"/>
+          <Component id="FormPanel" alignment="0" pref="2654" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -94,7 +94,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="845" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="2652" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -216,54 +216,9 @@
                     </Property>
                   </Properties>
 
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="22" pref="22" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="ColaPintButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="HalfColaButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="ColaDietPintButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="HalfDietColaButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="DashColaButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="DashDietColaButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace pref="29" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="ColaPintButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="HalfColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="DashColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="DashDietColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="ColaDietPintButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="HalfDietColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="121" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                    <Property name="columns" type="int" value="3"/>
+                    <Property name="rows" type="int" value="8"/>
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="ColaPintButton">
@@ -276,9 +231,9 @@
                         <Property name="text" type="java.lang.String" value="14oz Cola"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="HalfDietColaButton">
+                    <Component class="javax.swing.JButton" name="DashColaButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="14oz Diet Cola"/>
+                        <Property name="text" type="java.lang.String" value="4oz Dsh Cola"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="ColaDietPintButton">
@@ -286,14 +241,29 @@
                         <Property name="text" type="java.lang.String" value="Pint Diet Cola"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="DashColaButton">
+                    <Component class="javax.swing.JButton" name="HalfDietColaButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="4oz Dsh Cola"/>
+                        <Property name="text" type="java.lang.String" value="14oz Diet Cola"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="DashDietColaButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="4oz Dsh Diet Cola"/>
+                        <Property name="text" type="java.lang.String" value="4oz Dash Diet Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="LemonadePintButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Print Lemonade"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="HalfLemonadeButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="14oz Lemonade"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="DashLemonadeButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="4oz Dash Lemonade"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -384,7 +354,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="845" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="2652" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
