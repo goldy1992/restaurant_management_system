@@ -25,7 +25,6 @@ public class Item
     private final BigDecimal price;
     private final int quantity;
     
-    
     public Item(int id, String name, 
                 String message, BigDecimal price, 
                 Type type)
