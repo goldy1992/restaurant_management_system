@@ -49,11 +49,21 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         MineralsMixersButton = new javax.swing.JButton();
         BottlesButton = new javax.swing.JButton();
         FoodMenuPanel = new javax.swing.JPanel();
+        ColaPintButton = new javax.swing.JButton();
+        HalfColaButton = new javax.swing.JButton();
+        HalfDietColaButton = new javax.swing.JButton();
+        ColaDietPintButton = new javax.swing.JButton();
+        DashColaButton = new javax.swing.JButton();
+        DashDietColaButton = new javax.swing.JButton();
         BillHandleFrame = new javax.swing.JPanel();
-        SendOrderButton = new javax.swing.JButton();
+        PrintBillButton = new javax.swing.JButton();
+        PrintLastReceiptButton = new javax.swing.JButton();
         VoidButton = new javax.swing.JButton();
         VoidLastItemButton = new javax.swing.JButton();
+        SplitBillButton = new javax.swing.JButton();
+        OrderHoldButton = new javax.swing.JButton();
         DeliveredButton = new javax.swing.JButton();
+        SendOrderButton = new javax.swing.JButton();
         FoodCard = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -85,11 +95,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1254, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -135,25 +145,72 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
 
         FoodMenuPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        ColaPintButton.setText("Pint Cola");
+
+        HalfColaButton.setText("14oz Cola");
+
+        HalfDietColaButton.setText("14oz Diet Cola");
+
+        ColaDietPintButton.setText("Pint Diet Cola");
+
+        DashColaButton.setText("4oz Dsh Cola");
+
+        DashDietColaButton.setText("4oz Dsh Diet Cola");
+
         javax.swing.GroupLayout FoodMenuPanelLayout = new javax.swing.GroupLayout(FoodMenuPanel);
         FoodMenuPanel.setLayout(FoodMenuPanelLayout);
         FoodMenuPanelLayout.setHorizontalGroup(
             FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGroup(FoodMenuPanelLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
+                        .addComponent(ColaPintButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(HalfColaButton))
+                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
+                        .addComponent(ColaDietPintButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(HalfDietColaButton))
+                    .addGroup(FoodMenuPanelLayout.createSequentialGroup()
+                        .addComponent(DashColaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DashDietColaButton)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         FoodMenuPanelLayout.setVerticalGroup(
             FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 336, Short.MAX_VALUE)
+            .addGroup(FoodMenuPanelLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ColaPintButton)
+                    .addComponent(HalfColaButton))
+                .addGap(37, 37, 37)
+                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DashColaButton)
+                    .addComponent(DashDietColaButton))
+                .addGap(37, 37, 37)
+                .addGroup(FoodMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ColaDietPintButton)
+                    .addComponent(HalfDietColaButton))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
 
         InitialCard.add(FoodMenuPanel);
 
         BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
-        BillHandleFrame.setLayout(new java.awt.GridLayout(10, 1));
+        BillHandleFrame.setLayout(new java.awt.GridLayout(8, 1));
 
-        SendOrderButton.setText("Send Order");
-        BillHandleFrame.add(SendOrderButton);
-        SendOrderButton.addActionListener(this);
+        PrintBillButton.setText("Print Bill");
+        BillHandleFrame.add(PrintBillButton);
+
+        PrintLastReceiptButton.setText("Print Last Receipt");
+        PrintLastReceiptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintLastReceiptButtonActionPerformed(evt);
+            }
+        });
+        BillHandleFrame.add(PrintLastReceiptButton);
 
         VoidButton.setText("Void");
         BillHandleFrame.add(VoidButton);
@@ -163,9 +220,19 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         BillHandleFrame.add(VoidLastItemButton);
         VoidLastItemButton.addActionListener(this);
 
+        SplitBillButton.setText("Split Bill");
+        BillHandleFrame.add(SplitBillButton);
+
+        OrderHoldButton.setText("Order On Hold");
+        BillHandleFrame.add(OrderHoldButton);
+
         DeliveredButton.setText("Delivered");
         BillHandleFrame.add(DeliveredButton);
         DeliveredButton.addActionListener(this);
+
+        SendOrderButton.setText("Send Order");
+        BillHandleFrame.add(SendOrderButton);
+        SendOrderButton.addActionListener(this);
 
         InitialCard.add(BillHandleFrame);
 
@@ -175,11 +242,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         FoodCard.setLayout(FoodCardLayout);
         FoodCardLayout.setHorizontalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1254, Short.MAX_VALUE)
+            .addGap(0, 845, Short.MAX_VALUE)
         );
         FoodCardLayout.setVerticalGroup(
             FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 338, Short.MAX_VALUE)
+            .addGap(0, 321, Short.MAX_VALUE)
         );
 
         CardPanel.add(FoodCard, "foodCard");
@@ -206,7 +273,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1256, Short.MAX_VALUE)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,6 +282,10 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void PrintLastReceiptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintLastReceiptButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PrintLastReceiptButtonActionPerformed
 
     public String currentCard = "mainCard";
     /**
@@ -263,18 +334,28 @@ public class Menu extends javax.swing.JDialog implements MouseListener, ActionLi
     private javax.swing.JPanel BillHandleFrame;
     private javax.swing.JButton BottlesButton;
     private javax.swing.JPanel CardPanel;
+    private javax.swing.JButton ColaDietPintButton;
+    private javax.swing.JButton ColaPintButton;
+    private javax.swing.JButton DashColaButton;
+    private javax.swing.JButton DashDietColaButton;
     private javax.swing.JButton DeliveredButton;
     private javax.swing.JPanel FoodCard;
     private javax.swing.JButton FoodMenuButton;
     private javax.swing.JPanel FoodMenuPanel;
     private javax.swing.JPanel FormPanel;
+    private javax.swing.JButton HalfColaButton;
+    private javax.swing.JButton HalfDietColaButton;
     private javax.swing.JPanel InitialCard;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel MenuSelectPanel;
     private javax.swing.JButton MineralsMixersButton;
+    private javax.swing.JButton OrderHoldButton;
     private javax.swing.JTextPane OutputArea;
+    private javax.swing.JButton PrintBillButton;
+    private javax.swing.JButton PrintLastReceiptButton;
     private javax.swing.JButton SendOrderButton;
     private javax.swing.JButton SpiritLiqButton;
+    private javax.swing.JButton SplitBillButton;
     private javax.swing.JButton VoidButton;
     private javax.swing.JButton VoidLastItemButton;
     private javax.swing.JButton WinesButton;

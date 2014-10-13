@@ -55,7 +55,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="FormPanel" alignment="0" pref="1256" max="32767" attributes="0"/>
+          <Component id="FormPanel" alignment="0" pref="847" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -94,12 +94,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="1254" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="845" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="44" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="61" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -219,15 +219,84 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="22" pref="22" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="ColaPintButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="HalfColaButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="ColaDietPintButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="HalfDietColaButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="DashColaButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="DashDietColaButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="29" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="336" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="ColaPintButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="HalfColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="DashColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="DashDietColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="ColaDietPintButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="HalfDietColaButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="121" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JButton" name="ColaPintButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Pint Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="HalfColaButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="14oz Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="HalfDietColaButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="14oz Diet Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="ColaDietPintButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Pint Diet Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="DashColaButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="4oz Dsh Cola"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="DashDietColaButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="4oz Dsh Diet Cola"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="BillHandleFrame">
                   <Properties>
@@ -240,16 +309,21 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                     <Property name="columns" type="int" value="1"/>
-                    <Property name="rows" type="int" value="10"/>
+                    <Property name="rows" type="int" value="8"/>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JButton" name="SendOrderButton">
+                    <Component class="javax.swing.JButton" name="PrintBillButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Send Order"/>
+                        <Property name="text" type="java.lang.String" value="Print Bill"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SendOrderButton.addActionListener(this);"/>
-                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="PrintLastReceiptButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Print Last Receipt"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PrintLastReceiptButtonActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="VoidButton">
                       <Properties>
@@ -267,12 +341,30 @@
                         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="VoidLastItemButton.addActionListener(this);"/>
                       </AuxValues>
                     </Component>
+                    <Component class="javax.swing.JButton" name="SplitBillButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Split Bill"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="OrderHoldButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Order On Hold"/>
+                      </Properties>
+                    </Component>
                     <Component class="javax.swing.JButton" name="DeliveredButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Delivered"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="DeliveredButton.addActionListener(this);"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="SendOrderButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Send Order"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SendOrderButton.addActionListener(this);"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
@@ -292,12 +384,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1254" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="845" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="338" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="321" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
