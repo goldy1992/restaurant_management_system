@@ -81,4 +81,34 @@ public class Item
                 "\nmessage " + message;
     }
     
+    public int getID()
+    {
+        return id;
+    }
+    
+    public String getMessage()
+    {
+        return message;
+    }
+    
+    public BigDecimal getPrice()
+    {
+        return price;
+    }
+    
+    public int getQuantity()
+    {
+        return quantity;
+    }
+    
+    public String getName()
+    {
+        return name;
+    }
+    
+    public Type getType()
+    {
+        return type;
+    }
+    
 } // item
