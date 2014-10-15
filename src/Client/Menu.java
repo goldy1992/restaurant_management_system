@@ -12,6 +12,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,6 +23,10 @@ import java.awt.event.MouseListener;
  */
 public class Menu extends javax.swing.JDialog implements MouseListener
 {
+    ArrayList<JComponent> components = new ArrayList<JComponent>();
+    ArrayList<JButton> buttons = new ArrayList<JButton>();
+    ArrayList<JPanel> panels = new ArrayList<JPanel>();
+        
     
     Menu thisMenu;
 
@@ -29,8 +37,13 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     {
         super(parent, modal);
         initComponents();
-        this.setFocusable(true);
+        for (JComponent t : components)
+        {
+            t.setFocusable(false);
+            t.requestFocus(false);
+        }
   
+        
     }
 
     /**
@@ -100,6 +113,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         FormPanel.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setFocusable(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 150));
 
         OutputArea.setEditable(false);
@@ -130,14 +144,19 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.3;
         FormPanel.add(jPanel1, gridBagConstraints);
+        panels.add(jPanel1);
 
         CardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CardPanel.setPreferredSize(new java.awt.Dimension(400, 350));
         CardPanel.setLayout(new java.awt.CardLayout());
 
+        InitialCard.setFocusable(false);
+        InitialCard.setRequestFocusEnabled(false);
         InitialCard.setLayout(new java.awt.GridLayout(1, 0));
 
         MenuSelectPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        MenuSelectPanel.setFocusable(false);
+        MenuSelectPanel.setRequestFocusEnabled(false);
         MenuSelectPanel.setLayout(new java.awt.GridLayout(5, 2));
 
         FoodMenuButton.setText("Food Menu");
@@ -148,20 +167,28 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         });
         MenuSelectPanel.add(FoodMenuButton);
         FoodMenuButton.getAccessibleContext().setAccessibleName("");
+        components.add(FoodMenuButton);
+
+        buttons.add(FoodMenuButton);
 
         SpiritLiqButton.setText("Spirits/Liqueurs");
         MenuSelectPanel.add(SpiritLiqButton);
+        buttons.add(SpiritLiqButton);
 
         WinesButton.setText("Wines");
         MenuSelectPanel.add(WinesButton);
+        buttons.add(WinesButton);
 
         MineralsMixersButton.setText("Minerals/Mixers");
         MenuSelectPanel.add(MineralsMixersButton);
+        buttons.add(MineralsMixersButton);
 
         BottlesButton.setText("Bottles");
         MenuSelectPanel.add(BottlesButton);
+        buttons.add(BottlesButton);
 
         InitialCard.add(MenuSelectPanel);
+        panels.add(MenuSelectPanel);
 
         FoodMenuPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         FoodMenuPanel.setFocusable(false);
@@ -175,6 +202,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
             }
         });
         FoodMenuPanel.add(ColaPintButton);
+        buttons.add(ColaPintButton);
 
         HalfColaButton.setText("14oz Cola");
         FoodMenuPanel.add(HalfColaButton);
@@ -201,8 +229,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         FoodMenuPanel.add(DashLemonadeButton);
 
         InitialCard.add(FoodMenuPanel);
+        panels.add(FoodMenuPanel);
 
         BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
+        BillHandleFrame.setFocusable(false);
+        BillHandleFrame.setRequestFocusEnabled(false);
         BillHandleFrame.setLayout(new java.awt.GridLayout(8, 1));
 
         PrintBillButton.setText("Print Bill");
@@ -242,6 +273,10 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         InitialCard.add(BillHandleFrame);
 
         CardPanel.add(InitialCard, "mainCard");
+        panels.add(InitialCard);
+
+        FoodCard.setFocusable(false);
+        FoodCard.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout FoodCardLayout = new javax.swing.GroupLayout(FoodCard);
         FoodCard.setLayout(FoodCardLayout);
@@ -265,6 +300,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.7;
         FormPanel.add(CardPanel, gridBagConstraints);
+        panels.add(CardPanel);
 
         jMenu1.setText("File");
         MenuBar.add(jMenu1);
@@ -273,6 +309,10 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         MenuBar.add(jMenu2);
 
         setJMenuBar(MenuBar);
+        components.add(MenuBar);
+
+        MenuBar.setFocusable(false);
+        MenuBar.requestFocus(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -284,6 +324,8 @@ public class Menu extends javax.swing.JDialog implements MouseListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
         );
+
+        panels.add(FormPanel);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
