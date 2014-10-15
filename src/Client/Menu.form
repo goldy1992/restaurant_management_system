@@ -112,6 +112,12 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="OutputArea">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="OutputAreaKeyPressed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="OutputArea.addMouseListener(this);"/>
                   </AuxValues>
@@ -170,40 +176,31 @@
                         <Property name="text" type="java.lang.String" value="Food Menu"/>
                       </Properties>
                       <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="" postCode="FoodMenuButton.addActionListener(this);"/>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
                       </AccessibilityProperties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FoodMenuButtonActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="SpiritLiqButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Spirits/Liqueurs"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SpiritLiqButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="WinesButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Wines"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="WinesButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="MineralsMixersButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Minerals/Mixers"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="MineralsMixersButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="BottlesButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Bottles"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="BottlesButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -214,6 +211,8 @@
                         <LineBorder/>
                       </Border>
                     </Property>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
@@ -225,6 +224,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Pint Cola"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ColaPintButtonActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="HalfColaButton">
                       <Properties>
@@ -299,17 +301,11 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Void"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="VoidButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="VoidLastItemButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Void Last Item"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="VoidLastItemButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="SplitBillButton">
                       <Properties>
@@ -325,17 +321,14 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Delivered"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="DeliveredButton.addActionListener(this);"/>
-                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="SendOrderButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Send Order"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="SendOrderButton.addActionListener(this);"/>
-                      </AuxValues>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SendOrderButtonActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
