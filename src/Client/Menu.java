@@ -34,6 +34,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     ArrayList<JButton> buttons = new ArrayList<JButton>();
     ArrayList<JPanel> panels = new ArrayList<JPanel>();
+
+    public static enum MenuArea
+    {
+        MAIN_PAGE, FOOD_PAGE
+    }
     
     // the database connection
     Connection con = null; 
@@ -47,7 +52,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     public Menu(java.awt.Frame parent, boolean modal) 
     {
         super(parent, modal);
-        
+
         try 
         {         
             con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
@@ -212,26 +217,11 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         InitialCard.add(FoodMenuPanel);
         panels.add(FoodMenuPanel);
 
-        try
-        {
-            PreparedStatement numberOfButtonsQuery = null;
-            String query = "SELECT COUNT(ID) FROM 3YP_POS_IN_MENU WHERE LOCATION = 'MAIN_PAGE'";
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeQuery();
-            ResultSet x = numberOfButtonsQuery.getResultSet();
+        ArrayList<JButton> buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);
 
-            int result = -1;
-            if (x.next())
-            result = x.getInt(1);
-            System.out.println("number of results: " + result);
-
-            GridLayout layout = (GridLayout)FoodMenuPanel.getLayout();
-            layout.setColumns(5);
-            layout.setRows(5);
-        }
-        catch (SQLException ex)
+        for (int i = 0; i < buttonsForPanel.size(); i++)
         {
-            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+            FoodMenuPanel.add(buttonsForPanel.get(i));
         }
 
         BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
@@ -333,12 +323,50 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private ArrayList<JButton> getButtonsForPanel(MenuArea part)
+    {
+        ArrayList<JButton> buttons = new ArrayList<JButton>();
+        
+        try 
+        {
+            PreparedStatement numberOfButtonsQuery = null;
+            String query =  "SELECT NAME \n" +
+                        "FROM `3YP_ITEMS`\n" +
+                        "LEFT JOIN`3YP_POS_IN_MENU`\n" +
+                        "ON 3YP_ITEMS.ID = 3YP_POS_IN_MENU.ID\n" +
+                        "WHERE 3YP_POS_IN_MENU.LOCATION = '" + part + "'";
+            numberOfButtonsQuery = con.prepareStatement(query);
+            numberOfButtonsQuery.executeQuery();
+            ResultSet x = numberOfButtonsQuery.getResultSet();
+            
+         
+            while (x.next())
+            {
+                String result = x.getString("NAME");
+                System.out.println(result);
+                buttons.add( new JButton(result));
+            } // while
+        } // try
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
+        
+        return buttons;
+    }
     private void PrintLastReceiptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintLastReceiptButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PrintLastReceiptButtonActionPerformed
 
     private void SendOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendOrderButtonActionPerformed
-        // TODO add your handling code here:
+        try 
+        {
+            // TODO add your handling code here:
+            con.close();
+            System.out.println("connection closed, resources saved :-)");
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.dispose();
     }//GEN-LAST:event_SendOrderButtonActionPerformed
 

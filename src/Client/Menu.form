@@ -252,7 +252,7 @@
                     <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;try &#xa;{&#xa;    PreparedStatement numberOfButtonsQuery = null;&#xa;    String query = &quot;SELECT COUNT(ID) FROM 3YP_POS_IN_MENU WHERE LOCATION = &apos;MAIN_PAGE&apos;&quot;;&#xa;    numberOfButtonsQuery = con.prepareStatement(query);&#xa;    numberOfButtonsQuery.executeQuery();&#xa;    ResultSet x = numberOfButtonsQuery.getResultSet();&#xa;         &#xa;    int result = -1;&#xa;    if (x.next())&#xa;        result = x.getInt(1);&#xa;    System.out.println(&quot;number of results: &quot; + result);&#xa;&#xa;    GridLayout layout = (GridLayout)FoodMenuPanel.getLayout();&#xa;    layout.setColumns(5);&#xa;    layout.setRows(5);&#xa;}&#xa;catch (SQLException ex) &#xa;{&#xa;    Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);&#xa;}"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;ArrayList&lt;JButton&gt; buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);&#xa;&#xa;for (int i = 0; i &lt; buttonsForPanel.size(); i++)&#xa;{&#xa;    FoodMenuPanel.add(buttonsForPanel.get(i));&#xa;}"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
