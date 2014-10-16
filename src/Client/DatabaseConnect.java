@@ -28,17 +28,15 @@ public class DatabaseConnect
         {
            
             con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
-            PreparedStatement selectAll = null;
-            String select = "SELECT * FROM 3YP_ITEMS";
-            selectAll = con.prepareStatement(select);
-            selectAll.executeQuery();
-            ResultSet x = selectAll.getResultSet();
-         
-            while(x.next())
-            {
-                System.out.println(x.getString("NAME"));
-                
-            }
+            PreparedStatement numberOfButtonsQuery = null;
+            String query = "SELECT COUNT(ID) FROM 3YP_POS_IN_MENU WHERE LOCATION = 'MAIN_PAGE'";
+            numberOfButtonsQuery = con.prepareStatement(query);
+            numberOfButtonsQuery.executeQuery();
+            ResultSet x = numberOfButtonsQuery.getResultSet();
+            int result = -1;
+            if (x.next())
+                result = x.getInt(1);
+            System.out.println("number of results: " + result);
         } 
         catch (SQLException ex) 
         {

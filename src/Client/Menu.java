@@ -6,6 +6,7 @@
 package Client;
 
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,13 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +34,9 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     ArrayList<JButton> buttons = new ArrayList<JButton>();
     ArrayList<JPanel> panels = new ArrayList<JPanel>();
+    
+    // the database connection
+    Connection con = null; 
         
     
     Menu thisMenu;
@@ -36,12 +47,25 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     public Menu(java.awt.Frame parent, boolean modal) 
     {
         super(parent, modal);
+        
+        try 
+        {         
+            con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         initComponents();
         for (JComponent t : components)
         {
             t.setFocusable(false);
             t.requestFocus(false);
         }
+        
+      
+      
   
         
     }
@@ -73,15 +97,6 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         MineralsMixersButton = new javax.swing.JButton();
         BottlesButton = new javax.swing.JButton();
         FoodMenuPanel = new javax.swing.JPanel();
-        ColaPintButton = new javax.swing.JButton();
-        HalfColaButton = new javax.swing.JButton();
-        DashColaButton = new javax.swing.JButton();
-        ColaDietPintButton = new javax.swing.JButton();
-        HalfDietColaButton = new javax.swing.JButton();
-        DashDietColaButton = new javax.swing.JButton();
-        LemonadePintButton = new javax.swing.JButton();
-        HalfLemonadeButton = new javax.swing.JButton();
-        DashLemonadeButton = new javax.swing.JButton();
         BillHandleFrame = new javax.swing.JPanel();
         PrintBillButton = new javax.swing.JButton();
         PrintLastReceiptButton = new javax.swing.JButton();
@@ -194,42 +209,30 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         FoodMenuPanel.setFocusable(false);
         FoodMenuPanel.setRequestFocusEnabled(false);
         FoodMenuPanel.setLayout(new java.awt.GridLayout(8, 3));
-
-        ColaPintButton.setText("Pint Cola");
-        ColaPintButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ColaPintButtonActionPerformed(evt);
-            }
-        });
-        FoodMenuPanel.add(ColaPintButton);
-        buttons.add(ColaPintButton);
-
-        HalfColaButton.setText("14oz Cola");
-        FoodMenuPanel.add(HalfColaButton);
-
-        DashColaButton.setText("4oz Dsh Cola");
-        FoodMenuPanel.add(DashColaButton);
-
-        ColaDietPintButton.setText("Pint Diet Cola");
-        FoodMenuPanel.add(ColaDietPintButton);
-
-        HalfDietColaButton.setText("14oz Diet Cola");
-        FoodMenuPanel.add(HalfDietColaButton);
-
-        DashDietColaButton.setText("4oz Dash Diet Cola");
-        FoodMenuPanel.add(DashDietColaButton);
-
-        LemonadePintButton.setText("Print Lemonade");
-        FoodMenuPanel.add(LemonadePintButton);
-
-        HalfLemonadeButton.setText("14oz Lemonade");
-        FoodMenuPanel.add(HalfLemonadeButton);
-
-        DashLemonadeButton.setText("4oz Dash Lemonade");
-        FoodMenuPanel.add(DashLemonadeButton);
-
         InitialCard.add(FoodMenuPanel);
         panels.add(FoodMenuPanel);
+
+        try
+        {
+            PreparedStatement numberOfButtonsQuery = null;
+            String query = "SELECT COUNT(ID) FROM 3YP_POS_IN_MENU WHERE LOCATION = 'MAIN_PAGE'";
+            numberOfButtonsQuery = con.prepareStatement(query);
+            numberOfButtonsQuery.executeQuery();
+            ResultSet x = numberOfButtonsQuery.getResultSet();
+
+            int result = -1;
+            if (x.next())
+            result = x.getInt(1);
+            System.out.println("number of results: " + result);
+
+            GridLayout layout = (GridLayout)FoodMenuPanel.getLayout();
+            layout.setColumns(5);
+            layout.setRows(5);
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
         BillHandleFrame.setFocusable(false);
@@ -334,15 +337,6 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         // TODO add your handling code here:
     }//GEN-LAST:event_PrintLastReceiptButtonActionPerformed
 
-    private void ColaPintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColaPintButtonActionPerformed
-
-        // TODO add your handling code here:
-        System.out.println("called");
-        String currentText = OutputArea.getText();
-        currentText += "Pint of Cola\n";
-        OutputArea.setText(currentText);
-    }//GEN-LAST:event_ColaPintButtonActionPerformed
-
     private void SendOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendOrderButtonActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -406,21 +400,12 @@ System.out.println("pressed");
     private javax.swing.JPanel BillHandleFrame;
     private javax.swing.JButton BottlesButton;
     private javax.swing.JPanel CardPanel;
-    private javax.swing.JButton ColaDietPintButton;
-    private javax.swing.JButton ColaPintButton;
-    private javax.swing.JButton DashColaButton;
-    private javax.swing.JButton DashDietColaButton;
-    private javax.swing.JButton DashLemonadeButton;
     private javax.swing.JButton DeliveredButton;
     private javax.swing.JPanel FoodCard;
     private javax.swing.JButton FoodMenuButton;
     private javax.swing.JPanel FoodMenuPanel;
     private javax.swing.JPanel FormPanel;
-    private javax.swing.JButton HalfColaButton;
-    private javax.swing.JButton HalfDietColaButton;
-    private javax.swing.JButton HalfLemonadeButton;
     private javax.swing.JPanel InitialCard;
-    private javax.swing.JButton LemonadePintButton;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel MenuSelectPanel;
     private javax.swing.JButton MineralsMixersButton;
