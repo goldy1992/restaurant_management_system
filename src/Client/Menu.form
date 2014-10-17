@@ -253,7 +253,7 @@
                     <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;ArrayList&lt;JButton&gt; buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);&#xa;&#xa;for (int i = 0; i &lt; buttonsForPanel.size(); i++)&#xa;{&#xa;    FoodMenuPanel.add(buttonsForPanel.get(i));&#xa;    buttonsForPanel.get(i).addActionListener(new ActionListener()&#xa;        {&#xa;            public void actionPerformed(ActionEvent e)&#xa;            {&#xa;                System.out.println(MenuArea.FOOD_PAGE);&#xa;            }&#xa;        });&#xa;&#xa;&#xa;}&#xa;&#xa;buttons.addAll(buttonsForPanel);"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;ArrayList&lt;MenuItemJButton&gt; buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);&#xa;&#xa;for (int i = 0; i &lt; buttonsForPanel.size(); i++)&#xa;    FoodMenuPanel.add(buttonsForPanel.get(i));&#xa;&#xa;&#xa;menuItemButtons.addAll(buttonsForPanel);"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
