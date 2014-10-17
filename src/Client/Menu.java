@@ -6,11 +6,8 @@
 package Client;
 
 import java.awt.CardLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -24,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextPane;
 
 /**
  *
@@ -34,6 +32,8 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     ArrayList<JButton> buttons = new ArrayList<JButton>();
     ArrayList<JPanel> panels = new ArrayList<JPanel>();
+    
+    JTextPane myOutput;
 
     public static enum MenuArea
     {
@@ -44,7 +44,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
     Connection con = null; 
         
     
-    Menu thisMenu;
+    
 
     /**
      * Creates new form Menu
@@ -136,6 +136,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         jPanel1.setFocusable(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 150));
 
+        myOutput = OutputArea;
         OutputArea.setEditable(false);
         OutputArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -143,7 +144,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
             }
         });
         jScrollPane1.setViewportView(OutputArea);
-        OutputArea.addMouseListener(this);
+        myOutput.addMouseListener(this);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -222,106 +223,116 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         for (int i = 0; i < buttonsForPanel.size(); i++)
         {
             FoodMenuPanel.add(buttonsForPanel.get(i));
-        }
+            buttonsForPanel.get(i).addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        System.out.println(MenuArea.FOOD_PAGE);
+                    }
+                });
 
-        BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
-        BillHandleFrame.setFocusable(false);
-        BillHandleFrame.setRequestFocusEnabled(false);
-        BillHandleFrame.setLayout(new java.awt.GridLayout(8, 1));
-
-        PrintBillButton.setText("Print Bill");
-        BillHandleFrame.add(PrintBillButton);
-
-        PrintLastReceiptButton.setText("Print Last Receipt");
-        PrintLastReceiptButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PrintLastReceiptButtonActionPerformed(evt);
             }
-        });
-        BillHandleFrame.add(PrintLastReceiptButton);
 
-        VoidButton.setText("Void");
-        BillHandleFrame.add(VoidButton);
+            buttons.addAll(buttonsForPanel);
 
-        VoidLastItemButton.setText("Void Last Item");
-        BillHandleFrame.add(VoidLastItemButton);
+            BillHandleFrame.setBorder(new javax.swing.border.MatteBorder(null));
+            BillHandleFrame.setFocusable(false);
+            BillHandleFrame.setRequestFocusEnabled(false);
+            BillHandleFrame.setLayout(new java.awt.GridLayout(8, 1));
 
-        SplitBillButton.setText("Split Bill");
-        BillHandleFrame.add(SplitBillButton);
+            PrintBillButton.setText("Print Bill");
+            BillHandleFrame.add(PrintBillButton);
 
-        OrderHoldButton.setText("Order On Hold");
-        BillHandleFrame.add(OrderHoldButton);
+            PrintLastReceiptButton.setText("Print Last Receipt");
+            PrintLastReceiptButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    PrintLastReceiptButtonActionPerformed(evt);
+                }
+            });
+            BillHandleFrame.add(PrintLastReceiptButton);
 
-        DeliveredButton.setText("Delivered");
-        BillHandleFrame.add(DeliveredButton);
+            VoidButton.setText("Void");
+            BillHandleFrame.add(VoidButton);
 
-        SendOrderButton.setText("Send Order");
-        SendOrderButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SendOrderButtonActionPerformed(evt);
-            }
-        });
-        BillHandleFrame.add(SendOrderButton);
+            VoidLastItemButton.setText("Void Last Item");
+            BillHandleFrame.add(VoidLastItemButton);
 
-        InitialCard.add(BillHandleFrame);
+            SplitBillButton.setText("Split Bill");
+            BillHandleFrame.add(SplitBillButton);
 
-        CardPanel.add(InitialCard, "mainCard");
-        panels.add(InitialCard);
+            OrderHoldButton.setText("Order On Hold");
+            BillHandleFrame.add(OrderHoldButton);
 
-        FoodCard.setFocusable(false);
-        FoodCard.setRequestFocusEnabled(false);
+            DeliveredButton.setText("Delivered");
+            BillHandleFrame.add(DeliveredButton);
 
-        javax.swing.GroupLayout FoodCardLayout = new javax.swing.GroupLayout(FoodCard);
-        FoodCard.setLayout(FoodCardLayout);
-        FoodCardLayout.setHorizontalGroup(
-            FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2652, Short.MAX_VALUE)
-        );
-        FoodCardLayout.setVerticalGroup(
-            FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
-        );
+            SendOrderButton.setText("Send Order");
+            SendOrderButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    SendOrderButtonActionPerformed(evt);
+                }
+            });
+            BillHandleFrame.add(SendOrderButton);
 
-        CardPanel.add(FoodCard, "foodCard");
-        FoodCard.addMouseListener(this);
+            InitialCard.add(BillHandleFrame);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.7;
-        FormPanel.add(CardPanel, gridBagConstraints);
-        panels.add(CardPanel);
+            CardPanel.add(InitialCard, "mainCard");
+            panels.add(InitialCard);
 
-        jMenu1.setText("File");
-        MenuBar.add(jMenu1);
+            FoodCard.setFocusable(false);
+            FoodCard.setRequestFocusEnabled(false);
 
-        jMenu2.setText("Edit");
-        MenuBar.add(jMenu2);
+            javax.swing.GroupLayout FoodCardLayout = new javax.swing.GroupLayout(FoodCard);
+            FoodCard.setLayout(FoodCardLayout);
+            FoodCardLayout.setHorizontalGroup(
+                FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 2652, Short.MAX_VALUE)
+            );
+            FoodCardLayout.setVerticalGroup(
+                FoodCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 321, Short.MAX_VALUE)
+            );
 
-        setJMenuBar(MenuBar);
-        components.add(MenuBar);
+            CardPanel.add(FoodCard, "foodCard");
+            FoodCard.addMouseListener(this);
 
-        MenuBar.setFocusable(false);
-        MenuBar.requestFocus(false);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.weighty = 0.7;
+            FormPanel.add(CardPanel, gridBagConstraints);
+            panels.add(CardPanel);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 2654, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-        );
+            jMenu1.setText("File");
+            MenuBar.add(jMenu1);
 
-        panels.add(FormPanel);
+            jMenu2.setText("Edit");
+            MenuBar.add(jMenu2);
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+            setJMenuBar(MenuBar);
+            components.add(MenuBar);
+
+            MenuBar.setFocusable(false);
+            MenuBar.requestFocus(false);
+
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 2654, Short.MAX_VALUE)
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+            );
+
+            panels.add(FormPanel);
+
+            pack();
+        }// </editor-fold>//GEN-END:initComponents
 
     private ArrayList<JButton> getButtonsForPanel(MenuArea part)
     {

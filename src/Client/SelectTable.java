@@ -34,7 +34,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
    
     private final ObjectOutputStream out;
     private final JButton[] tableButtons;
-    private final ArrayList<Table.TableStatus> tableStatuses;
+    private ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
     
     public JButton openTable = new JButton("Open Table");
@@ -68,6 +68,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     {
         if (index < 0 || index >= tableButtons.length)
             return;    
+        
+        tableStatuses.set(index, t);
         switch(t)
         {
             case FREE:
@@ -296,9 +298,14 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         {
             System.out.println("algo");
             if ( tableSelected == -1)
+            {
                 OutputLabel.setText("You have no table selected yet!");
+            }
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
+            {
                 OutputLabel.setText("Table " + tableSelected + " in use");
+                System.out.println("called in use");
+            }
             else
             {
                 try 

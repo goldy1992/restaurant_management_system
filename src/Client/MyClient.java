@@ -225,6 +225,7 @@ public class MyClient implements Runnable
                         TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
                         System.out.println("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
                         selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
+                         System.out.println("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
                     }
                 } // evt ntfn if
             } // while running

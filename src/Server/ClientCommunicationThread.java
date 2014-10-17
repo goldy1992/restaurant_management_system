@@ -71,6 +71,7 @@ public class ClientCommunicationThread implements Runnable
             } // try            // try            // try            // try           
             catch(IOException e)
             {
+                System.err.println(e);
                 System.out.println("Failed to set up buffers" + "\n");
             } 
             catch (ClassNotFoundException ex) {
@@ -132,6 +133,8 @@ public class ClientCommunicationThread implements Runnable
                             
                             System.out.println("requested table " + tableNumber);
                             MyServer.getTable(tableNumber).setTableStatus(status);
+                            
+                            System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
                             System.out.println("number of clients to send to: " + MyServer.getClients().size());
                             for(int i =0; i < MyServer.getClients().size(); i++)
@@ -144,6 +147,7 @@ public class ClientCommunicationThread implements Runnable
                                                                                     status);
                                 
                                 otherClientOut.writeObject(msgToSend);
+                                System.out.println("sent " + i);
                             }
 }
     }

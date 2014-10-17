@@ -129,7 +129,8 @@
                     <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="OutputAreaKeyPressed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="OutputArea.addMouseListener(this);"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="myOutput.addMouseListener(this);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="myOutput = OutputArea;"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -252,7 +253,7 @@
                     <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;ArrayList&lt;JButton&gt; buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);&#xa;&#xa;for (int i = 0; i &lt; buttonsForPanel.size(); i++)&#xa;{&#xa;    FoodMenuPanel.add(buttonsForPanel.get(i));&#xa;}"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="panels.add(FoodMenuPanel);&#xa;&#xa;ArrayList&lt;JButton&gt; buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);&#xa;&#xa;for (int i = 0; i &lt; buttonsForPanel.size(); i++)&#xa;{&#xa;    FoodMenuPanel.add(buttonsForPanel.get(i));&#xa;    buttonsForPanel.get(i).addActionListener(new ActionListener()&#xa;        {&#xa;            public void actionPerformed(ActionEvent e)&#xa;            {&#xa;                System.out.println(MenuArea.FOOD_PAGE);&#xa;            }&#xa;        });&#xa;&#xa;&#xa;}&#xa;&#xa;buttons.addAll(buttonsForPanel);"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
