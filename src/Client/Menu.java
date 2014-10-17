@@ -338,6 +338,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         x.addActionListener(x);
         return x;
     }
+    
     private ArrayList<MenuItemJButton> getButtonsForPanel(MenuArea part)
     {
         ArrayList<MenuItemJButton> buttons = new ArrayList<MenuItemJButton>();
@@ -369,6 +370,7 @@ public class Menu extends javax.swing.JDialog implements MouseListener
         
         return buttons;
     }
+    
     private void PrintLastReceiptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintLastReceiptButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PrintLastReceiptButtonActionPerformed
@@ -476,7 +478,14 @@ System.out.println("pressed");
         if(e.getSource() == OutputArea || e.getSource() == FoodCard)
         {
                     System.out.println("outPutAreaout");
-            switch(currentCard)
+                    switchCards();
+            
+        } // if
+    }
+    
+    private void switchCards()
+    {
+                    switch(currentCard)
             {
                 case "foodCard":
                     CardLayout x = (CardLayout)CardPanel.getLayout();
@@ -485,8 +494,7 @@ System.out.println("pressed");
                     break;
                 default: break;
             }
-            
-        } // if
+        
     }
 
     @Override
