@@ -36,14 +36,31 @@ public class MenuCardPanel extends JPanel
         String toReturn = "Name: " + this.getName() + "\n";
         
         if (this.parentPanel == null)
-            toReturn += "Parent panel: null";
+            toReturn += "Parent panel: null\n";
         else
-            toReturn += "Parent panel: " + parentPanel.getName();
+            toReturn += "Parent panel: " + parentPanel.getName() + "\n";
         
-        toReturn += "buttons: " + menuButtons + "\n";
-        toReturn += "child panels: " + childrenCards + "\n";
+        toReturn += "buttons: "; 
+        for (MenuItemJButton m : menuButtons)
+            toReturn += m.getText() + "  ";
+        toReturn +="\n";
+        
+        toReturn += "child panels: "; 
+        for (MenuCardPanel m : childrenCards)
+            toReturn += m.getName() + "  ";
+        toReturn += "\n";
             
         return toReturn;
        
+    }
+    
+    public void addMenuButton(MenuItemJButton button)
+    {
+        this.menuButtons.add(button);
+    }
+    
+    public void addChildCardPanel(MenuCardPanel panel)
+    {
+        this.childrenCards.add(panel);
     }
 }

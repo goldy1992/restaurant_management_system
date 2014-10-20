@@ -305,15 +305,51 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 else
                     System.out.println("current panel = " + currentPanel.getName() +
                         "; parentPanel = " + parentPanel.getName());
+                
+                currentPanel.setParentPanel(parentPanel);
                              
                 
                 count++;
             }  while (x.next());
             
-            // FIND ALL BUTTONS
             
             
-
+            // FIND ALL BUTTONS FOR EACH PANEL
+            for (MenuCardPanel c : cardPanels )
+            {
+                query = "SELECT NAME FROM `3YP_ITEMS` "
+                    + "LEFT JOIN `3YP_POS_IN_MENU` ON "
+                    + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
+                    + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" + c.getName() + "\" ";
+                
+                numberOfButtonsQuery = con.prepareStatement(query);
+                numberOfButtonsQuery.executeQuery();
+                x = numberOfButtonsQuery.getResultSet();
+                
+                while(x.next())
+                    c.addMenuButton(new MenuItemJButton(x.getString(1))); 
+                
+            } // for each
+            
+            // FIND ALL CHILD PANELS
+            for (MenuCardPanel c : cardPanels )
+            {
+                query = "SELECT NAME FROM `3YP_MENU_PAGES` "
+                        + "WHERE `PARENT_PAGE_ID` = \"" + c.getName() + "\""; 
+                
+                numberOfButtonsQuery = con.prepareStatement(query);
+                numberOfButtonsQuery.executeQuery();
+                x = numberOfButtonsQuery.getResultSet();
+                
+                while(x.next())
+                    for (MenuCardPanel c1 : cardPanels)
+                        if (c1.getName().equals(x.getString(1)))
+                            c.addChildCardPanel(c1);               
+            } // for each
+            
+            for (MenuCardPanel c : cardPanels )
+                System.out.println(c);
+            
             
         
         } // try
