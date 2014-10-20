@@ -77,10 +77,11 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         }
         
         initComponents();
-        ArrayList<JPanel> cardPanels = getCards();
-        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
-        CardLayout cl = (CardLayout)(CardPanel.getLayout());
-        cl.show(CardPanel, "mainCard");
+        getCards();
+        //ArrayList<JPanel> cardPanels = getMainCard();
+        //cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        //CardLayout cl = (CardLayout)(CardPanel.getLayout());
+        //cl.show(CardPanel, "mainCard");
         
         // this code only allows the output Area text pane to have key controls
         components.addAll(buttons);
@@ -94,6 +95,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         }       
     } // constructor
 
+    
     private JPanel initialiseMainCard(JPanel panel)
     {
 
@@ -107,8 +109,35 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         // EDIT THIS
         MenuSelectPanel.setLayout(new java.awt.GridLayout(5, 2));
+        
+        try
+        {
+        
+                  PreparedStatement numberOfButtonsQuery = null;
+            String query =  "SELECT NAME \n" +
+                        "FROM `3YP_MENU_ITEMS`\n" +
+                        "WHERE PARENT_PAGE_ID = 'MAIN_PAGE'";
+            numberOfButtonsQuery = con.prepareStatement(query);
+            numberOfButtonsQuery.executeQuery();
+            ResultSet x = numberOfButtonsQuery.getResultSet();
+            
+         
+            while (x.next())
+            {
+                String result = x.getString("NAME");
+                System.out.println(result);
+
+            } // while
+        } // try
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
 
 
+        
+        
+        
         panel.add(MenuSelectPanel);
         panels.add(MenuSelectPanel);
 
@@ -170,7 +199,6 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         SendOrderButton = new JButton();
         SendOrderButton.addActionListener(this);
-        
         SendOrderButton.setText("Send Order");
         BillHandlePanel.add(SendOrderButton);
         buttons.add(SendOrderButton);
@@ -184,7 +212,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     } // initialiseCards
     
     
-    private ArrayList<JPanel> getCards()
+    private ArrayList<JPanel> getMainCard()
     {
         ArrayList<JPanel> cardPanels = new ArrayList<JPanel>();
         cardPanels.add(new JPanel());        
@@ -217,6 +245,76 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 CardPanel.add(cardPanels.get(i), cardPanels.get(i).getName());
                 panels.add(cardPanels.get(i));
             } // for
+        
+        } // try
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
+                
+                return cardPanels;
+        
+    }
+    
+    private ArrayList<MenuCardPanel> getCards()
+    {
+        ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
+
+        try 
+        {
+            // PREPARE SELECT STATEMENT
+            PreparedStatement numberOfButtonsQuery = null;
+            String query =  "SELECT * \n" +
+                        "FROM `3YP_MENU_PAGES`";
+            numberOfButtonsQuery = con.prepareStatement(query);
+            numberOfButtonsQuery.executeQuery();
+            ResultSet x = numberOfButtonsQuery.getResultSet();
+            
+
+            // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
+            while (x.next())
+            {
+                MenuCardPanel panel = new MenuCardPanel();
+                panel.setName(x.getString(1));
+                panel.setFocusable(false);
+                panel.setRequestFocusEnabled(false);
+                panel.setLayout(new java.awt.GridLayout(1, 0));
+                cardPanels.add(panel);
+            } // while
+           
+                for (MenuCardPanel c : cardPanels )
+                    System.out.println(c.getName());
+            
+                
+             // ADD EVERY CARD VIEW PANEL PARENT
+            int count = 0;
+            x.first();           
+            do
+            {
+                MenuCardPanel currentPanel = cardPanels.get(count);
+                MenuCardPanel parentPanel = null;
+                
+                for (MenuCardPanel c : cardPanels )
+                    if (c.getName().equals(x.getString(2)))
+                        parentPanel = c;
+                
+                
+                if (parentPanel == null)
+                    System.out.println("current panel = " + currentPanel.getName() +
+                        "; parentPanel = null");
+                else
+                    System.out.println("current panel = " + currentPanel.getName() +
+                        "; parentPanel = " + parentPanel.getName());
+                             
+                
+                count++;
+            }  while (x.next());
+            
+            // FIND ALL BUTTONS
+            
+            
+
+            
         
         } // try
         catch (SQLException ex) 
