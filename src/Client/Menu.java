@@ -30,6 +30,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     ArrayList<JButton> buttons = new ArrayList<JButton>();
     ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<MenuItemJButton>();
+    ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
     ArrayList<JPanel> panels = new ArrayList<JPanel>();
     
     private JButton SendOrderButton = null;
@@ -77,8 +78,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         }
         
         initComponents();
-        getCards();
-        //ArrayList<JPanel> cardPanels = getMainCard();
+        cardPanels = getCards();
         //cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
         //CardLayout cl = (CardLayout)(CardPanel.getLayout());
         //cl.show(CardPanel, "mainCard");
@@ -86,7 +86,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         // this code only allows the output Area text pane to have key controls
         components.addAll(buttons);
         components.addAll(menuItemButtons);
-        components.addAll(panels);
+        components.addAll(cardPanels);
         
         for (JComponent t : components)
         {
@@ -96,7 +96,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     } // constructor
 
     
-    private JPanel initialiseMainCard(JPanel panel)
+    private JPanel initialiseMainCard(MenuCardPanel panel)
     {
 
         System.out.println("initialise main card called");
@@ -350,6 +350,9 @@ public class Menu extends javax.swing.JDialog implements ActionListener
             for (MenuCardPanel c : cardPanels )
                 System.out.println(c);
             
+            
+            // NEED CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST
+            // INSERT BELOW
             
         
         } // try
