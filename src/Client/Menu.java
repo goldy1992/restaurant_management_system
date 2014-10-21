@@ -97,7 +97,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     } // constructor
 
     
-    private JPanel initialiseMainCard(MenuCardPanel panel)
+    private MenuCardPanel initialiseMainCard(MenuCardPanel panel)
     {
 
         System.out.println("initialise main card called");
@@ -110,37 +110,10 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         // EDIT THIS
         MenuSelectPanel.setLayout(new java.awt.GridLayout(5, 2));
-        
-        try
-        {
-        
-            PreparedStatement numberOfButtonsQuery = null;
-            String query =  "SELECT NAME \n" +
-                        "FROM `3YP_MENU_ITEMS`\n" +
-                        "WHERE PARENT_PAGE_ID = 'MAIN_PAGE'";
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeQuery();
-            ResultSet x = numberOfButtonsQuery.getResultSet();
             
-         
-            while (x.next())
-            {
-                String result = x.getString("NAME");
-                System.out.println(result);
-
-            } // while
-        } // try
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
-
-
-        
-        
-        
         panel.add(MenuSelectPanel);
         panels.add(MenuSelectPanel);
+        
 
         JPanel FoodMenuPanel = new JPanel();
         FoodMenuPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -211,6 +184,8 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         return panel;
         
     } // initialiseCards
+   
+    
     
     private ArrayList<MenuCardPanel> getCards()
     {
@@ -301,10 +276,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                     Collections.swap(cardPanels, i, 0);
                 
              for (MenuCardPanel c : cardPanels )
-                 System.out.println(c);
-            
-
-            
+                 System.out.println(c);    
         
         } // try
         catch (SQLException ex) 

@@ -6,6 +6,7 @@
 package Client;
 
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -15,14 +16,16 @@ import javax.swing.JPanel;
 public class MenuCardPanel extends JPanel 
 {
     private MenuCardPanel parentPanel;
-    private ArrayList<MenuItemJButton> menuButtons;
-    private ArrayList<MenuCardPanel> childrenCards;
+    private final ArrayList<MenuItemJButton> cardMenuItems;
+    private final ArrayList<MenuCardPanel> childCards;
+    private final ArrayList<JButton> childCardButtons;
     
     public MenuCardPanel()
     {
         super();
-        menuButtons = new ArrayList<MenuItemJButton>();
-        childrenCards = new ArrayList<MenuCardPanel>();
+        cardMenuItems = new ArrayList<MenuItemJButton>();
+        childCards = new ArrayList<MenuCardPanel>();
+        childCardButtons = new ArrayList<JButton>();
     }
     
     public void setParentPanel(MenuCardPanel panel)
@@ -41,12 +44,12 @@ public class MenuCardPanel extends JPanel
             toReturn += "Parent panel: " + parentPanel.getName() + "\n";
         
         toReturn += "buttons: "; 
-        for (MenuItemJButton m : menuButtons)
+        for (MenuItemJButton m : cardMenuItems)
             toReturn += m.getText() + "  ";
         toReturn +="\n";
         
         toReturn += "child panels: "; 
-        for (MenuCardPanel m : childrenCards)
+        for (MenuCardPanel m : childCards)
             toReturn += m.getName() + "  ";
         toReturn += "\n";
             
@@ -56,11 +59,31 @@ public class MenuCardPanel extends JPanel
     
     public void addMenuButton(MenuItemJButton button)
     {
-        this.menuButtons.add(button);
+        this.cardMenuItems.add(button);
     }
     
     public void addChildCardPanel(MenuCardPanel panel)
     {
-        this.childrenCards.add(panel);
+        this.childCards.add(panel);
+    }
+    
+    public ArrayList<MenuItemJButton> getCardMenuItems()
+    {
+        return cardMenuItems;
+    }
+    
+    public ArrayList<MenuCardPanel> getChildCards()
+    {
+        return childCards;
+    }
+    
+    public MenuCardPanel getParentPanel()
+    {
+        return parentPanel;
+    }
+    
+    public ArrayList<JButton> getChildCardButtons()
+    {
+        return childCardButtons;
     }
 }
