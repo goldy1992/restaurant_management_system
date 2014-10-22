@@ -24,5 +24,13 @@ public class MenuItemJButton extends JButton implements ActionListener
     public void actionPerformed(ActionEvent ae) 
     {
         System.out.println(this.getText());
+        String currentText = Menu.myOutput.getText();
+        
+        // CODE TO ADD TO TAB SHOULD BE PUT HERE
+        
+        
+        // CODE TO ADD SCREEN
+        currentText += this.getName() + "\n";
+        Menu.myOutput.setText(currentText);
     }
 }

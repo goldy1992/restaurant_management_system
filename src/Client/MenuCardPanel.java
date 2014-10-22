@@ -5,6 +5,7 @@
  */
 package Client;
 
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,6 +20,8 @@ public class MenuCardPanel extends JPanel
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private final ArrayList<MenuCardPanel> childCards;
     private final ArrayList<JButton> childCardButtons;
+    private JPanel menuSelectPanel;
+    private JPanel itemsPanel;
     
     public MenuCardPanel()
     {
@@ -26,6 +29,10 @@ public class MenuCardPanel extends JPanel
         cardMenuItems = new ArrayList<MenuItemJButton>();
         childCards = new ArrayList<MenuCardPanel>();
         childCardButtons = new ArrayList<JButton>();
+        menuSelectPanel = new JPanel();
+        itemsPanel = new JPanel();
+
+                
     }
     
     public void setParentPanel(MenuCardPanel panel)
@@ -85,5 +92,15 @@ public class MenuCardPanel extends JPanel
     public ArrayList<JButton> getChildCardButtons()
     {
         return childCardButtons;
+    }
+    
+    public JPanel getMenuSelectPanel()
+    {
+        return menuSelectPanel;
+    }
+    
+    public JPanel getItemsPanel()
+    {
+        return itemsPanel;
     }
 }

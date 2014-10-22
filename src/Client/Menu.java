@@ -6,6 +6,7 @@
 package Client;
 
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         initComponents();
         cardPanels = getCards();
-        //cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
         //CardLayout cl = (CardLayout)(CardPanel.getLayout());
         //cl.show(CardPanel, "mainCard");
         
@@ -204,11 +205,9 @@ public class Menu extends javax.swing.JDialog implements ActionListener
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
             while (x.next())
             {
-                MenuCardPanel panel = new MenuCardPanel();
+                MenuCardPanel panel = createMenuCardPanel();
                 panel.setName(x.getString(1));
-                panel.setFocusable(false);
-                panel.setRequestFocusEnabled(false);
-                panel.setLayout(new java.awt.GridLayout(1, 0));
+
                 cardPanels.add(panel);
             } // while
            
@@ -251,7 +250,10 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 x = numberOfButtonsQuery.getResultSet();
                 
                 while(x.next())
-                    c.addMenuButton(new MenuItemJButton(x.getString(1)));          
+                {
+                    MenuItemJButton newButton = new MenuItemJButton(x.getString(1));
+                    c.addMenuButton(newButton);          
+                }
             } // for each
             
             // FIND ALL CHILD PANELS
@@ -398,6 +400,17 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     {
         MenuItemJButton x = new MenuItemJButton(text);
         x.addActionListener(x);
+        return x;
+    }
+    
+    private MenuCardPanel createMenuCardPanel()
+    {
+        MenuCardPanel x = new MenuCardPanel();
+        x.setLayout(new GridLayout(1,2));
+        x.add(x.getMenuSelectPanel());
+        x.add(x.getItemsPanel());
+        x.setFocusable(false);
+        x.setRequestFocusEnabled(false);
         return x;
     }
     
