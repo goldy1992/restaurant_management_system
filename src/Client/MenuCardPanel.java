@@ -7,7 +7,6 @@ package Client;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -17,22 +16,24 @@ import javax.swing.JPanel;
 public class MenuCardPanel extends JPanel 
 {
     private MenuCardPanel parentPanel;
+    
     private final ArrayList<MenuItemJButton> cardMenuItems;
+    private JPanel itemsPanel;    
+
     private final ArrayList<MenuCardPanel> childCards;
-    private final ArrayList<JButton> childCardButtons;
+    private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private JPanel menuSelectPanel;
-    private JPanel itemsPanel;
+
     
     public MenuCardPanel()
     {
         super();
         cardMenuItems = new ArrayList<MenuItemJButton>();
         childCards = new ArrayList<MenuCardPanel>();
-        childCardButtons = new ArrayList<JButton>();
+        childCardButtons = new ArrayList<MenuCardLinkJButton>();
         menuSelectPanel = new JPanel();
         itemsPanel = new JPanel();
-
-                
+              
     }
     
     public void setParentPanel(MenuCardPanel panel)
@@ -64,24 +65,65 @@ public class MenuCardPanel extends JPanel
        
     }
     
-    public void addMenuButton(MenuItemJButton button)
+    /**
+     * Adds a menu item button to the ArrayList of all menu items on the card  
+     * @param button 
+     */
+    public void addMenuItemButton(MenuItemJButton button)
     {
         this.cardMenuItems.add(button);
     }
     
-    public void addChildCardPanel(MenuCardPanel panel)
+     /**
+     * Takes the arraylist of all the menu item buttons and adds them to the
+     * menu Item Panel
+     * 
+     * @return true if done successfully, false otherwise
+     */
+      public boolean addAllItemsToPanel()
     {
-        this.childCards.add(panel);
+        if ( cardMenuItems == null || cardMenuItems.isEmpty() )
+            return false;
+        
+        int size = cardMenuItems.size();
+        
+        int[] gridDimensions = Factors.closestIntSquare(size);
+        itemsPanel.setLayout(new GridLayout(gridDimensions[0], gridDimensions[1]));
+        
+        for (MenuItemJButton b : cardMenuItems)
+            itemsPanel.add(b);
+        
+        return true;
     }
+    
+      
+      
+    public void addChildCardButton(MenuCardLinkJButton button)
+    {
+        childCardButtons.add(button);
+    }
+    
+    public boolean addAllChildCardButtonsToPanel()
+    {
+        if ( childCardButtons == null || childCardButtons.isEmpty() )
+            return false;
+        
+        int size = childCardButtons.size();
+        
+        int[] gridDimensions = Factors.closestIntSquare(size);
+        menuSelectPanel.setLayout(new GridLayout(gridDimensions[0], gridDimensions[1]));
+        
+        for (MenuCardLinkJButton b : childCardButtons)
+            menuSelectPanel.add(b);    
+        
+        return true;
+    }
+    
+    
     
     public ArrayList<MenuItemJButton> getCardMenuItems()
     {
         return cardMenuItems;
-    }
-    
-    public ArrayList<MenuCardPanel> getChildCards()
-    {
-        return childCards;
     }
     
     public MenuCardPanel getParentPanel()
@@ -89,7 +131,7 @@ public class MenuCardPanel extends JPanel
         return parentPanel;
     }
     
-    public ArrayList<JButton> getChildCardButtons()
+    public ArrayList<MenuCardLinkJButton> getChildCardButtons()
     {
         return childCardButtons;
     }
@@ -103,4 +145,8 @@ public class MenuCardPanel extends JPanel
     {
         return itemsPanel;
     }
+    
+  
+    
+
 }

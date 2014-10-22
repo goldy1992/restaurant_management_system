@@ -164,9 +164,8 @@ public class MyClient implements Runnable
         } // synchronized
         System.out.println("post while");
         
-        SelectTable t = new SelectTable(getTableStatuses(), out);
-        selectTable = t;
-            t.setVisible(true);
+        selectTable = new SelectTable(getTableStatuses(), out);
+            selectTable.setVisible(true);
 
         
     } // main

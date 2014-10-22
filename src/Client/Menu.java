@@ -37,7 +37,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     
     private JButton SendOrderButton = null;
     
-    public static JTextPane myOutput;
+    public JTextPane myOutput;
 
     @Override
     public void actionPerformed(ActionEvent ae) 
@@ -81,9 +81,13 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         initComponents();
         cardPanels = getCards();
-        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
-        //CardLayout cl = (CardLayout)(CardPanel.getLayout());
-        //cl.show(CardPanel, "mainCard");
+        
+        for(MenuCardPanel p : cardPanels)
+            CardPanel.add(p);
+        
+        //cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        CardLayout cl = (CardLayout)(CardPanel.getLayout());
+        cl.show(CardPanel, cardPanels.get(0).getName());
         
         // this code only allows the output Area text pane to have key controls
         components.addAll(buttons);
@@ -94,7 +98,9 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         {
             t.setFocusable(false);
             t.requestFocus(false);
-        }       
+        }    
+        
+ 
     } // constructor
 
     
@@ -202,18 +208,23 @@ public class Menu extends javax.swing.JDialog implements ActionListener
             numberOfButtonsQuery.executeQuery();
             ResultSet x = numberOfButtonsQuery.getResultSet();
 
+            
+            
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
             while (x.next())
             {
                 MenuCardPanel panel = createMenuCardPanel();
                 panel.setName(x.getString(1));
-
                 cardPanels.add(panel);
             } // while
            
                 for (MenuCardPanel c : cardPanels )
                     System.out.println(c.getName());
             
+                
+                
+                
+                
              // ADD EVERY CARD VIEW PANEL PARENT
             int count = 0;
             x.first();           
@@ -237,6 +248,9 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 count++;
             }  while (x.next());
             
+            
+            
+            
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanels )
             {
@@ -252,9 +266,13 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 while(x.next())
                 {
                     MenuItemJButton newButton = new MenuItemJButton(x.getString(1));
-                    c.addMenuButton(newButton);          
+                    c.addMenuItemButton(newButton);          
                 }
+                
+                c.addAllItemsToPanel();
             } // for each
+            
+            
             
             // FIND ALL CHILD PANELS
             for (MenuCardPanel c : cardPanels )
@@ -269,7 +287,13 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 while(x.next())
                     for (MenuCardPanel c1 : cardPanels)
                         if (c1.getName().equals(x.getString(1)))
-                            c.addChildCardPanel(c1);               
+                        {
+                            MenuCardLinkJButton newButton = createMenuCardLinkButton(c1);
+                            c.addChildCardButton(newButton);
+                        }
+                
+                // adds all the buttons to the panel
+                c.addAllChildCardButtonsToPanel();
             } // for each
   
             // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
@@ -396,23 +420,6 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private MenuItemJButton createMenuItemJButton(String text)
-    {
-        MenuItemJButton x = new MenuItemJButton(text);
-        x.addActionListener(x);
-        return x;
-    }
-    
-    private MenuCardPanel createMenuCardPanel()
-    {
-        MenuCardPanel x = new MenuCardPanel();
-        x.setLayout(new GridLayout(1,2));
-        x.add(x.getMenuSelectPanel());
-        x.add(x.getItemsPanel());
-        x.setFocusable(false);
-        x.setRequestFocusEnabled(false);
-        return x;
-    }
     
     private ArrayList<MenuItemJButton> getButtonsForPanel(MenuArea part)
     {
@@ -507,7 +514,7 @@ System.out.println("pressed");
     
     private void switchCards()
     {
-                    switch(currentCard)
+            switch(currentCard)
             {
                 case "foodCard":
                     CardLayout x = (CardLayout)CardPanel.getLayout();
@@ -516,7 +523,44 @@ System.out.println("pressed");
                     break;
                 default: break;
             }
-        
+    }
+    
+    public JPanel getCardPanel()
+    {
+        return CardPanel;
+    }
+    
+    
+    
+    
+    
+    
+    
+    // factory Methods
+    
+    private MenuItemJButton createMenuItemJButton(String text)
+    {
+        MenuItemJButton x = new MenuItemJButton(text);
+        x.addActionListener(x);
+        return x;
+    }
+    
+    private MenuCardPanel createMenuCardPanel()
+    {
+        MenuCardPanel x = new MenuCardPanel();
+        x.setLayout(new GridLayout(1,0));
+        x.add(x.getMenuSelectPanel());
+        x.add(x.getItemsPanel());
+        x.setFocusable(false);
+        x.setRequestFocusEnabled(false);
+        return x;
+    }
+    
+    private MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent)
+    {
+        MenuCardLinkJButton x = new MenuCardLinkJButton(parent);
+        x.addActionListener(x);
+        return x;
     }
 
 }
