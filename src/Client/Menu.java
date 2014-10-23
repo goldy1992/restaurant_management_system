@@ -35,10 +35,8 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
     private ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<MenuItemJButton>();
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
-    private ArrayList<JPanel> panels = new ArrayList<JPanel>();
-    
+    private ArrayList<JPanel> panels = new ArrayList<JPanel>();    
     private JButton SendOrderButton = null;
-    
     public JTextPane myOutput;
 
     @Override
@@ -46,16 +44,11 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     {
         if (ae.getSource() == SendOrderButton)
         {
-            try 
-            {
-                con.close();
-            } catch (SQLException ex) 
-            {
-                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            this.dispose();;
-        }
-    }
+            try { con.close(); } 
+            catch (SQLException ex) { Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
+            this.dispose();
+        } // if
+    } // actionPerformed
 
     @Override
     public void mouseClicked(MouseEvent me) 
@@ -66,9 +59,8 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
             {
                 System.out.println("found called panel");
                 switchCards();
-            }
-        
-    }
+            }   
+    } // mouseClickeds
 
     @Override
     public void mousePressed(MouseEvent me) {  }
@@ -131,8 +123,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         
  
     } // constructor
-
-    
+  
     private MenuCardPanel initialiseMainCard(MenuCardPanel panel)
     {
 
@@ -191,9 +182,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         panels.add(panel);
         return panel;
         
-    } // initialiseCards
-   
-    
+    } // initialiseCards    
     
     private ArrayList<MenuCardPanel> getCards()
     {
@@ -209,8 +198,6 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
             numberOfButtonsQuery.executeQuery();
             ResultSet x = numberOfButtonsQuery.getResultSet();
 
-            
-            
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
             while (x.next())
             {
@@ -219,13 +206,9 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
                 cardPanels.add(panel);
             } // while
            
-                for (MenuCardPanel c : cardPanels )
-                    System.out.println(c.getName());
-            
-                
-                
-                
-                
+            for (MenuCardPanel c : cardPanels )
+                System.out.println(c.getName());
+                            
              // ADD EVERY CARD VIEW PANEL PARENT
             int count = 0;
             x.first();           
@@ -255,8 +238,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
             for (MenuCardPanel c1 : cardPanels)
                 c1.addAllChildCardButtonsToPanel();
             
-            
-            
+                
             
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanels )
@@ -274,53 +256,26 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
                 {
                     MenuItemJButton newButton = new MenuItemJButton(x.getString(1));
                     c.addMenuItemButton(newButton);          
-                }
+                } // while
                 
                 c.addAllItemsToPanel();
             } // for each
-            
-            
-            
-            /* FIND ALL CHILD PANELS
-            for (MenuCardPanel c : cardPanels )
-            {
-                query = "SELECT NAME FROM `3YP_MENU_PAGES` "
-                        + "WHERE `PARENT_PAGE_ID` = \"" + c.getName() + "\""; 
-                
-                numberOfButtonsQuery = con.prepareStatement(query);
-                numberOfButtonsQuery.executeQuery();
-                x = numberOfButtonsQuery.getResultSet();
-                
-                while(x.next())
-                    for (MenuCardPanel c1 : cardPanels)
-                        if (c1.getName().equals(x.getString(1)))
-                        {
-                            MenuCardLinkJButton newButton = createMenuCardLinkButton(c1);
-                            c.addChildCardButton(newButton);
-                        }
-                
-                // adds all the buttons to the panel
-                c.addAllChildCardButtonsToPanel();
-            } // for each
-            */
   
             // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
             for (int i = 1; i < cardPanels.size(); i++)
                 if (cardPanels.get(i).getName().equals("MAIN_PAGE"))
                     Collections.swap(cardPanels, i, 0);
                 
-             for (MenuCardPanel c : cardPanels )
-                 System.out.println(c);    
-        
+            for (MenuCardPanel c : cardPanels )
+                System.out.println(c);            
         } // try
         catch (SQLException ex) 
         {
             Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
         } // catch
                 
-                return cardPanels;
-        
-    }
+        return cardPanels;      
+    } // getCards
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -435,89 +390,13 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private ArrayList<MenuItemJButton> getButtonsForPanel(MenuArea part)
-    {
-        ArrayList<MenuItemJButton> buttons = new ArrayList<MenuItemJButton>();
-        
-        try 
-        {
-            PreparedStatement numberOfButtonsQuery = null;
-            String query =  "SELECT NAME \n" +
-                        "FROM `3YP_ITEMS`\n" +
-                        "LEFT JOIN`3YP_POS_IN_MENU`\n" +
-                        "ON 3YP_ITEMS.ID = 3YP_POS_IN_MENU.ID\n" +
-                        "WHERE 3YP_POS_IN_MENU.LOCATION = '" + part + "'";
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeQuery();
-            ResultSet x = numberOfButtonsQuery.getResultSet();
-            
-         
-            while (x.next())
-            {
-                String result = x.getString("NAME");
-                System.out.println(result);
-                buttons.add( createMenuItemJButton(result));
-            } // while
-        } // try
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
-        
-        return buttons;
-    }
-    
     private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
 System.out.println("pressed");
     }//GEN-LAST:event_OutputAreaKeyPressed
 
     private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
-        // TODO add your handling code here:
         switchCards();
     }//GEN-LAST:event_OutputAreaMouseClicked
-
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Menu dialog = new Menu(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CardPanel;
@@ -551,17 +430,9 @@ System.out.println("pressed");
      * 
      * @return the JPanel that stores all the cards
      */
-    public JPanel getCardPanel()
-    {
-        return CardPanel;
-    }
+    public JPanel getCardPanel() { return CardPanel; } 
     
-    
-   
-    
-    
-    // factory Methods
-    
+    // factory Methods 
     private MenuItemJButton createMenuItemJButton(String text)
     {
         MenuItemJButton x = new MenuItemJButton(text);
@@ -592,5 +463,4 @@ System.out.println("pressed");
         x.addActionListener(x);
         return x;
     }
-
-}
+} // class
