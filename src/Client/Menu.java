@@ -81,11 +81,13 @@ public class Menu extends javax.swing.JDialog implements ActionListener
         
         initComponents();
         cardPanels = getCards();
+        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
         
         for(MenuCardPanel p : cardPanels)
             CardPanel.add(p);
         
         //cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        System.out.println("show");
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanels.get(0).getName());
         
@@ -108,34 +110,6 @@ public class Menu extends javax.swing.JDialog implements ActionListener
     {
 
         System.out.println("initialise main card called");
-        panel.setLayout(new java.awt.GridLayout(1, 0));
-
-        JPanel MenuSelectPanel = new JPanel(); 
-        MenuSelectPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        MenuSelectPanel.setFocusable(false);
-        MenuSelectPanel.setRequestFocusEnabled(false);
-        
-        // EDIT THIS
-        MenuSelectPanel.setLayout(new java.awt.GridLayout(5, 2));
-            
-        panel.add(MenuSelectPanel);
-        panels.add(MenuSelectPanel);
-        
-
-        JPanel FoodMenuPanel = new JPanel();
-        FoodMenuPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        
-        // EDIT
-        FoodMenuPanel.setLayout(new java.awt.GridLayout(8, 3));
-        panel.add(FoodMenuPanel);
-        panels.add(FoodMenuPanel);
-
-        ArrayList<MenuItemJButton> buttonsForPanel =  getButtonsForPanel(MenuArea.MAIN_PAGE);
-
-        for (int i = 0; i < buttonsForPanel.size(); i++)
-            FoodMenuPanel.add(buttonsForPanel.get(i));
-
-        menuItemButtons.addAll(buttonsForPanel);
 
         JPanel BillHandlePanel = new JPanel();
         BillHandlePanel.setBorder(new javax.swing.border.MatteBorder(null));
@@ -186,7 +160,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
 
         panel.add(BillHandlePanel);
 
-        CardPanel.add(panel, "mainCard");
+        CardPanel.add(panel, panel.getName());
         panels.add(panel);
         return panel;
         
@@ -244,9 +218,15 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                     System.out.println("current panel = " + currentPanel.getName() +
                         "; parentPanel = " + parentPanel.getName());
                 
-                currentPanel.setParentPanel(parentPanel);                
+                currentPanel.setParentPanel(parentPanel);  
+                
+                if (parentPanel != null)
+                    parentPanel.addChildCardButton(createMenuCardLinkButton(currentPanel));
                 count++;
             }  while (x.next());
+            
+            for (MenuCardPanel c1 : cardPanels)
+                c1.addAllChildCardButtonsToPanel();
             
             
             
@@ -274,7 +254,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
             
             
             
-            // FIND ALL CHILD PANELS
+            /* FIND ALL CHILD PANELS
             for (MenuCardPanel c : cardPanels )
             {
                 query = "SELECT NAME FROM `3YP_MENU_PAGES` "
@@ -295,6 +275,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener
                 // adds all the buttons to the panel
                 c.addAllChildCardButtonsToPanel();
             } // for each
+            */
   
             // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
             for (int i = 1; i < cardPanels.size(); i++)

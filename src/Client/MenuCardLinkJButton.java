@@ -33,8 +33,15 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
         
         if (MyClient.selectTable.menu == null)
             System.out.println("no card panel");
+        
         CardLayout cl = (CardLayout)(MyClient.selectTable.menu.getCardPanel().getLayout());
         cl.show(MyClient.selectTable.menu.getCardPanel(), targetPanel.getName());
+        System.out.println("exit actionperformed");
+    }
+    
+    public MenuCardPanel getTargetPanel()
+    {
+        return targetPanel;
     }
     
 }

@@ -20,7 +20,7 @@ public class MenuCardPanel extends JPanel
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private JPanel itemsPanel;    
 
-    private final ArrayList<MenuCardPanel> childCards;
+
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private JPanel menuSelectPanel;
 
@@ -29,11 +29,10 @@ public class MenuCardPanel extends JPanel
     {
         super();
         cardMenuItems = new ArrayList<MenuItemJButton>();
-        childCards = new ArrayList<MenuCardPanel>();
+
         childCardButtons = new ArrayList<MenuCardLinkJButton>();
         menuSelectPanel = new JPanel();
-        itemsPanel = new JPanel();
-              
+        itemsPanel = new JPanel();            
     }
     
     public void setParentPanel(MenuCardPanel panel)
@@ -51,14 +50,14 @@ public class MenuCardPanel extends JPanel
         else
             toReturn += "Parent panel: " + parentPanel.getName() + "\n";
         
-        toReturn += "buttons: "; 
+        toReturn += "buttons(" + cardMenuItems.size() + ") : ";
         for (MenuItemJButton m : cardMenuItems)
             toReturn += m.getText() + "  ";
         toReturn +="\n";
         
-        toReturn += "child panels: "; 
-        for (MenuCardPanel m : childCards)
-            toReturn += m.getName() + "  ";
+        toReturn += "child panels (" + childCardButtons.size() + ") : "; 
+        for (MenuCardLinkJButton m : childCardButtons)
+            toReturn += m.getTargetPanel().getName() + "  ";
         toReturn += "\n";
             
         return toReturn;
