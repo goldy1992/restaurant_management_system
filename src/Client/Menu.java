@@ -1,60 +1,87 @@
-package Client;
-
-
-import Client.DatabaseConnect;
-import Client.MenuCardLinkJButton;
-import Client.MenuCardPanel;
-import Client.MenuGUI;
-import Client.MenuItemJButton;
-import java.awt.CardLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Client;
+
+import java.awt.CardLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextPane;
+
 /**
  *
- * @author Goldy
+ * @author mbbx9mg3
  */
-public class Menu 
+public class Menu extends javax.swing.JDialog implements ActionListener
 {
-    // the database connection
-    Connection con = null; 
-    
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     ArrayList<JButton> buttons = new ArrayList<JButton>();
     ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<MenuItemJButton>();
     ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
     ArrayList<JPanel> panels = new ArrayList<JPanel>();
-    private JButton SendOrderButton = null;   
-    public JTextPane myOutput;
-    public String currentCard = "mainCard";
-    private JPanel CardPanel;
-    private GridBagConstraints cardPanelGridBagConstraints;    
-    private JPanel OutputAreaPanel;
-    private JScrollPane jScrollPane1;
-    private JTextPane OutputArea;
-    private GridBagConstraints outputPanelgridBagConstraints;
     
-    public Menu()
+    private JButton SendOrderButton = null;
+    
+    public JTextPane myOutput;
+
+    @Override
+    public void actionPerformed(ActionEvent ae) 
     {
-        this.initialiseCardPanel();   
+        if (ae.getSource() == SendOrderButton)
+        {
+            try 
+            {
+                con.close();
+            } catch (SQLException ex) 
+            {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.dispose();;
+        }
+    }
+
+    public static enum MenuArea
+    {
+        MAIN_PAGE, FOOD_PAGE
+    }
+    
+    // the database connection
+    Connection con = null;    
+
+    /**
+     * Creates new form Menu
+     */
+    public Menu(java.awt.Frame parent, boolean modal) 
+    {
+        super(parent, modal);
+
+        try 
+        {         
+            con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        initComponents();
+        cardPanels = getCards();
+        
         for(MenuCardPanel p : cardPanels)
             CardPanel.add(p);
         
@@ -72,69 +99,10 @@ public class Menu
             t.setFocusable(false);
             t.requestFocus(false);
         }    
-                
-                
-    } // constructor
-    
-    private void initialiseCardPanel()
-    {
-        CardPanel = new javax.swing.JPanel();
-        CardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        CardPanel.setPreferredSize(new java.awt.Dimension(400, 350));
-        CardPanel.setLayout(new java.awt.CardLayout());
-        cardPanelGridBagConstraints = new GridBagConstraints();
-        cardPanelGridBagConstraints.gridx = 0;
-        cardPanelGridBagConstraints.gridy = 1;
-        cardPanelGridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        cardPanelGridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        cardPanelGridBagConstraints.weightx = 1.0;
-        cardPanelGridBagConstraints.weighty = 0.7;
-        panels.add(CardPanel);        
-        cardPanels = getCards();
         
-    }
-    
-    private void initialiseOutputAreaPanel()
-    {
-                OutputAreaPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        OutputArea = new javax.swing.JTextPane();
-                OutputAreaPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        OutputAreaPanel.setFocusable(false);
-        OutputAreaPanel.setPreferredSize(new java.awt.Dimension(400, 150));
+ 
+    } // constructor
 
-        myOutput = OutputArea;
-        OutputArea.setEditable(false);
-        OutputArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                System.out.println("pressed");
-            }
-        });
-        jScrollPane1.setViewportView(OutputArea);
-
-        javax.swing.GroupLayout OutputAreaPanelLayout = new javax.swing.GroupLayout(OutputAreaPanel);
-        OutputAreaPanel.setLayout(OutputAreaPanelLayout);
-        OutputAreaPanelLayout.setHorizontalGroup(
-            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-        );
-        OutputAreaPanelLayout.setVerticalGroup(
-            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-        );
-        outputPanelgridBagConstraints = new java.awt.GridBagConstraints();
-        outputPanelgridBagConstraints.gridx = 0;
-        outputPanelgridBagConstraints.gridy = 0;
-        outputPanelgridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        outputPanelgridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        outputPanelgridBagConstraints.weightx = 1.0;
-        outputPanelgridBagConstraints.weighty = 0.3;
-    }
-
-    public static enum MenuArea
-    {
-        MAIN_PAGE, FOOD_PAGE
-    }
     
     private MenuCardPanel initialiseMainCard(MenuCardPanel panel)
     {
@@ -211,7 +179,7 @@ public class Menu
         buttons.add(DeliveredButton);
         
         SendOrderButton = new JButton();
-        //SendOrderButton.addActionListener(this);
+        SendOrderButton.addActionListener(this);
         SendOrderButton.setText("Send Order");
         BillHandlePanel.add(SendOrderButton);
         buttons.add(SendOrderButton);
@@ -223,7 +191,9 @@ public class Menu
         return panel;
         
     } // initialiseCards
-       
+   
+    
+    
     private ArrayList<MenuCardPanel> getCards()
     {
         ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
@@ -344,7 +314,114 @@ public class Menu
         
     }
     
-   private ArrayList<MenuItemJButton> getButtonsForPanel(MenuArea part)
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jPanel2 = new javax.swing.JPanel();
+        FormPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        OutputArea = new javax.swing.JTextPane();
+        CardPanel = new javax.swing.JPanel();
+        MenuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 165, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 63, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
+        FormPanel.setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setFocusable(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 150));
+
+        myOutput = OutputArea;
+        OutputArea.setEditable(false);
+        OutputArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                OutputAreaKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(OutputArea);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2652, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
+        FormPanel.add(jPanel1, gridBagConstraints);
+        panels.add(jPanel1);
+
+        CardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CardPanel.setPreferredSize(new java.awt.Dimension(400, 350));
+        CardPanel.setLayout(new java.awt.CardLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.7;
+        FormPanel.add(CardPanel, gridBagConstraints);
+        panels.add(CardPanel);
+
+        jMenu1.setText("File");
+        MenuBar.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        MenuBar.add(jMenu2);
+
+        setJMenuBar(MenuBar);
+        components.add(MenuBar);
+
+        MenuBar.setFocusable(false);
+        MenuBar.requestFocus(false);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 2654, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+        );
+
+        panels.add(FormPanel);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    
+    private ArrayList<MenuItemJButton> getButtonsForPanel(MenuArea part)
     {
         ArrayList<MenuItemJButton> buttons = new ArrayList<MenuItemJButton>();
         
@@ -375,8 +452,66 @@ public class Menu
         
         return buttons;
     }
-   
-  
+    
+    private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
+System.out.println("pressed");
+    }//GEN-LAST:event_OutputAreaKeyPressed
+
+    public String currentCard = "mainCard";
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Menu dialog = new Menu(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel CardPanel;
+    private javax.swing.JPanel FormPanel;
+    private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JTextPane OutputArea;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
+    
     private void switchCards()
     {
             switch(currentCard)
@@ -393,11 +528,6 @@ public class Menu
     public JPanel getCardPanel()
     {
         return CardPanel;
-    }
-    
-    public JButton getSendOrderButton()
-    {
-        return SendOrderButton;
     }
     
     
@@ -432,5 +562,5 @@ public class Menu
         x.addActionListener(x);
         return x;
     }
-    
+
 }
