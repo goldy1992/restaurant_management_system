@@ -13,17 +13,15 @@ import javax.swing.JPanel;
  *
  * @author mbbx9mg3
  */
-public class MenuCardPanel extends JPanel 
+public class MenuCardPanel extends JPanel
 {
     private MenuCardPanel parentPanel;
     
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private JPanel itemsPanel;    
 
-
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private JPanel menuSelectPanel;
-
     
     public MenuCardPanel()
     {
@@ -145,7 +143,11 @@ public class MenuCardPanel extends JPanel
         return itemsPanel;
     }
     
-  
+    public boolean hasParent()
+    {
+       return (parentPanel != null);
+    }
     
-
 }
+
+

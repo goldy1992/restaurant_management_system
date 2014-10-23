@@ -27,16 +27,10 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent ae) 
-    {
-        System.out.println("child button clicked");
-        
-        
-        if (MyClient.selectTable.menu == null)
-            System.out.println("no card panel");
-        
+    {  
         CardLayout cl = (CardLayout)(MyClient.selectTable.menu.getCardPanel().getLayout());
         cl.show(MyClient.selectTable.menu.getCardPanel(), targetPanel.getName());
-        System.out.println("exit actionperformed");
+        MyClient.selectTable.menu.currentCardName = targetPanel.getName();
     }
     
     public MenuCardPanel getTargetPanel()

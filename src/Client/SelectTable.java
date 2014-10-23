@@ -321,7 +321,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     System.out.println("evt nfc set and sent for table " + tableSelected);
                     // open the table menu but send a message to other clients to say that it is now occupied
                     
-                    menu = new Menu(this, true);
+                    menu = makeMenu();
                            System.out.println("menu has been made");
                     menu.setEnabled(true);
                     menu.setModal(true);
@@ -355,6 +355,14 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             
         }
         
+    }
+    
+    
+    public Menu makeMenu()
+    {
+        Menu menu = new Menu(this, true);
+        menu.addMouseListener(menu);
+        return menu;
     }
 
 }
