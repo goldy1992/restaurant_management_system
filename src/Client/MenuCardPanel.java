@@ -18,12 +18,15 @@ public class MenuCardPanel extends JPanel
     private MenuCardPanel parentPanel;
     
     private final ArrayList<MenuItemJButton> cardMenuItems;
-    private JPanel itemsPanel;    
+    private final JPanel itemsPanel;    
 
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
-    private JPanel menuSelectPanel;
+    private final JPanel menuSelectPanel;
     
-    public MenuCardPanel()
+    /**
+     *
+     */
+    private MenuCardPanel()
     {
         super();
         cardMenuItems = new ArrayList<MenuItemJButton>();
@@ -33,6 +36,10 @@ public class MenuCardPanel extends JPanel
         itemsPanel = new JPanel();            
     }
     
+    /**
+     *
+     * @param panel
+     */
     public void setParentPanel(MenuCardPanel panel)
     {
         this.parentPanel = panel;
@@ -93,13 +100,19 @@ public class MenuCardPanel extends JPanel
         return true;
     }
     
-      
-      
+    /**
+     *
+     * @param button
+     */
     public void addChildCardButton(MenuCardLinkJButton button)
     {
         childCardButtons.add(button);
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean addAllChildCardButtonsToPanel()
     {
         if ( childCardButtons == null || childCardButtons.isEmpty() )
@@ -116,36 +129,76 @@ public class MenuCardPanel extends JPanel
         return true;
     }
     
-    
-    
+    /**
+     *
+     * @return
+     */
     public ArrayList<MenuItemJButton> getCardMenuItems()
     {
         return cardMenuItems;
     }
     
+    /**
+     *
+     * @return
+     */
     public MenuCardPanel getParentPanel()
     {
         return parentPanel;
     }
     
+    /**
+     *
+     * @return
+     */
     public ArrayList<MenuCardLinkJButton> getChildCardButtons()
     {
         return childCardButtons;
     }
     
+    /**
+     *
+     * @return
+     */
     public JPanel getMenuSelectPanel()
     {
         return menuSelectPanel;
     }
     
+    /**
+     *
+     * @return
+     */
     public JPanel getItemsPanel()
     {
         return itemsPanel;
     }
     
+    /**
+     * This method should return true for every panel and false for the main 
+     * panel.
+     * 
+     * @return true if the Panel has a parent, false if not.
+     */
     public boolean hasParent()
     {
        return (parentPanel != null);
+    }
+    
+    /**
+    * A factory method to make a new Menu Card Panel
+    * 
+    * @return a new Menu Card Panel
+    */
+    public static MenuCardPanel createMenuCardPanel()
+    {
+        MenuCardPanel x = new MenuCardPanel();
+        x.setLayout(new GridLayout(1,0));
+        x.add(x.getMenuSelectPanel());
+        x.add(x.getItemsPanel());
+        x.setFocusable(false);
+        x.setRequestFocusEnabled(false);
+        return x;
     }
     
 }

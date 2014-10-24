@@ -37,22 +37,44 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     private ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
     
+    /**
+     *
+     */
     public JButton openTable = new JButton("Open Table");
+
+    /**
+     *
+     */
     public JButton moveTable = new JButton("Move Table");
     
+    /**
+     *
+     */
     public Menu menu;
     
-    
+    /**
+     *
+     * @return
+     */
     public int getTableSelected()
     {
         return tableSelected;
     }
     
+    /**
+     *
+     * @param table
+     */
     public void setTableSelected(int table)
     {
         tableSelected = table;
     }
     
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Table.TableStatus getTableStatus(int i)
     {
         if (i < 0 || i >= tableStatuses.size())
@@ -61,11 +83,20 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             return tableStatuses.get(i);
     }
     
+    /**
+     *
+     * @return
+     */
     public JButton[] getTableButtons()
     {
         return tableButtons;
     }
     
+    /**
+     *
+     * @param index
+     * @param t
+     */
     public void setTableStatus(int index, Table.TableStatus t)
     {
         if (index < 0 || index >= tableButtons.length)
@@ -357,7 +388,10 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         
     }
     
-    
+    /**
+     *
+     * @return
+     */
     public Menu makeMenu()
     {
         Menu menu = new Menu(this, true);

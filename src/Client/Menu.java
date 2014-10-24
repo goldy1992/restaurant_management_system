@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client;
 
 import java.awt.CardLayout;
@@ -15,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JDialog;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,10 +22,31 @@ import java.util.logging.Logger;
 import javax.swing.JTextPane;
 
 /**
- *
+ * <p>This class displays the Menu Dialog box of the restaurant management System.
+ * It contains a menu bar of which underneath is the main JPanel called the 
+ * FormPanel. The form panel contains two extra panels called the OutputAreaPanel, 
+ * and the card panel.</p>
+ * 
+ * <p><b>OutputAreaPanel</b> - When an item is selected on the menu it will appear
+ * in the panel's JFrame along with it's price and the amount that has been 
+ * ordered; the total price will appear too. A scroll bar implementation will 
+ * also be included to see previous purchases that have disappeared from the 
+ * screen.</p>
+ * 
+ * <p><b>CardPanel</b> - The car panel will contain the actual Menu; it works 
+ * as a <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/CardLayout.html">CardLayout</a>
+ * in a tree format. The page you see originally is the main panel and has no parent,
+ * i.e. it is the root of the card tree. Every other panel has one parent and when
+ * an area on the screen that is not a menu item is clicked the card shown will
+ * change to the current panel's parent. Each card will contain all the relevant
+ * items and all this information will be requested from the database during the
+ * creation of the menu.</p>
+ *  
  * @author mbbx9mg3
+ * 
+ * 
  */
-public class Menu extends javax.swing.JDialog implements ActionListener, MouseListener
+public class Menu extends JDialog implements ActionListener, MouseListener
 {
     private ArrayList<JComponent> components = new ArrayList<JComponent>();
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
@@ -37,7 +54,12 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
     private ArrayList<JPanel> panels = new ArrayList<JPanel>();    
     private JButton SendOrderButton = null;
-    public JTextPane myOutput;
+
+    /**
+     * Stores the reference to the JTextPane used on the output
+     * @see javax.swing.JTextPane
+     */
+    public JTextPane outputTextPane;
 
     @Override
     public void actionPerformed(ActionEvent ae) 
@@ -55,10 +77,10 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     {
         System.out.println("mouse clicked");
         System.out.println("source class: " +  me.getSource().getClass());
-            if(me.getSource() == this || me.getSource() == myOutput)
+            if(me.getSource() == this || me.getSource() == outputTextPane)
             {
                 System.out.println("found called panel");
-                switchCards();
+                switchToParentCard();
             }   
     } // mouseClickeds
 
@@ -74,16 +96,16 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
     @Override
     public void mouseExited(MouseEvent me) { }
 
-    public static enum MenuArea
-    {
-        MAIN_PAGE, FOOD_PAGE
-    }
     
-    // the database connection
+    /**
+     * The reference to the object that stores the database connection
+     */
     Connection con = null;    
 
     /**
      * Creates new form Menu
+     * @param parent
+     * @param modal
      */
     public Menu(java.awt.Frame parent, boolean modal) 
     {
@@ -108,7 +130,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         System.out.println("show");
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanels.get(0).getName());
-        currentCardName = cardPanels.get(0).getName();
+        currentCard = cardPanels.get(0);
         
         // this code only allows the output Area text pane to have key controls
         components.addAll(buttons);
@@ -124,12 +146,19 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
  
     } // constructor
   
+    
+    
+    /**
+     * Adds the functional features to the main panel
+     * @param the main panel in the set of panels
+     * @return the main panel with the extra buttons added to it
+     */
     private MenuCardPanel initialiseMainCard(MenuCardPanel panel)
     {
 
-        System.out.println("initialise main card called");
-
+        // creates the panel that everything will be created on
         JPanel BillHandlePanel = new JPanel();
+        
         BillHandlePanel.setBorder(new javax.swing.border.MatteBorder(null));
         BillHandlePanel.setFocusable(false);
         BillHandlePanel.setRequestFocusEnabled(false);
@@ -201,7 +230,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
             while (x.next())
             {
-                MenuCardPanel panel = createMenuCardPanel();
+                MenuCardPanel panel = MenuCardPanel.createMenuCardPanel();
                 panel.setName(x.getString(1));
                 cardPanels.add(panel);
             } // while
@@ -231,7 +260,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
                 currentPanel.setParentPanel(parentPanel);  
                 
                 if (parentPanel != null)
-                    parentPanel.addChildCardButton(createMenuCardLinkButton(currentPanel));
+                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel));
                 count++;
             }  while (x.next());
             
@@ -254,7 +283,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
                 
                 while(x.next())
                 {
-                    MenuItemJButton newButton = new MenuItemJButton(x.getString(1));
+                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(x.getString(1));
                     c.addMenuItemButton(newButton);          
                 } // while
                 
@@ -284,7 +313,7 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
 
         jPanel2 = new javax.swing.JPanel();
         FormPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        OutputAreaPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         OutputArea = new javax.swing.JTextPane();
         CardPanel = new javax.swing.JPanel();
@@ -308,11 +337,11 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         FormPanel.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setFocusable(false);
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 150));
+        OutputAreaPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        OutputAreaPanel.setFocusable(false);
+        OutputAreaPanel.setPreferredSize(new java.awt.Dimension(400, 150));
 
-        myOutput = OutputArea;
+        outputTextPane = OutputArea;
         OutputArea.setEditable(false);
         OutputArea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -326,14 +355,14 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         });
         jScrollPane1.setViewportView(OutputArea);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout OutputAreaPanelLayout = new javax.swing.GroupLayout(OutputAreaPanel);
+        OutputAreaPanel.setLayout(OutputAreaPanelLayout);
+        OutputAreaPanelLayout.setHorizontalGroup(
+            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        OutputAreaPanelLayout.setVerticalGroup(
+            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
         );
 
@@ -344,8 +373,8 @@ public class Menu extends javax.swing.JDialog implements ActionListener, MouseLi
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.3;
-        FormPanel.add(jPanel1, gridBagConstraints);
-        panels.add(jPanel1);
+        FormPanel.add(OutputAreaPanel, gridBagConstraints);
+        panels.add(OutputAreaPanel);
 
         CardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CardPanel.setName(""); // NOI18N
@@ -395,7 +424,7 @@ System.out.println("pressed");
     }//GEN-LAST:event_OutputAreaKeyPressed
 
     private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
-        switchCards();
+        switchToParentCard();
     }//GEN-LAST:event_OutputAreaMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -403,27 +432,31 @@ System.out.println("pressed");
     private javax.swing.JPanel FormPanel;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JTextPane OutputArea;
+    private javax.swing.JPanel OutputAreaPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
     
-    public String currentCardName;
-    public void switchCards()
+    /**
+     *
+     */
+    public MenuCardPanel currentCard;
+
+    /**
+     * Should be called 
+     */
+    public void switchToParentCard()
     {
-        System.out.println("switch cards, currentCardName: " + currentCardName);
-        for(MenuCardPanel p : cardPanels)
-            if (p.getName().equals(currentCardName))
-                if(p.hasParent())
-                {
-                    System.out.println("current panel " + p.getName());
-                    int parentIndex = cardPanels.indexOf(p.getParentPanel());
-                    CardLayout cl = (CardLayout)(CardPanel.getLayout());
-                    cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
-                    currentCardName = cardPanels.get(parentIndex).getName();
-                }
+        if(this.currentCard.hasParent())
+        {
+            System.out.println("current panel " + this.currentCard.getName());
+            int parentIndex = cardPanels.indexOf(this.currentCard.getParentPanel());
+            CardLayout cl = (CardLayout)(CardPanel.getLayout());
+            cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
+            currentCard = cardPanels.get(parentIndex);
+        } // if
     }
     
     /**
@@ -433,34 +466,9 @@ System.out.println("pressed");
     public JPanel getCardPanel() { return CardPanel; } 
     
     // factory Methods 
-    private MenuItemJButton createMenuItemJButton(String text)
-    {
-        MenuItemJButton x = new MenuItemJButton(text);
-        x.addActionListener(x);
-        return x;
-    }
+
     
     
-    /**
-     * A factory method to make a new Menu Card Panel
-     * 
-     * @return a new Menu Card Panel
-     */
-    private MenuCardPanel createMenuCardPanel()
-    {
-        MenuCardPanel x = new MenuCardPanel();
-        x.setLayout(new GridLayout(1,0));
-        x.add(x.getMenuSelectPanel());
-        x.add(x.getItemsPanel());
-        x.setFocusable(false);
-        x.setRequestFocusEnabled(false);
-        return x;
-    }
     
-    private MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent)
-    {
-        MenuCardLinkJButton x = new MenuCardLinkJButton(parent);
-        x.addActionListener(x);
-        return x;
-    }
+
 } // class

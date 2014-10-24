@@ -15,7 +15,12 @@ import javax.swing.JButton;
  */
 public class MenuItemJButton extends JButton implements ActionListener
 {
-    public MenuItemJButton(String name)
+
+    /**
+     *
+     * @param name
+     */
+    private MenuItemJButton(String name)
     {
         super(name);    
     }
@@ -23,14 +28,22 @@ public class MenuItemJButton extends JButton implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
+        System.out.println("menu item action performed callws");
         System.out.println(this.getText());
-        String currentText = MyClient.selectTable.menu.myOutput.getText();
+        String currentText = MyClient.selectTable.menu.outputTextPane.getText();
         
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
         
         
         // CODE TO ADD SCREEN
         currentText += this.getName() + "\n";
-        MyClient.selectTable.menu.myOutput.setText(currentText);
+        MyClient.selectTable.menu.outputTextPane.setText(currentText);
+    }
+    
+    public static MenuItemJButton createMenuItemJButton(String text)
+    {
+        MenuItemJButton x = new MenuItemJButton(text);
+        x.addActionListener(x);
+        return x;
     }
 }

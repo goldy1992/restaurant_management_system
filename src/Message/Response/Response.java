@@ -16,7 +16,16 @@ import Message.Message;
 public abstract class Response extends Message 
 {    
     private Request request = null;
+
+    /**
+     *
+     */
     protected boolean parsedResponse;
+
+    /**
+     *
+     * @param request
+     */
     public Response(Request request)
     {
        super(request.getToAddress(), request.getFromAddress(), request.getMessageID());
@@ -24,16 +33,27 @@ public abstract class Response extends Message
        parsedResponse = false;
     } // constructor
     
+    /**
+     *
+     * @return
+     */
     public Request getRequest()
     {
         return request;
     } // getRequest
  
+    /**
+     *
+     * @return
+     */
     public boolean hasParsedResponse()
     {
         return parsedResponse;
     }
     
+    /**
+     *
+     */
     public abstract void parse();
     
     public String toString()

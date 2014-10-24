@@ -15,16 +15,48 @@ import java.net.InetAddress;
 public abstract class Request extends Message
 {
 
+    /**
+     *
+     * @return
+     */
     public Object getTableList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    /**
+     *
+     */
     public static enum RequestType 
     {
-        TABLE_STATUS, NUM_OF_TABLES, LEAVE
+
+        /**
+         *
+         */
+        TABLE_STATUS,
+
+        /**
+         *
+         */
+        NUM_OF_TABLES,
+
+        /**
+         *
+         */
+        LEAVE
     }
     
+    /**
+     *
+     */
     public RequestType type;
     
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     * @param type
+     */
     public Request(InetAddress from, 
                           InetAddress to, 
                           String messageID, 

@@ -14,6 +14,13 @@ import java.net.InetAddress;
  */
 public abstract class EventNotification extends Message 
 {
+
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     */
     public EventNotification(InetAddress from, InetAddress to, String messageID)
     {
         super(from, to, messageID);

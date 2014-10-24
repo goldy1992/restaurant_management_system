@@ -32,11 +32,20 @@ public class ClientCommunicationThread implements Runnable
 {
     private final Socket socket;
     private final Thread thread;
+
+    /**
+     *
+     */
     public long id;
     private ObjectOutputStream out;
     private ObjectInputStream in;   
     private boolean isRunning;
     
+    /**
+     *
+     * @param socket
+     * @param id
+     */
     public ClientCommunicationThread(Socket socket, long id)
     {
         this.socket = socket;
@@ -81,21 +90,37 @@ public class ClientCommunicationThread implements Runnable
 
     } // run
    
+    /**
+     *
+     * @return
+     */
     public Socket getSocket()
     {
         return socket;
     }
     
+    /**
+     *
+     * @return
+     */
     public Thread getThread()
     {
         return thread;
     }
     
+    /**
+     *
+     * @return
+     */
     public ObjectOutputStream getOutStream()
     {
         return out;
     }
     
+    /**
+     *
+     * @return
+     */
     public ObjectInputStream getInStream()
     {
         return in;

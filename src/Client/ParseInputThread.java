@@ -12,7 +12,9 @@ package Client;
  */
 public class ParseInputThread implements Runnable {
     
-    
+    /**
+     *
+     */
     public ParseInputThread()
     {
         

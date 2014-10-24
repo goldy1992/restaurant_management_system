@@ -15,6 +15,11 @@ import Message.Request.NumOfTablesRequest;
  */
 public class NumOfTablesResponse extends Response
 {
+
+    /**
+     *
+     * @param request
+     */
     public NumOfTablesResponse(NumOfTablesRequest request)
     {
         super(request);

@@ -37,28 +37,68 @@ import java.util.logging.Logger;
  */
 public class MyClient implements Runnable
 {
+
+    /**
+     *
+     */
     public static InetAddress serverAddress; 
+
+    /**
+     *
+     */
     public static int serverPort;  
+
+    /**
+     *
+     */
     public static Socket client;
     
     private static int numberOfTables = -1;
+
+    /**
+     *
+     */
     public static ArrayList<Table.TableStatus> tableStatuses = null;
     
-    
+    /**
+     *
+     */
     public static SelectTable selectTable;
+
+    /**
+     *
+     */
     public static MyClient responseThread;
     private static ObjectOutputStream out = null;
+
+    /**
+     *
+     */
     public boolean running = true;
+
+    /**
+     *
+     */
     public static Object lock = new Object();
+
+    /**
+     *
+     */
     public final Thread thread;
     
-    
+    /**
+     *
+     */
     public MyClient()
     {
         thread = new Thread(this);
     }
     
-   public static String generateRequestID()
+    /**
+     *
+     * @return
+     */
+    public static String generateRequestID()
    {
       String request_ID;
       Random random = new Random();
@@ -70,33 +110,55 @@ public class MyClient implements Runnable
       return request_ID;
    } // generateRequestID
    
-   public static ArrayList<Table.TableStatus> getTableStatuses()
+    /**
+     *
+     * @return
+     */
+    public static ArrayList<Table.TableStatus> getTableStatuses()
    {
         return tableStatuses;    
    }
    
-   public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
+    /**
+     *
+     * @param x
+     */
+    public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
    {
         tableStatuses = x;    
    }
    
-   public static int getNumTables()
+    /**
+     *
+     * @return
+     */
+    public static int getNumTables()
    {
         return numberOfTables;
    }
    
-   public static void setNumTables(int x)
+    /**
+     *
+     * @param x
+     */
+    public static void setNumTables(int x)
    {
         numberOfTables = x;   
    }
    
-
-   public ObjectOutputStream getOutputStream()
+    /**
+     *
+     * @return
+     */
+    public ObjectOutputStream getOutputStream()
    {
        return out;
    }
    
-   public static void initialiseProgram()
+    /**
+     *
+     */
+    public static void initialiseProgram()
    {
         try
         {
@@ -140,6 +202,11 @@ public class MyClient implements Runnable
 
    }
     
+    /**
+     *
+     * @param args
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws InterruptedException
     {
         initialiseProgram();

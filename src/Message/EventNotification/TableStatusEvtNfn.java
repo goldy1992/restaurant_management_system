@@ -17,6 +17,14 @@ public class TableStatusEvtNfn extends EventNotification
     private final int tableNumber;
     private final Table.TableStatus tStatus;
     
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     * @param tableNumber
+     * @param t
+     */
     public TableStatusEvtNfn(InetAddress from, 
                                 InetAddress to, 
                                 String messageID,
@@ -28,11 +36,19 @@ public class TableStatusEvtNfn extends EventNotification
         this.tStatus = t;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getTableNumber()
     {
         return tableNumber;
     }
     
+    /**
+     *
+     * @return
+     */
     public Table.TableStatus getTableStatus()
     {
         return tStatus;

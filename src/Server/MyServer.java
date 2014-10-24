@@ -29,6 +29,10 @@ public class MyServer
     private static ArrayList<ClientCommunicationThread> clients;
     private static Table[] tables;
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args)
     {
         clients = new ArrayList<>();
@@ -80,6 +84,11 @@ public class MyServer
         
     } // main
     
+    /**
+     *
+     * @param number
+     * @return
+     */
     public static Table getTable(int number)
     {
         if (number < 1 || number > NUM_OF_TABLES)
@@ -87,16 +96,28 @@ public class MyServer
         else return tables[number];
     } // table
     
+    /**
+     *
+     * @return
+     */
     public static int getNumOfTables()
     {
         return NUM_OF_TABLES;
     }
     
+    /**
+     *
+     * @return
+     */
     public static int getLowBoundPortRange()
     {
         return LB_PORT_RANGE;
     }
 
+    /**
+     *
+     * @return
+     */
     public static ArrayList<ClientCommunicationThread> getClients()
     {
         synchronized(LOCK)
@@ -105,6 +126,10 @@ public class MyServer
         }
     }
     
+    /**
+     *
+     * @param client
+     */
     public static void removeClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
@@ -116,6 +141,11 @@ public class MyServer
             System.out.println("client removed");
         } // synchronized
     }
+
+    /**
+     *
+     * @return
+     */
     public static Table[] getTables()
     {
         return tables;

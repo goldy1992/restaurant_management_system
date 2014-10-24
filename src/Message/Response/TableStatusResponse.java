@@ -19,6 +19,11 @@ public class TableStatusResponse extends Response
 {
     
     private final ArrayList<Table.TableStatus> tableStatuses;
+
+    /**
+     *
+     * @param request
+     */
     public TableStatusResponse(TableStatusRequest request)
     {
         super(request);
@@ -36,6 +41,9 @@ public class TableStatusResponse extends Response
         return tableStatuses;
     } // getTableStatuses
     
+    /**
+     *
+     */
     @Override
     public void parse()
     {

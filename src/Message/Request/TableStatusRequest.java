@@ -17,7 +17,14 @@ public class TableStatusRequest extends Request
 {
     private final ArrayList<Integer> tableList;
     
-    
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     * @param type
+     * @param tableList
+     */
     public TableStatusRequest(InetAddress from, 
                               InetAddress to, 
                               String messageID, 
@@ -28,6 +35,10 @@ public class TableStatusRequest extends Request
         this.tableList = tableList;
     } // constructor
     
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<Integer> getTableList()
     {

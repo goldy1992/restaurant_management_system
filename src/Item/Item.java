@@ -13,11 +13,27 @@ import java.math.BigDecimal;
  */
 public class Item 
 {   
+
+    /**
+     *
+     */
     public static enum Type 
     {
-        DRINK, FOOD
+
+        /**
+         *
+         */
+        DRINK,
+
+        /**
+         *
+         */
+        FOOD
     }
     
+    /**
+     *
+     */
     public Type type;
     private final int id;
     private final String message;
@@ -25,6 +41,14 @@ public class Item
     private final BigDecimal price;
     private final int quantity;
     
+    /**
+     *
+     * @param id
+     * @param name
+     * @param message
+     * @param price
+     * @param type
+     */
     public Item(int id, String name, 
                 String message, BigDecimal price, 
                 Type type)
@@ -37,6 +61,13 @@ public class Item
         this.quantity = 1;
     } // item
     
+    /**
+     *
+     * @param id
+     * @param name
+     * @param price
+     * @param type
+     */
     public Item(int id, String name, 
                 BigDecimal price, Type type)
     {
@@ -48,6 +79,15 @@ public class Item
         this.quantity = 1;
     } // item
     
+    /**
+     *
+     * @param id
+     * @param name
+     * @param message
+     * @param price
+     * @param type
+     * @param quantity
+     */
     public Item(int id, String name, String message, 
                 BigDecimal price, Type type, int quantity)
     {
@@ -59,6 +99,14 @@ public class Item
         this.quantity = quantity;
     } // item
     
+    /**
+     *
+     * @param id
+     * @param name
+     * @param price
+     * @param type
+     * @param quantity
+     */
     public Item(int id, String name, 
                 BigDecimal price, Type type, int quantity)
     {
@@ -80,31 +128,55 @@ public class Item
                 "\nmessage " + message;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getID()
     {
         return id;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getMessage()
     {
         return message;
     }
     
+    /**
+     *
+     * @return
+     */
     public BigDecimal getPrice()
     {
         return price;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getQuantity()
     {
         return quantity;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getName()
     {
         return name;
     }
     
+    /**
+     *
+     * @return
+     */
     public Type getType()
     {
         return type;

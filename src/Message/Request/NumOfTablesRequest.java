@@ -16,6 +16,13 @@ import java.util.ArrayList;
 public class NumOfTablesRequest extends Request
 {   
     
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     * @param type
+     */
     public NumOfTablesRequest(InetAddress from, 
                               InetAddress to, 
                               String messageID, 

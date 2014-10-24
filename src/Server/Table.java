@@ -23,9 +23,26 @@ import java.util.Random;
 public class Table implements Runnable
 {
     
+    /**
+     *
+     */
     public static enum TableStatus 
     {
-        FREE, OCCUPIED, IN_USE, 
+
+        /**
+         *
+         */
+        FREE, 
+
+        /**
+         *
+         */
+        OCCUPIED, 
+
+        /**
+         *
+         */
+        IN_USE, 
     }
     // the table number
     private int tableNumber;
@@ -37,6 +54,10 @@ public class Table implements Runnable
     // is boolean
     private TableStatus tableStatus;
     
+    /**
+     *
+     * @param tableNumber
+     */
     public Table(int tableNumber)
     {
         //System.out.println("table number  " + tableNumber);
@@ -50,21 +71,37 @@ public class Table implements Runnable
         
     } // constructor
     
+    /**
+     *
+     * @return
+     */
     public int getTableNumber()
     {
         return tableNumber;
     } // getTableNumber
     
+    /**
+     *
+     * @return
+     */
     public int getTablePortNumber()
     {
         return tableNumberPort;
     } // getTablePortNumber
     
+    /**
+     *
+     * @return
+     */
     public TableStatus getTableStatus()
     {
         return tableStatus;
     }
     
+    /**
+     *
+     * @param status
+     */
     public void setTableStatus(TableStatus status)
     {
         tableStatus = status;

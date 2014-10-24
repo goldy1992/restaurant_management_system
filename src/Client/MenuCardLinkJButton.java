@@ -18,7 +18,11 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
 {
     private MenuCardPanel targetPanel;
     
-    public MenuCardLinkJButton(MenuCardPanel panel)
+    /**
+     *
+     * @param panel
+     */
+    private MenuCardLinkJButton(MenuCardPanel panel)
     {
         super();    
         this.targetPanel = panel;
@@ -30,12 +34,23 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
     {  
         CardLayout cl = (CardLayout)(MyClient.selectTable.menu.getCardPanel().getLayout());
         cl.show(MyClient.selectTable.menu.getCardPanel(), targetPanel.getName());
-        MyClient.selectTable.menu.currentCardName = targetPanel.getName();
+        MyClient.selectTable.menu.currentCard= targetPanel;
     }
     
+    /**
+     *
+     * @return
+     */
     public MenuCardPanel getTargetPanel()
     {
         return targetPanel;
+    }
+    
+    public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent)
+    {
+        MenuCardLinkJButton x = new MenuCardLinkJButton(parent);
+        x.addActionListener(x);
+        return x;
     }
     
 }

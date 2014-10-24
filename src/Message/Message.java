@@ -19,6 +19,12 @@ public abstract class Message implements Serializable
     private final InetAddress toAddress;
     private final String messageID;
     
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     */
     public Message(InetAddress from, InetAddress to, String messageID)
     {
         this.fromAddress = from;
@@ -26,16 +32,28 @@ public abstract class Message implements Serializable
         this.messageID = messageID;
     } // constructor
     
+    /**
+     *
+     * @return
+     */
     public InetAddress getFromAddress()
     {
         return fromAddress;
     } // getFromAddress
     
+    /**
+     *
+     * @return
+     */
     public InetAddress getToAddress()
     {
         return toAddress;
     } // getToAddress
     
+    /**
+     *
+     * @return
+     */
     public String getMessageID()
     {
         return messageID;

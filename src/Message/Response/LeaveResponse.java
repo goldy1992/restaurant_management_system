@@ -15,6 +15,10 @@ public class LeaveResponse extends Response
 {
     boolean permissionGranted = true;
     
+    /**
+     *
+     * @param request
+     */
     public LeaveResponse(Request request)
     {
         super(request);

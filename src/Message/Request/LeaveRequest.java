@@ -13,6 +13,14 @@ import java.net.InetAddress;
  */
 public class LeaveRequest extends Request
 {
+
+    /**
+     *
+     * @param from
+     * @param to
+     * @param messageID
+     * @param type
+     */
     public LeaveRequest(InetAddress from, 
                               InetAddress to, 
                               String messageID, 

@@ -15,6 +15,11 @@ import java.util.TreeSet;
 public class Factors 
 {
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public static int[] closestIntSquare(int n)
     {
         TreeSet<Integer> factors = new TreeSet<Integer>();
@@ -41,6 +46,10 @@ public class Factors
         return arrayToReturn;
         }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args)
     {
         int[] x = closestIntSquare(114);
