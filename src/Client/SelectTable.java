@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -343,6 +344,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             {
                 try 
                 {
+                    /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
+                       IN USE */
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
@@ -350,9 +353,9 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     
                     
                     System.out.println("evt nfc set and sent for table " + tableSelected);
-                    // open the table menu but send a message to other clients to say that it is now occupied
+                    /* open the table menu but send a message to other clients to say that it is now occupied */
                     
-                    menu = makeMenu();
+                    menu = Menu.makeMenu(this);
                            System.out.println("menu has been made");
                     menu.setEnabled(true);
                     menu.setModal(true);
@@ -388,15 +391,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         
     }
     
-    /**
-     *
-     * @return
-     */
-    public Menu makeMenu()
-    {
-        Menu menu = new Menu(this, true);
-        menu.addMouseListener(menu);
-        return menu;
-    }
+
 
 }

@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTextPane;
 
 /**
@@ -106,20 +107,16 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * Creates new form Menu
      * @param parent
      * @param modal
+     * @throws java.sql.SQLException
      */
-    public Menu(java.awt.Frame parent, boolean modal) 
+    public Menu(java.awt.Frame parent, boolean modal) throws SQLException
     {
         super(parent, modal);
-
-        try 
-        {         
-            con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+     
+        // initialise the connection to the database
+        con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+      
+        // initialises the part of the GUI made automatically by netbeans
         initComponents();
         cardPanels = getCards();
         cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
@@ -215,62 +212,57 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     private ArrayList<MenuCardPanel> getCards()
     {
-        ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
+        ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
 
         try 
         {
-            // PREPARE SELECT STATEMENT
+            // PREPARE SELECT STATEMENT TO SELECT MENU PAGES TABLE
             PreparedStatement numberOfButtonsQuery = null;
             String query =  "SELECT * \n" +
                         "FROM `3YP_MENU_PAGES`";
             numberOfButtonsQuery = con.prepareStatement(query);
             numberOfButtonsQuery.executeQuery();
-            ResultSet x = numberOfButtonsQuery.getResultSet();
+            ResultSet results = numberOfButtonsQuery.getResultSet();
 
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
-            while (x.next())
+            while (results.next())
             {
                 MenuCardPanel panel = MenuCardPanel.createMenuCardPanel();
-                panel.setName(x.getString(1));
-                cardPanels.add(panel);
+                panel.setName(results.getString(1));
+                cardPanelsList.add(panel);
             } // while
-           
-            for (MenuCardPanel c : cardPanels )
-                System.out.println(c.getName());
                             
-             // ADD EVERY CARD VIEW PANEL PARENT
-            int count = 0;
-            x.first();           
+             // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
+            int count = 0; // keeps count to remember current panel
+            results.first(); // uses same resultsSet and goes to the first row
             do
             {
-                MenuCardPanel currentPanel = cardPanels.get(count);
+                MenuCardPanel currentPanel = cardPanelsList.get(count);
                 MenuCardPanel parentPanel = null;
                 
-                for (MenuCardPanel c : cardPanels )
-                    if (c.getName().equals(x.getString(2)))
+                // for loop to find parent panel
+                for (MenuCardPanel c : cardPanelsList )
+                    if (c.getName().equals(results.getString(2))) // 2 is column index of PARENT_PAGE_ID
                         parentPanel = c;
                 
-                if (parentPanel == null)
-                    System.out.println("current panel = " + currentPanel.getName() +
-                        "; parentPanel = null");
-                else
-                    System.out.println("current panel = " + currentPanel.getName() +
-                        "; parentPanel = " + parentPanel.getName());
-                
+                // set currentPanels Parent {COULD BE NULL}
                 currentPanel.setParentPanel(parentPanel);  
                 
+                // if not null take the parent and create a child button and reference it to panel
                 if (parentPanel != null)
-                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel));
+                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel, results.getString(3)));
+                
                 count++;
-            }  while (x.next());
+            }  while (results.next());
             
-            for (MenuCardPanel c1 : cardPanels)
+            // adds all c
+            for (MenuCardPanel c1 : cardPanelsList)
                 c1.addAllChildCardButtonsToPanel();
             
                 
             
             // FIND ALL BUTTONS FOR EACH PANEL
-            for (MenuCardPanel c : cardPanels )
+            for (MenuCardPanel c : cardPanelsList )
             {
                 query = "SELECT NAME FROM `3YP_ITEMS` "
                     + "LEFT JOIN `3YP_POS_IN_MENU` ON "
@@ -279,11 +271,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 numberOfButtonsQuery = con.prepareStatement(query);
                 numberOfButtonsQuery.executeQuery();
-                x = numberOfButtonsQuery.getResultSet();
+                results = numberOfButtonsQuery.getResultSet();
                 
-                while(x.next())
+                while(results.next())
                 {
-                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(x.getString(1));
+                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1));
                     c.addMenuItemButton(newButton);          
                 } // while
                 
@@ -291,19 +283,19 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             } // for each
   
             // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
-            for (int i = 1; i < cardPanels.size(); i++)
-                if (cardPanels.get(i).getName().equals("MAIN_PAGE"))
-                    Collections.swap(cardPanels, i, 0);
+            for (int i = 1; i < cardPanelsList.size(); i++)
+                if (cardPanelsList.get(i).getName().equals("MAIN_PAGE"))
+                    Collections.swap(cardPanelsList, i, 0);
                 
-            for (MenuCardPanel c : cardPanels )
+            for (MenuCardPanel c : cardPanelsList )
                 System.out.println(c);            
-        } // try
+        } // try // try
         catch (SQLException ex) 
         {
             Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
         } // catch
                 
-        return cardPanels;      
+        return cardPanelsList;      
     } // getCards
     
     @SuppressWarnings("unchecked")
@@ -445,8 +437,9 @@ System.out.println("pressed");
     public MenuCardPanel currentCard;
 
     /**
-     * Should be called 
+     * Should be called when the screen detects a click that is not on an item
      */
+    
     public void switchToParentCard()
     {
         if(this.currentCard.hasParent())
@@ -457,7 +450,7 @@ System.out.println("pressed");
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
             currentCard = cardPanels.get(parentIndex);
         } // if
-    }
+    } // switchToParentCard
     
     /**
      * 
@@ -465,7 +458,29 @@ System.out.println("pressed");
      */
     public JPanel getCardPanel() { return CardPanel; } 
     
-    // factory Methods 
+        /**
+     *
+     * @param parent
+     * @return
+     */
+    
+    public static Menu makeMenu(JFrame parent)
+    {
+        Menu newMenu = null;
+        try 
+        {
+
+            newMenu = new Menu(parent, true);
+            newMenu.addMouseListener(newMenu);
+
+        } // try
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
+        
+        return newMenu;
+    } // makeMenu
 
     
     

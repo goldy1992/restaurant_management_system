@@ -22,11 +22,11 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
      *
      * @param panel
      */
-    private MenuCardLinkJButton(MenuCardPanel panel)
+    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText)
     {
         super();    
         this.targetPanel = panel;
-        this.setText(panel.getName());
+        this.setText(buttonText);
     }
 
     @Override
@@ -46,9 +46,10 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
         return targetPanel;
     }
     
-    public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent)
+    public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent,
+                                                                String buttonText)
     {
-        MenuCardLinkJButton x = new MenuCardLinkJButton(parent);
+        MenuCardLinkJButton x = new MenuCardLinkJButton(parent, buttonText);
         x.addActionListener(x);
         return x;
     }
