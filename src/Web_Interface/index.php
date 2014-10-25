@@ -68,7 +68,7 @@ and open the template in the editor.
                     print sizeof($array);
                     for ($i = 1; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"pages\" value=\"" . $array[$i] . "\\>". $array[$i] ."<br>";
+                        print "<input type=\"checkbox\" name=\"pages\" value=\"" . $array[$i] . "\" \>". $array[$i] ."<br>";
                         
                     }
                     ?>
