@@ -31,19 +31,10 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <SCRIPT>
-            function JavaSays() {
-   alert("Java says\n the value of iJava is :" +
-         document.myApplet.getIntJava() + "\n" +
-         "and sJava is :" +      
-         document.myApplet.getStringJava());
-   }
-        </SCRIPT>
+
 
     </head>
     <body>
-            <applet code="NewApplet_1.class"  WIDTH=400 HEIGHT=200></applet>
-            <a href="../../dist/TestClientServer.jar"></a>
 <SCRIPT> javaSays(); </SCRIPT>
         <h1>Add Item To Database</h1>
         <form>
