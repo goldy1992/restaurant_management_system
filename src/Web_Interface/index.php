@@ -62,8 +62,6 @@ and open the template in the editor.
                     <input type="radio" name="stock_count" value="Off" checked> No</td>
             </tr>
                         <tr>
-                            <td colspan="2"><input type="submit" value="Submit"></td>
-            </tr>
                 <td>Add to Pages</td>
                 <td>
                     <?php
@@ -73,6 +71,10 @@ and open the template in the editor.
                     ?>
                 </td>
             </tr>
+                        <tr>
+                            <td colspan="2"><input type="submit" value="Submit"></td>
+            </tr>
+
             
             
         </table>
