@@ -61,17 +61,20 @@ and open the template in the editor.
                 <td><input type="radio" name="stock_count" value="On" > Yes<br>
                     <input type="radio" name="stock_count" value="Off" checked> No</td>
             </tr>
-                        <tr>
+            <tr>
                 <td>Add to Pages</td>
                 <td>
                     <?php
                     print sizeof($array);
-                    for ($i = 1; $i < sizeof($array); $i++) {
-                    print "<input type=\"checkbox\" name=\"pages\" value=\"" . $array[$i] . "\\>". $array[$i] ."<br>";}
+                    for ($i = 1; $i < sizeof($array); $i++) 
+                    {
+                        print "<input type=\"checkbox\" name=\"pages\" value=\"" . $array[$i] . "\\>". $array[$i] ."<br>";
+                        
+                    }
                     ?>
                 </td>
             </tr>
-                        <tr>
+            <tr>
                             <td colspan="2"><input type="submit" value="Submit"></td>
             </tr>
 
