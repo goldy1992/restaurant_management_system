@@ -5,10 +5,10 @@ mysqli_select_db($con, "mbbx9mg3");
 
 if(isset($_POST))
 {
-    $item_name = $_POST['item_name'];
-    $price = $_POST['price'];
-    $quantity = $_POST['quantity'];
-    $stock_count = $_POST['stock_count'];
+    $item_name = $_POST["item_name"];
+    $price = $_POST["price"];
+    $quantity = $_POST["quantity"];
+    $stock_count = $_POST["stock_count"];
     
     print $item_name . "\n" .
           $price . "\n" .
