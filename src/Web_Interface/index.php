@@ -10,11 +10,17 @@ if(isset($_POST["submit_button"]))
     $quantity = $_POST["quantity"];
     $age_check = $_POST["age_check"];
     
-    print $item_name . "\n" .
+    foreach($_POST['pages'] as $check) 
+            echo $check;
+    
+    echo $item_name . "\n" .
           $price . "\n" .
           $quantity . "\n" .
-          $stock_count . "\n";
-          $age_check . "\n";
+          $stock_count . "\n" .
+          $age_check . "\n\n" ;
+    
+        foreach($_POST['pages'] as $check) 
+            echo $check;
 
      
 } // if post
@@ -89,7 +95,7 @@ and open the template in the editor.
                     <?php
                     for ($i = 1; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"pages\" value=\"" . $array[$i] . "\" \>". $array[$i] ."<br>";
+                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" \>". $array[$i] ."<br>";
                         
                     }
                     ?>
