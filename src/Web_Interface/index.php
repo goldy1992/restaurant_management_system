@@ -3,7 +3,7 @@
 $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
 
-if(isset($_POST))
+if(isset($_POST["submit_button"]))
 {
     $item_name = $_POST["item_name"];
     $price = $_POST["price"];
@@ -96,7 +96,7 @@ and open the template in the editor.
                 </td>
             </tr>
             <tr>
-                            <td colspan="2"><input type="submit" value="Submit"></td>
+                            <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
             </tr>
 
             
