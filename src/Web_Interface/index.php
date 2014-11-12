@@ -1,24 +1,38 @@
 <?php
 
-$con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link)); 
-
+$con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
 
-$result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES");
+if(isset($_POST))
+{
+    $item_name = $_POST['item_name'];
+    $price = $_POST['price'];
+    $quantity = $_POST['quantity'];
+     
+} // if post
 
-$array = array();
 
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        $array[] = $row["NAME"];
+    $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES");
+
+    $array = array();
+
+    if ($result->num_rows > 0) 
+    {
+        // output data of each row
+        while($row = $result->fetch_assoc()) 
+        {
+            $array[] = $row["NAME"];
+        }
+    } // if
+    else
+    {
+        printf("no fucking results!");
     }
-}
-else
-    printf("no fucking results!");
-mysqli_free_result($result);
+    mysqli_free_result($result);
 
-mysqli_close($con);
+    mysqli_close($con);
+
+
 ?>
 <!DOCTYPE html>
 <!--
@@ -37,7 +51,7 @@ and open the template in the editor.
     <body>
 <SCRIPT> javaSays(); </SCRIPT>
         <h1>Add Item To Database</h1>
-        <form>
+        <form method="post">
         <table>
             <tr>
                 <td>Item Name</td>
