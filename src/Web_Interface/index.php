@@ -10,9 +10,6 @@ if(isset($_POST["submit_button"]))
     $quantity = $_POST["quantity"];
     $age_check = $_POST["age_check"];
     
-    foreach($_POST['pages'] as $check) 
-            echo $check;
-    
     echo $item_name . "\n" .
           $price . "\n" .
           $quantity . "\n" .
@@ -22,7 +19,9 @@ if(isset($_POST["submit_button"]))
         foreach($_POST['pages'] as $check) 
             echo $check;
 
-     
+     $insert_item = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . ", " .
+        $price . ", " . $quantity . ", " . $stock_count;
+     // finish off the goddam query
 } // if post
 
 
