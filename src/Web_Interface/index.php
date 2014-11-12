@@ -8,12 +8,13 @@ if(isset($_POST["submit_button"]))
     $item_name = $_POST["item_name"];
     $price = $_POST["price"];
     $quantity = $_POST["quantity"];
-    $stock_count = $_POST["stock_count"];
+    $age_check = $_POST["age_check"];
     
     print $item_name . "\n" .
           $price . "\n" .
           $quantity . "\n" .
           $stock_count . "\n";
+          $age_check . "\n";
 
      
 } // if post
@@ -79,8 +80,8 @@ and open the template in the editor.
             </tr>
             <tr>
                 <td>Need Age Check</td>
-                <td><input type="radio" name="stock_count" value=0 > Yes<br>
-                    <input type="radio" name="stock_count" value=1 checked> No</td>
+                <td><input type="radio" name="age_check" value=0 > Yes<br>
+                    <input type="radio" name="age_check" value=1 checked> No</td>
             </tr>
             <tr>
                 <td>Add to Pages</td>
