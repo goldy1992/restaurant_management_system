@@ -11,17 +11,19 @@ if(isset($_POST["submit_button"]))
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
     
-    echo $item_name . "\n" .
-          $price . "\n" .
-          $quantity . "\n" .
-          $stock_count . "\n" .
-          $age_check . "\n" ;
+    echo "item: " . $item_name . "\n" .
+          "price: " . $price . "\n" .
+          "quantity: " . $quantity . "\n" .
+          "stock_count: " . $stock_count . "\n" .
+          "age_check: " . $age_check . "\n" ;
     
-        foreach($_POST['pages'] as $check) 
-            echo $check;
+
 
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . ", " .
     $price . ", " . $quantity . ", " . $stock_count . ", " . $age_check . ")";
+    
+    echo "query: " . $insert_item_query;
+    
     mysqli_query($con, $insert_item_query);
     
     foreach($_POST['pages'] as $check) 
