@@ -17,6 +17,8 @@ if(isset($_POST["submit_button"]))
           "stock_count: " . $stock_count . "\n" .
           "age_check: " . $age_check . "\n" ;
     
+    $isDuplicate = false;
+    
 
 
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . $item_name . "', " .
@@ -24,36 +26,45 @@ if(isset($_POST["submit_button"]))
     
     echo "query: " . $insert_item_query;
     
-    mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($con));
-    
-    $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'";
-    
-    $result = mysqli_query($con, $idQuery);
-    
-    $newItemID;
-    
-    if ($result->num_rows > 0) 
+    if (!mysqli_query($con, $insert_item_query))
     {
-        // output data of each row
-        $row = $result->fetch_assoc(); 
-        $newItemID = $row["ID"];
-        echo "ID = " . $newItemID;
-    } // if
-    
-    else
-    {
-        printf("no fucking results!");
+        echo "Error insert 3YP_ITEMS VALUES" . mysqli_error($con);
+        $isDuplicate = true;
     }
     
-    foreach($_POST['pages'] as $check) 
+    if (!$isDuplicate)
     {
-        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . ", '" . $check  . "')";
+    
+        $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'"; 
+        $result = mysqli_query($con, $idQuery); 
+        $newItemID;
+    
+        if ($result->num_rows > 0) 
+        {
+            // output data of each row
+            $row = $result->fetch_assoc(); 
+            $newItemID = $row["ID"];
+            echo "ID = " . $newItemID;
+        } // if
+    
+        else
+        {   
+            printf("no fucking results!");
+        }
+    
+        foreach($_POST['pages'] as $check) 
+        {
+            $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . ", '" . $check  . "')";
         
-        echo $insert_item_query;
+            echo $insert_item_query;
         
-          if(!mysqli_query($con, $insert_item_query))
-                  echo "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
-    } //for each
+            if(!mysqli_query($con, $insert_item_query))
+            {
+                echo "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
+            }
+        } //for each
+    
+    } // is duplicate
     
 } // if post
 
