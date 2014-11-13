@@ -211,7 +211,7 @@ and open the template in the editor.
                     ?>> No</td>
             </tr>
             <tr>
-                <td colspan="2">Add to Pages</td>
+                <td colspan="2" align="top">Add to Pages</td>
                 <td>
                     <?php
                     for ($i = 1; $i < sizeof($array); $i++) 
