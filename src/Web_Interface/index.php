@@ -170,29 +170,30 @@ and open the template in the editor.
         <form method="post">
         <table>
             <tr>
-                <td>Item Name</td>
+                <td colspan="2">Item Name</td>
                 <td><input type="text" name="item_name" value="werfwef"></td>
             </tr>
             <tr>
-                <td><div align="left">Price</div><div align="right">£</div></td>
+                <td>Price</td>
+                <td align="right">£</td>
                 <td><input type="text" name="price"></td>
             </tr>        
             <tr>
-                <td>Quantity</td>
+                <td colspan="2">Quantity</td>
                 <td><input type="text" name="quantity"></td>
             </tr>
             <tr>
-                <td>Stock Count</td>
+                <td colspan="2">Stock Count</td>
                 <td><input type="radio" name="stock_count" value=0 checked> On<br>
                     <input type="radio" name="stock_count" value=1> Off</td>
             </tr>
             <tr>
-                <td>Need Age Check</td>
+                <td colspan="2">Need Age Check</td>
                 <td><input type="radio" name="age_check" value=0 > Yes<br>
                     <input type="radio" name="age_check" value=1 checked> No</td>
             </tr>
             <tr>
-                <td>Add to Pages</td>
+                <td colspan="2">Add to Pages</td>
                 <td>
                     <?php
                     for ($i = 1; $i < sizeof($array); $i++) 
