@@ -222,9 +222,10 @@ and open the template in the editor.
                             
                             if ($match == true)
                                 echo "checked";
-                        
-                            print ">". $array[$i] ."<br>";
+                           
                         } // if
+                        
+                        print ">". $array[$i] ."<br>";
                     }
                     ?>
                 </td>
