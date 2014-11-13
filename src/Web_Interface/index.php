@@ -19,12 +19,12 @@ if(isset($_POST["submit_button"]))
     
 
 
-    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . ", " .
+    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . "', " .
     $price . ", " . $quantity . ", " . $stock_count . ", " . $age_check . ")";
     
     echo "query: " . $insert_item_query;
     
-    mysqli_query($con, $insert_item_query);
+    mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($link));
     
     foreach($_POST['pages'] as $check) 
      if ($check == "")
@@ -36,7 +36,7 @@ if(isset($_POST["submit_button"]))
 } // if post
 
 
-    $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES");
+    $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($link));
 
     $array = array();
 
