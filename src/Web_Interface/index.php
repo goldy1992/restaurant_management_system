@@ -104,7 +104,7 @@ if(isset($_POST["submit_button"]))
     $quantity = $_POST["quantity"];
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
-    $pagesList = $_POST["pages"];
+    $pagesList = $_POST['pages'];
     
     echo "item: " . $item_name . "\n" .
           "price: " . $price . "\n" .
