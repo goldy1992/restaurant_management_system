@@ -1,74 +1,68 @@
 <?php
 
-$con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
-mysqli_select_db($con, "mbbx9mg3");
-
-if(isset($_POST["submit_button"]))
+function insertItem($item_name, $price, 
+                    $quantity, $stock_count, 
+                    $age_check, $con)
 {
-    $item_name = $_POST["item_name"];
-    $price = $_POST["price"];
-    $quantity = $_POST["quantity"];
-    $stock_count = $_POST["stock_count"];
-    $age_check = $_POST["age_check"];
-    
-    echo "item: " . $item_name . "\n" .
-          "price: " . $price . "\n" .
-          "quantity: " . $quantity . "\n" .
-          "stock_count: " . $stock_count . "\n" .
-          "age_check: " . $age_check . "\n" ;
-    
-    $isDuplicate = false;
-    
-
-
-    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . $item_name . "', " .
-    $price . ", " . $quantity . ", " . $stock_count . ", " . $age_check . ")";
+    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
+                            $item_name . "', " . $price . ", " . $quantity 
+                            . ", " . $stock_count . ", " . $age_check . ")";
     
     echo "query: " . $insert_item_query;
     
+    $reason = "success";
+    $success = true;
+    
     if (!mysqli_query($con, $insert_item_query))
     {
-        echo "Error insert 3YP_ITEMS VALUES" . mysqli_error($con);
-        $isDuplicate = true;
+        $reason = "Error insert 3YP_ITEMS VALUES: " . mysqli_error($con);
+        $success = false;
     }
     
-    if (!$isDuplicate)
+    return array($success, $reason);
+} 
+
+function getItemID($item_name)
+{
+    $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'"; 
+    $result = mysqli_query($con, $idQuery); 
+    $newItemID;
+    
+    if ($result->num_rows > 0) 
     {
+        // output data of each row
+        $row = $result->fetch_assoc(); 
+        $newItemID = $row["ID"];
+        echo "ID = " . $newItemID;
+    } // if
     
-        $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'"; 
-        $result = mysqli_query($con, $idQuery); 
-        $newItemID;
-    
-        if ($result->num_rows > 0) 
-        {
-            // output data of each row
-            $row = $result->fetch_assoc(); 
-            $newItemID = $row["ID"];
-            echo "ID = " . $newItemID;
-        } // if
-    
-        else
-        {   
-            printf("no fucking results!");
-        }
-    
-        foreach($_POST['pages'] as $check) 
-        {
-            $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . ", '" . $check  . "')";
+    else
+        printf("no fucking results!");
         
-            echo $insert_item_query;
+    return $newItemID;
+}
+
+function insertItemPagePosition($itemID, $itemPage, $con)
+{
+    $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $itemID . ", '" . $itemPage  . "')";
         
-            if(!mysqli_query($con, $insert_item_query))
-            {
-                echo "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
-            }
-        } //for each
+    echo $insert_item_query;
     
-    } // is duplicate
+    $reason = "success";
+    $success = true;
+        
+    if(!mysqli_query($con, $insert_item_query))
+    {
+        $reason =  "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
+        $success = false;
+    }
     
-} // if post
+    return array($success, $reason);
+}
 
-
+function selectPages($con)
+{
+    
     $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($con));
 
     $array = array();
@@ -86,8 +80,65 @@ if(isset($_POST["submit_button"]))
         printf("no fucking results!");
     }
     mysqli_free_result($result);
+ 
+    return $array;
+}
 
-    mysqli_close($con);
+
+
+$con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
+mysqli_select_db($con, "mbbx9mg3");
+
+
+$validName = false;
+$validPrice = false;
+$validQuantity = false;
+$insertedItem = array(false, "");
+$insertedPages = array(false, "");
+
+
+if(isset($_POST["submit_button"]))
+{
+    $item_name = $_POST["item_name"];
+    $price = $_POST["price"];
+    $quantity = $_POST["quantity"];
+    $stock_count = $_POST["stock_count"];
+    $age_check = $_POST["age_check"];
+    
+    echo "item: " . $item_name . "\n" .
+          "price: " . $price . "\n" .
+          "quantity: " . $quantity . "\n" .
+          "stock_count: " . $stock_count . "\n" .
+          "age_check: " . $age_check . "\n" ;
+    
+    $validName = !empty($item_name);
+    $validPrice = is_decimal($price) && ($validPrice > 0);
+    $validQuantity = is_numeric($quantity) && ($quantity >= 0);
+    
+
+    if ($validName && $validPrice && $validQuantity)
+    {
+        $insertedItem = insertItem($item_name, $price, 
+                    $quantity, $stock_count, 
+                    $age_check, $con);
+
+        if ($insertedItem[0])
+        {
+            $newItemID = getItemID($item_name);
+            foreach($_POST['pages'] as $check) 
+            {
+                insertItemPagePosition($newItemID, $check, $con);
+            }
+        } // isInserted
+    
+    } // if valid input
+    
+} // if post
+
+
+$array = selectPages($con);
+
+mysqli_close($con);
 
 
 ?>
@@ -99,7 +150,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Insert Item</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -116,7 +167,7 @@ and open the template in the editor.
             </tr>
             <tr>
                 <td>Price</td>
-                <td><input type="text" name="price"></td>
+                <td>£<input type="text" name="price"></td>
             </tr>        
             <tr>
                 <td>Quantity</td>
