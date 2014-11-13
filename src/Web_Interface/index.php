@@ -51,7 +51,8 @@ if(isset($_POST["submit_button"]))
         
         echo $insert_item_query;
         
-          $result = mysqli_query($con, $insert_item_query) or die("Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con));
+          if(!mysqli_query($con, $insert_item_query))
+                  echo "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
     } //for each
     
 } // if post
