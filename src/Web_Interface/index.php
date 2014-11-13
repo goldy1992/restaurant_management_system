@@ -115,7 +115,7 @@ if(isset($_POST["submit_button"]))
           "age_check: " . $age_check . "\n" ;
     
     $validName = !empty($item_name);
-    $validPrice = is_numeric($price) && ($validPrice > 0);
+    $validPrice = is_numeric($price) && ($price > 0);
     $validQuantity = is_numeric($quantity) && ($quantity >= 0);
     
 
