@@ -85,7 +85,6 @@ function selectPages($con)
 }
 
 
-
 $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
 
@@ -97,6 +96,14 @@ $insertedItem = array(false, "");
 $insertedPages = array(false, "");
 
 
+$item_name;
+$price;
+$quantity;
+$stock_count;
+$age_check;
+$pagesList;
+
+
 if(isset($_POST["submit_button"]))
 {
     $item_name = $_POST["item_name"];
@@ -104,6 +111,7 @@ if(isset($_POST["submit_button"]))
     $quantity = $_POST["quantity"];
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
+    $pagesList = $_POST["pages"];
     
     echo "item: " . $item_name . "\n" .
           "price: " . $price . "\n" .
@@ -163,7 +171,7 @@ and open the template in the editor.
         <table>
             <tr>
                 <td>Item Name</td>
-                <td><input type="text" name="item_name"></td>
+                <td><input type="text" name="item_name" value="werfwef"></td>
             </tr>
             <tr>
                 <td>Price</td>
