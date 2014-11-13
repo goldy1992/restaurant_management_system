@@ -135,6 +135,9 @@ if(isset($_POST["submit_button"]))
         } // isInserted
     
     } // if valid input
+    else
+        print "NOT VALID\n name " . $validName . "\n price " . $validPrice .
+             "\n quantity " . $validQuantity . "\n";
     
 } // if post
 
