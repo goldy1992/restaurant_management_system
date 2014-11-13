@@ -16,6 +16,7 @@ function insertItem($item_name, $price,
     if (!mysqli_query($con, $insert_item_query))
     {
         $reason = "Error insert 3YP_ITEMS VALUES: " . mysqli_error($con);
+        echo $reason . "\n";
         $success = false;
     }
     
