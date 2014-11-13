@@ -47,7 +47,7 @@ if(isset($_POST["submit_button"]))
     
     foreach($_POST['pages'] as $check) 
     {
-        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . "', '" . $check  . "')";
+        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . ", '" . $check  . "')";
         
         echo $insert_item_query;
         
