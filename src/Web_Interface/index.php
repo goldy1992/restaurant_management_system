@@ -46,11 +46,12 @@ if(isset($_POST["submit_button"]))
     }
     
     foreach($_POST['pages'] as $check) 
-     if ($check == null)
-         echo "not checked\n";
-     else
-         echo "checked " . $check . "\n";
-    
+    {
+        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . "', " .
+        $check  . ")";
+        
+          $result = mysqli_query($con, $idQuery);
+    } //for each
     
 } // if post
 
