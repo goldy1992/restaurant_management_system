@@ -24,7 +24,7 @@ function insertItem($item_name, $price,
     return array($success, $reason);
 } 
 
-function getItemID($item_name)
+function getItemID($item_name, $con)
 {
     $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'"; 
     $result = mysqli_query($con, $idQuery); 
@@ -127,7 +127,7 @@ if(isset($_POST["submit_button"]))
 
         if ($insertedItem[0])
         {
-            $newItemID = getItemID($item_name);
+            $newItemID = getItemID($item_name, $con);
             foreach($_POST['pages'] as $check) 
             {
                 insertItemPagePosition($newItemID, $check, $con);
