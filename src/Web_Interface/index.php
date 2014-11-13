@@ -24,10 +24,29 @@ if(isset($_POST["submit_button"]))
     
     echo "query: " . $insert_item_query;
     
-    //mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($con));
+    mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($con));
+    
+    $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'";
+    
+    $result = mysqli_query($con, $idQuery);
+    
+    $newItemID;
+    
+    if ($result->num_rows > 0) 
+    {
+        // output data of each row
+        $row = $result->fetch_assoc(); 
+        $newItemID = $row["ID"];
+        echo "ID = " . $newItemID;
+    } // if
+    
+    else
+    {
+        printf("no fucking results!");
+    }
     
     foreach($_POST['pages'] as $check) 
-     if ($check == "")
+     if ($check == null)
          echo "not checked\n";
      else
          echo "checked " . $check . "\n";
