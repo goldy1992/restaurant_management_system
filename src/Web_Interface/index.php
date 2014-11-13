@@ -47,10 +47,9 @@ if(isset($_POST["submit_button"]))
     
     foreach($_POST['pages'] as $check) 
     {
-        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . "', " .
-        $check  . ")";
+        $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $newItemID . "', '" . $check  . "')";
         
-          $result = mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($con));
+          $result = mysqli_query($con, $insert_item_query) or die("Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con));
     } //for each
     
 } // if post
