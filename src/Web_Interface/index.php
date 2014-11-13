@@ -96,13 +96,6 @@ $insertedItem = array(false, "");
 $insertedPages = array(false, "");
 
 
-$item_name;
-$price;
-$quantity;
-$stock_count;
-$age_check;
-$pagesList;
-
 
 if(isset($_POST["submit_button"]))
 {
@@ -171,26 +164,46 @@ and open the template in the editor.
         <table>
             <tr>
                 <td colspan="2">Item Name</td>
-                <td><input type="text" name="item_name" value="werfwef"></td>
+                <td><input type="text" name="item_name" value="<?php if(isset($_POST["submit_button"])) echo $item_name; ?>"></td>
             </tr>
             <tr>
                 <td>Price</td>
                 <td align="right">£</td>
-                <td><input type="text" name="price"></td>
+                <td><input type="text" name="price"  value="<?php if(isset($_POST["submit_button"])) echo $price; ?>"></td>
             </tr>        
             <tr>
                 <td colspan="2">Quantity</td>
-                <td><input type="text" name="quantity"></td>
+                <td><input type="text" name="quantity" value="<?php if(isset($_POST["submit_button"])) echo $quantity; ?>"></td>
             </tr>
             <tr>
                 <td colspan="2">Stock Count</td>
-                <td><input type="radio" name="stock_count" value=0 checked> On<br>
-                    <input type="radio" name="stock_count" value=1> Off</td>
+                <td><input type="radio" name="stock_count" value=0 
+                    <?php
+                        if(isset($_POST["submit_button"]))
+                        {
+                          if ($stock_count == 0) echo "checked";
+                        }
+                        else echo "checked";
+                    ?>> On<br>
+                    <input type="radio" name="stock_count" value=1
+                    <?php  if(isset($_POST["submit_button"])) 
+                                if ($stock_count == 1) echo "checked";
+                    ?>> Off</td>
             </tr>
             <tr>
                 <td colspan="2">Need Age Check</td>
-                <td><input type="radio" name="age_check" value=0 > Yes<br>
-                    <input type="radio" name="age_check" value=1 checked> No</td>
+                <td><input type="radio" name="age_check" value=0 
+                     <?php if(isset($_POST["submit_button"])) 
+                                if ($age_check == 0) echo "checked";
+                    ?>> Yes<br>
+                    <input type="radio" name="age_check" value=1 
+                    <?php 
+                          if(isset($_POST["submit_button"]))
+                          { 
+                              if($age_check == 1) echo "checked";
+                          }
+                          else echo "checked";
+                    ?>> No</td>
             </tr>
             <tr>
                 <td colspan="2">Add to Pages</td>
@@ -198,8 +211,20 @@ and open the template in the editor.
                     <?php
                     for ($i = 1; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" \>". $array[$i] ."<br>";
+                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . " "; 
                         
+                        if(isset($_POST["submit_button"]))
+                        {
+                            $match = false;
+                            for ($t = 0; $t < count($pagesList); $t++)
+                                if (strcmp($pagesList[t], $array[$i]) == 0)
+                                        $match = true;
+                            
+                            if ($match == true)
+                                echo "checked";
+                        
+                            print ">". $array[$i] ."<br>";
+                        } // if
                     }
                     ?>
                 </td>
