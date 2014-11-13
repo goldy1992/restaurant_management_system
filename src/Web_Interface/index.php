@@ -28,9 +28,9 @@ if(isset($_POST["submit_button"]))
     
     foreach($_POST['pages'] as $check) 
      if ($check == "")
-         echo "not checked";
+         echo "not checked\n";
      else
-         echo "checked " . $check;
+         echo "checked " . $check . "\n";
     
     
 } // if post
