@@ -19,7 +19,7 @@ if(isset($_POST["submit_button"]))
     
 
 
-    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . "', " .
+    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . $item_name . "', " .
     $price . ", " . $quantity . ", " . $stock_count . ", " . $age_check . ")";
     
     echo "query: " . $insert_item_query;
