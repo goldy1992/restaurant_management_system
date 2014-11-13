@@ -19,9 +19,17 @@ if(isset($_POST["submit_button"]))
         foreach($_POST['pages'] as $check) 
             echo $check;
 
-     $insert_item = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . ", " .
-        $price . ", " . $quantity . ", " . $stock_count;
-     // finish off the goddam query
+    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES ('" . $item_name . ", " .
+    $price . ", " . $quantity . ", " . $stock_count . ", " . $age_check . ")";
+    mysqli_query($con, $query);
+    
+    foreach($_POST['pages'] as $check) 
+     if ($check == "")
+         echo "not checked";
+     else
+         echo "checked " . $check;
+    
+    
 } // if post
 
 
