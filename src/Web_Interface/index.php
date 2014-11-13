@@ -24,7 +24,7 @@ if(isset($_POST["submit_button"]))
     
     echo "query: " . $insert_item_query;
     
-    mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($link));
+    mysqli_query($con, $insert_item_query) or die("Error " . mysqli_error($con));
     
     foreach($_POST['pages'] as $check) 
      if ($check == "")
