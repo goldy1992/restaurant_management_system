@@ -4,6 +4,7 @@ function insertItem($item_name, $price,
                     $quantity, $stock_count, 
                     $age_check, $con)
 {
+    print "called insert_item \n";
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
                             $item_name . "', " . $price . ", " . $quantity 
                             . ", " . $stock_count . ", " . $age_check . ")";
