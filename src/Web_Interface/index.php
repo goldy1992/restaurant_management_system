@@ -174,7 +174,7 @@ and open the template in the editor.
                 <td><input type="text" name="item_name" value="werfwef"></td>
             </tr>
             <tr>
-                <td>Price<div align="right">£</div></td>
+                <td><div align="left">Price</div><div align="right">£</div></td>
                 <td><input type="text" name="price"></td>
             </tr>        
             <tr>
