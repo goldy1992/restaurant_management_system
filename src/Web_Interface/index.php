@@ -36,7 +36,7 @@ if(isset($_POST["submit_button"]))
 } // if post
 
 
-    $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($link));
+    $result = mysqli_query($con, "SELECT NAME FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($con));
 
     $array = array();
 
