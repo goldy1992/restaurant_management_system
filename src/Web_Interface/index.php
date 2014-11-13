@@ -211,7 +211,7 @@ and open the template in the editor.
                     <?php
                     for ($i = 1; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . " "; 
+                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
                         
                         if(isset($_POST["submit_button"]))
                         {
@@ -225,7 +225,7 @@ and open the template in the editor.
                            
                         } // if
                         
-                        print ">". $array[$i] ."<br>";
+                        print ">". $array[$i] ."<br>\n";
                     }
                     ?>
                 </td>
