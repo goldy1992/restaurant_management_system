@@ -217,7 +217,7 @@ and open the template in the editor.
                         {
                             $match = false;
                             for ($t = 0; $t < count($pagesList); $t++)
-                                if (strcmp($pagesList[t], $array[$i]) == 0)
+                                if (strcmp($pagesList[$t], $array[$i]) == 0)
                                         $match = true;
                             
                             if ($match == true)
