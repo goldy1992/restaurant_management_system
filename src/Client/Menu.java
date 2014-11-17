@@ -1,5 +1,6 @@
 package Client;
 
+import Item.Tab;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -55,12 +56,56 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
     private ArrayList<JPanel> panels = new ArrayList<JPanel>();    
     private JButton SendOrderButton = null;
+    
+    private Tab tab;
 
     /**
      * Stores the reference to the JTextPane used on the output
      * @see javax.swing.JTextPane
      */
     public JTextPane outputTextPane;
+    
+        /**
+     * Creates new form Menu
+     * @param parent
+     * @param modal
+     * @param tab
+     * @throws java.sql.SQLException
+     */
+    public Menu(java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
+    {
+        super(parent, modal);
+        this.tab = tab;
+     
+        // initialise the connection to the database
+        con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+      
+        // initialises the part of the GUI made automatically by netbeans
+        initComponents();
+        cardPanels = getCards();
+        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        
+        for(MenuCardPanel p : cardPanels)
+            CardPanel.add(p, p.getName());
+        
+        System.out.println("show");
+        CardLayout cl = (CardLayout)(CardPanel.getLayout());
+        cl.show(CardPanel, cardPanels.get(0).getName());
+        currentCard = cardPanels.get(0);
+        
+        // this code only allows the output Area text pane to have key controls
+        components.addAll(buttons);
+        components.addAll(menuItemButtons);
+        components.addAll(cardPanels);
+        
+        for (JComponent t : components)
+        {
+            t.setFocusable(false);
+            t.requestFocus(false);
+        }    
+        
+ 
+    } // constructor
 
     @Override
     public void actionPerformed(ActionEvent ae) 
@@ -103,47 +148,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      */
     Connection con = null;    
 
-    /**
-     * Creates new form Menu
-     * @param parent
-     * @param modal
-     * @throws java.sql.SQLException
-     */
-    public Menu(java.awt.Frame parent, boolean modal) throws SQLException
-    {
-        super(parent, modal);
-     
-        // initialise the connection to the database
-        con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
-      
-        // initialises the part of the GUI made automatically by netbeans
-        initComponents();
-        cardPanels = getCards();
-        cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
-        
-        for(MenuCardPanel p : cardPanels)
-            CardPanel.add(p, p.getName());
-        
-        System.out.println("show");
-        CardLayout cl = (CardLayout)(CardPanel.getLayout());
-        cl.show(CardPanel, cardPanels.get(0).getName());
-        currentCard = cardPanels.get(0);
-        
-        // this code only allows the output Area text pane to have key controls
-        components.addAll(buttons);
-        components.addAll(menuItemButtons);
-        components.addAll(cardPanels);
-        
-        for (JComponent t : components)
-        {
-            t.setFocusable(false);
-            t.requestFocus(false);
-        }    
-        
- 
-    } // constructor
-  
-    
     
     /**
      * Adds the functional features to the main panel
@@ -464,13 +468,17 @@ System.out.println("pressed");
      * @return
      */
     
-    public static Menu makeMenu(JFrame parent)
+    /**
+    *
+    * Factory method to make a new menu
+    */
+    public static Menu makeMenu(JFrame parent, Tab tab)
     {
         Menu newMenu = null;
         try 
         {
 
-            newMenu = new Menu(parent, true);
+            newMenu = new Menu(parent, true, tab);
             newMenu.addMouseListener(newMenu);
 
         } // try

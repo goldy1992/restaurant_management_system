@@ -6,6 +6,7 @@
 
 package Server;
 
+import Item.Tab;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +23,6 @@ import java.util.Random;
  */
 public class Table implements Runnable
 {
-    
     /**
      *
      */
@@ -44,15 +44,21 @@ public class Table implements Runnable
          */
         IN_USE, 
     }
-    // the table number
-    private int tableNumber;
     
-    // the table number Port
-    private int tableNumberPort;
+    /**
+     * the table number
+     */
+    private final int tableNumber;
     
-    
+    /**
+     * the table number Port
+     */
+    private final int tableNumberPort;
+       
     // is boolean
     private TableStatus tableStatus;
+    
+    private Tab currentTab;
     
     /**
      *
@@ -64,6 +70,7 @@ public class Table implements Runnable
         this.tableNumber = tableNumber;
         this.tableNumberPort = tableNumber + MyServer.getLowBoundPortRange();
         tableStatus = TableStatus.FREE;
+        
         
         /* TEST */
         //int pick = new Random().nextInt(TableStatus.values().length);
@@ -99,6 +106,15 @@ public class Table implements Runnable
     }
     
     /**
+     * 
+     * @return the tab linked with the table
+     */
+    public Tab getCurrentTab()
+    {
+        return currentTab;
+    } // getCurrentTab
+    
+    /**
      *
      * @param status
      */
@@ -107,6 +123,7 @@ public class Table implements Runnable
         tableStatus = status;
     }
     
+    @Override
     public void run()
     {
         ServerSocket mySocket = null;
@@ -155,4 +172,18 @@ public class Table implements Runnable
             System.out.println("Failed to accept incoming socket");
         } // catch
     } // run
+    
+    /**
+     * 
+     * @param number: the table number of the table to be created
+     * @return 
+     */
+    public static Table createTable(int number)
+    {
+        Table table = new Table(number);
+        table.currentTab = new Tab(table);
+        return table;
+    } // create table
+    
+    
 }

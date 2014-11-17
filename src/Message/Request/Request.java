@@ -30,19 +30,24 @@ public abstract class Request extends Message
     {
 
         /**
-         *
+         *  Request the status of a table (FREE, OCCUPIED, IN USE) etc.
          */
         TABLE_STATUS,
 
         /**
-         *
+         *  Request the number of tables currently in use.
          */
         NUM_OF_TABLES,
 
         /**
-         *
+         *  Requests permission to leave.
          */
-        LEAVE
+        LEAVE,
+        
+        /**
+         *  Requests the current tab from the table server.
+         */
+        TAB
     }
     
     /**

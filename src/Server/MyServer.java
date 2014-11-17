@@ -41,7 +41,7 @@ public class MyServer
         // creates a thread for each table
         for (int i = 1; i <= NUM_OF_TABLES; i++)
         {
-            tables[i] = new Table(i);
+            tables[i] = Table.createTable(i);
             new Thread(tables[i]).start();
         } // for
         

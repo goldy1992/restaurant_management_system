@@ -6,17 +6,10 @@
 
 package Server;
 
-import Message.EventNotification.EventNotification;
-import Message.EventNotification.TableStatusEvtNfn;
-import Message.Message;
-import Message.Request.LeaveRequest;
-import Message.Request.NumOfTablesRequest;
-import Message.Request.Request;
-import Message.Request.TableStatusRequest;
-import Message.Response.LeaveResponse;
-import Message.Response.NumOfTablesResponse;
-import Message.Response.Response;
-import Message.Response.TableStatusResponse;
+import Message.*;
+import Message.Request.*;
+import Message.EventNotification.*;
+import Message.Response.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -133,6 +126,8 @@ public class ClientCommunicationThread implements Runnable
             response = new TableStatusResponse((TableStatusRequest)message);
         else if (message instanceof NumOfTablesRequest)
             response = new NumOfTablesResponse((NumOfTablesRequest)message);
+        else if (message instanceof TabRequest)
+            response = new TabResponse((TabRequest)message);
         else if (message instanceof LeaveRequest)
         {
             response = new LeaveResponse((LeaveRequest)message);
