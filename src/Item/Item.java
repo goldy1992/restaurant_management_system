@@ -5,13 +5,14 @@
  */
 package Item;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  *
  * @author mbbx9mg3
  */
-public class Item 
+public class Item implements Serializable 
 {   
 
     /**

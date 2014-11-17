@@ -254,8 +254,10 @@ public class MyClient implements Runnable
                 
                 if (response instanceof Response)
                 {
+                    System.out.println("received response from request");
                     Response resp = (Response) response;
                     resp.onReceiving();
+                    
                                             
                 } // if response
                 else if(response instanceof EventNotification)

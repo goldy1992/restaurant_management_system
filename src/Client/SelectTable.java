@@ -7,6 +7,8 @@
 package Client;
 
 import static Client.MyClient.generateRequestID;
+import static Client.MyClient.getTableStatuses;
+import static Client.MyClient.lock;
 import static Client.MyClient.serverAddress;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -23,6 +25,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -39,8 +44,9 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     private final JButton[] tableButtons;
     private ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
-    private boolean tabReceived = false;
+    public boolean tabReceived = false;
     private Tab tab;
+    public Object tabLock = new Object();
     
     /**
      *
@@ -376,8 +382,25 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                         MyClient.generateRequestID(), 
                         Request.RequestType.TAB,
                             tableSelected);
+                    out.writeObject(tabStatusRequest);
                     
-                    while (this.tabReceived == false);
+                    System.out.println("waiting for reply, in while loop");
+                   
+
+                    synchronized(tabLock)
+                    {
+                        try
+                        {
+                            while(this.tabReceived == false)
+                            {
+                                tabLock.wait();
+                            } // while
+                        }
+                        catch (InterruptedException ex) 
+                        {
+                            Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                        } // catch
+                    } // synchronized
                     
                     menu = Menu.makeMenu(this, tab);
                            System.out.println("menu has been made");

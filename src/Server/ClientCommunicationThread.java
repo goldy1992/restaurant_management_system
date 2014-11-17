@@ -127,7 +127,10 @@ public class ClientCommunicationThread implements Runnable
         else if (message instanceof NumOfTablesRequest)
             response = new NumOfTablesResponse((NumOfTablesRequest)message);
         else if (message instanceof TabRequest)
+        {
             response = new TabResponse((TabRequest)message);
+            System.out.println("received Tab Request\n");
+        }
         else if (message instanceof LeaveRequest)
         {
             response = new LeaveResponse((LeaveRequest)message);

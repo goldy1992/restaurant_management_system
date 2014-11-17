@@ -6,6 +6,7 @@
 package Message.Response;
 
 import Client.MyClient;
+
 import Item.Tab;
 import Message.Request.Request;
 import Message.Request.TabRequest;
@@ -49,8 +50,15 @@ public class TabResponse extends Response
     @Override
     public void onReceiving() 
     {
-        MyClient.selectTable.setTab(currentTab);
-        MyClient.selectTable.setTabReceived(true);
+        System.out.println("Executing TabResponse's onreceiving");
+       synchronized(MyClient.selectTable.tabLock)
+        {
+              MyClient.selectTable.setTab(currentTab);
+        MyClient.selectTable.setTabReceived(true);      
+            MyClient.selectTable.tabLock.notifyAll();
+        } 
+
+        System.out.println("tab received: " + MyClient.selectTable.tabReceived);
     }
     
 }

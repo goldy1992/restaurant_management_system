@@ -6,13 +6,14 @@
 package Item;
 
 import Server.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author mbbx9mg3
  */
-public class Tab 
+public class Tab implements Serializable  
 {
     private final Table parent;
     private ArrayList<Item> items;

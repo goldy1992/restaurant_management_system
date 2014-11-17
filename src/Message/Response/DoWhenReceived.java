@@ -5,11 +5,13 @@
  */
 package Message.Response;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mbbx9mg3
  */
-public interface DoWhenReceived 
+public interface DoWhenReceived extends Serializable 
 {
     public void onReceiving();
 }
