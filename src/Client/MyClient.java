@@ -254,34 +254,8 @@ public class MyClient implements Runnable
                 
                 if (response instanceof Response)
                 {
-                    if (response instanceof TableStatusResponse)
-                    {
-                        TableStatusResponse r = (TableStatusResponse)response;
-                        System.out.println(r.getTableStatuses());
-                        
-                        synchronized(lock)
-                        {
-                            MyClient.setTableStatuses(r.getTableStatuses());
-                            lock.notifyAll();
-                        }   
-                        
-                        //System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
-                       
-                    }
-                    else if (response instanceof NumOfTablesResponse)
-                    {
-                        
-                        NumOfTablesResponse r = (NumOfTablesResponse)response;
-                        System.out.println(r);
-                        //System.out.println("got  num of tables: " + r.getNumOfTables());
-                        MyClient.setNumTables(r.getNumOfTables());
-
-                    }
-                    if (response instanceof LeaveResponse)
-                    {
-                        System.out.println("reached exit");
-                        System.exit(0);
-                    }
+                    Response resp = (Response) response;
+                    resp.onReceiving();
                                             
                 } // if response
                 else if(response instanceof EventNotification)

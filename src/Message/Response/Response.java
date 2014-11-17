@@ -13,7 +13,7 @@ import Message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message 
+public abstract class Response extends Message implements DoWhenReceived
 {    
     private Request request = null;
 
@@ -60,5 +60,11 @@ public abstract class Response extends Message
     {
         return super.toString() + "TYPE: Response\n";
     }
+    
+    /**
+     * implements the method to be called when the message is received.
+     */
+    @Override
+    public abstract void onReceiving();
     
 } // class

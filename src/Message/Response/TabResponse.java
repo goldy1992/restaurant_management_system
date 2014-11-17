@@ -5,10 +5,10 @@
  */
 package Message.Response;
 
+import Client.MyClient;
 import Item.Tab;
 import Message.Request.Request;
 import Message.Request.TabRequest;
-import Message.Request.TableStatusRequest;
 import Server.MyServer;
 
 /**
@@ -44,6 +44,13 @@ public class TabResponse extends Response
     public Tab getTab()
     {
         return currentTab;
+    }
+
+    @Override
+    public void onReceiving() 
+    {
+        MyClient.selectTable.setTab(currentTab);
+        MyClient.selectTable.setTabReceived(true);
     }
     
 }

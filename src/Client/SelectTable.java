@@ -8,6 +8,7 @@ package Client;
 
 import static Client.MyClient.generateRequestID;
 import static Client.MyClient.serverAddress;
+import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
 import Message.Request.Request;
@@ -37,6 +38,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     private final JButton[] tableButtons;
     private ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
+    private boolean tabReceived = false;
+    private Tab tab;
     
     /**
      *
@@ -120,6 +123,16 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                 break;
         } // switch
     } // setTableStatus
+    
+    public void setTabReceived(boolean received)
+    {
+        this.tabReceived = received;
+    }
+    
+    public void setTab(Tab tab)
+    {
+        this.tab = tab;
+    }
     
     /**
      * Creates new form SelectTable

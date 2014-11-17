@@ -6,6 +6,8 @@
 
 package Message.Response;
 
+import Client.MyClient;
+import static Client.MyClient.lock;
 import Server.MyServer;
 import Server.Table;
 import Message.Request.TableStatusRequest;
@@ -77,4 +79,19 @@ public class TableStatusResponse extends Response
         
         return x;
     }
+
+    @Override
+    public void onReceiving() 
+    {
+
+        System.out.println(this.getTableStatuses());
+                        
+        synchronized(lock)
+        {
+            MyClient.setTableStatuses(this.getTableStatuses());
+            lock.notifyAll();
+        }   
+                        
+        //System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
+    } // onReceiving
 }

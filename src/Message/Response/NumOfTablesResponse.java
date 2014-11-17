@@ -6,6 +6,7 @@
 
 package Message.Response;
 
+import Client.MyClient;
 import Server.MyServer;
 import Message.Request.NumOfTablesRequest;
 
@@ -58,5 +59,13 @@ public class NumOfTablesResponse extends Response
         x+= "\n";
         
         return x;
+    }
+
+    @Override
+    public void onReceiving() 
+    {
+        System.out.println(this);
+        //System.out.println("got  num of tables: " + r.getNumOfTables());
+        MyClient.setNumTables(this.getNumOfTables());
     }
 }

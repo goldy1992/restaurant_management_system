@@ -145,31 +145,31 @@ public class ClientCommunicationThread implements Runnable
     
     private void parseEventNotification(EventNotification message) throws IOException
     {
-                        if (message instanceof TableStatusEvtNfn)
-                        {
-                            TableStatusEvtNfn event = (TableStatusEvtNfn)message;
-                            int tableNumber = event.getTableNumber();
-                            Table.TableStatus status = event.getTableStatus();
+        if (message instanceof TableStatusEvtNfn)
+        {
+            TableStatusEvtNfn event = (TableStatusEvtNfn)message;
+            int tableNumber = event.getTableNumber();
+            Table.TableStatus status = event.getTableStatus();
+                           
+            System.out.println("requested table " + tableNumber);
+            MyServer.getTable(tableNumber).setTableStatus(status);
                             
-                            System.out.println("requested table " + tableNumber);
-                            MyServer.getTable(tableNumber).setTableStatus(status);
-                            
-                            System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+            System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
-                            System.out.println("number of clients to send to: " + MyServer.getClients().size());
-                            for(int i =0; i < MyServer.getClients().size(); i++)
-                            {
-                                ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
-                                TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                                                                                    MyServer.getClients().get(i).getSocket().getInetAddress(),
-                                                                                    event.getMessageID(),
-                                                                                   tableNumber,
-                                                                                    status);
+            System.out.println("number of clients to send to: " + MyServer.getClients().size());
+            for(int i =0; i < MyServer.getClients().size(); i++)
+            {
+                ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
+                TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+                        MyServer.getClients().get(i).getSocket().getInetAddress(),
+                        event.getMessageID(),
+                        tableNumber,
+                        status);
                                 
-                                otherClientOut.writeObject(msgToSend);
-                                System.out.println("sent " + i);
-                            }
-}
+                otherClientOut.writeObject(msgToSend);
+                System.out.println("sent " + i);
+            } // for
+        } // if
     }
 
 } // class

@@ -33,5 +33,13 @@ public class LeaveResponse extends Response
     {
         permissionGranted = true;
     }
+
+
+    @Override
+    public void onReceiving() 
+    {
+        System.out.println("reached exit");
+        System.exit(0);
+    }
     
 }
