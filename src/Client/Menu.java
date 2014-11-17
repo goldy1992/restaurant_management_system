@@ -268,7 +268,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanelsList )
             {
-                query = "SELECT NAME FROM `3YP_ITEMS` "
+                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE` FROM `3YP_ITEMS` " 
                     + "LEFT JOIN `3YP_POS_IN_MENU` ON "
                     + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
                     + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" + c.getName() + "\" ";
@@ -279,7 +279,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 while(results.next())
                 {
-                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1));
+                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), results.getInt(2), results.getDouble(3));
                     c.addMenuItemButton(newButton);          
                 } // while
                 

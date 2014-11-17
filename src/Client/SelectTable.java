@@ -12,6 +12,7 @@ import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
 import Message.Request.Request;
+import Message.Request.TabRequest;
 import Server.Table;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -326,6 +327,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     // End of variables declaration//GEN-END:variables
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void actionPerformed(ActionEvent e) 
     {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -368,7 +370,15 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     System.out.println("evt nfc set and sent for table " + tableSelected);
                     /* open the table menu but send a message to other clients to say that it is now occupied */
                     
-                    Tab tab = null;
+                    
+                    TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(serverAddress.getHostName()),
+                        MyClient.generateRequestID(), 
+                        Request.RequestType.TAB,
+                            tableSelected);
+                    
+                    while (this.tabReceived == false);
+                    
                     menu = Menu.makeMenu(this, tab);
                            System.out.println("menu has been made");
                     menu.setEnabled(true);

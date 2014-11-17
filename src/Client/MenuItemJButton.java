@@ -16,20 +16,24 @@ import javax.swing.JButton;
 public class MenuItemJButton extends JButton implements ActionListener
 {
 
+    private final double price; 
+    private final int id;
     /**
      *
      * @param name
      */
-    private MenuItemJButton(String name)
+    private MenuItemJButton(String name, int id, double price)
     {
         super(name);    
+        this.price = price;
+        this.id = id;
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
-        System.out.println("menu item action performed callws");
-        System.out.println(this.getText());
+
+        System.out.println("name: " + this.getText() + ", price: " + this.price + ", id: " + this.id + "\n");
         String currentText = MyClient.selectTable.menu.outputTextPane.getText();
         
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
@@ -40,9 +44,9 @@ public class MenuItemJButton extends JButton implements ActionListener
         MyClient.selectTable.menu.outputTextPane.setText(currentText);
     }
     
-    public static MenuItemJButton createMenuItemJButton(String text)
+    public static MenuItemJButton createMenuItemJButton(String text, int id, double price)
     {
-        MenuItemJButton x = new MenuItemJButton(text);
+        MenuItemJButton x = new MenuItemJButton(text, id, price);
         x.addActionListener(x);
         return x;
     }
