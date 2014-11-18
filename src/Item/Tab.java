@@ -35,4 +35,9 @@ public class Tab implements Serializable
         return sToReturn;
     } // toString
     
+    public void addItem(Item newItem)
+    {
+        items.add(newItem);
+    }
+    
 } // class

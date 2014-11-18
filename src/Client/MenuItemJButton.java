@@ -7,6 +7,7 @@ package Client;
 
 import Item.Item;
 import Item.Item.Type;
+import Item.Tab;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -49,16 +50,18 @@ public class MenuItemJButton extends JButton implements ActionListener
 
         System.out.println("name: " + this.getText() + ", price: " + this.price 
                         + ", id: " + this.id + ", type: " + this.type + "\n");
-        String currentText = MyClient.selectTable.menu.outputTextPane.getText();
-        
+
+        Tab currentTab =  MyClient.selectTable.menu.getTab();
         Item newItem = new Item(this.id, this.getText(), this.price, this.type );
+        currentTab.addItem(newItem);
         
+
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
         
         
         // CODE TO ADD SCREEN
-        currentText += this.getName() + "\n";
-        MyClient.selectTable.menu.outputTextPane.setText(currentText);
+
+        MyClient.selectTable.menu.outputTextPane.setText(currentTab.toString());
     }
     
     public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type)

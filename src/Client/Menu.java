@@ -119,6 +119,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             this.dispose();
         } // if
     } // actionPerformed
+    
+    public Tab getTab()
+    {
+        return tab;
+    }
 
     @Override
     public void mouseClicked(MouseEvent me) 
