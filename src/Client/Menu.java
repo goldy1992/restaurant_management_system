@@ -102,9 +102,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         {
             t.setFocusable(false);
             t.requestFocus(false);
-        }    
+        } // for   
         
- 
+        outputTextPane.setText(tab.toString());
+        
     } // constructor
 
     @Override

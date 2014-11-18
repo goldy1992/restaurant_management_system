@@ -22,10 +22,8 @@ public class MyServer
 {
     // the lower bound of the port range
     private static final int LB_PORT_RANGE = 11000;
-    private static final int NUM_OF_TABLES = 30;
-    
-    private static final Object LOCK = new Object();
-    
+    private static final int NUM_OF_TABLES = 44;
+    private static final Object LOCK = new Object();  
     private static ArrayList<ClientCommunicationThread> clients;
     private static Table[] tables;
     
@@ -40,10 +38,8 @@ public class MyServer
         
         // creates a thread for each table
         for (int i = 1; i <= NUM_OF_TABLES; i++)
-        {
             tables[i] = Table.createTable(i);
-            new Thread(tables[i]).start();
-        } // for
+            //new Thread(tables[i]).start();
         
         
         ServerSocket mySocket;
@@ -61,7 +57,6 @@ public class MyServer
             
             while (socketListening)
             {
-
                 Socket acceptSocket = mySocket.accept();
                 ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
                 newThread.getThread().start();
@@ -123,7 +118,7 @@ public class MyServer
         synchronized(LOCK)
         {
             return clients;
-        }
+        } // sync
     }
     
     /**

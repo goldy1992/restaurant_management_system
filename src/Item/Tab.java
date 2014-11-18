@@ -17,14 +17,22 @@ public class Tab implements Serializable
 {
     private final Table parent;
     private ArrayList<Item> items;
-   
     
     public Tab(Table parent)
     {
         this.parent = parent;
-        this.items = new ArrayList<Item>();
+        this.items = new ArrayList<>();
     } // tab
     
+    @Override
+    public String toString()
+    {
+        String sToReturn = null;
+        for (Item i : items)
+            sToReturn += i.getQuantity() + "\t" + i.getName() 
+                        + "\t\t\t" + i.getPrice() + "\n";
+        
+        return sToReturn;
+    } // toString
     
-    
-}
+} // class
