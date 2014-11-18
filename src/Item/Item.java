@@ -37,7 +37,7 @@ public class Item implements Serializable
      */
     public Type type;
     private final int id;
-    private final String message;
+    private String message;
     private final String name;
     private final BigDecimal price;
     private final int quantity;
@@ -118,6 +118,11 @@ public class Item implements Serializable
         this.type = type;
         this.quantity = quantity;
     } // item
+    
+    public void setMessage(String message)
+    {
+        this.message += message;
+    } // setMessage
     
     @Override
     public String toString()

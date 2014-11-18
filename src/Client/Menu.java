@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -255,7 +256,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 // if not null take the parent and create a child button and reference it to panel
                 if (parentPanel != null)
-                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel, results.getString(3)));
+                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel, 
+                            results.getString(3)));
                 
                 count++;
             }  while (results.next());
@@ -269,7 +271,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanelsList )
             {
-                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE` FROM `3YP_ITEMS` " 
+                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, `FOOD_OR_DRINK` FROM `3YP_ITEMS` " 
                     + "LEFT JOIN `3YP_POS_IN_MENU` ON "
                     + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
                     + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" + c.getName() + "\" ";
@@ -280,7 +282,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 while(results.next())
                 {
-                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), results.getInt(2), results.getDouble(3));
+                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), 
+                            results.getInt(2), new BigDecimal(results.getDouble(3)), results.getString(4));
                     c.addMenuItemButton(newButton);          
                 } // while
                 
@@ -462,16 +465,13 @@ System.out.println("pressed");
      * @return the JPanel that stores all the cards
      */
     public JPanel getCardPanel() { return CardPanel; } 
-    
-        /**
-     *
-     * @param parent
-     * @return
-     */
-    
+       
     /**
     *
     * Factory method to make a new menu
+     * @param parent
+     * @param tab
+     * @return 
     */
     public static Menu makeMenu(JFrame parent, Tab tab)
     {
@@ -491,8 +491,5 @@ System.out.println("pressed");
         return newMenu;
     } // makeMenu
 
-    
-    
-    
 
 } // class
