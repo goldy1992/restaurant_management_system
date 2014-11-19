@@ -6,7 +6,6 @@
 package Message.EventNotification;
 
 import Item.Tab;
-import Server.Table;
 import java.net.InetAddress;
 
 /**

@@ -3,10 +3,8 @@ package Client;
 import static Client.MyClient.serverAddress;
 import Item.Item;
 import Item.Tab;
-import Message.EventNotification.TabUpdateNfn;
-import Message.EventNotification.TableStatusEvtNfn;
+import Message.EventNotification.*;
 import java.awt.CardLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -132,6 +130,23 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 InetAddress.getByName(serverAddress.getHostName()),
                 MyClient.generateRequestID(), this.tab);
                 out.writeObject(newEvt);
+                
+                if (this.newDrinkItems.size() > 0)
+                {
+                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(serverAddress.getHostName()),
+                    MyClient.generateRequestID(), Item.Type.DRINK, this.newDrinkItems);
+                    out.writeObject(newEvt1);
+                } // if
+                
+                if (this.newFoodItems.size() > 0)
+                {
+                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(serverAddress.getHostName()),
+                    MyClient.generateRequestID(), Item.Type.FOOD, this.newFoodItems);
+                    out.writeObject(newEvt1);
+                } // if                
+                
                 con.close(); 
             } 
             catch (SQLException ex) { Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
@@ -498,6 +513,7 @@ System.out.println("pressed");
     * Factory method to make a new menu
      * @param parent
      * @param tab
+     * @param out
      * @return 
     */
     public static Menu makeMenu(JFrame parent, Tab tab, ObjectOutputStream out)
