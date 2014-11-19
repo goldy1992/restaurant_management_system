@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MyServer
 {
     // the lower bound of the port range
-    private static final int LB_PORT_RANGE = 11000;
+    private static final int PORT_NUMBER = 11000;
     private static final int NUM_OF_TABLES = 44;
     private static final Object LOCK = new Object();  
     private static ArrayList<ClientCommunicationThread> clients;
@@ -48,10 +48,10 @@ public class MyServer
         try
         {
             System.out.println("got here");
-            mySocket = new ServerSocket(LB_PORT_RANGE);
+            mySocket = new ServerSocket(PORT_NUMBER);
                 System.out.println("socket listening");
             socketListening = true;
-            System.out.println("Currently listening on port " + LB_PORT_RANGE);
+            System.out.println("Currently listening on port " + PORT_NUMBER);
             
             long clientNumber = 0;
             
@@ -67,7 +67,7 @@ public class MyServer
    
             mySocket.close();
             
-        } // try
+        } // try // try
         catch (BindException e)
         {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class MyServer
      */
     public static int getLowBoundPortRange()
     {
-        return LB_PORT_RANGE;
+        return PORT_NUMBER;
     }
 
     /**

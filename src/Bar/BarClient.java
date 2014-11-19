@@ -1,0 +1,75 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Bar;
+
+import Message.EventNotification.EventNotification;
+import Message.Message;
+import Message.Request.Request;
+import Server.ClientCommunicationThread;
+import Server.MyServer;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author mbbx9mg3
+ */
+public class BarClient 
+{
+    /**
+     *
+     */
+    private static InetAddress serverAddress;
+    /**
+     *
+     */
+    private static int serverPort;  
+
+    /**
+     *
+     */
+    private static Socket client; 
+    
+    private static ObjectInputStream in;
+    
+    private static boolean isRunning = true;
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+        try
+        {
+            serverAddress = InetAddress.getByName(null);
+            serverPort = MyServer.getLowBoundPortRange();
+            //System.out.println(serverPort);
+            client = new Socket(serverAddress, serverPort);
+            in = new ObjectInputStream(client.getInputStream());
+            
+            if (client != null)
+            {
+                System.out.println(client);
+                System.out.println("read message");
+                while(isRunning)
+                {               
+                    EventNotification message = (EventNotification) in.readObject();                    
+                    if (message instanceof EventNotification);
+                      
+                } // while
+            } // if socket == null
+        } // try
+        catch (IOException | ClassNotFoundException ex) 
+        {
+            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch   
+    } // main
+} // class

@@ -1,6 +1,7 @@
 package Client;
 
 import static Client.MyClient.serverAddress;
+import Item.Item;
 import Item.Tab;
 import Message.EventNotification.TabUpdateNfn;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -67,6 +68,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     private Tab tab;
     private ObjectOutputStream out;
+    private ArrayList<Item> newItems = new ArrayList<Item>();
 
     /**
      * Stores the reference to the JTextPane used on the output
