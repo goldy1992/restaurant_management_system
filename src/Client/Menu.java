@@ -126,34 +126,36 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         {
             try 
             {
-                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                InetAddress.getByName(serverAddress.getHostName()),
-                MyClient.generateRequestID(), this.tab);
+                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+                    MyClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(serverAddress.getHostName()),
+                    MyClient.generateRequestID(), this.tab);
                 out.writeObject(newEvt);
                 
                 if (this.newDrinkItems.size() > 0)
                 {
-                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(serverAddress.getHostName()),
-                    MyClient.generateRequestID(), Item.Type.DRINK, this.newDrinkItems);
+                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+                        MyClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(serverAddress.getHostName()),
+                        MyClient.generateRequestID(), Item.Type.DRINK, this.newDrinkItems);
                     out.writeObject(newEvt1);
                 } // if
                 
                 if (this.newFoodItems.size() > 0)
                 {
-                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+                        MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     MyClient.generateRequestID(), Item.Type.FOOD, this.newFoodItems);
                     out.writeObject(newEvt1);
                 } // if                
                 
                 con.close(); 
-            } 
-            catch (SQLException ex) { Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
-            catch (UnknownHostException e){}
-            catch (IOException ex) {
+            } // try
+            catch (SQLException | IOException ex) 
+            { 
                 Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } // catch
             this.dispose();
         } // if
     } // actionPerformed

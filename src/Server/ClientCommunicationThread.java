@@ -178,9 +178,12 @@ public class ClientCommunicationThread implements Runnable
             TabUpdateNfn event = (TabUpdateNfn)message;
             int tableNumber = event.getTab().getTable().getTableNumber();
             MyServer.getTable(tableNumber).updateTab(event.getTab());
-            System.out.println("Tab updated");
-                    
+            System.out.println("Tab updated");              
         } // else if
+        else if (message instanceof NewItemNfn)
+        {
+            
+        }
     }
 
 } // class

@@ -47,7 +47,17 @@ public abstract class Request extends Message
         /**
          *  Requests the current tab from the table server.
          */
-        TAB
+        TAB,
+        
+        /**
+         *  Request registers the bar client.
+         */
+        REGISTER_BAR,
+        
+        /**
+         *  Request registers the kitchen client.
+         */
+        REGISTER_KITCHEN
     }
     
     /**
