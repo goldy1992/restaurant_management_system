@@ -7,8 +7,11 @@ package Message.EventNotification;
 
 import Item.*;
 import Item.Item.Type;
+import Server.Table;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -18,6 +21,9 @@ public class NewItemNfn extends EventNotification
 {
     private final Type type;
     private final ArrayList<Item> items;
+    private final int hours;
+    private final int minutes;
+    private final Table table;
     
     /**
      * @param from
@@ -25,20 +31,29 @@ public class NewItemNfn extends EventNotification
      * @param messageID
      * @param type
      * @param items
+     * @param table
      */
     public NewItemNfn(InetAddress from, 
                       InetAddress to, 
                       String messageID,
                       Type type,
-                      ArrayList<Item> items)
+                      ArrayList<Item> items,
+                      Table table)
     {
         super(from, to, messageID);
         this.type = type;
         this.items = items;
-    }
+        this.table = table;
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        System.out.println(cal.get(Calendar.HOUR_OF_DAY) + ":" 
+                            + cal.get(Calendar.MINUTE));
+        this.hours = cal.get(Calendar.HOUR_OF_DAY);
+        this.minutes = cal.get(Calendar.MINUTE); 
+    } // constructor
     
     /**
-     *
      * @return
      */
     public Type getType()
@@ -49,6 +64,21 @@ public class NewItemNfn extends EventNotification
     public ArrayList<Item> getItems()
     {
         return items;
+    }
+    
+    public int getHours()
+    {
+        return hours;
+    }
+    
+    public int getMinutes()
+    {
+        return minutes;
+    }
+    
+    public Table getTable()
+    {
+        return table;
     }
 }
 

@@ -126,6 +126,16 @@ public class ClientCommunicationThread implements Runnable
             response = new TableStatusResponse((TableStatusRequest)message);
         else if (message instanceof NumOfTablesRequest)
             response = new NumOfTablesResponse((NumOfTablesRequest)message);
+        else if (message instanceof RegisterBarRequest)
+        {
+            response = new RegisterBarResponse((RegisterBarRequest)message);
+            if (MyServer.getBarClient() == null)
+            {
+                RegisterBarResponse rResponse = (RegisterBarResponse)response;
+                MyServer.setBarClient(this);
+                rResponse.setPermission(true);
+            } // if
+        } // else if
         else if (message instanceof TabRequest)
         {
             response = new TabResponse((TabRequest)message);

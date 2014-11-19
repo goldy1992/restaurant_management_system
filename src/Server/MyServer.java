@@ -25,6 +25,7 @@ public class MyServer
     private static final int NUM_OF_TABLES = 44;
     private static final Object LOCK = new Object();  
     private static ArrayList<ClientCommunicationThread> clients;
+    private static ClientCommunicationThread barClient = null;
     private static Table[] tables;
     
     /**
@@ -144,5 +145,15 @@ public class MyServer
     public static Table[] getTables()
     {
         return tables;
+    }
+    
+    public static ClientCommunicationThread getBarClient()
+    {
+        return barClient;
+    }
+    
+    public static void setBarClient(ClientCommunicationThread client)
+    {
+        barClient = client;
     }
 } // MySocket class

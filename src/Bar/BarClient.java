@@ -6,6 +6,8 @@
 package Bar;
 
 import Message.EventNotification.EventNotification;
+import Message.Message;
+import Message.Response.*;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,6 +23,13 @@ import java.util.logging.Logger;
  */
 public class BarClient implements Runnable
 {
+    private final Thread thread;
+    
+    public BarClient()
+    {
+        this.thread = new Thread(this);
+    } // constructor
+    
     /**
      *
      */
@@ -48,13 +57,14 @@ public class BarClient implements Runnable
        
        try
        {
-        serverAddress = InetAddress.getByName(null);
-        serverPort = MyServer.getLowBoundPortRange();
-        client = new Socket(serverAddress, serverPort);
-        in = new ObjectInputStream(client.getInputStream());
-        out = new ObjectOutputStream(client.getOutputStream());
+            serverAddress = InetAddress.getByName(null);
+            serverPort = MyServer.getLowBoundPortRange();
+            client = new Socket(serverAddress, serverPort);
+            in = new ObjectInputStream(client.getInputStream());
+            out = new ObjectOutputStream(client.getOutputStream());
         
-        //BarClient incomeThread = new BarClient(); EDIT THIS
+            BarClient incomeThread = new BarClient();
+            incomeThread.getThread().start();
        }
        catch(IOException ex)
        {
@@ -73,9 +83,15 @@ public class BarClient implements Runnable
                 System.out.println("read message");
                 while(isRunning)
                 {               
-                    EventNotification message = (EventNotification) in.readObject();                    
-                    if (message instanceof EventNotification);
-                      
+                    Message message = (Message) in.readObject();                    
+                    if (message instanceof EventNotification);  
+                    else if (message instanceof Response)
+                    {
+                        if (message instanceof RegisterBarResponse)
+                        {
+                            
+                        } // if
+                    } // else if
                 } // while
             } // if socket == null
         }
@@ -85,4 +101,23 @@ public class BarClient implements Runnable
         } // catch
         
     } // run
+    
+    /**
+     *
+     * @return
+     */
+    public Thread getThread()
+    {
+        return thread;
+    }
+    
+    public static boolean getRunning()
+    {
+        return isRunning;
+    }
+    
+    public static void setRunning(boolean running)
+    {
+        isRunning = running;
+    } // setRunning
 } // class

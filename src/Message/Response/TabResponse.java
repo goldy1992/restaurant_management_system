@@ -51,7 +51,7 @@ public class TabResponse extends Response
     public void onReceiving() 
     {
         System.out.println("Executing TabResponse's onreceiving");
-       synchronized(MyClient.selectTable.tabLock)
+        synchronized(MyClient.selectTable.tabLock)
         {
               MyClient.selectTable.setTab(currentTab);
         MyClient.selectTable.setTabReceived(true);      

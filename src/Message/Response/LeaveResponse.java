@@ -13,7 +13,7 @@ import Message.Request.Request;
  */
 public class LeaveResponse extends Response
 {
-    boolean permissionGranted = true;
+
     
     /**
      *
@@ -31,7 +31,7 @@ public class LeaveResponse extends Response
     @Override
     public void parse()
     {
-        permissionGranted = true;
+
     }
 
 

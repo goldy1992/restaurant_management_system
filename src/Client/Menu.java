@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -137,7 +136,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
-                        MyClient.generateRequestID(), Item.Type.DRINK, this.newDrinkItems);
+                        MyClient.generateRequestID(), 
+                        Item.Type.DRINK, 
+                        this.newDrinkItems,
+                        tab.getTable());
                     out.writeObject(newEvt1);
                 } // if
                 
@@ -145,8 +147,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(serverAddress.getHostName()),
-                    MyClient.generateRequestID(), Item.Type.FOOD, this.newFoodItems);
+                        InetAddress.getByName(serverAddress.getHostName()),
+                        MyClient.generateRequestID(), 
+                        Item.Type.FOOD, 
+                        this.newFoodItems,
+                        tab.getTable());
                     out.writeObject(newEvt1);
                 } // if                
                 
