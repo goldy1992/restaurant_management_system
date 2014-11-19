@@ -331,8 +331,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     @SuppressWarnings("empty-statement")
     public void actionPerformed(ActionEvent e) 
     {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
         for (int i = 0; i < tableButtons.length; i++)
         {
             if (e.getSource() == tableButtons[i])
@@ -402,6 +400,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     menu.setEnabled(true);
                     menu.setModal(true);
                     menu.setVisible(true);
+                    this.tabReceived = false;
                 
                     System.out.println("show");
 
