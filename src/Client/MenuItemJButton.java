@@ -38,8 +38,7 @@ public class MenuItemJButton extends JButton implements ActionListener
             case "FOOD":
                 this.type = Type.FOOD; break;
             default:
-                this.type = Type.DRINK; break;
-            
+                this.type = Type.DRINK; break;         
         } // switch
         
     } // constructor 
@@ -47,20 +46,19 @@ public class MenuItemJButton extends JButton implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
+        Menu menu = MyClient.selectTable.menu;
+        Tab currentTab = menu.getTab();
 
-
-
-        Tab currentTab =  MyClient.selectTable.menu.getTab();
+        // CODE TO ADD TO TAB SHOULD BE PUT HERE
         Item newItem = new Item(this.id, this.getText(), this.price, this.type );
         currentTab.addItem(newItem);
+        menu.addNewItem(newItem);
         
         System.out.println(currentTab);
-        // CODE TO ADD TO TAB SHOULD BE PUT HERE
         
         
         // CODE TO ADD SCREEN
-
-        MyClient.selectTable.menu.outputTextPane.setText(currentTab.toString());
+        menu.outputTextPane.setText(currentTab.toString());
     }
     
     public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type)

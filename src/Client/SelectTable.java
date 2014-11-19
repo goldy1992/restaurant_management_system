@@ -41,7 +41,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     private int tableSelected = -1;
     public boolean tabReceived = false;
     private Tab tab;
-    public Object tabLock = new Object();
+    public final Object tabLock = new Object();
     
     /**
      *

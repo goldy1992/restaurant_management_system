@@ -59,17 +59,17 @@ import javax.swing.JTextPane;
  */
 public class Menu extends JDialog implements ActionListener, MouseListener
 {
-    private ArrayList<JComponent> components = new ArrayList<JComponent>();
-    private ArrayList<JButton> buttons = new ArrayList<JButton>();
-    private ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<MenuItemJButton>();
-    private ArrayList<MenuCardPanel> cardPanels = new ArrayList<MenuCardPanel>();
-    private ArrayList<JPanel> panels = new ArrayList<JPanel>();    
-    private JButton SendOrderButton = null;
+    private final ArrayList<JComponent> components = new ArrayList<>();
+    private final ArrayList<JButton> buttons = new ArrayList<>();
+    private final ArrayList<JPanel> panels = new ArrayList<>();  
+    private final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
+    private final Tab tab;
+    private final ObjectOutputStream out;
+    private final ArrayList<Item> newFoodItems = new ArrayList<>();
+    private final ArrayList<Item> newDrinkItems = new ArrayList<>();
     
-    private Tab tab;
-    private ObjectOutputStream out;
-    private ArrayList<Item> newItems = new ArrayList<Item>();
-
+    private ArrayList<MenuCardPanel> cardPanels = new ArrayList<>();
+    private JButton SendOrderButton = null;
     /**
      * Stores the reference to the JTextPane used on the output
      * @see javax.swing.JTextPane
@@ -81,6 +81,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @param parent
      * @param modal
      * @param tab
+     * @param stream
      * @throws java.sql.SQLException
      */
     public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
@@ -516,6 +517,13 @@ System.out.println("pressed");
         
         return newMenu;
     } // makeMenu
-
-
+    
+    public void addNewItem(Item newItem)
+    {
+        if (newItem.type == Item.Type.DRINK)
+            newDrinkItems.add(newItem);
+        else
+            newFoodItems.add(newItem);      
+    } // addNewItem
+    
 } // class
