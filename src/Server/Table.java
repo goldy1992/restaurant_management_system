@@ -124,6 +124,11 @@ public class Table implements Runnable, Serializable
         tableStatus = status;
     }
     
+    public void updateTab(Tab tab)
+    {
+        this.currentTab = tab;
+    }
+    
     @Override
     public void run()
     {

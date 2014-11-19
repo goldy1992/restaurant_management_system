@@ -173,6 +173,14 @@ public class ClientCommunicationThread implements Runnable
                 System.out.println("sent " + i);
             } // for
         } // if
+        else if (message instanceof TabUpdateNfn)
+        {
+            TabUpdateNfn event = (TabUpdateNfn)message;
+            int tableNumber = event.getTab().getTable().getTableNumber();
+            MyServer.getTable(tableNumber).updateTab(event.getTab());
+            System.out.println("Tab updated");
+                    
+        } // else if
     }
 
 } // class

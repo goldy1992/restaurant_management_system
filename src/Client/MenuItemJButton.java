@@ -48,14 +48,13 @@ public class MenuItemJButton extends JButton implements ActionListener
     public void actionPerformed(ActionEvent ae) 
     {
 
-        System.out.println("name: " + this.getText() + ", price: " + this.price 
-                        + ", id: " + this.id + ", type: " + this.type + "\n");
+
 
         Tab currentTab =  MyClient.selectTable.menu.getTab();
         Item newItem = new Item(this.id, this.getText(), this.price, this.type );
         currentTab.addItem(newItem);
         
-
+        System.out.println(currentTab);
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
         
         

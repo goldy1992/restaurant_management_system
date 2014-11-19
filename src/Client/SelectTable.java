@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,8 +8,6 @@
 package Client;
 
 import static Client.MyClient.generateRequestID;
-import static Client.MyClient.getTableStatuses;
-import static Client.MyClient.lock;
 import static Client.MyClient.serverAddress;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -23,11 +22,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -402,8 +397,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                         } // catch
                     } // synchronized
                     
-                    menu = Menu.makeMenu(this, tab);
-                           System.out.println("menu has been made");
+                    menu = Menu.makeMenu(this, tab, out);
+                    System.out.println("menu has been made");
                     menu.setEnabled(true);
                     menu.setModal(true);
                     menu.setVisible(true);

@@ -27,10 +27,10 @@ public class Tab implements Serializable
     @Override
     public String toString()
     {
-        String sToReturn = null;
+        String sToReturn = "";
         for (Item i : items)
             sToReturn += i.getQuantity() + "\t" + i.getName() 
-                        + "\t\t\t" + i.getPrice() + "\n";
+                        + "\t\t\t£" + i.getPrice().doubleValue() + "\n";
         
         return sToReturn;
     } // toString
@@ -38,6 +38,11 @@ public class Tab implements Serializable
     public void addItem(Item newItem)
     {
         items.add(newItem);
+    }
+    
+    public Table getTable()
+    {
+        return parent;
     }
     
 } // class

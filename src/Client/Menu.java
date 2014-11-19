@@ -1,13 +1,20 @@
 package Client;
 
+import static Client.MyClient.serverAddress;
 import Item.Tab;
+import Message.EventNotification.TabUpdateNfn;
+import Message.EventNotification.TableStatusEvtNfn;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -59,6 +66,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private JButton SendOrderButton = null;
     
     private Tab tab;
+    private ObjectOutputStream out;
 
     /**
      * Stores the reference to the JTextPane used on the output
@@ -73,10 +81,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @param tab
      * @throws java.sql.SQLException
      */
-    public Menu(java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
+    public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
         super(parent, modal);
         this.tab = tab;
+        this.out = stream;
      
         // initialise the connection to the database
         con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
@@ -114,8 +123,19 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     {
         if (ae.getSource() == SendOrderButton)
         {
-            try { con.close(); } 
+            try 
+            {
+                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(serverAddress.getHostName()),
+                MyClient.generateRequestID(), this.tab);
+                out.writeObject(newEvt);
+                con.close(); 
+            } 
             catch (SQLException ex) { Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
+            catch (UnknownHostException e){}
+            catch (IOException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.dispose();
         } // if
     } // actionPerformed
@@ -451,8 +471,7 @@ System.out.println("pressed");
 
     /**
      * Should be called when the screen detects a click that is not on an item
-     */
-    
+     */ 
     public void switchToParentCard()
     {
         if(this.currentCard.hasParent())
@@ -478,13 +497,13 @@ System.out.println("pressed");
      * @param tab
      * @return 
     */
-    public static Menu makeMenu(JFrame parent, Tab tab)
+    public static Menu makeMenu(JFrame parent, Tab tab, ObjectOutputStream out)
     {
         Menu newMenu = null;
         try 
         {
 
-            newMenu = new Menu(parent, true, tab);
+            newMenu = new Menu(parent, true, tab, out);
             newMenu.addMouseListener(newMenu);
 
         } // try
