@@ -7,6 +7,7 @@ package Message.Response;
 
 import Bar.BarClient;
 import Message.Request.Request;
+import Server.MyServer;
 
 /**
  *
@@ -24,6 +25,11 @@ public class RegisterBarResponse extends Response
     @Override
     public void parse() 
     {
+        
+        if(hasParsedResponse())
+            return;
+        permissionGranted = (MyServer.getBarClient() == null);
+        
     }
 
     @Override

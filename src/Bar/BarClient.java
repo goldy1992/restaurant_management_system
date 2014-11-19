@@ -5,7 +5,7 @@
  */
 package Bar;
 
-import Message.EventNotification.EventNotification;
+import Message.EventNotification.*;
 import Message.Message;
 import Message.Response.*;
 import Server.MyServer;
@@ -84,12 +84,20 @@ public class BarClient implements Runnable
                 while(isRunning)
                 {               
                     Message message = (Message) in.readObject();                    
-                    if (message instanceof EventNotification);  
+                    if (message instanceof EventNotification)
+                    {
+                        if (message instanceof NewItemNfn)
+                        {
+                            NewItemNfn newItemMessage = (NewItemNfn)message;
+                            System.out.println(newItemMessage + "\n");
+                        } // if
+                    } // if
                     else if (message instanceof Response)
                     {
                         if (message instanceof RegisterBarResponse)
                         {
-                            
+                            RegisterBarResponse rResponse = (RegisterBarResponse)message;
+                            rResponse.onReceiving();
                         } // if
                     } // else if
                 } // while

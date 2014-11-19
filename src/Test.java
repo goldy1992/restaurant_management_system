@@ -17,9 +17,6 @@ public class Test
 {
     public static void main(String[] args)
     {
-        
-
-
         Thread serverThread = new Thread(){
         @Override
         public void run()
@@ -38,6 +35,29 @@ public class Test
         {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        Thread barClient = new Thread(){
+        @Override
+        public void run()
+        {
+            Bar.BarClient.main(null);
+            
+        }// run
+        };
+        barClient.start(); 
+        
+        
+        try
+        {
+            Thread.sleep(2000);
+        } 
+        catch (InterruptedException ex) 
+        {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         
         Thread client = new Thread(){
         @Override

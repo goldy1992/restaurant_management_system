@@ -80,6 +80,18 @@ public class NewItemNfn extends EventNotification
     {
         return table;
     }
+    
+    
+    @Override
+    public String toString()
+    {
+        String sToReturn = "Table " + table.getTableNumber() + "\n";
+        sToReturn += "Time: " + getHours() + ":" + getMinutes() + "\n";
+        
+        for(Item i : items)
+            sToReturn += i;
+        return sToReturn;
+    }
 }
 
     

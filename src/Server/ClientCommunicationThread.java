@@ -129,12 +129,16 @@ public class ClientCommunicationThread implements Runnable
         else if (message instanceof RegisterBarRequest)
         {
             response = new RegisterBarResponse((RegisterBarRequest)message);
-            if (MyServer.getBarClient() == null)
+
+            RegisterBarResponse rResponse = (RegisterBarResponse)response;
+            rResponse.parse();
+                
+            if (rResponse.hasPermission())
             {
-                RegisterBarResponse rResponse = (RegisterBarResponse)response;
                 MyServer.setBarClient(this);
-                rResponse.setPermission(true);
-            } // if
+                System.out.println("bar registered");
+            }
+            response = rResponse;
         } // else if
         else if (message instanceof TabRequest)
         {
@@ -192,8 +196,20 @@ public class ClientCommunicationThread implements Runnable
         } // else if
         else if (message instanceof NewItemNfn)
         {
-            
-        }
+            if (MyServer.getBarClient() != null)
+            {
+                NewItemNfn event = (NewItemNfn)message;
+                ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
+                NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
+                        MyServer.getBarClient().getSocket().getInetAddress(),
+                        event.getMessageID(),
+                        event.getType(),
+                        event.getItems(),
+                        event.getTable());
+                otherClientOut.writeObject(msgToSend);
+                System.out.println("sent to bar");
+            } // if
+        } // else if
     }
 
 } // class
