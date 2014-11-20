@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Bar;
+package Kitchen;
 
 import Item.Item;
-import Message.EventNotification.*;
+import Message.EventNotification.EventNotification;
+import Message.EventNotification.NewItemNfn;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
-import Message.Response.*;
+import Message.Response.RegisterClientResponse;
+import Message.Response.Response;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,11 +26,13 @@ import java.util.logging.Logger;
  *
  * @author mbbx9mg3
  */
-public class BarClient implements Runnable
+public class KitchenClient implements Runnable
 {
+
+
     private final Thread thread;
     
-    public BarClient()
+    public KitchenClient()
     {
         this.thread = new Thread(this);
     } // constructor
@@ -66,21 +70,20 @@ public class BarClient implements Runnable
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
         
-            BarClient incomeThread = new BarClient();
+            KitchenClient incomeThread = new KitchenClient();
             incomeThread.getThread().start();
             
-            RegisterClientRequest rBarRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+            RegisterClientRequest rKitchenRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  Message.generateRequestID(),
-                                                 Request.RequestType.REGISTER_BAR);
-            
-            out.writeObject(rBarRequest);
+                                                 Request.RequestType.REGISTER_BAR);         
+            out.writeObject(rKitchenRequest);
             
             
        }
        catch(IOException ex)
        {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);         
+            Logger.getLogger(KitchenClient.class.getName()).log(Level.SEVERE, null, ex);         
        }
     } // main
     
@@ -117,7 +120,7 @@ public class BarClient implements Runnable
                         if (message instanceof NewItemNfn)
                         {
                             NewItemNfn newItemMessage = (NewItemNfn)message;
-                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + BarClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
+                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + KitchenClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
                             for (Item i : newItemMessage.getItems())
                                 System.out.println(i.getQuantity() + "\t" + i.getName());
                             
@@ -137,7 +140,7 @@ public class BarClient implements Runnable
         }
         catch (IOException | ClassNotFoundException ex) 
         {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KitchenClient.class.getName()).log(Level.SEVERE, null, ex);
         } // catch
         
     } // run
@@ -160,4 +163,8 @@ public class BarClient implements Runnable
     {
         isRunning = running;
     } // setRunning
+    
 } // class
+
+    
+

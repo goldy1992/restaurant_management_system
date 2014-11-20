@@ -54,7 +54,7 @@ public class MenuItemJButton extends JButton implements ActionListener
         currentTab.addItem(newItem);
         menu.addNewItem(newItem);
         
-        System.out.println(currentTab);
+        System.out.println(newItem);
         
         
         // CODE TO ADD SCREEN

@@ -47,7 +47,16 @@ public class Test
         };
         barClient.start(); 
         
-        
+        Thread kitchenClient = new Thread(){
+        @Override
+        public void run()
+        {
+            Kitchen.KitchenClient.main(null);
+            
+        }// run
+        };
+        kitchenClient.start(); 
+           
         try
         {
             Thread.sleep(2000);
@@ -75,10 +84,6 @@ public class Test
         }// run
         };
         client.start();
-        
-        
-        
-        
-    } // main
-    
-}
+             
+    } // main   
+} // class

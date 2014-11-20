@@ -26,6 +26,7 @@ public class MyServer
     private static final Object LOCK = new Object();  
     private static ArrayList<ClientCommunicationThread> clients;
     private static ClientCommunicationThread barClient = null;
+    private static ClientCommunicationThread kitchenClient = null;
     private static Table[] tables;
     
     /**
@@ -41,7 +42,6 @@ public class MyServer
         for (int i = 1; i <= NUM_OF_TABLES; i++)
             tables[i] = Table.createTable(i);
             //new Thread(tables[i]).start();
-        
         
         ServerSocket mySocket;
         boolean socketListening;
@@ -155,5 +155,15 @@ public class MyServer
     public static void setBarClient(ClientCommunicationThread client)
     {
         barClient = client;
+    }
+    
+    public static ClientCommunicationThread getKitchenClient()
+    {
+        return kitchenClient;
+    }
+    
+    public static void setKitchenClient(ClientCommunicationThread client)
+    {
+        kitchenClient = client;
     }
 } // MySocket class

@@ -129,6 +129,7 @@ public class Item implements Serializable
     {
         return "Food\nName: " + name + 
                 "\nid: " + id + 
+                "\nType " + type +
                 "\nprice " + price +
                 "\nquantity " + quantity +
                 "\nmessage " + message;

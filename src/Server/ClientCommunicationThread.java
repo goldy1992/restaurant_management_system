@@ -6,6 +6,7 @@
 
 package Server;
 
+import Item.*;
 import Message.*;
 import Message.Request.*;
 import Message.EventNotification.*;
@@ -126,11 +127,11 @@ public class ClientCommunicationThread implements Runnable
             response = new TableStatusResponse((TableStatusRequest)message);
         else if (message instanceof NumOfTablesRequest)
             response = new NumOfTablesResponse((NumOfTablesRequest)message);
-        else if (message instanceof RegisterBarRequest)
+        else if (message instanceof RegisterClientRequest)
         {
-            response = new RegisterBarResponse((RegisterBarRequest)message);
+            response = new RegisterClientResponse((RegisterClientRequest)message);
 
-            RegisterBarResponse rResponse = (RegisterBarResponse)response;
+            RegisterClientResponse rResponse = (RegisterClientResponse)response;
             rResponse.parse();
                 
             if (rResponse.hasPermission())
@@ -140,7 +141,7 @@ public class ClientCommunicationThread implements Runnable
             }
             response = rResponse;
             
-            if (response instanceof RegisterBarResponse)
+            if (response instanceof RegisterClientResponse)
                 System.out.println("response registered correctly");
         } // else if
         else if (message instanceof TabRequest)
@@ -177,6 +178,7 @@ public class ClientCommunicationThread implements Runnable
             System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
             System.out.println("number of clients to send to: " + MyServer.getClients().size());
+
             for(int i =0; i < MyServer.getClients().size(); i++)
             {
                 ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
@@ -199,9 +201,10 @@ public class ClientCommunicationThread implements Runnable
         } // else if
         else if (message instanceof NewItemNfn)
         {
-            if (MyServer.getBarClient() != null)
+            NewItemNfn event = (NewItemNfn)message;
+            if (event.getType() == Item.Type.DRINK && MyServer.getBarClient() != null)
             {
-                NewItemNfn event = (NewItemNfn)message;
+
                 ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                         MyServer.getBarClient().getSocket().getInetAddress(),
@@ -212,6 +215,18 @@ public class ClientCommunicationThread implements Runnable
                 otherClientOut.writeObject(msgToSend);
                 System.out.println("sent to bar");
             } // if
+            else
+            {
+                ObjectOutputStream otherClientOut = MyServer.getKitchenClient().getOutStream();
+                NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
+                        MyServer.getKitchenClient().getSocket().getInetAddress(),
+                        event.getMessageID(),
+                        event.getType(),
+                        event.getItems(),
+                        event.getTable());
+                otherClientOut.writeObject(msgToSend);
+                System.out.println("sent to bar");
+            } // else
         } // else if
     }
 

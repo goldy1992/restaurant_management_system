@@ -13,11 +13,11 @@ import Server.MyServer;
  *
  * @author mbbx9mg3
  */
-public class RegisterBarResponse extends Response
+public class RegisterClientResponse extends Response
 {
     private boolean permissionGranted;
     
-    public RegisterBarResponse(Request request)
+    public RegisterClientResponse(Request request)
     {
         super(request);
     } // constructor

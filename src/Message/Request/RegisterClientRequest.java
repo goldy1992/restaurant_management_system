@@ -11,7 +11,7 @@ import java.net.InetAddress;
  *
  * @author mbbx9mg3
  */
-public class RegisterBarRequest extends Request
+public class RegisterClientRequest extends Request
 {
     /**
      *
@@ -20,7 +20,7 @@ public class RegisterBarRequest extends Request
      * @param messageID
      * @param type
      */
-    public RegisterBarRequest(InetAddress from, 
+    public RegisterClientRequest(InetAddress from, 
                               InetAddress to, 
                               String messageID, 
                               Request.RequestType type)
