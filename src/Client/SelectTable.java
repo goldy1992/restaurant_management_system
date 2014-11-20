@@ -34,7 +34,6 @@ import javax.swing.JOptionPane;
  */
 public class SelectTable extends javax.swing.JFrame implements ActionListener 
 {
-   
     private final ObjectOutputStream out;
     private final JButton[] tableButtons;
     private ArrayList<Table.TableStatus> tableStatuses;
@@ -42,25 +41,12 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     public boolean tabReceived = false;
     private Tab tab;
     public final Object tabLock = new Object();
-    
-    /**
-     *
-     */
     public JButton openTable = new JButton("Open Table");
-
-    /**
-     *
-     */
     public JButton moveTable = new JButton("Move Table");
+    public Menu menu; // the menu GUI
     
     /**
-     *
-     */
-    public Menu menu;
-    
-    /**
-     *
-     * @return
+     * @return The table currently selected.
      */
     public int getTableSelected()
     {
@@ -69,17 +55,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     
     /**
      *
-     * @param table
-     */
-    public void setTableSelected(int table)
-    {
-        tableSelected = table;
-    }
-    
-    /**
-     *
-     * @param i
-     * @return
+     * @param i the number of the table you want to get the status of.
+     * @return The status of table "i"
      */
     public Table.TableStatus getTableStatus(int i)
     {
@@ -90,12 +67,20 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     }
     
     /**
-     *
      * @return
      */
     public JButton[] getTableButtons()
     {
         return tableButtons;
+    }
+    
+    /**
+     * Mutator method to select the current table.
+     * @param table the table to be selected.
+     */
+    public void setTableSelected(int table)
+    {
+        tableSelected = table;
     }
     
     /**
@@ -135,6 +120,9 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     {
         this.tab = tab;
     }
+    
+    
+    
     
     /**
      * Creates new form SelectTable
@@ -332,28 +320,24 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     public void actionPerformed(ActionEvent e) 
     {
         for (int i = 0; i < tableButtons.length; i++)
-        {
             if (e.getSource() == tableButtons[i])
             {
                 OutputLabel.setText("<html><b>Would you like to open Table " + i + "?</b></html>");
                 setTableSelected(i);
                             System.out.println("select table " +  getTableSelected());
-            }
+            } // if
 
-        } // for
         
         if (e.getSource() == openTable)
         {
             System.out.println("algo");
             if ( tableSelected == -1)
-            {
                 OutputLabel.setText("You have no table selected yet!");
-            }
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
             {
                 OutputLabel.setText("Table " + tableSelected + " in use");
                 System.out.println("called in use");
-            }
+            } // else if
             else
             {
                 try 
@@ -365,11 +349,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.writeObject(newEvt);
                     
-                    
-                    System.out.println("evt nfc set and sent for table " + tableSelected);
-                    /* open the table menu but send a message to other clients to say that it is now occupied */
-                    
-                    
+                    /* Request the tab of this table from the server */
                     TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
                         generateRequestID(), 
@@ -379,15 +359,12 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     
                     System.out.println("waiting for reply, in while loop");
                    
-
                     synchronized(tabLock)
                     {
                         try
                         {
                             while(this.tabReceived == false)
-                            {
                                 tabLock.wait();
-                            } // while
                         }
                         catch (InterruptedException ex) 
                         {

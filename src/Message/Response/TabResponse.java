@@ -53,12 +53,12 @@ public class TabResponse extends Response
         System.out.println("Executing TabResponse's onreceiving");
         synchronized(MyClient.selectTable.tabLock)
         {
-              MyClient.selectTable.setTab(currentTab);
-        MyClient.selectTable.setTabReceived(true);      
+            MyClient.selectTable.setTab(currentTab);
+            MyClient.selectTable.setTabReceived(true);      
             MyClient.selectTable.tabLock.notifyAll();
-        } 
+        } // synchronized
 
         System.out.println("tab received: " + MyClient.selectTable.tabReceived);
-    }
+    } // onReceiving
     
-}
+} // class

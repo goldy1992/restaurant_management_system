@@ -32,85 +32,43 @@ import java.util.logging.Logger;
 public class MyClient implements Runnable
 {
 
-    /**
-     *
-     */
     public static InetAddress serverAddress; 
-
-    /**
-     *
-     */
     public static int serverPort;  
-
-    /**
-     *
-     */
     public static Socket client;
-    
-    private static int numberOfTables = -1;
-
-    /**
-     *
-     */
-    public static ArrayList<Table.TableStatus> tableStatuses = null;
-    
-    /**
-     *
-     */
-    public static SelectTable selectTable;
-
-    /**
-     *
-     */
+    public static SelectTable selectTable; // selectTableGUI
     public static MyClient responseThread;
+    /**
+     * An object used to ensure tasks are performed asynchronously. 
+     */
+    public static final Object lock = new Object();
+
+    private static ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
+    private static int numberOfTables = -1;
     private static ObjectOutputStream out = null;
-
-    /**
-     *
-     */
-    public boolean running = true;
-
-    /**
-     *
-     */
-    public static Object lock = new Object();
-
-    /**
-     *
-     */
-    public final Thread thread;
     
-    /**
-     *
-     */
+    // object classes
+    public boolean running = true;
+    public final Thread thread;
+
+    
+    
     public MyClient()
     {
         thread = new Thread(this);
-    }
+    } // constructor
     
-
-   
-    /**
-     *
-     * @return
-     */
-    public static ArrayList<Table.TableStatus> getTableStatuses()
-   {
-        return tableStatuses;    
-   }
    
     /**
      *
      * @param x
      */
-    public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
+   public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
    {
         tableStatuses = x;    
    }
    
     /**
-     *
-     * @return
+     * @return The number of tables in use.
      */
     public static int getNumTables()
    {
@@ -118,36 +76,34 @@ public class MyClient implements Runnable
    }
    
     /**
-     *
-     * @param x
+     * A mutator method to set the number of tables.
+     * @param numTables the number of the tables to be run
      */
-    public static void setNumTables(int x)
+    public static void setNumTables(int numTables)
    {
-        numberOfTables = x;   
+        numberOfTables = numTables;   
    }
    
     /**
-     *
-     * @return
+     * @return The output stream of the client.
      */
     public ObjectOutputStream getOutputStream()
    {
        return out;
    }
-   
+    
     /**
-     *
+     * @param args
+     * @throws InterruptedException
      */
-    public static void initialiseProgram()
-   {
+    public static void main(String[] args) throws InterruptedException
+    {
         try
         {
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
-            //System.out.println(serverPort);
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(MyClient.client.getOutputStream());
-            //System.out.println(client);
             responseThread = new MyClient();
             responseThread.thread.start();
             
@@ -178,32 +134,16 @@ public class MyClient implements Runnable
         {
             System.out.println("Could not connect to server");
         } // catch
-        
-
-   }
-    
-    /**
-     *
-     * @param args
-     * @throws InterruptedException
-     */
-    public static void main(String[] args) throws InterruptedException
-    {
-        initialiseProgram();
         System.out.println("pre while");
         
         
         synchronized(lock)
         {
-            while(getTableStatuses() == null)
+            while(tableStatuses == null)
             {
-                try
-                {
-                    lock.wait();
-                }
+                try { lock.wait(); }
                 catch (InterruptedException e) 
-                {
-                    // treat interrupt as exit request
+                { // treat interrupt as exit request
                     break;
                 }
             } // while
@@ -211,44 +151,40 @@ public class MyClient implements Runnable
         } // synchronized
         System.out.println("post while");
         
-        selectTable = new SelectTable(getTableStatuses(), out);
-            selectTable.setVisible(true);
+        selectTable = new SelectTable(tableStatuses, out);
+        selectTable.setVisible(true);
 
         
     } // main
     
     /**
-     *
+     * The run method that controls the listener that receives incoming messages
+     * from the rest of the System.
      */
     @Override
     public void run()
-    {
-        
+    {       
         try 
         {   
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             while(running)
             {
-
                 Message response = (Message)in.readObject();
                 
                 if (response instanceof Response)
                 {
-                    System.out.println("received response from request");
                     Response resp = (Response) response;
-                    resp.onReceiving();
-                    
-                                            
+                    resp.onReceiving();                                         
                 } // if response
                 else if(response instanceof EventNotification)
                 {
                     if (response instanceof TableStatusEvtNfn)
                     {
                         TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
-                        System.out.println("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
+                        //System.out.println("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
                         selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
-                         System.out.println("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
-                    }
+                        // System.out.println("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
+                    } // inner if
                 } // evt ntfn if
             } // while running
         } // try

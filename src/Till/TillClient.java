@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Bar;
+package Till;
 
 import Item.Item;
-import Message.EventNotification.*;
 import Message.Message;
-import Message.Request.RegisterClientRequest;
-import Message.Request.Request;
+import Message.Request.*;
+import Message.EventNotification.*;
 import Message.Response.*;
 import Server.MyServer;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,29 +24,20 @@ import java.util.logging.Logger;
  *
  * @author mbbx9mg3
  */
-public class BarClient implements Runnable
+public class TillClient implements Runnable
 {
-    private final Thread thread;
+    private final Thread responseThread;
     
-    public BarClient()
+    public TillClient()
     {
-        this.thread = new Thread(this);
+        this.responseThread = new Thread(this);
     } // constructor
     
-    /**
-     *
-     */
-    private static InetAddress serverAddress;
-    /**
-     *
-     */
-    private static int serverPort;  
 
-    /**
-     *
-     */
+    private static InetAddress serverAddress;
+    private static int serverPort;  
     private static Socket client; 
-    
+ 
     private static ObjectInputStream in;
     private static ObjectOutputStream out;
     
@@ -56,8 +47,7 @@ public class BarClient implements Runnable
      * @param args the command line arguments
      */
     public static void main(String[] args)  
-    {
-       
+    {   
        try
        {
             serverAddress = InetAddress.getByName(null);
@@ -66,21 +56,37 @@ public class BarClient implements Runnable
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
         
-            BarClient incomeThread = new BarClient();
+            TillClient incomeThread = new TillClient();
             incomeThread.getThread().start();
             
-            RegisterClientRequest rBarRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                        if (client == null)
+                System.exit(0);
+
+            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  Message.generateRequestID(),
-                                                 Request.RequestType.REGISTER_BAR);
+                                                 Request.RequestType.NUM_OF_TABLES);
+            out.writeObject(nTablesRequest);
+            //System.out.println("sent num table request");
+
+            ArrayList<Integer> tables = new ArrayList<>();
+            // add null because there's no table zero
+            tables.add(null);
+            for(int  i = 1 ; i <= MyServer.getNumOfTables(); i++ ) 
+                tables.add(i);
             
-            out.writeObject(rBarRequest);
+            TableStatusRequest rKitchenRequest = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                InetAddress.getByName(serverAddress.getHostName()),
+                                                Message.generateRequestID(),
+                                                Request.RequestType.REGISTER_KITCHEN,
+                                                tables);         
+            out.writeObject(rKitchenRequest);
             
             
        }
        catch(IOException ex)
        {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);         
+            Logger.getLogger(TillClient.class.getName()).log(Level.SEVERE, null, ex);         
        }
     } // main
     
@@ -117,7 +123,7 @@ public class BarClient implements Runnable
                         if (message instanceof NewItemNfn)
                         {
                             NewItemNfn newItemMessage = (NewItemNfn)message;
-                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + BarClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
+                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + TillClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
                             for (Item i : newItemMessage.getItems())
                                 System.out.println(i.getQuantity() + "\t" + i.getName());
                             
@@ -137,7 +143,7 @@ public class BarClient implements Runnable
         }
         catch (IOException | ClassNotFoundException ex) 
         {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TillClient.class.getName()).log(Level.SEVERE, null, ex);
         } // catch
         
     } // run
@@ -148,7 +154,7 @@ public class BarClient implements Runnable
      */
     public Thread getThread()
     {
-        return thread;
+        return responseThread;
     }
     
     public static boolean getRunning()
@@ -160,4 +166,8 @@ public class BarClient implements Runnable
     {
         isRunning = running;
     } // setRunning
+    
 } // class
+
+    
+

@@ -21,9 +21,9 @@ public class RegisterClientRequest extends Request
      * @param type
      */
     public RegisterClientRequest(InetAddress from, 
-                              InetAddress to, 
-                              String messageID, 
-                              Request.RequestType type)
+                                InetAddress to, 
+                                String messageID, 
+                                Request.RequestType type)
     {
         super(from, to, messageID, type);
     } // constructor

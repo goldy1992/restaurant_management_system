@@ -134,7 +134,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 if (this.newDrinkItems.size() > 0)
                 {
-                    System.out.println("sending bar message");
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),

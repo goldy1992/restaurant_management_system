@@ -76,7 +76,7 @@ public class KitchenClient implements Runnable
             RegisterClientRequest rKitchenRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  Message.generateRequestID(),
-                                                 Request.RequestType.REGISTER_BAR);         
+                                                 Request.RequestType.REGISTER_KITCHEN);         
             out.writeObject(rKitchenRequest);
             
             
@@ -90,7 +90,7 @@ public class KitchenClient implements Runnable
     private static String sortTimeSyntax(int time)
     {        
         if (time == 0) return "00";
-        else if (time > 0 && time < 9)
+        else if (time > 0 && time <= 9)
             return "0" + time;
         else return time + "";
         

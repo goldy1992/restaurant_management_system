@@ -6,7 +6,9 @@
 package Message.Response;
 
 import Bar.BarClient;
+import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
+import static Message.Request.Request.RequestType.REGISTER_BAR;
 import Server.MyServer;
 
 /**
@@ -29,8 +31,11 @@ public class RegisterClientResponse extends Response
         if(hasParsedResponse())
             return;
         
+        RegisterClientRequest req = (RegisterClientRequest)getRequest();
         System.out.println("not already parsed");
+        if (req.type == REGISTER_BAR)
         permissionGranted = (MyServer.getBarClient() == null);
+        else permissionGranted = (MyServer.getKitchenClient() == null);
         System.out.println("permission granted: " + permissionGranted + "\n" + MyServer.getBarClient());
         
         this.parsedResponse = true;

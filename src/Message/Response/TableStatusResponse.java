@@ -70,6 +70,7 @@ public class TableStatusResponse extends Response
         parsedResponse = true;
     }
     
+    @Override
     public String toString()
     {
         String x = super.toString() + "SUBTYPE: Table status\nTABLES: "; 
@@ -78,7 +79,7 @@ public class TableStatusResponse extends Response
         x+= "\n";
         
         return x;
-    }
+    } // to String
 
     @Override
     public void onReceiving() 

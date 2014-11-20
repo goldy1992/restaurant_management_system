@@ -10,6 +10,7 @@ import Item.*;
 import Message.*;
 import Message.Request.*;
 import Message.EventNotification.*;
+import static Message.Request.Request.RequestType.REGISTER_BAR;
 import Message.Response.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,12 +64,12 @@ public class ClientCommunicationThread implements Runnable
                 while(isRunning)
                 {
                     Message message = (Message) in.readObject();
-                         System.out.println("read message");       
+                         //System.out.println("read message");       
                     if (message instanceof Request)
                         parseRequest((Request)message);                  
                     else if(message instanceof EventNotification)
                         parseEventNotification((EventNotification)message);
-                    System.out.println("returned");
+                    //System.out.println("returned");
                 } // while
                 
             } // try            // try            // try            // try           
@@ -136,30 +137,30 @@ public class ClientCommunicationThread implements Runnable
                 
             if (rResponse.hasPermission())
             {
-                MyServer.setBarClient(this);
-                System.out.println("bar registered");
+                if (message.type == REGISTER_BAR) MyServer.setBarClient(this); else MyServer.setKitchenClient(this);
+                //System.out.println("bar registered");
             }
             response = rResponse;
             
-            if (response instanceof RegisterClientResponse)
-                System.out.println("response registered correctly");
+            //if (response instanceof RegisterClientResponse)
+                //System.out.println("response registered correctly");
         } // else if
         else if (message instanceof TabRequest)
         {
             response = new TabResponse((TabRequest)message);
-            System.out.println("received Tab Request\n");
+            //System.out.println("received Tab Request\n");
         }
         else if (message instanceof LeaveRequest)
         {
             response = new LeaveResponse((LeaveRequest)message);
             MyServer.removeClient(this);
-            System.out.println("client size " + MyServer.getClients().size());
+            //System.out.println("client size " + MyServer.getClients().size());
             isRunning = false;
         }
         if (response == null)
             return;
         
-        System.out.println("reponse\n" + message);
+        //System.out.println("reponse\n" + message);
         response.parse();
         out.writeObject(response);        
     }
@@ -172,12 +173,12 @@ public class ClientCommunicationThread implements Runnable
             int tableNumber = event.getTableNumber();
             Table.TableStatus status = event.getTableStatus();
                            
-            System.out.println("requested table " + tableNumber);
+            //System.out.println("requested table " + tableNumber);
             MyServer.getTable(tableNumber).setTableStatus(status);
                             
-            System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+            //System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
-            System.out.println("number of clients to send to: " + MyServer.getClients().size());
+            //System.out.println("number of clients to send to: " + MyServer.getClients().size());
 
             for(int i =0; i < MyServer.getClients().size(); i++)
             {
@@ -189,7 +190,7 @@ public class ClientCommunicationThread implements Runnable
                         status);
                                 
                 otherClientOut.writeObject(msgToSend);
-                System.out.println("sent " + i);
+                //System.out.println("sent " + i);
             } // for
         } // if
         else if (message instanceof TabUpdateNfn)
@@ -197,7 +198,7 @@ public class ClientCommunicationThread implements Runnable
             TabUpdateNfn event = (TabUpdateNfn)message;
             int tableNumber = event.getTab().getTable().getTableNumber();
             MyServer.getTable(tableNumber).updateTab(event.getTab());
-            System.out.println("Tab updated");              
+            //System.out.println("Tab updated");              
         } // else if
         else if (message instanceof NewItemNfn)
         {
@@ -213,10 +214,11 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.writeObject(msgToSend);
-                System.out.println("sent to bar");
+                //System.out.println("sent to bar");
             } // if
-            else
-            {
+            
+            if (event.getType() == Item.Type.FOOD && MyServer.getKitchenClient() != null)
+            { 
                 ObjectOutputStream otherClientOut = MyServer.getKitchenClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                         MyServer.getKitchenClient().getSocket().getInetAddress(),
@@ -225,8 +227,8 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.writeObject(msgToSend);
-                System.out.println("sent to bar");
-            } // else
+                //System.out.println("sent to bar");
+            } // if
         } // else if
     }
 
