@@ -1,6 +1,7 @@
 package Client;
 
 import static Client.MyClient.serverAddress;
+import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
@@ -128,7 +129,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
                     MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
-                    MyClient.generateRequestID(), this.tab);
+                    generateRequestID(), this.tab);
                 out.writeObject(newEvt);
                 
                 if (this.newDrinkItems.size() > 0)
@@ -137,7 +138,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
-                        MyClient.generateRequestID(), 
+                        generateRequestID(), 
                         Item.Type.DRINK, 
                         this.newDrinkItems,
                         tab.getTable());
@@ -149,7 +150,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
-                        MyClient.generateRequestID(), 
+                        generateRequestID(), 
                         Item.Type.FOOD, 
                         this.newFoodItems,
                         tab.getTable());

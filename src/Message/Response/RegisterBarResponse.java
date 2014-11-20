@@ -28,7 +28,12 @@ public class RegisterBarResponse extends Response
         
         if(hasParsedResponse())
             return;
+        
+        System.out.println("not already parsed");
         permissionGranted = (MyServer.getBarClient() == null);
+        System.out.println("permission granted: " + permissionGranted + "\n" + MyServer.getBarClient());
+        
+        this.parsedResponse = true;
         
     }
 

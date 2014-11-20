@@ -20,10 +20,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,21 +88,7 @@ public class MyClient implements Runnable
         thread = new Thread(this);
     }
     
-    /**
-     *
-     * @return
-     */
-    public static String generateRequestID()
-   {
-      String request_ID;
-      Random random = new Random();
-      int x = random.nextInt();
-      request_ID = "" + x;
-      Date currentDate = new Date();
-      Timestamp t = new Timestamp(currentDate.getTime());
-      request_ID = request_ID + t;
-      return request_ID;
-   } // generateRequestID
+
    
     /**
      *
@@ -173,7 +156,7 @@ public class MyClient implements Runnable
 
             NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
-                                                 generateRequestID(),
+                                                 Message.generateRequestID(),
                                                  Request.RequestType.NUM_OF_TABLES);
             out.writeObject(nTablesRequest);
             //System.out.println("sent num table request");
@@ -186,7 +169,7 @@ public class MyClient implements Runnable
                 
             TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                           InetAddress.getByName(serverAddress.getHostName()),
-                                          generateRequestID(),
+                                          Message.generateRequestID(),
                                           Request.RequestType.TABLE_STATUS,
                                           tables);
             out.writeObject(request);  

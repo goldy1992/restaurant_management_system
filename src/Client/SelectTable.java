@@ -7,7 +7,7 @@
 
 package Client;
 
-import static Client.MyClient.generateRequestID;
+import static Message.Message.generateRequestID;
 import static Client.MyClient.serverAddress;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -362,7 +362,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                        IN USE */
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
-                    MyClient.generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
+                    generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.writeObject(newEvt);
                     
                     
@@ -372,7 +372,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     
                     TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
-                        MyClient.generateRequestID(), 
+                        generateRequestID(), 
                         Request.RequestType.TAB,
                             tableSelected);
                     out.writeObject(tabStatusRequest);
@@ -406,7 +406,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
 
                     TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
-                    MyClient.generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
+                    generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
                     out.writeObject(newEvt1);
                     OutputLabel.setText("");
                     tableSelected = -1;

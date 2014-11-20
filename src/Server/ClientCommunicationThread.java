@@ -57,12 +57,12 @@ public class ClientCommunicationThread implements Runnable
             {
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());    
-                System.out.println("read message");
+
                                
                 while(isRunning)
                 {
                     Message message = (Message) in.readObject();
-                
+                         System.out.println("read message");       
                     if (message instanceof Request)
                         parseRequest((Request)message);                  
                     else if(message instanceof EventNotification)
@@ -139,6 +139,9 @@ public class ClientCommunicationThread implements Runnable
                 System.out.println("bar registered");
             }
             response = rResponse;
+            
+            if (response instanceof RegisterBarResponse)
+                System.out.println("response registered correctly");
         } // else if
         else if (message instanceof TabRequest)
         {

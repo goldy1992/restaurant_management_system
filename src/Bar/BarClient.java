@@ -5,8 +5,11 @@
  */
 package Bar;
 
+import Item.Item;
 import Message.EventNotification.*;
 import Message.Message;
+import Message.Request.RegisterBarRequest;
+import Message.Request.Request;
 import Message.Response.*;
 import Server.MyServer;
 import java.io.IOException;
@@ -65,12 +68,37 @@ public class BarClient implements Runnable
         
             BarClient incomeThread = new BarClient();
             incomeThread.getThread().start();
+            
+            RegisterBarRequest rBarRequest = new RegisterBarRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                 InetAddress.getByName(serverAddress.getHostName()),
+                                                 Message.generateRequestID(),
+                                                 Request.RequestType.REGISTER_BAR);
+            
+            out.writeObject(rBarRequest);
+            
+            
        }
        catch(IOException ex)
        {
             Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);         
        }
     } // main
+    
+    private static String sortTimeSyntax(int time)
+    {        
+        if (time == 0) return "00";
+        else if (time > 0 && time < 9)
+            return "0" + time;
+        else return time + "";
+        
+    } // sortTimeSyntax
+
+    public static String timeToString(int hours, int minutes)
+    {
+        return sortTimeSyntax(hours) + ":" + sortTimeSyntax(minutes);
+    }
+
+
 
     @Override
     public void run() 
@@ -89,7 +117,11 @@ public class BarClient implements Runnable
                         if (message instanceof NewItemNfn)
                         {
                             NewItemNfn newItemMessage = (NewItemNfn)message;
-                            System.out.println(newItemMessage + "\n");
+                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + BarClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
+                            for (Item i : newItemMessage.getItems())
+                                System.out.println(i.getQuantity() + "\t" + i.getName());
+                            
+                            System.out.println("");
                         } // if
                     } // if
                     else if (message instanceof Response)
