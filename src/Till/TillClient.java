@@ -37,10 +37,8 @@ public class TillClient implements Runnable
     private static InetAddress serverAddress;
     private static int serverPort;  
     private static Socket client; 
- 
     private static ObjectInputStream in;
     private static ObjectOutputStream out;
-    
     private static boolean isRunning = true;
     
     /**
@@ -103,8 +101,6 @@ public class TillClient implements Runnable
     {
         return sortTimeSyntax(hours) + ":" + sortTimeSyntax(minutes);
     }
-
-
 
     @Override
     public void run() 

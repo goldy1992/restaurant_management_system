@@ -53,6 +53,7 @@ public class KitchenClient implements Runnable
     
     private static ObjectInputStream in;
     private static ObjectOutputStream out;
+    private static KitchenGUI gui;
     
     private static boolean isRunning = true;
     
@@ -72,6 +73,10 @@ public class KitchenClient implements Runnable
         
             KitchenClient incomeThread = new KitchenClient();
             incomeThread.getThread().start();
+            
+            gui = new KitchenGUI();
+            gui.setVisible(true);
+            
             
             RegisterClientRequest rKitchenRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
@@ -112,19 +117,23 @@ public class KitchenClient implements Runnable
             {
                 System.out.println(client);
                 System.out.println("read message");
+                
+                
                 while(isRunning)
                 {               
+                    // read the message
                     Message message = (Message) in.readObject();                    
+                    
+                    // convert message to notification
                     if (message instanceof EventNotification)
                     {
                         if (message instanceof NewItemNfn)
                         {
-                            NewItemNfn newItemMessage = (NewItemNfn)message;
-                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + KitchenClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
-                            for (Item i : newItemMessage.getItems())
-                                System.out.println(i.getQuantity() + "\t" + i.getName());
                             
-                            System.out.println("");
+                            
+                            NewItemNfn newItemMessage = (NewItemNfn)message;
+                            gui.addMessage(newItemMessage);
+
                         } // if
                     } // if
                     else if (message instanceof Response)

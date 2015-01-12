@@ -17,6 +17,7 @@ public class Test
 {
     public static void main(String[] args)
     {
+        // creates the server
         Thread serverThread = new Thread(){
         @Override
         public void run()
@@ -36,7 +37,7 @@ public class Test
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
+        // creates the bar client
         Thread barClient = new Thread(){
         @Override
         public void run()
@@ -47,6 +48,7 @@ public class Test
         };
         barClient.start(); 
         
+        // creates the kitchen client
         Thread kitchenClient = new Thread(){
         @Override
         public void run()
@@ -67,7 +69,7 @@ public class Test
         }
         
         
-        
+        // creates the waiter client
         Thread client = new Thread(){
         @Override
         public void run()
