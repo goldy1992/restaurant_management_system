@@ -5,7 +5,6 @@
  */
 package Message.Response;
 
-import Bar.BarClient;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import static Message.Request.Request.RequestType.REGISTER_BAR;
@@ -47,7 +46,7 @@ public class RegisterClientResponse extends Response
     {
         if (!hasPermission())
         {
-            BarClient.setRunning(false);
+            //BarClient.setRunning(false);
             System.out.println("A bar client already exists!");
         } // if
     } // onReceiving

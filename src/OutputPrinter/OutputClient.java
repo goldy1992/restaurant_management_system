@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Bar;
+package OutputPrinter;
 
 import Item.Item;
-import Message.EventNotification.*;
+import Message.EventNotification.EventNotification;
+import Message.EventNotification.NewItemNfn;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
-import Message.Response.*;
+import Message.Response.RegisterClientResponse;
+import Message.Response.Response;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,31 +26,31 @@ import java.util.logging.Logger;
  *
  * @author mbbx9mg3
  */
-public class BarClient implements Runnable
+public class OutputClient implements Runnable
 {
+    
+
+    public static enum Type 
+    {
+        BAR, KITCHEN
+    }
+    
+    private final Type type;
+
     private final Thread thread;
     
-    public BarClient()
+    public OutputClient(Type type)
     {
         this.thread = new Thread(this);
+        this.type = type;
     } // constructor
     
-    /**
-     *
-     */
     private static InetAddress serverAddress;
-    /**
-     *
-     */
     private static int serverPort;  
-
-    /**
-     *
-     */
-    private static Socket client; 
-    
+    private static Socket client;    
     private static ObjectInputStream in;
     private static ObjectOutputStream out;
+    private static OutputGUI gui;
     
     private static boolean isRunning = true;
     
@@ -60,27 +62,56 @@ public class BarClient implements Runnable
        
        try
        {
+System.out.println("argslength = " + args.length);
+           
+           
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
-        
-            BarClient incomeThread = new BarClient();
+            Type type;
+            System.out.println("args " + args[0]);
+            switch(args[0])
+            {
+                case "bar": type = Type.BAR; break;
+                case "kitchen": type = Type.KITCHEN; break;
+                default: type = Type.BAR; break;
+            }
+            OutputClient incomeThread = new OutputClient(type);
             incomeThread.getThread().start();
             
-            RegisterClientRequest rBarRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+            gui = new OutputGUI();
+            if (type == Type.KITCHEN)
+                gui.setTitle("Kitchen Client");
+            else
+                gui.setTitle("Bar Client");
+            gui.setVisible(true);
+            
+            
+            if (type == Type.KITCHEN)
+            {
+                RegisterClientRequest rKitchenRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                                 InetAddress.getByName(serverAddress.getHostName()),
+                                                 Message.generateRequestID(),
+                                                 Request.RequestType.REGISTER_KITCHEN);         
+                out.writeObject(rKitchenRequest);
+            } // if
+            else
+            {
+                RegisterClientRequest rBarRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  Message.generateRequestID(),
                                                  Request.RequestType.REGISTER_BAR);
             
-            out.writeObject(rBarRequest);
-            
+                out.writeObject(rBarRequest);
+                
+            } // else
             
        }
        catch(IOException ex)
        {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);         
+            Logger.getLogger(OutputClient.class.getName()).log(Level.SEVERE, null, ex);         
        }
     } // main
     
@@ -109,19 +140,23 @@ public class BarClient implements Runnable
             {
                 System.out.println(client);
                 System.out.println("read message");
+                
+                
                 while(isRunning)
                 {               
+                    // read the message
                     Message message = (Message) in.readObject();                    
+                    
+                    // convert message to notification
                     if (message instanceof EventNotification)
                     {
                         if (message instanceof NewItemNfn)
                         {
-                            NewItemNfn newItemMessage = (NewItemNfn)message;
-                            System.out.println("Table " +  newItemMessage.getTable().getTableNumber() + " " + BarClient.timeToString(newItemMessage.getHours(), newItemMessage.getMinutes()) );
-                            for (Item i : newItemMessage.getItems())
-                                System.out.println(i.getQuantity() + "\t" + i.getName());
                             
-                            System.out.println("");
+                            
+                            NewItemNfn newItemMessage = (NewItemNfn)message;
+                            gui.addMessage(newItemMessage);
+
                         } // if
                     } // if
                     else if (message instanceof Response)
@@ -137,8 +172,8 @@ public class BarClient implements Runnable
         }
         catch (IOException | ClassNotFoundException ex) 
         {
-            Logger.getLogger(BarClient.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
+            Logger.getLogger(OutputClient.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch // catch
         
     } // run
     
@@ -160,4 +195,8 @@ public class BarClient implements Runnable
     {
         isRunning = running;
     } // setRunning
+    
 } // class
+
+    
+

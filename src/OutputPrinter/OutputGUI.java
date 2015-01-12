@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Kitchen;
+package OutputPrinter;
 
 import Item.Item;
 import Message.EventNotification.NewItemNfn;
@@ -12,20 +12,21 @@ import Message.EventNotification.NewItemNfn;
  *
  * @author mbbx9mg3
  */
-public class KitchenGUI extends javax.swing.JFrame {
+public class OutputGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form KitchenGUI
      */
-    public KitchenGUI() {
+    public OutputGUI() 
+    {
         initComponents();
-        setTitle("Kitchen Client");
+
     }
     
     public void addMessage(NewItemNfn msg)
     {
         String currentText = outputPanel.getText();
-        currentText += "Table " +  msg.getTable().getTableNumber() + " - " + KitchenClient.timeToString(msg.getHours(), msg.getMinutes()) + "\n";
+        currentText += "Table " +  msg.getTable().getTableNumber() + " - " + OutputClient.timeToString(msg.getHours(), msg.getMinutes()) + "\n";
         for (Item i : msg.getItems())
             currentText += i.getQuantity() + "\t" + i.getName() + "\n";
                             
@@ -81,20 +82,21 @@ public class KitchenGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(KitchenGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(KitchenGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(KitchenGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(KitchenGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new KitchenGUI().setVisible(true);
+                new OutputGUI().setVisible(true);
             }
         });
     }

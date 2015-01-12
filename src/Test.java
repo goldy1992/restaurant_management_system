@@ -42,18 +42,29 @@ public class Test
         @Override
         public void run()
         {
-            Bar.BarClient.main(null);
+            String [] array = {"bar"};
+            OutputPrinter.OutputClient.main(array);
             
         }// run
         };
         barClient.start(); 
+        
+                try
+        {
+            Thread.sleep(2000);
+        } 
+        catch (InterruptedException ex) 
+        {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         // creates the kitchen client
         Thread kitchenClient = new Thread(){
         @Override
         public void run()
         {
-            Kitchen.KitchenClient.main(null);
+            String [] array = {"kitchen"};
+            OutputPrinter.OutputClient.main(array);
             
         }// run
         };
