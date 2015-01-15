@@ -347,6 +347,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
+                    out.reset();
                     out.writeObject(newEvt);
                     
                     /* Request the tab of this table from the server */
@@ -355,6 +356,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                         generateRequestID(), 
                         Request.RequestType.TAB,
                             tableSelected);
+                    out.reset();
                     out.writeObject(tabStatusRequest);
                     
                     //System.out.println("waiting for reply, in while loop");

@@ -130,6 +130,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                     MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
                     generateRequestID(), this.tab);
+                out.reset();
                 out.writeObject(newEvt);
                 
                 if (this.newDrinkItems.size() > 0)
@@ -141,7 +142,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                         Item.Type.DRINK, 
                         this.newDrinkItems,
                         tab.getTable());
+                        out.reset();
                         out.writeObject(newEvt1);
+                        System.out.println("sent drinks");
                 } // if
                 
                 if (this.newFoodItems.size() > 0)
@@ -153,7 +156,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                         Item.Type.FOOD, 
                         this.newFoodItems,
                         tab.getTable());
+                    out.reset();
                     out.writeObject(newEvt1);
+                    System.out.println("sent food");
                 } // if                
                 
                 con.close(); 
