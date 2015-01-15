@@ -99,7 +99,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         for(MenuCardPanel p : cardPanels)
             CardPanel.add(p, p.getName());
         
-        System.out.println("show");
+        //System.out.println("show");
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanels.get(0).getName());
         currentCard = cardPanels.get(0);
@@ -174,11 +174,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     @Override
     public void mouseClicked(MouseEvent me) 
     {
-        System.out.println("mouse clicked");
-        System.out.println("source class: " +  me.getSource().getClass());
+        //System.out.println("mouse clicked");
+        //System.out.println("source class: " +  me.getSource().getClass());
             if(me.getSource() == this || me.getSource() == outputTextPane)
             {
-                System.out.println("found called panel");
+                //System.out.println("found called panel");
                 switchToParentCard();
             }   
     } // mouseClickeds
@@ -346,8 +346,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 if (cardPanelsList.get(i).getName().equals("MAIN_PAGE"))
                     Collections.swap(cardPanelsList, i, 0);
                 
-            for (MenuCardPanel c : cardPanelsList )
-                System.out.println(c);            
+           // for (MenuCardPanel c : cardPanelsList )
+                //System.out.println(c);            
         } // try // try
         catch (SQLException ex) 
         {
@@ -502,7 +502,7 @@ System.out.println("pressed");
     {
         if(this.currentCard.hasParent())
         {
-            System.out.println("current panel " + this.currentCard.getName());
+            //System.out.println("current panel " + this.currentCard.getName());
             int parentIndex = cardPanels.indexOf(this.currentCard.getParentPanel());
             CardLayout cl = (CardLayout)(CardPanel.getLayout());
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );

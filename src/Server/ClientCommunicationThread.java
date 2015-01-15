@@ -66,10 +66,14 @@ public class ClientCommunicationThread implements Runnable
                     Message message = (Message) in.readObject();
                          //System.out.println("read message");       
                     if (message instanceof Request)
+                    {
                         parseRequest((Request)message);                  
+                    }
                     else if(message instanceof EventNotification)
+                    {
                         parseEventNotification((EventNotification)message);
-                    //System.out.println("returned");
+                    }
+                    
                 } // while
                 
             } // try            // try            // try            // try           
@@ -135,10 +139,17 @@ public class ClientCommunicationThread implements Runnable
             RegisterClientResponse rResponse = (RegisterClientResponse)response;
             rResponse.parse();
                 
+            // register the bar/kitchen
             if (rResponse.hasPermission())
             {
-                if (message.type == REGISTER_BAR) MyServer.setBarClient(this); else MyServer.setKitchenClient(this);
-                //System.out.println("bar registered");
+                switch (message.type)
+                {
+                    case REGISTER_BAR: MyServer.setBarClient(this); break;
+                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); break;
+                    case REGISTER_WAITER_CLIENT: MyServer.addWaiterClient(this); break;
+                    default: break;
+                }
+
             }
             response = rResponse;
             
@@ -148,15 +159,16 @@ public class ClientCommunicationThread implements Runnable
         else if (message instanceof TabRequest)
         {
             response = new TabResponse((TabRequest)message);
-            //System.out.println("received Tab Request\n");
+            System.out.println("received Tab Request\n");
         }
         else if (message instanceof LeaveRequest)
         {
             response = new LeaveResponse((LeaveRequest)message);
-            MyServer.removeClient(this);
+            MyServer.removeWaiterClient(this);
             //System.out.println("client size " + MyServer.getClients().size());
             isRunning = false;
         }
+        
         if (response == null)
             return;
         
@@ -173,24 +185,24 @@ public class ClientCommunicationThread implements Runnable
             int tableNumber = event.getTableNumber();
             Table.TableStatus status = event.getTableStatus();
                            
-            //System.out.println("requested table " + tableNumber);
+            System.out.println("requested table " + tableNumber);
             MyServer.getTable(tableNumber).setTableStatus(status);
                             
-            //System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+            System.out.println("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
-            //System.out.println("number of clients to send to: " + MyServer.getClients().size());
+            System.out.println("number of clients to send to: " + MyServer.getWaiterClients().size());
 
-            for(int i =0; i < MyServer.getClients().size(); i++)
+            for(int i =0; i < MyServer.getWaiterClients().size(); i++)
             {
-                ObjectOutputStream otherClientOut = MyServer.getClients().get(i).getOutStream();
+                ObjectOutputStream otherClientOut = MyServer.getWaiterClients().get(i).getOutStream();
                 TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                        MyServer.getClients().get(i).getSocket().getInetAddress(),
+                        MyServer.getWaiterClients().get(i).getSocket().getInetAddress(),
                         event.getMessageID(),
                         tableNumber,
                         status);
                                 
                 otherClientOut.writeObject(msgToSend);
-                //System.out.println("sent " + i);
+                System.out.println("sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
             } // for
         } // if
         else if (message instanceof TabUpdateNfn)

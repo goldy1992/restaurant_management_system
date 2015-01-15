@@ -12,6 +12,7 @@ import Server.MyServer;
 import Server.Table;
 import Message.Message;
 import Message.Request.NumOfTablesRequest;
+import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
 import Message.Response.Response;
@@ -109,6 +110,12 @@ public class MyClient implements Runnable
             
             if (client == null)
                 System.exit(0);
+            
+            RegisterClientRequest rWRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
+                                            InetAddress.getByName(serverAddress.getHostName()),
+                                            Message.generateRequestID(),
+                                            Request.RequestType.REGISTER_WAITER_CLIENT);         
+                out.writeObject(rWRequest);
 
             NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                  InetAddress.getByName(serverAddress.getHostName()),

@@ -71,7 +71,7 @@ System.out.println("argslength = " + args.length);
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
             Type type;
-            System.out.println("args " + args[0]);
+            System.out.println("this client port " + client.getLocalPort());
             switch(args[0])
             {
                 case "bar": type = Type.BAR; break;
@@ -173,7 +173,9 @@ System.out.println("argslength = " + args.length);
         catch (IOException | ClassNotFoundException ex) 
         {
             Logger.getLogger(OutputClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(type + " received something");
         } // catch // catch
+
         
     } // run
     

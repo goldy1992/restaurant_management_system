@@ -24,7 +24,7 @@ public class MyServer
     private static final int PORT_NUMBER = 11000;
     private static final int NUM_OF_TABLES = 44;
     private static final Object LOCK = new Object();  
-    private static ArrayList<ClientCommunicationThread> clients;
+    private static ArrayList<ClientCommunicationThread> waiterClient;
     private static ClientCommunicationThread barClient = null;
     private static ClientCommunicationThread kitchenClient = null;
     private static Table[] tables;
@@ -35,7 +35,7 @@ public class MyServer
      */
     public static void main(String[] args)
     {
-        clients = new ArrayList<>();
+        waiterClient = new ArrayList<>();
         tables = new Table[NUM_OF_TABLES + 1];
         
         // creates a thread for each table
@@ -61,14 +61,13 @@ public class MyServer
                 Socket acceptSocket = mySocket.accept();
                 ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
                 newThread.getThread().start();
-                clients.add(newThread);
-                clientNumber++;
-                System.out.println("client size " + clients.size());
+
+                System.out.println("client size " + waiterClient.size());
             } // while
    
             mySocket.close();
             
-        } // try // try
+        } // try // try // try // try
         catch (BindException e)
         {
             e.printStackTrace();
@@ -114,25 +113,42 @@ public class MyServer
      *
      * @return
      */
-    public static ArrayList<ClientCommunicationThread> getClients()
+    public static ArrayList<ClientCommunicationThread> getWaiterClients()
     {
         synchronized(LOCK)
         {
-            return clients;
+            return waiterClient;
         } // sync
+    }
+    
+    public static boolean addWaiterClient(ClientCommunicationThread client)
+    {
+        synchronized(LOCK)
+        {
+            for (ClientCommunicationThread waiterClient1 : waiterClient) 
+            {
+                if (client.equals(waiterClient1)) {
+                    System.out.println("client already exits");
+                    return false;
+                }
+            }
+            waiterClient.add(client);
+            return true;
+     
+        } // synchronized
     }
     
     /**
      *
      * @param client
      */
-    public static void removeClient(ClientCommunicationThread client)
+    public static void removeWaiterClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
         {
-            for (int i = 0; i < clients.size(); i++)
-                if (client.equals(clients.get(i)))
-                    clients.remove(i);
+            for (int i = 0; i < waiterClient.size(); i++)
+                if (client.equals(waiterClient.get(i)))
+                    waiterClient.remove(i);
             
             System.out.println("client removed");
         } // synchronized

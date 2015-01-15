@@ -57,7 +57,13 @@ public abstract class Request extends Message
         /**
          *  Request registers the kitchen client.
          */
-        REGISTER_KITCHEN
+        REGISTER_KITCHEN,
+        
+        /**
+         *  Request registers the waiter client.
+         */
+        REGISTER_WAITER_CLIENT
+
     }
     
     /**

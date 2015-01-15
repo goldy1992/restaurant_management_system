@@ -330,13 +330,13 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         
         if (e.getSource() == openTable)
         {
-            System.out.println("algo");
+            //System.out.println("algo");
             if ( tableSelected == -1)
                 OutputLabel.setText("You have no table selected yet!");
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
             {
                 OutputLabel.setText("Table " + tableSelected + " in use");
-                System.out.println("called in use");
+                //System.out.println("called in use");
             } // else if
             else
             {
@@ -357,7 +357,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                             tableSelected);
                     out.writeObject(tabStatusRequest);
                     
-                    System.out.println("waiting for reply, in while loop");
+                    //System.out.println("waiting for reply, in while loop");
                    
                     synchronized(tabLock)
                     {
@@ -373,13 +373,13 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     } // synchronized
                     
                     menu = Menu.makeMenu(this, tab, out);
-                    System.out.println("menu has been made");
+                    //System.out.println("menu has been made");
                     menu.setEnabled(true);
                     menu.setModal(true);
                     menu.setVisible(true);
                     this.tabReceived = false;
                 
-                    System.out.println("show");
+                    //System.out.println("show");
 
                     TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
