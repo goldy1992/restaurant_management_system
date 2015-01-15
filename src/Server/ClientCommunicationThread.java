@@ -215,9 +215,10 @@ public class ClientCommunicationThread implements Runnable
         else if (message instanceof NewItemNfn)
         {
             NewItemNfn event = (NewItemNfn)message;
+            System.out.println("new notifaction for " + event.getType());
             if (event.getType() == Item.Type.DRINK && MyServer.getBarClient() != null)
             {
-
+                System.out.println("got here drink");
                 ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                         MyServer.getBarClient().getSocket().getInetAddress(),
@@ -226,11 +227,12 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.writeObject(msgToSend);
-                //System.out.println("sent to bar");
+                System.out.println("sent to port: " + MyServer.getBarClient().getSocket().getPort());
             } // if
             
-            if (event.getType() == Item.Type.FOOD && MyServer.getKitchenClient() != null)
+            else if (event.getType() == Item.Type.FOOD && MyServer.getKitchenClient() != null)
             { 
+                                System.out.println("got here food");
                 ObjectOutputStream otherClientOut = MyServer.getKitchenClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                         MyServer.getKitchenClient().getSocket().getInetAddress(),
@@ -239,7 +241,7 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.writeObject(msgToSend);
-                //System.out.println("sent to bar");
+                System.out.println("sent to port: " + MyServer.getKitchenClient().getSocket().getPort());
             } // if
         } // else if
     }

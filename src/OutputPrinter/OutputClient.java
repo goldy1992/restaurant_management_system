@@ -70,8 +70,10 @@ System.out.println("argslength = " + args.length);
             client = new Socket(serverAddress, serverPort);
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
+            gui = new OutputGUI();
+            gui.addText("this client port " + client.getLocalPort());
             Type type;
-            System.out.println("this client port " + client.getLocalPort());
+            System.out.println();
             switch(args[0])
             {
                 case "bar": type = Type.BAR; break;
@@ -81,7 +83,7 @@ System.out.println("argslength = " + args.length);
             OutputClient incomeThread = new OutputClient(type);
             incomeThread.getThread().start();
             
-            gui = new OutputGUI();
+
             if (type == Type.KITCHEN)
                 gui.setTitle("Kitchen Client");
             else

@@ -22,6 +22,15 @@ public class OutputGUI extends javax.swing.JFrame {
         initComponents();
 
     }
+   
+    public void addText(String msg)
+    {
+        String currentText = outputPanel.getText();       
+        currentText += msg;                     
+        currentText += "\n\n";
+        
+        outputPanel.setText(currentText);
+    }
     
     public void addMessage(NewItemNfn msg)
     {
