@@ -7,6 +7,7 @@
 
 package Server;
 
+import OutputPrinter.OutputGUI;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
@@ -28,6 +29,7 @@ public class MyServer
     private static ClientCommunicationThread barClient = null;
     private static ClientCommunicationThread kitchenClient = null;
     private static Table[] tables;
+    public static OutputGUI debugGUI;
     
     /**
      *
@@ -35,6 +37,9 @@ public class MyServer
      */
     public static void main(String[] args)
     {
+        debugGUI = new OutputGUI();
+        debugGUI.setTitle("Server Output");
+        debugGUI.setVisible(true);
         waiterClient = new ArrayList<>();
         tables = new Table[NUM_OF_TABLES + 1];
         
@@ -48,11 +53,11 @@ public class MyServer
         
         try
         {
-            System.out.println("got here");
+            debugGUI.addText("got here");
             mySocket = new ServerSocket(PORT_NUMBER);
-                System.out.println("socket listening");
+                debugGUI.addText("socket listening");
             socketListening = true;
-            System.out.println("Currently listening on port " + PORT_NUMBER);
+            debugGUI.addText("Currently listening on port " + PORT_NUMBER);
             
             long clientNumber = 0;
             
@@ -62,7 +67,7 @@ public class MyServer
                 ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
                 newThread.getThread().start();
 
-                System.out.println("client size " + waiterClient.size());
+                debugGUI.addText("client size " + waiterClient.size());
             } // while
    
             mySocket.close();
@@ -128,7 +133,7 @@ public class MyServer
             for (ClientCommunicationThread waiterClient1 : waiterClient) 
             {
                 if (client.equals(waiterClient1)) {
-                    System.out.println("client already exits");
+                    debugGUI.addText("client already exits");
                     return false;
                 }
             }
@@ -150,7 +155,7 @@ public class MyServer
                 if (client.equals(waiterClient.get(i)))
                     waiterClient.remove(i);
             
-            System.out.println("client removed");
+            debugGUI.addText("client removed");
         } // synchronized
     }
 
