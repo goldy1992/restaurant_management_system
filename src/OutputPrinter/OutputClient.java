@@ -167,13 +167,14 @@ System.out.println("argslength = " + args.length);
                         {
                             RegisterClientResponse rResponse = (RegisterClientResponse)message;
                             rResponse.onReceiving();
-                            
+                            RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
                             if (!rResponse.hasPermission())
                             {
                                 gui.addText("A client already exists!");
                                 System.exit(0);                               
                             } // if
-                            else gui.addText("Client successfully registered ");
+                            
+                            else gui.addText("Client successfully registered as: " + req);
                         } // if
                     } // else if
                 } // while

@@ -68,6 +68,7 @@ public class MyServer
                 newThread.getThread().start();
 
                 debugGUI.addText("client size " + waiterClient.size());
+                clientNumber++;
             } // while
    
             mySocket.close();

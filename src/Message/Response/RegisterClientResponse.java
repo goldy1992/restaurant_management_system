@@ -35,13 +35,16 @@ public class RegisterClientResponse extends Response
         MyServer.debugGUI.addText("not already parsed");
         
         if (req.type == REGISTER_BAR)
+        {
             permissionGranted = (MyServer.getBarClient() == null);
-        
+            MyServer.debugGUI.addText("permission granted: " + permissionGranted 
+                + "\n" + MyServer.getBarClient());
+        }
         else if (req.type == REGISTER_KITCHEN) 
         {
             permissionGranted = (MyServer.getKitchenClient() == null);
             MyServer.debugGUI.addText("permission granted: " + permissionGranted 
-                                + "\n" + MyServer.getBarClient());
+                                + "\n" + MyServer.getKitchenClient());
         }
         else permissionGranted = true;
         

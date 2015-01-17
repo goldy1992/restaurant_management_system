@@ -30,7 +30,7 @@ public class RegisterClientRequest extends Request
     
     public String toString()
     {
-        String x = super.toString() + "SUBTYPE: Register bar";
+        String x = super.toString() + "SUBTYPE: " + type;
         x+= "\n";
         
         return x;

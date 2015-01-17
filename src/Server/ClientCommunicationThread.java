@@ -145,8 +145,8 @@ public class ClientCommunicationThread implements Runnable
             {
                 switch (message.type)
                 {
-                    case REGISTER_BAR: MyServer.setBarClient(this); MyServer.debugGUI.addText("register bar to port: " + this.getSocket().getPort() ); break;
-                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); MyServer.debugGUI.addText("register kitchen to port: " + this.getSocket().getPort() ); break;
+                    case REGISTER_BAR: MyServer.setBarClient(this); MyServer.debugGUI.addText("register bar to port: " + this.id + "\n object: " + this.getOutStream()); break;
+                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); MyServer.debugGUI.addText("register kitchen to port: " + this.id + "\n object: " + this.getOutStream()); break;
                     case REGISTER_WAITER_CLIENT: MyServer.addWaiterClient(this); break;
                     default: break;
                 }
@@ -187,12 +187,12 @@ public class ClientCommunicationThread implements Runnable
             int tableNumber = event.getTableNumber();
             Table.TableStatus status = event.getTableStatus();
                            
-            MyServer.debugGUI.addText("requested table " + tableNumber);
+            //MyServer.debugGUI.addText("requested table " + tableNumber);
             MyServer.getTable(tableNumber).setTableStatus(status);
                             
-            MyServer.debugGUI.addText("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+            //MyServer.debugGUI.addText("new table status " + MyServer.getTable(tableNumber).getTableStatus());
                                                         
-            MyServer.debugGUI.addText("number of clients to send to: " + MyServer.getWaiterClients().size());
+            //MyServer.debugGUI.addText("number of clients to send to: " + MyServer.getWaiterClients().size());
 
             for(int i =0; i < MyServer.getWaiterClients().size(); i++)
             {
@@ -221,25 +221,28 @@ public class ClientCommunicationThread implements Runnable
             MyServer.debugGUI.addText("kitchen port: " + MyServer.getKitchenClient().getSocket().getPort());
             NewItemNfn event = (NewItemNfn)message;
             MyServer.debugGUI.addText("new notifaction for " + event.getType());
+            
             if (event.getType() == Item.Type.DRINK && MyServer.getBarClient() != null)
             {
-                MyServer.debugGUI.addText("got here drink: send to port: " + MyServer.getBarClient().getSocket().getPort());
-                //ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
-                                MyServer.debugGUI.addText("got here drink: send to port: " + MyServer.getBarClient().getSocket().getPort());
-                NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
+                ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
+           
+                NewItemNfn msgToSend1 = new NewItemNfn(event.getToAddress(),
                         MyServer.getBarClient().getSocket().getInetAddress(),
                         event.getMessageID(),
                         event.getType(),
                         event.getItems(),
                         event.getTable());
                 MyServer.getBarClient().getOutStream().reset();
-                MyServer.getBarClient().getOutStream().writeObject(msgToSend);
+                                     MyServer.debugGUI.addText("got here drink: send to port: " + MyServer.getBarClient().getOutStream().toString());
+                otherClientOut.writeObject(msgToSend1);
                 MyServer.debugGUI.addText("sent to port: " + MyServer.getBarClient().getSocket().getPort());
+                
+                MyServer.debugGUI.addText("kitchen and bar\n" + MyServer.getBarClient().getOutStream() + "\n" + MyServer.getKitchenClient().getOutStream());
             } // if
             
             else if (event.getType() == Item.Type.FOOD && MyServer.getKitchenClient() != null)
             { 
-                MyServer.debugGUI.addText("got here food: send to port: " + MyServer.getBarClient().getSocket().getPort());
+                //MyServer.debugGUI.addText("got here food: send to port: " + MyServer.getBarClient().getSocket().getPort());
                 ObjectOutputStream otherClientOut = MyServer.getKitchenClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                         MyServer.getKitchenClient().getSocket().getInetAddress(),
@@ -248,6 +251,8 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.reset();
+         MyServer.debugGUI.addText("port difference: " + MyServer.getKitchenClient().getSocket().getPort() + " " + MyServer.getBarClient().getSocket().getPort());  
+         MyServer.debugGUI.addText("Out Stream difference: " + MyServer.getKitchenClient().getOutStream() + " " + MyServer.getBarClient().getOutStream());
                 otherClientOut.writeObject(msgToSend);
                 MyServer.debugGUI.addText("sent to port: " + MyServer.getKitchenClient().getSocket().getPort());
             } // if
