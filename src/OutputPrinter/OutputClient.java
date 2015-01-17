@@ -167,6 +167,13 @@ System.out.println("argslength = " + args.length);
                         {
                             RegisterClientResponse rResponse = (RegisterClientResponse)message;
                             rResponse.onReceiving();
+                            
+                            if (!rResponse.hasPermission())
+                            {
+                                gui.addText("A client already exists!");
+                                System.exit(0);                               
+                            } // if
+                            else gui.addText("Client successfully registered ");
                         } // if
                     } // else if
                 } // while

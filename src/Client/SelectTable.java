@@ -133,7 +133,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     {
         this.tableStatuses = tableStatuses;
         this.out = out;
-        System.out.println("size " + tableStatuses.size());
+        MyClient.debugGUI.addText("size " + tableStatuses.size());
         tableButtons = new JButton[this.tableStatuses.size()];
         initComponents();
     }
@@ -324,19 +324,19 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             {
                 OutputLabel.setText("<html><b>Would you like to open Table " + i + "?</b></html>");
                 setTableSelected(i);
-                            System.out.println("select table " +  getTableSelected());
+                            MyClient.debugGUI.addText("select table " +  getTableSelected());
             } // if
 
         
         if (e.getSource() == openTable)
         {
-            //System.out.println("algo");
+            //MyClient.debugGUI.addText("algo");
             if ( tableSelected == -1)
                 OutputLabel.setText("You have no table selected yet!");
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
             {
                 OutputLabel.setText("Table " + tableSelected + " in use");
-                //System.out.println("called in use");
+                //MyClient.debugGUI.addText("called in use");
             } // else if
             else
             {
@@ -359,7 +359,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     out.reset();
                     out.writeObject(tabStatusRequest);
                     
-                    //System.out.println("waiting for reply, in while loop");
+                    //MyClient.debugGUI.addText("waiting for reply, in while loop");
                    
                     synchronized(tabLock)
                     {
@@ -375,13 +375,13 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     } // synchronized
                     
                     menu = Menu.makeMenu(this, tab, out);
-                    //System.out.println("menu has been made");
+                    //MyClient.debugGUI.addText("menu has been made");
                     menu.setEnabled(true);
                     menu.setModal(true);
                     menu.setVisible(true);
                     this.tabReceived = false;
                 
-                    //System.out.println("show");
+                    //MyClient.debugGUI.addText("show");
 
                     TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),

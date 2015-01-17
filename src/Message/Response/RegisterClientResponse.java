@@ -5,6 +5,7 @@
  */
 package Message.Response;
 
+import Client.MyClient;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import static Message.Request.Request.RequestType.*;
@@ -31,7 +32,7 @@ public class RegisterClientResponse extends Response
             return;
         
         RegisterClientRequest req = (RegisterClientRequest)getRequest();
-        System.out.println("not already parsed");
+        MyServer.debugGUI.addText("not already parsed");
         
         if (req.type == REGISTER_BAR)
             permissionGranted = (MyServer.getBarClient() == null);
@@ -39,7 +40,7 @@ public class RegisterClientResponse extends Response
         else if (req.type == REGISTER_KITCHEN) 
         {
             permissionGranted = (MyServer.getKitchenClient() == null);
-            System.out.println("permission granted: " + permissionGranted 
+            MyServer.debugGUI.addText("permission granted: " + permissionGranted 
                                 + "\n" + MyServer.getBarClient());
         }
         else permissionGranted = true;
@@ -51,11 +52,7 @@ public class RegisterClientResponse extends Response
     @Override
     public void onReceiving() 
     {
-        if (!hasPermission())
-        {
-            //BarClient.setRunning(false);
-            System.out.println("A bar client already exists!");
-        } // if
+
     } // onReceiving
     
     public boolean hasPermission()

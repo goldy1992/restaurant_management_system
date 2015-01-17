@@ -28,56 +28,12 @@ public class Test
         };
         serverThread.start();
         
-        try
-        {
-            Thread.sleep(2000);
-        } 
+        try { Thread.sleep(2000); } 
         catch (InterruptedException ex) 
         {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        // creates the bar client
-        Thread barClient = new Thread(){
-        @Override
-        public void run()
-        {
-            String [] array = {"bar"};
-            OutputPrinter.OutputClient.main(array);
-            
-        }// run
-        };
-        barClient.start(); 
-        
-                try
-        {
-            Thread.sleep(2000);
-        } 
-        catch (InterruptedException ex) 
-        {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        // creates the kitchen client
-        Thread kitchenClient = new Thread(){
-        @Override
-        public void run()
-        {
-            String [] array = {"kitchen"};
-            OutputPrinter.OutputClient.main(array);
-            
-        }// run
-        };
-        kitchenClient.start(); 
-           
-        try
-        {
-            Thread.sleep(2000);
-        } 
-        catch (InterruptedException ex) 
-        {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         
         // creates the waiter client
@@ -97,6 +53,43 @@ public class Test
         }// run
         };
         client.start();
+        
+        try { Thread.sleep(2000); } 
+        catch (InterruptedException ex) 
+        {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // creates the bar client
+        Thread barClient = new Thread(){
+        @Override
+        public void run()
+        {
+            String [] array = {"bar"};
+            OutputPrinter.OutputClient.main(array);
+            
+        }// run
+        };
+        barClient.start(); 
+        
+        try {  Thread.sleep(2000); } 
+        catch (InterruptedException ex) 
+        {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // creates the kitchen client
+        Thread kitchenClient = new Thread(){
+        @Override
+        public void run()
+        {
+            String [] array = {"kitchen"};
+            OutputPrinter.OutputClient.main(array);
+            
+        }// run
+        };
+        kitchenClient.start(); 
+           
              
     } // main   
 } // class

@@ -64,8 +64,9 @@ public class NumOfTablesResponse extends Response
     @Override
     public void onReceiving() 
     {
-        System.out.println(this);
-        //System.out.println("got  num of tables: " + r.getNumOfTables());
+        MyClient.debugGUI.addText("received number of tables: \n" 
+                                + this.toString());
+        //MyClient.debugGUI.addText("got  num of tables: " + r.getNumOfTables());
         MyClient.setNumTables(this.getNumOfTables());
     }
 }

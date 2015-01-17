@@ -5,6 +5,7 @@
  */
 package Message.EventNotification;
 
+import Client.MyClient;
 import Item.*;
 import Item.Item.Type;
 import Server.Table;
@@ -47,7 +48,8 @@ public class NewItemNfn extends EventNotification
         
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        System.out.println(cal.get(Calendar.HOUR_OF_DAY) + ":" 
+        MyClient.debugGUI.addText("Making new item notification:\n" 
+                            + cal.get(Calendar.HOUR_OF_DAY) + ":" 
                             + cal.get(Calendar.MINUTE));
         this.hours = cal.get(Calendar.HOUR_OF_DAY);
         this.minutes = cal.get(Calendar.MINUTE); 

@@ -8,7 +8,6 @@ package Client;
 
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
-import Server.MyServer;
 import Server.Table;
 import Message.Message;
 import Message.Request.NumOfTablesRequest;
@@ -16,6 +15,8 @@ import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
 import Message.Response.Response;
+import OutputPrinter.OutputGUI;
+import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,11 +38,14 @@ public class MyClient implements Runnable
     public static int serverPort;  
     public static Socket client;
     public static SelectTable selectTable; // selectTableGUI
+    public static OutputGUI debugGUI;
     public static MyClient responseThread;
     /**
      * An object used to ensure tasks are performed asynchronously. 
      */
     public static final Object lock = new Object();
+    
+
 
     private static ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
     private static int numberOfTables = -1;
@@ -101,6 +105,9 @@ public class MyClient implements Runnable
     {
         try
         {
+            debugGUI = new OutputGUI();
+            debugGUI.setTitle("Client Output");
+            debugGUI.setVisible(true);
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
@@ -122,7 +129,7 @@ public class MyClient implements Runnable
                                                  Message.generateRequestID(),
                                                  Request.RequestType.NUM_OF_TABLES);
             out.writeObject(nTablesRequest);
-            //System.out.println("sent num table request");
+            //debugGUI.addText("sent num table request");
 
             ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
@@ -139,9 +146,9 @@ public class MyClient implements Runnable
         } // try
         catch (IOException e)
         {
-            System.out.println("Could not connect to server");
+            debugGUI.addText("Could not connect to server");
         } // catch
-        System.out.println("pre while");
+        debugGUI.addText("pre while");
         
         
         synchronized(lock)
@@ -156,7 +163,7 @@ public class MyClient implements Runnable
             } // while
         
         } // synchronized
-        System.out.println("post while");
+        debugGUI.addText("post while");
         
         selectTable = new SelectTable(tableStatuses, out);
         selectTable.setVisible(true);
@@ -188,9 +195,9 @@ public class MyClient implements Runnable
                     if (response instanceof TableStatusEvtNfn)
                     {
                         TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
-                        //System.out.println("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
+                        //debugGUI.addText("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
                         selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
-                        // System.out.println("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
+                        // debugGUI.addText("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
                     } // inner if
                 } // evt ntfn if
             } // while running

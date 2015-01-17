@@ -99,7 +99,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         for(MenuCardPanel p : cardPanels)
             CardPanel.add(p, p.getName());
         
-        //System.out.println("show");
+        //MyClient.debugGUI.addText("show");
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanels.get(0).getName());
         currentCard = cardPanels.get(0);
@@ -144,7 +144,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                         tab.getTable());
                         out.reset();
                         out.writeObject(newEvt1);
-                        System.out.println("sent drinks");
+                        MyClient.debugGUI.addText("sent drinks");
                 } // if
                 
                 if (this.newFoodItems.size() > 0)
@@ -158,7 +158,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                         tab.getTable());
                     out.reset();
                     out.writeObject(newEvt1);
-                    System.out.println("sent food");
+                    MyClient.debugGUI.addText("sent food");
                 } // if                
                 
                 con.close(); 
@@ -179,11 +179,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     @Override
     public void mouseClicked(MouseEvent me) 
     {
-        //System.out.println("mouse clicked");
-        //System.out.println("source class: " +  me.getSource().getClass());
+        //MyClient.debugGUI.addText("mouse clicked");
+        //MyClient.debugGUI.addText("source class: " +  me.getSource().getClass());
             if(me.getSource() == this || me.getSource() == outputTextPane)
             {
-                //System.out.println("found called panel");
+                //MyClient.debugGUI.addText("found called panel");
                 switchToParentCard();
             }   
     } // mouseClickeds
@@ -352,7 +352,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                     Collections.swap(cardPanelsList, i, 0);
                 
            // for (MenuCardPanel c : cardPanelsList )
-                //System.out.println(c);            
+                //MyClient.debugGUI.addText(c);            
         } // try // try
         catch (SQLException ex) 
         {
@@ -476,7 +476,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
     
     private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
-System.out.println("pressed");
+MyClient.debugGUI.addText("pressed");
     }//GEN-LAST:event_OutputAreaKeyPressed
 
     private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
@@ -507,7 +507,7 @@ System.out.println("pressed");
     {
         if(this.currentCard.hasParent())
         {
-            //System.out.println("current panel " + this.currentCard.getName());
+            //MyClient.debugGUI.addText("current panel " + this.currentCard.getName());
             int parentIndex = cardPanels.indexOf(this.currentCard.getParentPanel());
             CardLayout cl = (CardLayout)(CardPanel.getLayout());
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
