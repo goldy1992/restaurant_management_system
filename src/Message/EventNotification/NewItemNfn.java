@@ -48,9 +48,9 @@ public class NewItemNfn extends EventNotification
         
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        MyClient.debugGUI.addText("Making new item notification:\n" 
-                            + cal.get(Calendar.HOUR_OF_DAY) + ":" 
-                            + cal.get(Calendar.MINUTE));
+//        MyClient.debugGUI.addText("Making new item notification:\n" 
+  //                          + cal.get(Calendar.HOUR_OF_DAY) + ":" 
+    //                        + cal.get(Calendar.MINUTE));
         this.hours = cal.get(Calendar.HOUR_OF_DAY);
         this.minutes = cal.get(Calendar.MINUTE); 
     } // constructor

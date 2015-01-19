@@ -67,7 +67,7 @@ public class MyServer
                 ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
                 newThread.getThread().start();
 
-                debugGUI.addText("client size " + waiterClient.size());
+                debugGUI.addText("accept client number " + clientNumber);
                 clientNumber++;
             } // while
    

@@ -60,6 +60,32 @@ public class Test
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+        
+        // creates the waiter client
+        Thread client1 = new Thread(){
+        @Override
+        public void run()
+        {
+            try
+            {
+                Client.MyClient.main(null);
+            } 
+            catch (InterruptedException ex) 
+            {
+                Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }// run
+        };
+        client1.start();
+        
+        try { Thread.sleep(2000); } 
+        catch (InterruptedException ex) 
+        {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
         
         // creates the kitchen client

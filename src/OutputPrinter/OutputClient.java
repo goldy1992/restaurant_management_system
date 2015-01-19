@@ -5,7 +5,6 @@
  */
 package OutputPrinter;
 
-import Item.Item;
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.NewItemNfn;
 import Message.Message;
@@ -62,9 +61,7 @@ public class OutputClient implements Runnable
        
        try
        {
-System.out.println("argslength = " + args.length);
-           
-           
+                  
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
@@ -147,7 +144,9 @@ System.out.println("argslength = " + args.length);
                 while(isRunning)
                 {               
                     // read the message
-                    Message message = (Message) in.readObject();                    
+                    Message message = (Message) in.readObject();
+                    
+                    gui.addText("message received");
                     
                     // convert message to notification
                     if (message instanceof EventNotification)
