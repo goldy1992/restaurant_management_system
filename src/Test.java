@@ -1,6 +1,6 @@
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +17,8 @@ public class Test
 {
     public static void main(String[] args)
     {
+        
+        Executor myThreadPool = Executors.newFixedThreadPool(4);
         // creates the server
         Thread serverThread = new Thread(){
         @Override
@@ -26,7 +28,7 @@ public class Test
             
         }// run
         };
-        serverThread.start();
+        myThreadPool.execute(serverThread);
         
         try { Thread.sleep(2000); } 
         catch (InterruptedException ex) 
@@ -34,8 +36,7 @@ public class Test
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
+            
         // creates the waiter client
         Thread client = new Thread(){
         @Override
@@ -52,40 +53,14 @@ public class Test
             
         }// run
         };
-        client.start();
+        myThreadPool.execute(client);
         
         try { Thread.sleep(2000); } 
         catch (InterruptedException ex) 
         {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        // creates the waiter client
-        Thread client1 = new Thread(){
-        @Override
-        public void run()
-        {
-            try
-            {
-                Client.MyClient.main(null);
-            } 
-            catch (InterruptedException ex) 
-            {
-                Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }// run
-        };
-        client1.start();
-        
-        try { Thread.sleep(2000); } 
-        catch (InterruptedException ex) 
-        {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+       
 
         
         // creates the kitchen client
@@ -98,7 +73,7 @@ public class Test
             
         }// run
         };
-        kitchenClient.start(); 
+        myThreadPool.execute(kitchenClient);
         
                 try {  Thread.sleep(2000); } 
         catch (InterruptedException ex) 
@@ -116,10 +91,8 @@ public class Test
             
         }// run
         };
-        barClient.start(); 
-        
+        myThreadPool.execute(barClient); 
 
-           
              
     } // main   
 } // class

@@ -6,6 +6,7 @@ import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -221,7 +222,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         BillHandlePanel.setBorder(new javax.swing.border.MatteBorder(null));
         BillHandlePanel.setFocusable(false);
         BillHandlePanel.setRequestFocusEnabled(false);
-        BillHandlePanel.setLayout(new java.awt.GridLayout(8, 1));
+        BillHandlePanel.setLayout(new java.awt.GridLayout(9, 1));
 
         JButton PrintBillButton = new JButton(); 
         PrintBillButton.setText("Print Bill");
@@ -253,10 +254,16 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         BillHandlePanel.add(OrderHoldButton);
         buttons.add(OrderHoldButton);
         
+        
         JButton DeliveredButton = new JButton();
         DeliveredButton.setText("Delivered");
         BillHandlePanel.add(DeliveredButton);
         buttons.add(DeliveredButton);
+        
+        JButton barTabButton = new JButton();
+        barTabButton.setText("Bar Tab");
+        BillHandlePanel.add(barTabButton);
+        buttons.add(barTabButton);
         
         SendOrderButton = new JButton();
         SendOrderButton.addActionListener(this);
@@ -264,7 +271,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         BillHandlePanel.add(SendOrderButton);
         buttons.add(SendOrderButton);
 
+        panel.remove(2);
         panel.add(BillHandlePanel);
+        panel.add(Menu.createKeypadPanel());
 
         CardPanel.add(panel, panel.getName());
         panels.add(panel);
@@ -554,5 +563,74 @@ MyClient.debugGUI.addText("pressed");
         else
             newFoodItems.add(newItem);      
     } // addNewItem
+    
+    public static JPanel createKeypadPanel()
+    {
+        JPanel keypadPanel = new JPanel();
+        keypadPanel.setLayout(new GridLayout(4,3));
+        
+        // makes the first 9 buttons
+        for (int i= 1; i <= 9; i++)
+        {
+            final int x = i; // declared final so can be used in the actionlistener method
+            JButton number = new JButton(i + "");
+            number.addActionListener(new ActionListener() 
+            {
+
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
+                    currentTab += x;
+                    MyClient.selectTable.menu.outputTextPane.setText(currentTab);
+                    
+                    
+                }
+            });
+            keypadPanel.add(number);
+        } // for
+        
+        
+        
+        final int zero = 0; // declared final so can be used in the actionlistener method
+        JButton number = new JButton(zero + "");
+        number.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
+                currentTab += zero;
+                MyClient.selectTable.menu.outputTextPane.setText(currentTab);    
+            }
+        });
+        keypadPanel.add(number);
+        
+        
+
+        JButton clear = new JButton("Clear");
+        clear.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
+                String[] array = currentTab.split("\n");
+                System.out.println(array);
+            }
+        });
+        keypadPanel.add(clear);  
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        return keypadPanel;
+    }
     
 } // class

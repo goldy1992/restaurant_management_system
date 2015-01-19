@@ -22,6 +22,7 @@ public class MenuCardPanel extends JPanel
 
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private final JPanel menuSelectPanel;
+    private final JPanel keypadPanel;
     
     /**
      *
@@ -33,7 +34,8 @@ public class MenuCardPanel extends JPanel
 
         childCardButtons = new ArrayList<MenuCardLinkJButton>();
         menuSelectPanel = new JPanel();
-        itemsPanel = new JPanel();            
+        itemsPanel = new JPanel();      
+        keypadPanel = Menu.createKeypadPanel();
     }
     
     /**
@@ -174,6 +176,11 @@ public class MenuCardPanel extends JPanel
         return itemsPanel;
     }
     
+    public JPanel getKeypadPanel()
+    {
+        return keypadPanel;
+    }
+    
     /**
      * This method should return true for every panel and false for the main 
      * panel.
@@ -196,6 +203,7 @@ public class MenuCardPanel extends JPanel
         x.setLayout(new GridLayout(1,0));
         x.add(x.getMenuSelectPanel());
         x.add(x.getItemsPanel());
+        x.add(x.getKeypadPanel());
         x.setFocusable(false);
         x.setRequestFocusEnabled(false);
         return x;

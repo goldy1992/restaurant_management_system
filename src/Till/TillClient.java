@@ -64,6 +64,7 @@ public class TillClient implements Runnable
                                                  InetAddress.getByName(serverAddress.getHostName()),
                                                  Message.generateRequestID(),
                                                  Request.RequestType.NUM_OF_TABLES);
+            out.reset();
             out.writeObject(nTablesRequest);
             //System.out.println("sent num table request");
 
@@ -76,8 +77,9 @@ public class TillClient implements Runnable
             TableStatusRequest rKitchenRequest = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
                                                 InetAddress.getByName(serverAddress.getHostName()),
                                                 Message.generateRequestID(),
-                                                Request.RequestType.REGISTER_KITCHEN,
-                                                tables);         
+                                                Request.RequestType.TABLE_STATUS,
+                                                tables);    
+            out.reset();
             out.writeObject(rKitchenRequest);
             
             
