@@ -616,7 +616,10 @@ MyClient.debugGUI.addText("pressed");
             {
                 String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
                 String[] array = currentTab.split("\n");
-                System.out.println(array);
+                for(String s : array)
+                {
+                    System.out.println(s);
+                }
             }
         });
         keypadPanel.add(clear);  
