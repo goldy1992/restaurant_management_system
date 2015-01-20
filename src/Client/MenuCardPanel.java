@@ -30,9 +30,9 @@ public class MenuCardPanel extends JPanel
     private MenuCardPanel()
     {
         super();
-        cardMenuItems = new ArrayList<MenuItemJButton>();
+        cardMenuItems = new ArrayList<>();
 
-        childCardButtons = new ArrayList<MenuCardLinkJButton>();
+        childCardButtons = new ArrayList<>();
         menuSelectPanel = new JPanel();
         itemsPanel = new JPanel();      
         keypadPanel = Menu.createKeypadPanel();

@@ -69,6 +69,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private final ObjectOutputStream out;
     private final ArrayList<Item> newFoodItems = new ArrayList<>();
     private final ArrayList<Item> newDrinkItems = new ArrayList<>();
+    private final MenuCardPanel kitchenBarMsgPanel;
     
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<>();
     private JButton SendOrderButton = null;
@@ -99,6 +100,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private MenuCardPanel createKitchenBarMessageCard()
     {
         MenuCardPanel newPanel = MenuCardPanel.createMenuCardPanel();
+        newPanel.setName("kitchenBarPanel");
         
         newPanel.remove(0);
         newPanel.remove(1);
@@ -125,8 +127,18 @@ public class Menu extends JDialog implements ActionListener, MouseListener
       
         // initialises the part of the GUI made automatically by netbeans
         initComponents();
+        
+                // create the kitchen/Bar message panel
+        kitchenBarMsgPanel = createKitchenBarMessageCard();
+        CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
+
         cardPanels = getCards();
-        cardPanels.add(createKitchenBarMessageCard());
+        
+  
+        
+        
+
+
         cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
         
         for(MenuCardPanel p : cardPanels)
@@ -136,6 +148,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanels.get(0).getName());
         currentCard = cardPanels.get(0);
+        
+        // set the kitchen parent not because the current card is not null
+        kitchenBarMsgPanel.setParentPanel(currentCard);
         
         // this code only allows the output Area text pane to have key controls
         components.addAll(buttons);
@@ -203,6 +218,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             this.dispose();
         } // if
     } // actionPerformed
+    
+    public MenuCardPanel getKitchenBarMsgPanel()
+    {
+        return kitchenBarMsgPanel;
+    }
     
     public Tab getTab()
     {
@@ -335,7 +355,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 cardPanelsList.add(panel);
                 
                 // ADD the kitchen message card option to EVERY card's children
-                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(null, "Kitchen/Bar Message"));
+                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(kitchenBarMsgPanel, "Kitchen/Bar Message"));
             } // while
                             
              // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
@@ -556,6 +576,10 @@ MyClient.debugGUI.addText("pressed");
             CardLayout cl = (CardLayout)(CardPanel.getLayout());
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
             currentCard = cardPanels.get(parentIndex);
+            
+            // set the new Kitchen message parent to be the new card.
+            kitchenBarMsgPanel.setParentPanel(currentCard);
+            
             Menu.removeNumberFromTab();
         } // if
     } // switchToParentCard
