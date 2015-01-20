@@ -6,6 +6,8 @@ import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,10 +27,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -99,13 +98,64 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      */
     private MenuCardPanel createKitchenBarMessageCard()
     {
-        MenuCardPanel newPanel = MenuCardPanel.createMenuCardPanel();
-        newPanel.setName("kitchenBarPanel");
+        MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel();
+        containerPanel.setName("kitchenBarPanel");
+        containerPanel.removeAll();
         
-        newPanel.remove(0);
-        newPanel.remove(1);
+        String[] ch = {"Q","W","E","R","T","Y","U","I","O","P",
+                     "A","S","D","F","G","H","J","K", "L",
+                     "Z","X","C","V","B","N","M",
+                     "SPACE"};
         
-        return newPanel;
+        JPanel keyboardContainerPanel = new JPanel();
+        keyboardContainerPanel.setLayout(new GridLayout(4,1));
+        
+        containerPanel.add(keyboardContainerPanel);
+        containerPanel.add(containerPanel.getKeypadPanel());
+        
+        
+        // add line 1
+        JPanel line1 = new JPanel();
+        line1.setLayout(new GridLayout(1,10));
+        keyboardContainerPanel.add(line1);        
+        for(int i = 0; i <= 9; i++)
+        {
+            JButton key = new JButton(ch[i]);
+            key.addActionListener(makeKeyActionListener(ch[i]));
+            line1.add(key);
+        } // for 
+       
+        // add line 2
+        JPanel line2 = new JPanel();
+        line2.setLayout(new GridLayout(1,10));
+        keyboardContainerPanel.add(line2);
+        for(int i = 10; i <= 18; i++)
+        {
+            JButton key = new JButton(ch[i]);
+            key.addActionListener(makeKeyActionListener(ch[i]));
+            line2.add(key);
+        }
+               
+        // add line 3
+        JPanel line3 = new JPanel();
+        line3.setLayout(new GridLayout(1,10));
+        keyboardContainerPanel.add(line3);
+        for(int i = 19; i <= 25; i++)
+        {
+            JButton key = new JButton(ch[i]);
+            key.addActionListener(makeKeyActionListener(ch[i]));            
+            line3.add(key);
+        }
+ 
+        JPanel line4 = new JPanel();
+        line4.setLayout(new GridLayout(1,1));
+        keyboardContainerPanel.add(line4);
+        // La ultima en la colección
+        JButton key = new JButton("SPACE");
+        key.addActionListener(makeKeyActionListener(" "));
+        line4.add(key);
+        
+        return containerPanel;
     }
     
         /**
@@ -128,18 +178,17 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         // initialises the part of the GUI made automatically by netbeans
         initComponents();
         
-                // create the kitchen/Bar message panel
+        // create the kitchen/Bar message panel
         kitchenBarMsgPanel = createKitchenBarMessageCard();
+        // add the kitchen/Bar message panel to the card layout
         CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
 
+        // prepare the rest of the cards and store in cardPanels arrayList
         cardPanels = getCards();
         
-  
-        
-        
-
-
+        // initialise the cardLayout to show the main panel
         cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
+        
         
         for(MenuCardPanel p : cardPanels)
             CardPanel.add(p, p.getName());
@@ -699,5 +748,25 @@ MyClient.debugGUI.addText("pressed");
             MyClient.selectTable.menu.outputTextPane.setText(x);
         } // if
     } // remove number from tab
+    
+    private ActionListener makeKeyActionListener(final String key)
+    {
+    
+        ActionListener toReturn = new ActionListener(){
+
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    Menu menu = MyClient.selectTable.menu;
+                    String currentText = menu.OutputArea.getText();
+                    currentText += key;
+                    menu.OutputArea.setText(currentText);
+                   
+                }
+        };
+        
+        return toReturn;
+        
+    }
     
 } // class
