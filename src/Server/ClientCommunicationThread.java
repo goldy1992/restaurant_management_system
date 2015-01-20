@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,13 +44,14 @@ public class ClientCommunicationThread implements Runnable
      * @param socket
      * @param id
      */
-    public ClientCommunicationThread(Socket socket, long id)
+    public ClientCommunicationThread(Socket socket, long id) throws SocketException
     {
         this.socket = socket;
         this.id = id;
         this.isRunning = true;
         this.thread = new Thread(this);
         gui = new OutputGUI();
+        System.out.println("buffer size: " + socket.getReceiveBufferSize());
         //gui.setVisible(true);
     } // constructor
     

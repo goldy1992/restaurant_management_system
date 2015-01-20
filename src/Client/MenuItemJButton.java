@@ -5,6 +5,7 @@
  */
 package Client;
 
+import static Client.Menu.isNumeric;
 import Item.Item;
 import Item.Item.Type;
 import Item.Tab;
@@ -46,13 +47,26 @@ public class MenuItemJButton extends JButton implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
-        Menu menu = MyClient.selectTable.menu;
+                Menu menu = MyClient.selectTable.menu;
+        // detects to see if a number has been pressed and if so removes it
+        String currentTab1 = menu.outputTextPane.getText();
+        String[] array = currentTab1.split("\n");
+    
+        int quantity = 1;
+        if (isNumeric(array[array.length-1]))
+            quantity = Integer.parseInt(array[array.length-1]);
+     
+        
+        
+
         Tab currentTab = menu.getTab();
 
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
-        Item newItem = new Item(this.id, this.getText(), this.price, this.type );
+        Item newItem = new Item(this.id, this.getText(), this.price.multiply(new BigDecimal(quantity)), this.type, quantity);
         currentTab.addItem(newItem);
         menu.addNewItem(newItem);
+        
+        Menu.removeNumberFromTab();
         
         MyClient.debugGUI.addText(newItem.toString());
         

@@ -25,7 +25,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -74,6 +77,19 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @see javax.swing.JTextPane
      */
     public JTextPane outputTextPane;
+    
+    public static boolean isNumeric(String x)
+    {
+        try
+        {
+            Integer.parseInt(x);
+            return true;
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+    } // isNumeric
     
         /**
      * Creates new form Menu
@@ -521,6 +537,7 @@ MyClient.debugGUI.addText("pressed");
             CardLayout cl = (CardLayout)(CardPanel.getLayout());
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
             currentCard = cardPanels.get(parentIndex);
+            Menu.removeNumberFromTab();
         } // if
     } // switchToParentCard
     
@@ -576,22 +593,18 @@ MyClient.debugGUI.addText("pressed");
             JButton number = new JButton(i + "");
             number.addActionListener(new ActionListener() 
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
                     String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
                     currentTab += x;
-                    MyClient.selectTable.menu.outputTextPane.setText(currentTab);
-                    
-                    
-                }
+                    MyClient.selectTable.menu.outputTextPane.setText(currentTab);                   
+                } // act performed
             });
             keypadPanel.add(number);
         } // for
         
-        
-        
+        /* make the zero button manually after number 9 */   
         final int zero = 0; // declared final so can be used in the actionlistener method
         JButton number = new JButton(zero + "");
         number.addActionListener(new ActionListener() 
@@ -607,33 +620,41 @@ MyClient.debugGUI.addText("pressed");
         keypadPanel.add(number);
         
         
-
+        /* Make the clear button */
         JButton clear = new JButton("Clear");
         clear.addActionListener(new ActionListener() 
-        {
+        {        
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
-                String[] array = currentTab.split("\n");
-                for(String s : array)
-                {
-                    System.out.println(s);
-                }
-            }
+                Menu.removeNumberFromTab();
+            } // actionPerformed
         });
-        keypadPanel.add(clear);  
-        
-
-        
-        
-        
-        
-        
-        
-        
+        keypadPanel.add(clear);    
         
         return keypadPanel;
     }
+    
+    /**
+     * A useful method that will take any number to express quantity that have 
+     * been pressed and remove them, reseting the default number to 1.
+     */
+    public static void removeNumberFromTab()
+    {
+        // detects to see if a number has been pressed and if so removes it
+        String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
+        String[] array = currentTab.split("\n");
+        for(String s : array)
+            System.out.println(s);
+    
+        if (isNumeric(array[array.length-1]))
+        {
+            String x = "";
+            for (int i = 0; i <= array.length - 2; i++)
+                x += array[i] + "\n";
+
+            MyClient.selectTable.menu.outputTextPane.setText(x);
+        } // if
+    } // remove number from tab
     
 } // class

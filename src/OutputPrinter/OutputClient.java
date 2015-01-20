@@ -138,7 +138,6 @@ public class OutputClient implements Runnable
             if (client != null)
             {
                 System.out.println(client);
-                System.out.println("read message");
                 
                 
                 while(isRunning)
@@ -152,12 +151,9 @@ public class OutputClient implements Runnable
                     if (message instanceof EventNotification)
                     {
                         if (message instanceof NewItemNfn)
-                        {
-                            
-                            
+                        {                    
                             NewItemNfn newItemMessage = (NewItemNfn)message;
                             gui.addMessage(newItemMessage);
-
                         } // if
                     } // if
                     else if (message instanceof Response)

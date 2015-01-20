@@ -42,43 +42,6 @@ public class Item implements Serializable
     private final BigDecimal price;
     private final int quantity;
     
-    /**
-     *
-     * @param id
-     * @param name
-     * @param message
-     * @param price
-     * @param type
-     */
-    public Item(int id, String name, 
-                String message, BigDecimal price, 
-                Type type)
-    {
-        this.id = id;
-        this.message = message;
-        this.name = name;
-        this.price = price;
-        this.type = type;
-        this.quantity = 1;
-    } // item
-    
-    /**
-     *
-     * @param id
-     * @param name
-     * @param price
-     * @param type
-     */
-    public Item(int id, String name, 
-                BigDecimal price, Type type)
-    {
-        this.id = id;
-        this.message = null;
-        this.name = name;
-        this.price = price;
-        this.type = type;
-        this.quantity = 1;
-    } // item
     
     /**
      *
