@@ -91,6 +91,21 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         }
     } // isNumeric
     
+    /**
+     * The method that makes the Kitchen/Bar message card with the keyboard
+     * 
+     * @return the newly created card
+     */
+    private MenuCardPanel createKitchenBarMessageCard()
+    {
+        MenuCardPanel newPanel = MenuCardPanel.createMenuCardPanel();
+        
+        newPanel.remove(0);
+        newPanel.remove(1);
+        
+        return newPanel;
+    }
+    
         /**
      * Creates new form Menu
      * @param parent
@@ -111,6 +126,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         // initialises the part of the GUI made automatically by netbeans
         initComponents();
         cardPanels = getCards();
+        cardPanels.add(createKitchenBarMessageCard());
         cardPanels.set(0, initialiseMainCard(cardPanels.get(0)));
         
         for(MenuCardPanel p : cardPanels)
@@ -317,6 +333,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 MenuCardPanel panel = MenuCardPanel.createMenuCardPanel();
                 panel.setName(results.getString(1));
                 cardPanelsList.add(panel);
+                
+                // ADD the kitchen message card option to EVERY card's children
+                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(null, "Kitchen/Bar Message"));
             } // while
                             
              // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
