@@ -6,8 +6,6 @@ import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
 import java.awt.CardLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,6 +66,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private final ObjectOutputStream out;
     private final ArrayList<Item> newFoodItems = new ArrayList<>();
     private final ArrayList<Item> newDrinkItems = new ArrayList<>();
+    private final ArrayList<Item> newItems = new ArrayList<>();
     private final MenuCardPanel kitchenBarMsgPanel;
     
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<>();
@@ -221,6 +220,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     {
         if (ae.getSource() == SendOrderButton)
         {
+            
+            
             try 
             {
                 TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
@@ -230,6 +231,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 out.reset();
                 out.writeObject(newEvt);
                 
+                // send the new items to the bar or kitchen respectively
                 if (this.newDrinkItems.size() > 0)
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
@@ -626,6 +628,18 @@ MyClient.debugGUI.addText("pressed");
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
             currentCard = cardPanels.get(parentIndex);
             
+            
+            /* TO DOOOO
+            if  new items is not nulll
+            
+                If current panel == kitch message
+                    parse last line and add the last items kitch message
+            
+            
+            
+            */
+            
+            
             // set the new Kitchen message parent to be the new card.
             kitchenBarMsgPanel.setParentPanel(currentCard);
             
@@ -667,10 +681,7 @@ MyClient.debugGUI.addText("pressed");
     
     public void addNewItem(Item newItem)
     {
-        if (newItem.type == Item.Type.DRINK)
-            newDrinkItems.add(newItem);
-        else
-            newFoodItems.add(newItem);      
+        this.newItems.add(newItem);
     } // addNewItem
     
     public static JPanel createKeypadPanel()

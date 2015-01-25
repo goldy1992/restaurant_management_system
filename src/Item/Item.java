@@ -43,25 +43,6 @@ public class Item implements Serializable
     private final int quantity;
     
     
-    /**
-     *
-     * @param id
-     * @param name
-     * @param message
-     * @param price
-     * @param type
-     * @param quantity
-     */
-    public Item(int id, String name, String message, 
-                BigDecimal price, Type type, int quantity)
-    {
-        this.id = id;
-        this.message = message;
-        this.name = name;
-        this.price = price;
-        this.type = type;
-        this.quantity = quantity;
-    } // item
     
     /**
      *
@@ -86,6 +67,19 @@ public class Item implements Serializable
     {
         this.message += message;
     } // setMessage
+    
+    public String outputToScreen()
+    {
+        String stringToReturn = "";
+        
+        stringToReturn += this.getQuantity() + "\t" + this.getName() 
+            + "\t\t\t£" + this.getPrice().doubleValue() + "\n";
+            
+        if (this.getMessage() != null)
+            stringToReturn += this.getMessage() + "\n";
+        
+        return stringToReturn;
+    } // outputToScreen
     
     @Override
     public String toString()

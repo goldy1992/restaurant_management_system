@@ -29,9 +29,7 @@ public class Tab implements Serializable
     {
         String sToReturn = "";
         for (Item i : items)
-            sToReturn += i.getQuantity() + "\t" + i.getName() 
-                        + "\t\t\t£" + i.getPrice().doubleValue() + "\n";
-        
+            sToReturn += i.outputToScreen();
         return sToReturn;
     } // toString
     

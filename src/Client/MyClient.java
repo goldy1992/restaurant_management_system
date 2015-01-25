@@ -40,6 +40,7 @@ public class MyClient implements Runnable
     public static SelectTable selectTable; // selectTableGUI
     public static OutputGUI debugGUI;
     public static MyClient responseThread;
+    
     /**
      * An object used to ensure tasks are performed asynchronously. 
      */
