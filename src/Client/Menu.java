@@ -499,8 +499,12 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         jPanel2 = new javax.swing.JPanel();
         FormPanel = new javax.swing.JPanel();
         OutputAreaPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        ouputScrollPane = new javax.swing.JScrollPane();
         OutputArea = new javax.swing.JTextPane();
+        quantityPane = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        totalCostPane = new javax.swing.JScrollPane();
+        jTextPane2 = new javax.swing.JTextPane();
         CardPanel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -518,6 +522,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridLayout());
 
         FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         FormPanel.setLayout(new java.awt.GridBagLayout());
@@ -525,6 +530,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         OutputAreaPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         OutputAreaPanel.setFocusable(false);
         OutputAreaPanel.setPreferredSize(new java.awt.Dimension(400, 150));
+        OutputAreaPanel.setLayout(new java.awt.GridBagLayout());
 
         outputTextPane = OutputArea;
         OutputArea.setEditable(false);
@@ -538,18 +544,39 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 OutputAreaKeyPressed(evt);
             }
         });
-        jScrollPane1.setViewportView(OutputArea);
+        ouputScrollPane.setViewportView(OutputArea);
 
-        javax.swing.GroupLayout OutputAreaPanelLayout = new javax.swing.GroupLayout(OutputAreaPanel);
-        OutputAreaPanel.setLayout(OutputAreaPanelLayout);
-        OutputAreaPanelLayout.setHorizontalGroup(
-            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-        );
-        OutputAreaPanelLayout.setVerticalGroup(
-            OutputAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 2631;
+        gridBagConstraints.ipady = 108;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        OutputAreaPanel.add(ouputScrollPane, gridBagConstraints);
+
+        quantityPane.setViewportView(jTextPane1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        OutputAreaPanel.add(quantityPane, gridBagConstraints);
+
+        totalCostPane.setViewportView(jTextPane2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        OutputAreaPanel.add(totalCostPane, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -575,6 +602,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         FormPanel.add(CardPanel, gridBagConstraints);
         panels.add(CardPanel);
 
+        getContentPane().add(FormPanel);
+        panels.add(FormPanel);
+
         jMenu1.setText("File");
         MenuBar.add(jMenu1);
 
@@ -586,19 +616,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
         MenuBar.setFocusable(false);
         MenuBar.requestFocus(false);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 2654, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-        );
-
-        panels.add(FormPanel);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -621,7 +638,11 @@ MyClient.debugGUI.addText("pressed");
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JScrollPane ouputScrollPane;
+    private javax.swing.JScrollPane quantityPane;
+    private javax.swing.JScrollPane totalCostPane;
     // End of variables declaration//GEN-END:variables
     
     /**
