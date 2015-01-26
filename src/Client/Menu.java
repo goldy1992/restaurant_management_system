@@ -220,6 +220,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     {
         if (ae.getSource() == SendOrderButton)
         {
+            /* the code to parse and separate items in the new items and add to
+                tab
+            */
             
             
             try 
@@ -622,23 +625,27 @@ MyClient.debugGUI.addText("pressed");
     {
         if(this.currentCard.hasParent())
         {
+
+
+                if (currentCard.getName().equals("kitchenBarPanel") && newItems.size() > 0)
+                {
+                    
+                    // detects to see if a number has been pressed and if so removes it
+                    String currentTab1 = outputTextPane.getText();
+                    String[] array = currentTab1.split("\n");
+    
+                    if (!isNumeric(array[array.length-1]))
+                        this.newItems.get(newItems.size()-1).setMessage(array[array.length-1]);            
+                }
+            
+            
             //MyClient.debugGUI.addText("current panel " + this.currentCard.getName());
             int parentIndex = cardPanels.indexOf(this.currentCard.getParentPanel());
             CardLayout cl = (CardLayout)(CardPanel.getLayout());
             cl.show(CardPanel, cardPanels.get(parentIndex).getName() );
             currentCard = cardPanels.get(parentIndex);
             
-            
-            /* TO DOOOO
-            if  new items is not nulll
-            
-                If current panel == kitch message
-                    parse last line and add the last items kitch message
-            
-            
-            
-            */
-            
+
             
             // set the new Kitchen message parent to be the new card.
             kitchenBarMsgPanel.setParentPanel(currentCard);
