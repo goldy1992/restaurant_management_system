@@ -69,6 +69,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private final ArrayList<Item> newItems = new ArrayList<>();
     private final MenuCardPanel kitchenBarMsgPanel;
     
+    public int quantitySelected = -1; // -1 defaults to 1
+    public boolean messageForLatestItem;
+    
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<>();
     private JButton SendOrderButton = null;
     /**
@@ -800,8 +803,8 @@ MyClient.debugGUI.addText("pressed");
                     String currentText = menu.OutputArea.getText();
                     currentText += key;
                     menu.OutputArea.setText(currentText);
-                   
-                }
+                    menu.messageForLatestItem = true;       
+                } // actionPerformed
         };
         
         return toReturn;
