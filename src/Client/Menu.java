@@ -223,7 +223,15 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             /* the code to parse and separate items in the new items and add to
                 tab
             */
+            for (Item i : newItems)
+            {
+                if (i.getType() == Item.Type.DRINK)
+                    this.newDrinkItems.add(i);
+                else
+                    this.newFoodItems.add(i);
             
+                this.tab.addItem(i);
+            } // for
             
             try 
             {
@@ -636,6 +644,19 @@ MyClient.debugGUI.addText("pressed");
     
                     if (!isNumeric(array[array.length-1]))
                         this.newItems.get(newItems.size()-1).setMessage(array[array.length-1]);            
+                }
+                else
+                {
+                    // detects to see if a number has been pressed and if so removes it
+                    String currentTab1 = outputTextPane.getText();
+                    String[] array = currentTab1.split("\n");
+                    
+                    if (!array[array.length-1].equals(""))
+                    {
+                        /* 
+                        ADD CODE TO REMOVE TEXT ON THE LAST WRITTEN LINE
+                        */
+                    }
                 }
             
             

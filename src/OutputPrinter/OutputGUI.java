@@ -36,9 +36,14 @@ public class OutputGUI extends javax.swing.JFrame {
     {
         String currentText = outputPanel.getText();
         currentText += "Table " +  msg.getTable().getTableNumber() + " - " + OutputClient.timeToString(msg.getHours(), msg.getMinutes()) + "\n";
+        
         for (Item i : msg.getItems())
+        {
             currentText += i.getQuantity() + "\t" + i.getName() + "\n";
-                            
+            
+            if (!i.getMessage().equals(""))
+                currentText += i.getMessage();
+        } // for              
         currentText += "\n\n";
         
         outputPanel.setText(currentText);

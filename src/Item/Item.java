@@ -56,7 +56,7 @@ public class Item implements Serializable
                 BigDecimal price, Type type, int quantity)
     {
         this.id = id;
-        this.message = null;
+        this.message = "";
         this.name = name;
         this.price = price;
         this.type = type;
@@ -75,7 +75,7 @@ public class Item implements Serializable
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
             + "\t\t\t£" + this.getPrice().doubleValue() + "\n";
             
-        if (this.getMessage() != null)
+        if (!this.getMessage().equals(""))
             stringToReturn += this.getMessage() + "\n";
         
         return stringToReturn;

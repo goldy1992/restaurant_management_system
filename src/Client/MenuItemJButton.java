@@ -59,7 +59,6 @@ public class MenuItemJButton extends JButton implements ActionListener
         int quantity = 1;
         if (isNumeric(array[array.length-1]))
             quantity = Integer.parseInt(array[array.length-1]);
-     
         
 
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
