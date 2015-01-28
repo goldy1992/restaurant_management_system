@@ -66,11 +66,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private final ObjectOutputStream out;
     private final ArrayList<Item> newFoodItems = new ArrayList<>();
     private final ArrayList<Item> newDrinkItems = new ArrayList<>();
-    private final ArrayList<Item> newItems = new ArrayList<>();
+    public final ArrayList<Item> newItems = new ArrayList<>();
     private final MenuCardPanel kitchenBarMsgPanel;
     
     public int quantitySelected = -1; // -1 defaults to 1
-    public boolean messageForLatestItem;
+    public boolean messageForLatestItem = false;
     
     private ArrayList<MenuCardPanel> cardPanels = new ArrayList<>();
     private JButton SendOrderButton = null;
@@ -79,6 +79,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @see javax.swing.JTextPane
      */
     public JTextPane outputTextPane;
+    public JTextPane quantityTextPane;
+    public JTextPane totalCostTextPane;
+    
+    
     
     public static boolean isNumeric(String x)
     {
@@ -171,7 +175,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
         super(parent, modal);
-        this.tab = tab;
+         this.tab = tab;
         this.out = stream;
      
         // initialise the connection to the database
@@ -390,7 +394,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
         panel.remove(2);
         panel.add(BillHandlePanel);
-        panel.add(Menu.createKeypadPanel());
+        // true because we want the keypad the be used for quantity
+        panel.add(Menu.createKeypadPanel(true));
 
         CardPanel.add(panel, panel.getName());
         panels.add(panel);
@@ -502,9 +507,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         ouputScrollPane = new javax.swing.JScrollPane();
         OutputArea = new javax.swing.JTextPane();
         quantityPane = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        quantityArea = new javax.swing.JTextPane();
         totalCostPane = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        totalCostArea = new javax.swing.JTextPane();
         CardPanel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -522,7 +527,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        setPreferredSize(new java.awt.Dimension(800, 500));
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
         FormPanel.setLayout(new java.awt.GridBagLayout());
@@ -559,7 +565,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         OutputAreaPanel.add(ouputScrollPane, gridBagConstraints);
 
-        quantityPane.setViewportView(jTextPane1);
+        quantityTextPane = quantityArea;
+        quantityPane.setViewportView(quantityArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -569,7 +576,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         gridBagConstraints.weightx = 0.5;
         OutputAreaPanel.add(quantityPane, gridBagConstraints);
 
-        totalCostPane.setViewportView(jTextPane2);
+        totalCostTextPane = totalCostArea;
+        totalCostPane.setViewportView(totalCostArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -638,10 +646,10 @@ MyClient.debugGUI.addText("pressed");
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
     private javax.swing.JScrollPane ouputScrollPane;
+    private javax.swing.JTextPane quantityArea;
     private javax.swing.JScrollPane quantityPane;
+    private javax.swing.JTextPane totalCostArea;
     private javax.swing.JScrollPane totalCostPane;
     // End of variables declaration//GEN-END:variables
     
@@ -695,7 +703,8 @@ MyClient.debugGUI.addText("pressed");
             // set the new Kitchen message parent to be the new card.
             kitchenBarMsgPanel.setParentPanel(currentCard);
             
-            Menu.removeNumberFromTab();
+            quantitySelected = -1;
+            this.quantityTextPane.setText("");
         } // if
     } // switchToParentCard
     
@@ -718,10 +727,8 @@ MyClient.debugGUI.addText("pressed");
         Menu newMenu = null;
         try 
         {
-
             newMenu = new Menu(parent, true, tab, out);
             newMenu.addMouseListener(newMenu);
-
         } // try
         catch (SQLException ex) 
         {
@@ -731,13 +738,16 @@ MyClient.debugGUI.addText("pressed");
         return newMenu;
     } // makeMenu
     
+    
     public void addNewItem(Item newItem)
     {
         this.newItems.add(newItem);
     } // addNewItem
     
-    public static JPanel createKeypadPanel()
+    public static JPanel createKeypadPanel(boolean isForQuantity)
     {
+        final boolean b = isForQuantity;
+        
         JPanel keypadPanel = new JPanel();
         keypadPanel.setLayout(new GridLayout(4,3));
         
@@ -751,9 +761,14 @@ MyClient.debugGUI.addText("pressed");
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
-                    currentTab += x;
-                    MyClient.selectTable.menu.outputTextPane.setText(currentTab);                   
+                    if (b)
+                        addNumberToQuantity(x);                  
+                    else
+                    {
+                        Menu m = MyClient.selectTable.menu;
+                        String text = m.OutputArea.getText();
+                        text += x;
+                    }
                 } // act performed
             });
             keypadPanel.add(number);
@@ -767,9 +782,14 @@ MyClient.debugGUI.addText("pressed");
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
-                currentTab += zero;
-                MyClient.selectTable.menu.outputTextPane.setText(currentTab);    
+                    if (b)
+                        addNumberToQuantity(0);                  
+                    else
+                    {
+                        Menu m = MyClient.selectTable.menu;
+                        String text = m.OutputArea.getText();
+                        text += "0";
+                    }
             }
         });
         keypadPanel.add(number);
@@ -782,7 +802,12 @@ MyClient.debugGUI.addText("pressed");
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                Menu.removeNumberFromTab();
+                if (b)
+                {
+                    Menu menu = MyClient.selectTable.menu;
+                    menu.quantitySelected = -1;
+                    menu.quantityTextPane.setText("");
+                }
             } // actionPerformed
         });
         keypadPanel.add(clear);    
@@ -790,27 +815,6 @@ MyClient.debugGUI.addText("pressed");
         return keypadPanel;
     }
     
-    /**
-     * A useful method that will take any number to express quantity that have 
-     * been pressed and remove them, reseting the default number to 1.
-     */
-    public static void removeNumberFromTab()
-    {
-        // detects to see if a number has been pressed and if so removes it
-        String currentTab = MyClient.selectTable.menu.outputTextPane.getText();
-        String[] array = currentTab.split("\n");
-        for(String s : array)
-            System.out.println(s);
-    
-        if (isNumeric(array[array.length-1]))
-        {
-            String x = "";
-            for (int i = 0; i <= array.length - 2; i++)
-                x += array[i] + "\n";
-
-            MyClient.selectTable.menu.outputTextPane.setText(x);
-        } // if
-    } // remove number from tab
     
     private ActionListener makeKeyActionListener(final String key)
     {
@@ -829,6 +833,20 @@ MyClient.debugGUI.addText("pressed");
         };
         
         return toReturn;
+        
+    }
+    
+    public static void addNumberToQuantity(int number)
+    {
+        Menu menu = MyClient.selectTable.menu;
+        Integer quantity  = menu.quantitySelected;
+        if (quantity <= 0)
+            quantity = number;
+        else
+            quantity = (quantity * 10) + number;
+        MyClient.selectTable.menu.quantityTextPane.setText(quantity.toString());
+        
+        menu.quantitySelected = quantity;
         
     }
     

@@ -46,19 +46,19 @@ public class MenuItemJButton extends JButton implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent ae) 
-    {
-        
-        
+    { 
         Menu menu = MyClient.selectTable.menu;
         
         // detects to see if a number has been pressed and if so removes it
         String currentTab1 = menu.outputTextPane.getText();
         String[] array = currentTab1.split("\n");
-    
+        
+        if (menu.messageForLatestItem)
+            menu.newItems.get(menu.newItems.size() - 1).setMessage(array[array.length - 1]);
         // parse the quantity
-        int quantity = 1;
-        if (isNumeric(array[array.length-1]))
-            quantity = Integer.parseInt(array[array.length-1]);
+        int quantity = menu.quantitySelected;
+        if (quantity < 0)
+            quantity = 1;
         
 
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
@@ -66,8 +66,8 @@ public class MenuItemJButton extends JButton implements ActionListener
         //currentTab.addItem(newItem);
         menu.addNewItem(newItem);
         
-        // removes ay previous number to select quantity from the text field
-        Menu.removeNumberFromTab();
+        menu.quantitySelected = -1;
+        menu.quantityTextPane.setText("");
         
         MyClient.debugGUI.addText(newItem.toString());
         
