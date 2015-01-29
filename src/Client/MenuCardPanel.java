@@ -36,7 +36,7 @@ public class MenuCardPanel extends JPanel
         menuSelectPanel = new JPanel();
         itemsPanel = new JPanel();      
         // true because we want to use the keyboard to control the quantity
-        keypadPanel = Menu.createKeypadPanel(true);
+        keypadPanel = Menu.createKeypadPanel();
     }
     
     /**

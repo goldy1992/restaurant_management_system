@@ -113,17 +113,28 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                      "Z","X","C","V","B","N","M",
                      "SPACE"};
         
-        JPanel keyboardContainerPanel = new JPanel();
-        keyboardContainerPanel.setLayout(new GridLayout(4,1));
+        containerPanel.setLayout(new GridLayout(5,1));
         
-        containerPanel.add(keyboardContainerPanel);
-        containerPanel.add(containerPanel.getKeypadPanel());
+
         
+        /*  ADD THE NUMBERS */
+        JPanel numberLine = new JPanel();
+        numberLine.setLayout(new GridLayout(1,10));
+        containerPanel.add(numberLine);
+        for (int i = 1; i <=10; i++)
+        {
+            Integer x = i;
+            if (x == 10) x = 0;
+            JButton key = new JButton(x.toString());
+            key.addActionListener(makeKeyActionListener(x.toString()));
+            numberLine.add(key);
+        }
+            
         
         // add line 1
         JPanel line1 = new JPanel();
         line1.setLayout(new GridLayout(1,10));
-        keyboardContainerPanel.add(line1);        
+        containerPanel.add(line1);        
         for(int i = 0; i <= 9; i++)
         {
             JButton key = new JButton(ch[i]);
@@ -134,7 +145,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         // add line 2
         JPanel line2 = new JPanel();
         line2.setLayout(new GridLayout(1,10));
-        keyboardContainerPanel.add(line2);
+        containerPanel.add(line2);
         for(int i = 10; i <= 18; i++)
         {
             JButton key = new JButton(ch[i]);
@@ -145,7 +156,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         // add line 3
         JPanel line3 = new JPanel();
         line3.setLayout(new GridLayout(1,10));
-        keyboardContainerPanel.add(line3);
+        containerPanel.add(line3);
         for(int i = 19; i <= 25; i++)
         {
             JButton key = new JButton(ch[i]);
@@ -155,7 +166,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
  
         JPanel line4 = new JPanel();
         line4.setLayout(new GridLayout(1,1));
-        keyboardContainerPanel.add(line4);
+        containerPanel.add(line4);
         // La ultima en la colección
         JButton key = new JButton("SPACE");
         key.addActionListener(makeKeyActionListener(" "));
@@ -204,7 +215,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         cl.show(CardPanel, cardPanels.get(0).getName());
         currentCard = cardPanels.get(0);
         
-        // set the kitchen parent not because the current card is not null
+        /* set the kitchen card's parent now so that it is not null when it's it
+        first selected */
         kitchenBarMsgPanel.setParentPanel(currentCard);
         
         // this code only allows the output Area text pane to have key controls
@@ -395,7 +407,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         panel.remove(2);
         panel.add(BillHandlePanel);
         // true because we want the keypad the be used for quantity
-        panel.add(Menu.createKeypadPanel(true));
+        panel.add(Menu.createKeypadPanel());
 
         CardPanel.add(panel, panel.getName());
         panels.add(panel);
@@ -674,8 +686,8 @@ MyClient.debugGUI.addText("pressed");
                     String currentTab1 = outputTextPane.getText();
                     String[] array = currentTab1.split("\n");
     
-                    if (!isNumeric(array[array.length-1]))
-                        this.newItems.get(newItems.size()-1).setMessage(array[array.length-1]);            
+                    //if (!isNumeric(array[array.length-1]))
+                      //  this.newItems.get(newItems.size()-1).setMessage(array[array.length-1]);            
                 }
                 else
                 {
@@ -744,55 +756,28 @@ MyClient.debugGUI.addText("pressed");
         this.newItems.add(newItem);
     } // addNewItem
     
-    public static JPanel createKeypadPanel(boolean isForQuantity)
-    {
-        final boolean b = isForQuantity;
-        
+    public static JPanel createKeypadPanel()
+    {       
         JPanel keypadPanel = new JPanel();
         keypadPanel.setLayout(new GridLayout(4,3));
         
         // makes the first 9 buttons
-        for (int i= 1; i <= 9; i++)
+        for (int i= 1; i <= 10; i++)
         {
-            final int x = i; // declared final so can be used in the actionlistener method
-            JButton number = new JButton(i + "");
+             final int x; if (i == 10)  x = 0; else x = i; // declared final so can be used in the actionlistener method
+            JButton number = new JButton(x + "");
             number.addActionListener(new ActionListener() 
             {
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    if (b)
-                        addNumberToQuantity(x);                  
-                    else
-                    {
-                        Menu m = MyClient.selectTable.menu;
-                        String text = m.OutputArea.getText();
-                        text += x;
-                    }
+                    Menu.addNumberToQuantity(x);
                 } // act performed
             });
             keypadPanel.add(number);
         } // for
         
-        /* make the zero button manually after number 9 */   
-        final int zero = 0; // declared final so can be used in the actionlistener method
-        JButton number = new JButton(zero + "");
-        number.addActionListener(new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                    if (b)
-                        addNumberToQuantity(0);                  
-                    else
-                    {
-                        Menu m = MyClient.selectTable.menu;
-                        String text = m.OutputArea.getText();
-                        text += "0";
-                    }
-            }
-        });
-        keypadPanel.add(number);
+
         
         
         /* Make the clear button */
@@ -802,12 +787,9 @@ MyClient.debugGUI.addText("pressed");
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                if (b)
-                {
-                    Menu menu = MyClient.selectTable.menu;
-                    menu.quantitySelected = -1;
-                    menu.quantityTextPane.setText("");
-                }
+                Menu menu = MyClient.selectTable.menu;
+                menu.quantitySelected = -1;
+                menu.quantityTextPane.setText("");
             } // actionPerformed
         });
         keypadPanel.add(clear);    
@@ -821,15 +803,19 @@ MyClient.debugGUI.addText("pressed");
     
         ActionListener toReturn = new ActionListener(){
 
-                @Override
-                public void actionPerformed(ActionEvent e) 
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {      
+                if (newItems.size() > 0)
                 {
                     Menu menu = MyClient.selectTable.menu;
                     String currentText = menu.OutputArea.getText();
                     currentText += key;
                     menu.OutputArea.setText(currentText);
+                    menu.newItems.get(menu.newItems.size() - 1).setMessage(key);
                     menu.messageForLatestItem = true;       
-                } // actionPerformed
+                } // if 
+            } // actionPerformed
         };
         
         return toReturn;

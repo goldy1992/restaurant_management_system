@@ -7,6 +7,7 @@ package Item;
 
 import Server.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -17,11 +18,13 @@ public class Tab implements Serializable
 {
     private final Table parent;
     private ArrayList<Item> items;
+    private BigDecimal total;
     
     public Tab(Table parent)
     {
         this.parent = parent;
         this.items = new ArrayList<>();
+        this.total = BigDecimal.ZERO;
     } // tab
     
     @Override
@@ -36,6 +39,7 @@ public class Tab implements Serializable
     public void addItem(Item newItem)
     {
         items.add(newItem);
+        total.add(newItem.getPrice());
     }
     
     public Table getTable()

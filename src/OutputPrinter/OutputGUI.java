@@ -42,7 +42,7 @@ public class OutputGUI extends javax.swing.JFrame {
             currentText += i.getQuantity() + "\t" + i.getName() + "\n";
             
             if (!i.getMessage().equals(""))
-                currentText += i.getMessage();
+                currentText += i.getMessage() + "\n";
         } // for              
         currentText += "\n\n";
         

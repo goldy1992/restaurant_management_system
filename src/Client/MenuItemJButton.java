@@ -49,12 +49,6 @@ public class MenuItemJButton extends JButton implements ActionListener
     { 
         Menu menu = MyClient.selectTable.menu;
         
-        // detects to see if a number has been pressed and if so removes it
-        String currentTab1 = menu.outputTextPane.getText();
-        String[] array = currentTab1.split("\n");
-        
-        if (menu.messageForLatestItem)
-            menu.newItems.get(menu.newItems.size() - 1).setMessage(array[array.length - 1]);
         // parse the quantity
         int quantity = menu.quantitySelected;
         if (quantity < 0)
@@ -74,7 +68,8 @@ public class MenuItemJButton extends JButton implements ActionListener
         
         // CODE TO ADD SCREEN
         String currentText = menu.outputTextPane.getText();
-        menu.outputTextPane.setText(currentText + newItem.outputToScreen());
+        menu.outputTextPane.setText(currentText + newItem.outputToScreen() );
+        menu.messageForLatestItem = false;
     }
     
     

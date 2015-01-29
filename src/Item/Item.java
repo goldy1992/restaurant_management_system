@@ -7,6 +7,7 @@ package Item;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -71,9 +72,10 @@ public class Item implements Serializable
     public String outputToScreen()
     {
         String stringToReturn = "";
+        DecimalFormat df = new DecimalFormat("0.00");
         
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
-            + "\t\t\t£" + this.getPrice().doubleValue() + "\n";
+            + "\t\t\t£" + df.format(this.getPrice().doubleValue()) + "\n";
             
         if (!this.getMessage().equals(""))
             stringToReturn += this.getMessage() + "\n";
@@ -90,7 +92,7 @@ public class Item implements Serializable
                 "\nprice " + price +
                 "\nquantity " + quantity +
                 "\nmessage " + message;
-    }
+    } // toString
     
     /**
      *
