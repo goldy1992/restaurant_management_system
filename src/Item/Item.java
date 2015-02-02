@@ -40,9 +40,9 @@ public class Item implements Serializable
     private final int id;
     private String message;
     private final String name;
-    private final BigDecimal price;
+    private final BigDecimal pricePerItem;
     private final int quantity;
-    
+    private final BigDecimal totalPrice;    
     
     
     /**
@@ -59,9 +59,11 @@ public class Item implements Serializable
         this.id = id;
         this.message = "";
         this.name = name;
-        this.price = price;
+        this.pricePerItem = price;
         this.type = type;
         this.quantity = quantity;
+        BigDecimal quantityBD = new BigDecimal(quantity);
+        this.totalPrice = pricePerItem.multiply(quantityBD);
     } // item
     
     public void setMessage(String message)
@@ -75,7 +77,7 @@ public class Item implements Serializable
         DecimalFormat df = new DecimalFormat("0.00");
         
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
-            + "\t\t\t£" + df.format(this.getPrice().doubleValue()) + "\n";
+            + "\t\t\t£" + df.format(this.getTotalPrice().doubleValue()) + "\n";
             
         if (!this.getMessage().equals(""))
             stringToReturn += this.getMessage() + "\n";
@@ -89,7 +91,7 @@ public class Item implements Serializable
         return "Food\nName: " + name + 
                 "\nid: " + id + 
                 "\nType " + type +
-                "\nprice " + price +
+                "\nprice " + pricePerItem +
                 "\nquantity " + quantity +
                 "\nmessage " + message;
     } // toString
@@ -116,9 +118,14 @@ public class Item implements Serializable
      *
      * @return
      */
-    public BigDecimal getPrice()
+    public BigDecimal getPricePerItem()
     {
-        return price;
+        return pricePerItem;
+    }
+    
+    public BigDecimal getTotalPrice()
+    {
+        return totalPrice;
     }
     
     /**
@@ -148,4 +155,6 @@ public class Item implements Serializable
         return type;
     }
     
+
+          
 } // item

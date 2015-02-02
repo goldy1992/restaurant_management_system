@@ -56,9 +56,8 @@ public class MenuItemJButton extends JButton implements ActionListener
         
 
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
-        Item newItem = new Item(this.id, this.getText(), this.price.multiply(new BigDecimal(quantity)), this.type, quantity);
-        //currentTab.addItem(newItem);
-        menu.addNewItem(newItem);
+        Item newItem = new Item(this.id, this.getText(), this.price, this.type, quantity);
+        menu.newTab.addItem(newItem);
         
         menu.quantitySelected = -1;
         menu.quantityTextPane.setText("");
@@ -70,6 +69,9 @@ public class MenuItemJButton extends JButton implements ActionListener
         String currentText = menu.outputTextPane.getText();
         menu.outputTextPane.setText(currentText + newItem.outputToScreen() );
         menu.messageForLatestItem = false;
+        
+        // ADD TOTAL
+        menu.setTotal();
     }
     
     

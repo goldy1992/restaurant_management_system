@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +63,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private final ArrayList<JButton> buttons = new ArrayList<>();
     private final ArrayList<JPanel> panels = new ArrayList<>();  
     private final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
-    private final Tab tab;
+    private Tab oldTab;
+    public Tab newTab;
     private final ObjectOutputStream out;
     private final ArrayList<Item> newFoodItems = new ArrayList<>();
     private final ArrayList<Item> newDrinkItems = new ArrayList<>();
@@ -186,7 +188,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
         super(parent, modal);
-         this.tab = tab;
+    
         this.out = stream;
      
         // initialise the connection to the database
@@ -232,6 +234,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         
         outputTextPane.setText(tab.toString());
         
+        // set up current tab
+        this.oldTab = tab;
+        this.newTab = new Tab(oldTab.getParent());
+        
     } // constructor
 
     @Override
@@ -239,59 +245,48 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     {
         if (ae.getSource() == SendOrderButton)
         {
-            /* the code to parse and separate items in the new items and add to
-                tab
-            */
-            for (Item i : newItems)
-            {
-                if (i.getType() == Item.Type.DRINK)
-                    this.newDrinkItems.add(i);
-                else
-                    this.newFoodItems.add(i);
-            
-                this.tab.addItem(i);
-            } // for
+            this.oldTab = oldTab.mergeTabs(newTab);
             
             try 
             {
                 TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
                     MyClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(serverAddress.getHostName()),
-                    generateRequestID(), this.tab);
+                    generateRequestID(), this.oldTab);
                 out.reset();
                 out.writeObject(newEvt);
                 
                 // send the new items to the bar or kitchen respectively
-                if (this.newDrinkItems.size() > 0)
+                if (this.newTab.getDrinks().size() > 0)
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
                         generateRequestID(), 
                         Item.Type.DRINK, 
-                        this.newDrinkItems,
-                        tab.getTable());
+                        this.newTab.getDrinks(),
+                        newTab.getTable());
                         out.reset();
                         out.writeObject(newEvt1);
                         MyClient.debugGUI.addText("sent drinks");
                 } // if
                 
-                if (this.newFoodItems.size() > 0)
+                if (this.newTab.getFood().size() > 0)
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                         MyClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(serverAddress.getHostName()),
                         generateRequestID(), 
                         Item.Type.FOOD, 
-                        this.newFoodItems,
-                        tab.getTable());
+                        this.newTab.getFood(),
+                        newTab.getTable());
                     out.reset();
                     out.writeObject(newEvt1);
                     MyClient.debugGUI.addText("sent food");
                 } // if                
                 
                 con.close(); 
-            } // try
+            } // try // try
             catch (SQLException | IOException ex) 
             { 
                 Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -307,7 +302,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     public Tab getTab()
     {
-        return tab;
+        return oldTab;
     }
 
     @Override
@@ -741,6 +736,7 @@ MyClient.debugGUI.addText("pressed");
         {
             newMenu = new Menu(parent, true, tab, out);
             newMenu.addMouseListener(newMenu);
+            newMenu.setTotal();
         } // try
         catch (SQLException ex) 
         {
@@ -834,6 +830,18 @@ MyClient.debugGUI.addText("pressed");
         
         menu.quantitySelected = quantity;
         
+    }
+    
+    public void setTotal()
+    {
+        BigDecimal total = oldTab.getTotal();
+        total = total.add(newTab.getTotal());
+        
+        DecimalFormat df = new DecimalFormat("0.00");
+        String totalAsString = df.format(total.doubleValue());
+        
+        System.out.println(total);
+        this.totalCostArea.setText("Total: £" + totalAsString);
     }
     
 } // class
