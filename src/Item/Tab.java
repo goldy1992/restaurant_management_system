@@ -47,9 +47,9 @@ public class Tab implements Serializable
         total = total.add(newItem.getTotalPrice());
       
         if (newItem.getType() == DRINK)
-            drinks.add(newItem);
+            drinks.add(allitems.get(allitems.size() - 1));
         else
-            food.add(newItem);
+            food.add(allitems.get(allitems.size() - 1));
         
     } // addItem
     
@@ -89,6 +89,12 @@ public class Tab implements Serializable
     public ArrayList<Item> getFood()
     {
         return food;
+    }
+    
+    
+    public int getNumberOfItems()
+    {
+        return allitems.size();
     }
     
     public ArrayList<Item> getItems()

@@ -66,9 +66,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private Tab oldTab;
     public Tab newTab;
     private final ObjectOutputStream out;
-    private final ArrayList<Item> newFoodItems = new ArrayList<>();
-    private final ArrayList<Item> newDrinkItems = new ArrayList<>();
-    public final ArrayList<Item> newItems = new ArrayList<>();
     private final MenuCardPanel kitchenBarMsgPanel;
     
     public int quantitySelected = -1; // -1 defaults to 1
@@ -303,6 +300,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public Tab getTab()
     {
         return oldTab;
+        
     }
 
     @Override
@@ -674,7 +672,7 @@ MyClient.debugGUI.addText("pressed");
         {
 
 
-                if (currentCard.getName().equals("kitchenBarPanel") && newItems.size() > 0)
+                if (currentCard.getName().equals("kitchenBarPanel") && newTab.getNumberOfItems() > 0)
                 {
                     
                     // detects to see if a number has been pressed and if so removes it
@@ -747,10 +745,6 @@ MyClient.debugGUI.addText("pressed");
     } // makeMenu
     
     
-    public void addNewItem(Item newItem)
-    {
-        this.newItems.add(newItem);
-    } // addNewItem
     
     public static JPanel createKeypadPanel()
     {       
@@ -802,18 +796,19 @@ MyClient.debugGUI.addText("pressed");
             @Override
             public void actionPerformed(ActionEvent e) 
             {      
-                if (newItems.size() > 0)
+                if (newTab.getNumberOfItems() > 0)
                 {
+        
                     Menu menu = MyClient.selectTable.menu;
                     String currentText = menu.OutputArea.getText();
                     currentText += key;
                     menu.OutputArea.setText(currentText);
-                    menu.newItems.get(menu.newItems.size() - 1).setMessage(key);
+                    Tab newT = menu.newTab;
+                    newT.getItems().get(newT.getItems().size() - 1).setMessage(key);
                     menu.messageForLatestItem = true;       
                 } // if 
             } // actionPerformed
         };
-        
         return toReturn;
         
     }

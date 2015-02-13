@@ -62,12 +62,14 @@ public class MenuItemJButton extends JButton implements ActionListener
         menu.quantitySelected = -1;
         menu.quantityTextPane.setText("");
         
-        MyClient.debugGUI.addText(newItem.toString());
-        
-        
+
+            MyClient.debugGUI.addText( newItem.toString() + "\n");   
         // CODE TO ADD SCREEN
+        
         String currentText = menu.outputTextPane.getText();
-        menu.outputTextPane.setText(currentText + newItem.outputToScreen() );
+        if (menu.messageForLatestItem)
+        menu.outputTextPane.setText(currentText + "\n" + newItem.outputToScreen() );
+        else         menu.outputTextPane.setText(currentText  + newItem.outputToScreen() );
         menu.messageForLatestItem = false;
         
         // ADD TOTAL
