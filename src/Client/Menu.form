@@ -22,12 +22,12 @@
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="components.add(MenuBar);&#xa;&#xa;MenuBar.setFocusable(false);&#xa;MenuBar.requestFocus(false);"/>
       </AuxValues>
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="fileMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="editMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>

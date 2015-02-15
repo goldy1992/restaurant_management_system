@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 /**
  *
@@ -24,15 +25,17 @@ public class MenuItemJButton extends JButton implements ActionListener
     private final BigDecimal price; 
     private final int id;
     private final Type type;
+    private final JComponent parent;
     /**
      *
      * @param name
      */
-    private MenuItemJButton(String name, int id, BigDecimal price, String type)
+    private MenuItemJButton(String name, int id, BigDecimal price, String type, JComponent parent)
     {
         super(name);    
         this.price = price;
         this.id = id;
+        this.parent = parent;
         
         switch (type)
         {
@@ -48,7 +51,7 @@ public class MenuItemJButton extends JButton implements ActionListener
     public void actionPerformed(ActionEvent ae) 
     { 
         Menu menu = MyClient.selectTable.menu;
-        
+      
         // parse the quantity
         int quantity = menu.quantitySelected;
         if (quantity < 0)
@@ -78,9 +81,9 @@ public class MenuItemJButton extends JButton implements ActionListener
     
     
     
-    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type)
+    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent)
     {
-        MenuItemJButton x = new MenuItemJButton(text, id, price, type);
+        MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent);
         x.addActionListener(x);
         return x;
     }

@@ -6,7 +6,10 @@
 package Client;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -36,7 +39,7 @@ public class MenuCardPanel extends JPanel
         menuSelectPanel = new JPanel();
         itemsPanel = new JPanel();      
         // true because we want to use the keyboard to control the quantity
-        keypadPanel = Menu.createKeypadPanel();
+        keypadPanel = createKeypadPanel();
     }
     
     /**
@@ -191,6 +194,43 @@ public class MenuCardPanel extends JPanel
     public boolean hasParent()
     {
        return (parentPanel != null);
+    }
+    
+    private JPanel createKeypadPanel()
+    {       
+        JPanel keypadPanel = new JPanel();
+        keypadPanel.setLayout(new GridLayout(4,3));
+        
+        // makes the first 9 buttons
+        for (int i= 1; i <= 10; i++)
+        {
+             final int x; if (i == 10)  x = 0; else x = i; // declared final so can be used in the actionlistener method
+            JButton number = new JButton(x + "");
+            number.addActionListener(new ActionListener() 
+            {
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    Menu.addNumberToQuantity(x);
+                } // act performed
+            });
+            keypadPanel.add(number);
+        } // for
+        /* Make the clear button */
+        JButton clear = new JButton("Clear");
+        clear.addActionListener(new ActionListener() 
+        {        
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                Menu menu = MyClient.selectTable.menu;
+                menu.quantitySelected = -1;
+                menu.quantityTextPane.setText("");
+            } // actionPerformed
+        });
+        keypadPanel.add(clear);    
+        
+        return keypadPanel;
     }
     
     /**

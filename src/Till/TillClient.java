@@ -5,6 +5,8 @@
  */
 package Till;
 
+import Client.Menu;
+import Client.TillMenu;
 import Item.Item;
 import Message.Message;
 import Message.Request.*;
@@ -57,32 +59,10 @@ public class TillClient implements Runnable
             TillClient incomeThread = new TillClient();
             incomeThread.getThread().start();
             
-                        if (client == null)
+            if (client == null)
                 System.exit(0);
 
-            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                                 InetAddress.getByName(serverAddress.getHostName()),
-                                                 Message.generateRequestID(),
-                                                 Request.RequestType.NUM_OF_TABLES);
-            out.reset();
-            out.writeObject(nTablesRequest);
-            //System.out.println("sent num table request");
-
-            ArrayList<Integer> tables = new ArrayList<>();
-            // add null because there's no table zero
-            tables.add(null);
-            for(int  i = 1 ; i <= MyServer.getNumOfTables(); i++ ) 
-                tables.add(i);
-            
-            TableStatusRequest rKitchenRequest = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                                InetAddress.getByName(serverAddress.getHostName()),
-                                                Message.generateRequestID(),
-                                                Request.RequestType.TABLE_STATUS,
-                                                tables);    
-            out.reset();
-            out.writeObject(rKitchenRequest);
-            
-            
+            TillMenu menu = TillMenu.makeMenu(null, null, out, TillMenu.class);
        }
        catch(IOException ex)
        {

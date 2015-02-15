@@ -6,3 +6,5 @@ sleep 2s
 java -cp dist/TestClientServer.jar OutputPrinter.OutputClient kitchen&
 sleep 2s
 java -cp dist/TestClientServer.jar Client.MyClient&
+sleep 2s
+java -cp dist/TestClientServer.jar Till.TillClient&
