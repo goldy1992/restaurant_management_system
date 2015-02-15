@@ -6,6 +6,7 @@ import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
 import java.awt.CardLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -365,7 +366,7 @@ MyClient.debugGUI.addText("pressed");
         // add the kitchen/Bar message panel to the card layout
         CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
         
-        System.out.println("card panel parent: " + findParentMenu(CardPanel));
+        System.out.println("card panel parent: " + findTypeOfParentMenu(CardPanel));
 
         // prepare the rest of the cards and store in cardPanels arrayList
         cardPanelsList = getCards();
@@ -519,17 +520,16 @@ MyClient.debugGUI.addText("pressed");
      * @return the main panel with the extra buttons added to it
      */
     protected MenuCardPanel initialiseMainCard(MenuCardPanel panel)
-    {
-
-        
+    {      
         // creates the panel that everything will be created on
         JPanel BillHandlePanel = new JPanel();
         
         BillHandlePanel.setBorder(new javax.swing.border.MatteBorder(null));
         BillHandlePanel.setFocusable(false);
         BillHandlePanel.setRequestFocusEnabled(false);
-        BillHandlePanel.setLayout(new java.awt.GridLayout(getOptionNames().length, 1));
-        
+        GridLayout layout = new java.awt.GridLayout(0, 1);
+        System.out.println(layout);
+        BillHandlePanel.setLayout(layout);
 
 
         for (String s: getOptionNames())
@@ -540,7 +540,7 @@ MyClient.debugGUI.addText("pressed");
             BillHandlePanel.add(newButton);
             buttons.add(newButton);           
         }
-
+        System.out.println(layout);
 
         panel.remove(2);
         panel.add(BillHandlePanel);
@@ -733,7 +733,9 @@ MyClient.debugGUI.addText("pressed");
             }
             newMenu.addMouseListener(newMenu);
             newMenu.setTotal();
-            
+            newMenu.setEnabled(true);
+            newMenu.setModal(true);
+            newMenu.setVisible(true);
 
         } // try
         catch (SQLException ex) 
@@ -747,11 +749,7 @@ MyClient.debugGUI.addText("pressed");
     
     
 
-        
-
-        
-        
-
+      
     
     
     private ActionListener makeKeyActionListener(final String key)
@@ -805,14 +803,35 @@ MyClient.debugGUI.addText("pressed");
         this.totalCostArea.setText("Total: £" + totalAsString);
     }
     
-    public static Menu findParentMenu(Container cont)
+    public static Class<?> findTypeOfParentMenu(Container cont)
     {
         while(cont.getParent() != null)
         {
             cont = cont.getParent();
             if (cont instanceof Menu)
-                return (Menu)cont;
+                return Menu.class;
+            if (cont instanceof TillMenu)
+                return TillMenu.class;
                     
+        }
+        return null;
+    }
+    
+    public static <T extends Menu> T findParentMenu(Container cont)
+    {
+        while(cont.getParent() != null)
+        {
+            cont = cont.getParent();
+            if (cont instanceof Menu)
+            {
+                T returnT = (T)(Menu)(Object)cont;
+                return returnT;
+            }    
+            else if (cont instanceof TillMenu)
+            {
+                T returnT = (T)(TillMenu)(Object)cont;
+                return returnT;
+            }  
         }
         return null;
     }

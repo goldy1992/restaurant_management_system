@@ -230,6 +230,24 @@ public class MenuCardPanel extends JPanel
         });
         keypadPanel.add(clear);    
         
+        System.out.println(Menu.findTypeOfParentMenu(this));
+        if (Menu.findTypeOfParentMenu(this) == TillMenu.class)
+        {
+            System.out.println("entered");
+            JButton cashPay = new JButton("Cash Pay");
+            cashPay.addActionListener(new ActionListener() 
+            {        
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    Menu menu = MyClient.selectTable.menu;
+                    menu.quantitySelected = -1;
+                    menu.quantityTextPane.setText("");
+                } // actionPerformed
+            });
+            keypadPanel.add(cashPay);             
+        }
+        
         return keypadPanel;
     }
     
