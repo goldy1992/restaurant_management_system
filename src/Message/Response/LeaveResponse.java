@@ -5,7 +5,6 @@
  */
 package Message.Response;
 
-import Client.MyClient;
 import Message.Request.Request;
 
 /**
@@ -39,7 +38,7 @@ public class LeaveResponse extends Response
     @Override
     public void onReceiving() 
     {
-        MyClient.debugGUI.addText("reached exit");
+        //MyClient.debugGUI.addText("reached exit");
         System.exit(0);
     }
     

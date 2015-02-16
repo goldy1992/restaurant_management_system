@@ -8,7 +8,6 @@
 package Client;
 
 import static Message.Message.generateRequestID;
-import static Client.MyClient.serverAddress;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
@@ -44,6 +43,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     public JButton openTable = new JButton("Open Table");
     public JButton moveTable = new JButton("Move Table");
     public Menu menu; // the menu GUI
+    public final MyClient parentClient;
     
     /**
      * @return The table currently selected.
@@ -129,11 +129,12 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
      * @param tableStatuses
      * @param out
      */
-    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out) 
+    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out, MyClient parent) 
     {
         this.tableStatuses = tableStatuses;
         this.out = out;
-        MyClient.debugGUI.addText("size " + tableStatuses.size());
+        this.parentClient = parent;
+        parent.debugGUI.addText("size " + tableStatuses.size());
         tableButtons = new JButton[this.tableStatuses.size()];
         initComponents();
     }
@@ -286,8 +287,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                 {
                     try 
                     {
-                        LeaveRequest leaveRequest = new LeaveRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                                InetAddress.getByName(MyClient.serverAddress.getHostName()),
+                        LeaveRequest leaveRequest = new LeaveRequest(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                                InetAddress.getByName(parentClient.serverAddress.getHostName()),
                                 generateRequestID(),
                                 Request.RequestType.LEAVE);
                         out.writeObject(leaveRequest);
@@ -324,19 +325,17 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             {
                 OutputLabel.setText("<html><b>Would you like to open Table " + i + "?</b></html>");
                 setTableSelected(i);
-                            MyClient.debugGUI.addText("select table " +  getTableSelected());
+                            parentClient.debugGUI.addText("select table " +  getTableSelected());
             } // if
 
         
         if (e.getSource() == openTable)
         {
-            //MyClient.debugGUI.addText("algo");
             if ( tableSelected == -1)
                 OutputLabel.setText("You have no table selected yet!");
             else if (getTableStatus(tableSelected) == Table.TableStatus.IN_USE)
             {
                 OutputLabel.setText("Table " + tableSelected + " in use");
-                //MyClient.debugGUI.addText("called in use");
             } // else if
             else
             {
@@ -344,22 +343,20 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                 {
                     /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
                        IN USE */
-                    TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(serverAddress.getHostName()),
+                    TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
                     generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
                     out.reset();
                     out.writeObject(newEvt);
                     
                     /* Request the tab of this table from the server */
-                    TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(serverAddress.getHostName()),
+                    TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
                         generateRequestID(), 
                         Request.RequestType.TAB,
                             tableSelected);
                     out.reset();
                     out.writeObject(tabStatusRequest);
-                    
-                    //MyClient.debugGUI.addText("waiting for reply, in while loop");
                    
                     synchronized(tabLock)
                     {
@@ -374,15 +371,15 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                         } // catch
                     } // synchronized
                     
-                    menu = Menu.makeMenu(this, tab, out, Menu.class);
+                    menu = Menu.makeMenu(parentClient, this, tab, out, Menu.class);
                     //MyClient.debugGUI.addText("menu has been made");
 
                     this.tabReceived = false;
                 
-                    //MyClient.debugGUI.addText("show");
 
-                    TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(MyClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(serverAddress.getHostName()),
+
+                    TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
                     generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
                     out.writeObject(newEvt1);
                     OutputLabel.setText("");

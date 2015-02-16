@@ -15,60 +15,43 @@ import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
 import Message.Response.Response;
-import OutputPrinter.OutputGUI;
+import Message.Response.TabResponse;
+import Message.Response.TableStatusResponse;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
  * @author Goldy
  */
-public class MyClient implements Runnable
+public class MyClient extends Client
 {
-
-    public static InetAddress serverAddress; 
-    public static int serverPort;  
-    public static Socket client;
-    public static SelectTable selectTable; // selectTableGUI
-    public static OutputGUI debugGUI;
-    public static MyClient responseThread;
-    
+   
     /**
      * An object used to ensure tasks are performed asynchronously. 
      */
     public static final Object lock = new Object();
-    
-
-
-    private static ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
-    private static int numberOfTables = -1;
-    private static ObjectOutputStream out = null;
-    
-    // object classes
-    public boolean running = true;
-    public final Thread thread;
-
+    public ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
+    public int numberOfTables = -1;
+    public SelectTable selectTable;
     
     
     public MyClient()
     {
-        thread = new Thread(this);
+        super();
     } // constructor
-    
-   
+     
     /**
      *
      * @param x
      */
-   public static void setTableStatuses(ArrayList<Table.TableStatus>  x)
+   public void setTableStatuses(ArrayList<Table.TableStatus>  x)
    {
         tableStatuses = x;    
    }
@@ -76,7 +59,7 @@ public class MyClient implements Runnable
     /**
      * @return The number of tables in use.
      */
-    public static int getNumTables()
+   public int getNumTables()
    {
         return numberOfTables;
    }
@@ -85,18 +68,11 @@ public class MyClient implements Runnable
      * A mutator method to set the number of tables.
      * @param numTables the number of the tables to be run
      */
-    public static void setNumTables(int numTables)
+    public void setNumTables(int numTables)
    {
         numberOfTables = numTables;   
    }
    
-    /**
-     * @return The output stream of the client.
-     */
-    public ObjectOutputStream getOutputStream()
-   {
-       return out;
-   }
     
     /**
      * @param args
@@ -104,32 +80,29 @@ public class MyClient implements Runnable
      */
     public static void main(String[] args) throws InterruptedException
     {
+        MyClient myClient = new MyClient();
         try
         {
-            debugGUI = new OutputGUI();
-            debugGUI.setTitle("Client Output");
-            debugGUI.setVisible(true);
-            serverAddress = InetAddress.getByName(null);
-            serverPort = MyServer.getLowBoundPortRange();
-            client = new Socket(serverAddress, serverPort);
-            out = new ObjectOutputStream(MyClient.client.getOutputStream());
-            responseThread = new MyClient();
-            responseThread.thread.start();
+
             
-            if (client == null)
+            if (myClient == null)
                 System.exit(0);
             
-            RegisterClientRequest rWRequest = new RegisterClientRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                            InetAddress.getByName(serverAddress.getHostName()),
-                                            Message.generateRequestID(),
-                                            Request.RequestType.REGISTER_WAITER_CLIENT);         
-                out.writeObject(rWRequest);
+            RegisterClientRequest rWRequest = new RegisterClientRequest(
+                InetAddress.getByName(
+                    myClient.client.getLocalAddress().getHostName() ),
+                InetAddress.getByName(myClient.serverAddress.getHostName()),
+                Message.generateRequestID(),
+                Request.RequestType.REGISTER_WAITER_CLIENT);         
+            myClient.getOutputStream().writeObject(rWRequest);
 
-            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                                 InetAddress.getByName(serverAddress.getHostName()),
-                                                 Message.generateRequestID(),
-                                                 Request.RequestType.NUM_OF_TABLES);
-            out.writeObject(nTablesRequest);
+            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(
+                InetAddress.getByName(
+                    myClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(myClient.serverAddress.getHostName()),
+                Message.generateRequestID(),
+                Request.RequestType.NUM_OF_TABLES);
+            myClient.getOutputStream().writeObject(nTablesRequest);
             //debugGUI.addText("sent num table request");
 
             ArrayList<Integer> tables = new ArrayList<>();
@@ -138,23 +111,26 @@ public class MyClient implements Runnable
             for(int  i = 1 ; i <= MyServer.getNumOfTables(); i++ ) 
                 tables.add(i);
                 
-            TableStatusRequest request = new TableStatusRequest(InetAddress.getByName(client.getLocalAddress().getHostName()),
-                                          InetAddress.getByName(serverAddress.getHostName()),
-                                          Message.generateRequestID(),
-                                          Request.RequestType.TABLE_STATUS,
-                                          tables);
-            out.writeObject(request);  
+            TableStatusRequest request = new TableStatusRequest(
+                InetAddress.getByName(
+                    myClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(
+                    myClient.serverAddress.getHostName() ),
+                Message.generateRequestID(),
+                Request.RequestType.TABLE_STATUS,
+                tables);
+            myClient.getOutputStream().writeObject(request);  
         } // try
         catch (IOException e)
         {
-            debugGUI.addText("Could not connect to server");
+            myClient.debugGUI.addText("Could not connect to server");
         } // catch
-        debugGUI.addText("pre while");
+        myClient.debugGUI.addText("pre while");
         
         
         synchronized(lock)
         {
-            while(tableStatuses == null)
+            while(myClient.tableStatuses == null)
             {
                 try { lock.wait(); }
                 catch (InterruptedException e) 
@@ -164,13 +140,37 @@ public class MyClient implements Runnable
             } // while
         
         } // synchronized
-        debugGUI.addText("post while");
+        myClient.debugGUI.addText("post while");
         
-        selectTable = new SelectTable(tableStatuses, out);
-        selectTable.setVisible(true);
+        myClient.selectTable = new SelectTable(
+            myClient.tableStatuses, myClient.getOutputStream(), myClient);
+        myClient.selectTable.setVisible(true);
 
         
     } // main
+    
+    private void parseTabResponse(TabResponse resp)
+    {
+        debugGUI.addText("Executing TabResponse's onreceiving");
+        synchronized(selectTable.tabLock)
+        {
+            selectTable.setTab(resp.getTab());
+            selectTable.setTabReceived(true);      
+            selectTable.tabLock.notifyAll();
+        } // synchronized        
+    }
+    
+    private void parseTableStatusResponse(TableStatusResponse resp)
+    {
+        
+       System.out.println(resp.getTableStatuses());
+                        
+        synchronized(lock)
+        {
+            setTableStatuses(resp.getTableStatuses());
+            lock.notifyAll();
+        }   
+    }
     
     /**
      * The run method that controls the listener that receives incoming messages
@@ -189,7 +189,11 @@ public class MyClient implements Runnable
                 if (response instanceof Response)
                 {
                     Response resp = (Response) response;
-                    resp.onReceiving();                                         
+                    if (resp instanceof TabResponse) 
+                        parseTabResponse((TabResponse)resp);
+                    if (resp instanceof TableStatusResponse) 
+                        parseTableStatusResponse((TableStatusResponse)resp);
+                    
                 } // if response
                 else if(response instanceof EventNotification)
                 {

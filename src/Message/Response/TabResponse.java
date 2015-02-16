@@ -50,15 +50,7 @@ public class TabResponse extends Response
     @Override
     public void onReceiving() 
     {
-        MyClient.debugGUI.addText("Executing TabResponse's onreceiving");
-        synchronized(MyClient.selectTable.tabLock)
-        {
-            MyClient.selectTable.setTab(currentTab);
-            MyClient.selectTable.setTabReceived(true);      
-            MyClient.selectTable.tabLock.notifyAll();
-        } // synchronized
 
-        MyClient.debugGUI.addText("tab received: " + MyClient.selectTable.tabReceived);
     } // onReceiving
     
 } // class

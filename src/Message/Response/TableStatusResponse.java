@@ -85,13 +85,6 @@ public class TableStatusResponse extends Response
     public void onReceiving() 
     {
 
-        System.out.println(this.getTableStatuses());
-                        
-        synchronized(lock)
-        {
-            MyClient.setTableStatuses(this.getTableStatuses());
-            lock.notifyAll();
-        }   
                         
         //System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
     } // onReceiving

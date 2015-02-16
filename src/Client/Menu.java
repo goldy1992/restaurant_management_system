@@ -1,12 +1,10 @@
 package Client;
 
-import static Client.MyClient.serverAddress;
 import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
 import java.awt.CardLayout;
-import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -74,7 +72,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public boolean messageForLatestItem = false;
     
     private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
-    private JButton SendOrderButton = null;
+    private final JButton SendOrderButton = null;
     /**
      * Stores the reference to the JTextPane used on the output
      * @see javax.swing.JTextPane
@@ -82,6 +80,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public JTextPane outputTextPane;
     public JTextPane quantityTextPane;
     public JTextPane totalCostTextPane;
+    private final Client parentClient;
     
     protected String[] getOptionNames() { 
         
@@ -225,7 +224,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
     
     private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
-MyClient.debugGUI.addText("pressed");
+        parentClient.debugGUI.addText("pressed");
     }//GEN-LAST:event_OutputAreaKeyPressed
 
     private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
@@ -339,16 +338,18 @@ MyClient.debugGUI.addText("pressed");
     
         /**
      * Creates new form Menu
+     * @param parentClient
      * @param parent
      * @param modal
      * @param tab
      * @param stream
      * @throws java.sql.SQLException
      */
-    public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
+    public Menu(Client parentClient, java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
         super(parent, modal);
         this.out = stream;
+        this.parentClient = parentClient;
      
         // initialise the connection to the database
         con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
@@ -422,8 +423,8 @@ MyClient.debugGUI.addText("pressed");
             try 
             {
                 TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-                    MyClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(serverAddress.getHostName()),
+                    parentClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
                     generateRequestID(), this.oldTab);
                 out.reset();
                 out.writeObject(newEvt);
@@ -432,29 +433,29 @@ MyClient.debugGUI.addText("pressed");
                 if (this.newTab.getDrinks().size() > 0)
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-                        MyClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(serverAddress.getHostName()),
+                        parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
                         generateRequestID(), 
                         Item.Type.DRINK, 
                         this.newTab.getDrinks(),
                         newTab.getTable());
                         out.reset();
                         out.writeObject(newEvt1);
-                        MyClient.debugGUI.addText("sent drinks");
+                        parentClient.debugGUI.addText("sent drinks");
                 } // if
                 
                 if (this.newTab.getFood().size() > 0)
                 {
                     NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-                        MyClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(serverAddress.getHostName()),
+                        parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
                         generateRequestID(), 
                         Item.Type.FOOD, 
                         this.newTab.getFood(),
                         newTab.getTable());
                     out.reset();
                     out.writeObject(newEvt1);
-                    MyClient.debugGUI.addText("sent food");
+                    parentClient.debugGUI.addText("sent food");
                 } // if                
                 
                 con.close(); 
@@ -711,7 +712,7 @@ MyClient.debugGUI.addText("pressed");
      * @param out
      * @return 
     */
-    public static <T extends Menu> T makeMenu(JFrame parent, Tab tab, ObjectOutputStream out, Class<T> type)
+    public static <T extends Menu> T makeMenu(Client cParent, JFrame parent, Tab tab, ObjectOutputStream out, Class<T> type)
     {
         
         T  newMenu = null;
@@ -719,7 +720,7 @@ MyClient.debugGUI.addText("pressed");
         {
             if (type.equals(Menu.class))
             {
-                Menu newMenu1 = new Menu(parent, true, tab, out);
+                Menu newMenu1 = new Menu(cParent, parent, true, tab, out);
                 newMenu = (T)(Object)newMenu1;
             }
             else if (type.equals(TillMenu.class))
