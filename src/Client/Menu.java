@@ -249,7 +249,7 @@ MyClient.debugGUI.addText("pressed");
     // End of variables declaration//GEN-END:variables
     
     
-        public static boolean isNumeric(String x)
+    public static boolean isNumeric(String x)
     {
         try
         {
@@ -269,7 +269,7 @@ MyClient.debugGUI.addText("pressed");
      */
     protected MenuCardPanel createKitchenBarMessageCard()
     {
-        MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel();
+        MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel(this);
         containerPanel.setName("kitchenBarPanel");
         containerPanel.removeAll();
         
@@ -279,9 +279,7 @@ MyClient.debugGUI.addText("pressed");
                      "SPACE"};
         
         containerPanel.setLayout(new GridLayout(5,1));
-        
-
-        
+       
         /*  ADD THE NUMBERS */
         JPanel numberLine = new JPanel();
         numberLine.setLayout(new GridLayout(1,10));
@@ -291,11 +289,10 @@ MyClient.debugGUI.addText("pressed");
             Integer x = i;
             if (x == 10) x = 0;
             JButton key = new JButton(x.toString());
-            key.addActionListener(makeKeyActionListener(x.toString()));
+            key.addActionListener(makeKeyActionListener(x.toString(), this));
             numberLine.add(key);
         }
-            
-        
+                   
         // add line 1
         JPanel line1 = new JPanel();
         line1.setLayout(new GridLayout(1,10));
@@ -303,7 +300,7 @@ MyClient.debugGUI.addText("pressed");
         for(int i = 0; i <= 9; i++)
         {
             JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i]));
+            key.addActionListener(makeKeyActionListener(ch[i], this));
             line1.add(key);
         } // for 
        
@@ -314,7 +311,7 @@ MyClient.debugGUI.addText("pressed");
         for(int i = 10; i <= 18; i++)
         {
             JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i]));
+            key.addActionListener(makeKeyActionListener(ch[i], this));
             line2.add(key);
         }
                
@@ -325,7 +322,7 @@ MyClient.debugGUI.addText("pressed");
         for(int i = 19; i <= 25; i++)
         {
             JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i]));            
+            key.addActionListener(makeKeyActionListener(ch[i], this));            
             line3.add(key);
         }
  
@@ -334,7 +331,7 @@ MyClient.debugGUI.addText("pressed");
         containerPanel.add(line4);
         // La ultima en la colección
         JButton key = new JButton("SPACE");
-        key.addActionListener(makeKeyActionListener(" "));
+        key.addActionListener(makeKeyActionListener(" ", this));
         line4.add(key);
         
         return containerPanel;
@@ -351,7 +348,6 @@ MyClient.debugGUI.addText("pressed");
     public Menu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
         super(parent, modal);
-    
         this.out = stream;
      
         // initialise the connection to the database
@@ -365,19 +361,19 @@ MyClient.debugGUI.addText("pressed");
         
         // add the kitchen/Bar message panel to the card layout
         CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
-        
-        System.out.println("card panel parent: " + findTypeOfParentMenu(CardPanel));
 
         // prepare the rest of the cards and store in cardPanels arrayList
         cardPanelsList = getCards();
         
         // initialise the cardLayout to show the main panel
         cardPanelsList.set(0, initialiseMainCard(cardPanelsList.get(0)));
-        
-        
+                
         for(MenuCardPanel p : cardPanelsList)
+        {
             CardPanel.add(p, p.getName());
-        
+            p.add(p.createKeypadPanel());
+            
+        }
         //MyClient.debugGUI.addText("show");
         CardLayout cl = (CardLayout)(CardPanel.getLayout());
         cl.show(CardPanel, cardPanelsList.get(0).getName());
@@ -527,10 +523,10 @@ MyClient.debugGUI.addText("pressed");
         BillHandlePanel.setBorder(new javax.swing.border.MatteBorder(null));
         BillHandlePanel.setFocusable(false);
         BillHandlePanel.setRequestFocusEnabled(false);
+        // we just want one column, zero rows implies as many coulmns as we like
         GridLayout layout = new java.awt.GridLayout(0, 1);
         System.out.println(layout);
         BillHandlePanel.setLayout(layout);
-
 
         for (String s: getOptionNames())
         {
@@ -542,9 +538,9 @@ MyClient.debugGUI.addText("pressed");
         }
         System.out.println(layout);
 
-        panel.remove(2);
+        //panel.remove(2);
         panel.add(BillHandlePanel);
-        panel.add(panel.getKeypadPanel());
+        //panel.add(panel.getKeypadPanel());
 
         CardPanel.add(panel, panel.getName());
         panels.add(panel);
@@ -569,7 +565,7 @@ MyClient.debugGUI.addText("pressed");
             // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
             while (results.next())
             {
-                MenuCardPanel panel = MenuCardPanel.createMenuCardPanel();
+                MenuCardPanel panel = MenuCardPanel.createMenuCardPanel(this);
                 panel.setName(results.getString(1));
                 cardPanelsList.add(panel);
                 
@@ -622,7 +618,7 @@ MyClient.debugGUI.addText("pressed");
                 while(results.next())
                 {
                     MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), 
-                            results.getInt(2), new BigDecimal(results.getDouble(3)), results.getString(4), c);
+                            results.getInt(2), new BigDecimal(results.getDouble(3)), results.getString(4), c, this);
                     c.addMenuItemButton(newButton);          
                 } // while
                 
@@ -745,15 +741,10 @@ MyClient.debugGUI.addText("pressed");
         
         return newMenu;
     } // makeMenu
-    
-    
-    
-
-      
-    
-    
-    private ActionListener makeKeyActionListener(final String key)
+        
+    private ActionListener makeKeyActionListener(final String key, Menu menu)
     {
+        final Menu m = menu;
     
         ActionListener toReturn = new ActionListener(){
 
@@ -763,7 +754,7 @@ MyClient.debugGUI.addText("pressed");
                 if (newTab.getNumberOfItems() > 0)
                 {
         
-                    Menu menu = MyClient.selectTable.menu;
+                    Menu menu = m;
                     String currentText = menu.OutputArea.getText();
                     currentText += key;
                     menu.OutputArea.setText(currentText);
@@ -777,19 +768,6 @@ MyClient.debugGUI.addText("pressed");
         
     }
     
-    public static void addNumberToQuantity(int number)
-    {
-        Menu menu = MyClient.selectTable.menu;
-        Integer quantity  = menu.quantitySelected;
-        if (quantity <= 0)
-            quantity = number;
-        else
-            quantity = (quantity * 10) + number;
-        MyClient.selectTable.menu.quantityTextPane.setText(quantity.toString());
-        
-        menu.quantitySelected = quantity;
-        
-    }
     
     public void setTotal()
     {
@@ -805,14 +783,16 @@ MyClient.debugGUI.addText("pressed");
     
     public static Class<?> findTypeOfParentMenu(Container cont)
     {
+        int i = 1;
         while(cont.getParent() != null)
         {
             cont = cont.getParent();
-            if (cont instanceof Menu)
-                return Menu.class;
             if (cont instanceof TillMenu)
                 return TillMenu.class;
-                    
+            if (cont instanceof Menu)
+                return Menu.class;
+            System.out.println("count: " + i);
+                    i++;
         }
         return null;
     }

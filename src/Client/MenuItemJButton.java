@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 public class MenuItemJButton extends JButton implements ActionListener
 {
 
+    private final Menu belongsToMenu;
     private final BigDecimal price; 
     private final int id;
     private final Type type;
@@ -30,12 +31,13 @@ public class MenuItemJButton extends JButton implements ActionListener
      *
      * @param name
      */
-    private MenuItemJButton(String name, int id, BigDecimal price, String type, JComponent parent)
+    private MenuItemJButton(String name, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu)
     {
         super(name);    
         this.price = price;
         this.id = id;
         this.parent = parent;
+        this.belongsToMenu = parentMenu;
         
         switch (type)
         {
@@ -50,40 +52,40 @@ public class MenuItemJButton extends JButton implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     { 
-        Menu menu = MyClient.selectTable.menu;
+        //Menu belongsToMenu = MyClient.selectTable.menu;
       
         // parse the quantity
-        int quantity = menu.quantitySelected;
+        int quantity = belongsToMenu.quantitySelected;
         if (quantity < 0)
             quantity = 1;
         
 
         // CODE TO ADD TO TAB SHOULD BE PUT HERE
         Item newItem = new Item(this.id, this.getText(), this.price, this.type, quantity);
-        menu.newTab.addItem(newItem);
+        belongsToMenu.newTab.addItem(newItem);
         
-        menu.quantitySelected = -1;
-        menu.quantityTextPane.setText("");
+        belongsToMenu.quantitySelected = -1;
+        belongsToMenu.quantityTextPane.setText("");
         
 
-            MyClient.debugGUI.addText( newItem.toString() + "\n");   
+           // MyClient.debugGUI.addText( newItem.toString() + "\n");   
         // CODE TO ADD SCREEN
         
-        String currentText = menu.outputTextPane.getText();
-        if (menu.messageForLatestItem)
-        menu.outputTextPane.setText(currentText + "\n" + newItem.outputToScreen() );
-        else         menu.outputTextPane.setText(currentText  + newItem.outputToScreen() );
-        menu.messageForLatestItem = false;
+        String currentText = belongsToMenu.outputTextPane.getText();
+        if (belongsToMenu.messageForLatestItem)
+        belongsToMenu.outputTextPane.setText(currentText + "\n" + newItem.outputToScreen() );
+        else         belongsToMenu.outputTextPane.setText(currentText  + newItem.outputToScreen() );
+        belongsToMenu.messageForLatestItem = false;
         
         // ADD TOTAL
-        menu.setTotal();
+        belongsToMenu.setTotal();
     }
     
     
     
-    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent)
+    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu)
     {
-        MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent);
+        MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent, parentMenu);
         x.addActionListener(x);
         return x;
     }

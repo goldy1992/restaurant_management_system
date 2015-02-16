@@ -29,16 +29,6 @@ public class TillMenu extends Menu {
         super(parent, modal, tab, stream);
     }
     
-    @Override
-    protected MenuCardPanel initialiseMainCard(MenuCardPanel panel)
-    {
-        MenuCardPanel x = super.initialiseMainCard(panel);
-        
-        Component[] arrayOfItems = x.getComponents();
-        
-        JPanel option = (JPanel)arrayOfItems[2];
-        option.setLayout(new java.awt.GridLayout(10, 1));
-        return x;
-    }
+
     
 }

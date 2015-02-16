@@ -19,18 +19,18 @@ import javax.swing.JPanel;
 public class MenuCardPanel extends JPanel
 {
     private MenuCardPanel parentPanel;
-    
+    private final Menu belongsToMenu;
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private final JPanel itemsPanel;    
 
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private final JPanel menuSelectPanel;
-    private final JPanel keypadPanel;
+    private JPanel keypadPanel;
     
     /**
      *
      */
-    private MenuCardPanel()
+    private MenuCardPanel(Menu parentMenu)
     {
         super();
         cardMenuItems = new ArrayList<>();
@@ -39,7 +39,8 @@ public class MenuCardPanel extends JPanel
         menuSelectPanel = new JPanel();
         itemsPanel = new JPanel();      
         // true because we want to use the keyboard to control the quantity
-        keypadPanel = createKeypadPanel();
+        keypadPanel = null;
+        this.belongsToMenu = parentMenu;
     }
     
     /**
@@ -196,7 +197,7 @@ public class MenuCardPanel extends JPanel
        return (parentPanel != null);
     }
     
-    private JPanel createKeypadPanel()
+    public JPanel createKeypadPanel()
     {       
         JPanel keypadPanel = new JPanel();
         keypadPanel.setLayout(new GridLayout(4,3));
@@ -211,7 +212,7 @@ public class MenuCardPanel extends JPanel
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    Menu.addNumberToQuantity(x);
+                    addNumberToQuantity(x);
                 } // act performed
             });
             keypadPanel.add(number);
@@ -223,15 +224,14 @@ public class MenuCardPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                Menu menu = MyClient.selectTable.menu;
+                Menu menu = belongsToMenu;
                 menu.quantitySelected = -1;
                 menu.quantityTextPane.setText("");
             } // actionPerformed
         });
         keypadPanel.add(clear);    
         
-        System.out.println(Menu.findTypeOfParentMenu(this));
-        if (Menu.findTypeOfParentMenu(this) == TillMenu.class)
+        if (belongsToMenu.getClass() == TillMenu.class)
         {
             System.out.println("entered");
             JButton cashPay = new JButton("Cash Pay");
@@ -240,14 +240,15 @@ public class MenuCardPanel extends JPanel
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    Menu menu = MyClient.selectTable.menu;
+                    Menu menu = belongsToMenu;
                     menu.quantitySelected = -1;
                     menu.quantityTextPane.setText("");
                 } // actionPerformed
             });
-            keypadPanel.add(cashPay);             
+            keypadPanel.add(cashPay);      
+         
         }
-        
+        this.keypadPanel = keypadPanel;
         return keypadPanel;
     }
     
@@ -256,16 +257,30 @@ public class MenuCardPanel extends JPanel
     * 
     * @return a new Menu Card Panel
     */
-    public static MenuCardPanel createMenuCardPanel()
+    public static MenuCardPanel createMenuCardPanel(Menu parentMenu)
     {
-        MenuCardPanel x = new MenuCardPanel();
+        MenuCardPanel x = new MenuCardPanel(parentMenu);
         x.setLayout(new GridLayout(1,0));
         x.add(x.getMenuSelectPanel());
         x.add(x.getItemsPanel());
-        x.add(x.getKeypadPanel());
+        //x.add(x.getKeypadPanel());
         x.setFocusable(false);
         x.setRequestFocusEnabled(false);
         return x;
+    }
+    
+    public void addNumberToQuantity(int number)
+    {
+        //Menu belongsToMenu = MyClient.selectTable.menu;
+        Integer quantity  = belongsToMenu.quantitySelected;
+        if (quantity <= 0)
+            quantity = number;
+        else
+            quantity = (quantity * 10) + number;
+        belongsToMenu.quantityTextPane.setText(quantity.toString());
+        
+        belongsToMenu.quantitySelected = quantity;
+        
     }
     
 }
