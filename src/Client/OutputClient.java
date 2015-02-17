@@ -62,12 +62,12 @@ public class OutputClient extends Client implements Runnable
     public OutputClient()
     {
         super();
-        if (type == Type.KITCHEN)
-            debugGUI.setTitle("Kitchen Client");
-        else
-            debugGUI.setTitle("Bar Client");
-        debugGUI.setVisible(true);
     } // constructor
+    
+    public Type getType()
+    {
+        return type;
+    }
     
     /**
      * @param args the command line arguments
@@ -96,6 +96,8 @@ public class OutputClient extends Client implements Runnable
                     Message.generateRequestID(),
                     Request.RequestType.REGISTER_KITCHEN);         
                 client.getOutputStream().writeObject(rKitchenReq);
+                client.getOutputStream().reset();
+                System.out.println("sent kitch req");
             } // if
             else
             {
@@ -107,6 +109,8 @@ public class OutputClient extends Client implements Runnable
                     Request.RequestType.REGISTER_BAR);
             
                 client.getOutputStream().writeObject(rBarRequest);
+                client.getOutputStream().reset();
+                                System.out.println("sent bar req");
                 
             } // else            
        } // try

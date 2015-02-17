@@ -60,7 +60,7 @@ public class ClientCommunicationThread implements Runnable
     {
         if (socket != null)
         {
-            gui.addText("socket: " + socket);
+            //gui.addText("socket: " + socket);
             try
             {
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -70,7 +70,8 @@ public class ClientCommunicationThread implements Runnable
                 while(isRunning)
                 {
                     Message message = (Message) in.readObject();
-                    gui.addText("read message from " + id);       
+                    
+                    //gui.addText("read message from " + id);       
                     if (message instanceof Request)
                     {
                         parseRequest((Request)message);                  
@@ -87,11 +88,12 @@ public class ClientCommunicationThread implements Runnable
             {
                 e.printStackTrace();
                 System.err.println(e);
-                gui.addText("Failed to set up buffers" + "\n");
+                //gui.addText("Failed to set up buffers" + "\n");
             } 
-            catch (ClassNotFoundException ex) {
+            catch (ClassNotFoundException  ex) {
                 Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         } // if socket == null
 
     } // run
@@ -151,9 +153,9 @@ public class ClientCommunicationThread implements Runnable
             {
                 switch (message.type)
                 {
-                    case REGISTER_BAR: MyServer.setBarClient(this); gui.addText("id: " + id + ", register bar to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Bar Thread Debug");break;
-                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); gui.addText("id: " + id + ", register kitchen to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Kitchen Thread Debug"); break;
-                    case REGISTER_WAITER_CLIENT: MyServer.addWaiterClient(this); gui.setTitle("Server Client Thread Debug"); break;
+                    case REGISTER_BAR: MyServer.setBarClient(this); //gui.addText("id: " + id + ", register bar to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Bar Thread Debug");break;
+                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); //gui.addText("id: " + id + ", register kitchen to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Kitchen Thread Debug"); break;
+                    case REGISTER_WAITER_CLIENT: MyServer.addWaiterClient(this); //gui.setTitle("Server Client Thread Debug"); break;
                     default: break;
                 }
 
@@ -166,7 +168,7 @@ public class ClientCommunicationThread implements Runnable
         else if (message instanceof TabRequest)
         {
             response = new TabResponse((TabRequest)message);
-            gui.addText("id: " + id + ", received Tab Request\n");
+            //gui.addText("id: " + id + ", received Tab Request\n");
         }
         else if (message instanceof LeaveRequest)
         {
@@ -211,7 +213,7 @@ public class ClientCommunicationThread implements Runnable
                                 
                 otherClientOut.reset();
                 otherClientOut.writeObject(msgToSend);
-                gui.addText("id: " + id + ", sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
+                //gui.addText("id: " + id + ", sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
             } // for
         } // if
         else if (message instanceof TabUpdateNfn)
@@ -223,10 +225,10 @@ public class ClientCommunicationThread implements Runnable
         } // else if
         else if (message instanceof NewItemNfn)
         {
-            gui.addText("id: " + id + ", bar port: " + MyServer.getBarClient().getSocket().getPort());
+            //gui.addText("id: " + id + ", bar port: " + MyServer.getBarClient().getSocket().getPort());
             //gui.addText("id: " + id + ", kitchen port: " + MyServer.getKitchenClient().getSocket().getPort());
             NewItemNfn event = (NewItemNfn)message;
-            gui.addText("id: " + id + ", new notifaction for " + event.getType());
+            //gui.addText("id: " + id + ", new notifaction for " + event.getType());
             
             if (event.getType() == Item.Type.DRINK && MyServer.getBarClient() != null)
             {
@@ -239,9 +241,9 @@ public class ClientCommunicationThread implements Runnable
                         event.getItems(),
                         event.getTable());
                 otherClientOut.reset();
-                                     gui.addText("id: " + id + ", got here drink: send to port: " + MyServer.getBarClient().getOutStream().toString());
+                                     //gui.addText("id: " + id + ", got here drink: send to port: " + MyServer.getBarClient().getOutStream().toString());
                 otherClientOut.writeObject(msgToSend1);
-                gui.addText("id: " + id + ", sent to port: " + MyServer.getBarClient().getSocket().getPort());
+                //gui.addText("id: " + id + ", sent to port: " + MyServer.getBarClient().getSocket().getPort());
                 
             } // if
             

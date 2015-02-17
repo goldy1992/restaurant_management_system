@@ -42,7 +42,7 @@ public abstract class Client implements Runnable
             while(running)
             {
                 Message response = (Message)in.readObject();      
-                System.out.println("Message received");
+                System.out.println("Message received: " + this.getClass());
                 if (response instanceof Response)
                     parseResponse((Response)response);
                 else if(response instanceof EventNotification)
@@ -117,9 +117,10 @@ public abstract class Client implements Runnable
         
         if (till != null)
         {
+            till.debugGUI = OutputGUI.makeGUI(till);
             till.responseThread = new Thread(till);
             till.responseThread.start();
-            till.debugGUI = OutputGUI.makeGUI(till);
+
         }
 
         return till;
