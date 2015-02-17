@@ -7,6 +7,7 @@
 
 package Client;
 
+import Client.MainMenu.Menu;
 import static Message.Message.generateRequestID;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -128,6 +129,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
      * Creates new form SelectTable
      * @param tableStatuses
      * @param out
+     * @param parent
      */
     public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out, MyClient parent) 
     {

@@ -20,7 +20,6 @@ import Message.Response.TableStatusResponse;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -83,11 +82,6 @@ public class MyClient extends Client
         MyClient myClient = new MyClient();
         try
         {
-
-            
-            if (myClient == null)
-                System.exit(0);
-            
             RegisterClientRequest rWRequest = new RegisterClientRequest(
                 InetAddress.getByName(
                     myClient.client.getLocalAddress().getHostName() ),
@@ -162,7 +156,7 @@ public class MyClient extends Client
     
     private void parseTableStatusResponse(TableStatusResponse resp)
     {
-        
+        System.out.println("table status response");
        System.out.println(resp.getTableStatuses());
                         
         synchronized(lock)
@@ -171,44 +165,24 @@ public class MyClient extends Client
             lock.notifyAll();
         }   
     }
-    
-    /**
-     * The run method that controls the listener that receives incoming messages
-     * from the rest of the System.
-     */
-    @Override
-    public void run()
-    {       
-        try 
-        {   
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            while(running)
-            {
-                Message response = (Message)in.readObject();
-                
-                if (response instanceof Response)
-                {
-                    Response resp = (Response) response;
-                    if (resp instanceof TabResponse) 
-                        parseTabResponse((TabResponse)resp);
-                    if (resp instanceof TableStatusResponse) 
-                        parseTableStatusResponse((TableStatusResponse)resp);
-                    
-                } // if response
-                else if(response instanceof EventNotification)
-                {
-                    if (response instanceof TableStatusEvtNfn)
-                    {
-                        TableStatusEvtNfn r = (TableStatusEvtNfn)response; 
-                        //debugGUI.addText("table number " + r.getTableNumber() +"\n" + "table Status: " + r.getTableStatus());
-                        selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());
-                        // debugGUI.addText("table number updated to " + selectTable.getTableStatus(r.getTableNumber()));
-                    } // inner if
-                } // evt ntfn if
-            } // while running
-        } // try
-        catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+     
+   @Override
+   public void parseResponse(Response resp) throws IOException, ClassNotFoundException
+   {
+        if (resp instanceof TabResponse) 
+            parseTabResponse((TabResponse)resp);
+        if (resp instanceof TableStatusResponse) 
+            parseTableStatusResponse((TableStatusResponse)resp);
+   }
+   
+   @Override
+   public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
+   {
+        if (evntNfn instanceof TableStatusEvtNfn)
+        {
+            TableStatusEvtNfn r = (TableStatusEvtNfn)evntNfn; 
+            selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());                 
+         } // inner if
+       
+   }
 } // MyClientSocketClass

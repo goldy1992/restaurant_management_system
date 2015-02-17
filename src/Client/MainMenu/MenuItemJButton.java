@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package Client.MainMenu;
 
-import static Client.Menu.isNumeric;
+import Client.MainMenu.Menu;
+import static Client.MainMenu.Menu.isNumeric;
 import Item.Item;
 import Item.Item.Type;
 import Item.Tab;

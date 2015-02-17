@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package Client.MainMenu;
 
+import Client.MainMenu.Menu;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,34 +18,32 @@ import javax.swing.JButton;
 public class MenuCardLinkJButton extends JButton implements ActionListener
 {
     private MenuCardPanel targetPanel;
+    private final Menu parentMenu;
     
     /**
      *
      * @param panel
      */
-    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText)
+    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText, Menu parentMenu)
     {
         super();    
         this.targetPanel = panel;
         this.setText(buttonText);
+        this.parentMenu = parentMenu;
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) 
     {  
-
-        
-        Menu menu = MyClient.selectTable.menu;
-        MenuCardPanel kitchenBarMessage = menu.getKitchenBarMsgPanel();
-        
-        
+        MenuCardPanel kitchenBarMessage = parentMenu.getKitchenBarMsgPanel();
+            
         // show the selected card.
-        CardLayout cl = (CardLayout)(menu.getCardPanel().getLayout());
-        cl.show(menu.getCardPanel(), targetPanel.getName());
-        menu.currentCard = targetPanel;
+        CardLayout cl = (CardLayout)(parentMenu.getCardPanel().getLayout());
+        cl.show(parentMenu.getCardPanel(), targetPanel.getName());
+        parentMenu.currentCard = targetPanel;
         
         // set the new parent for the kitchen bar message panel
-        if (!menu.currentCard.equals(kitchenBarMessage))
+        if (!parentMenu.currentCard.equals(kitchenBarMessage))
         {
                     System.out.println("called button");
             kitchenBarMessage.setParentPanel(targetPanel);
@@ -69,9 +68,10 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
     }
     
     public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent,
-                                                                String buttonText)
+                                                                String buttonText,
+                                                            Menu parentPanel)
     {
-        MenuCardLinkJButton x = new MenuCardLinkJButton(parent, buttonText);
+        MenuCardLinkJButton x = new MenuCardLinkJButton(parent, buttonText, parentPanel);
         x.addActionListener(x);
         return x;
     }

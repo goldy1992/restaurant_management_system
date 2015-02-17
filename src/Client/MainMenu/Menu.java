@@ -1,5 +1,8 @@
-package Client;
+package Client.MainMenu;
 
+import Client.Client;
+import Client.DatabaseConnect;
+import Client.SelectTable;
 import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;
@@ -121,7 +124,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         FormPanel.setPreferredSize(new java.awt.Dimension(400, 500));
@@ -571,7 +573,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 cardPanelsList.add(panel);
                 
                 // ADD the kitchen message card option to EVERY card's children
-                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(kitchenBarMsgPanel, "Kitchen/Bar Message"));
+                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(kitchenBarMsgPanel, "Kitchen/Bar Message", this));
             } // while
                             
              // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
@@ -593,7 +595,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 // if not null take the parent and create a child button and reference it to panel
                 if (parentPanel != null)
                     parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel, 
-                            results.getString(3)));
+                            results.getString(3), this));
                 
                 count++;
             }  while (results.next());
@@ -707,27 +709,31 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     *
     * Factory method to make a new menu
      * @param <T>
+     * @param cParent
      * @param parent
      * @param tab
      * @param out
+     * @param type
      * @return 
     */
-    public static <T extends Menu> T makeMenu(Client cParent, JFrame parent, Tab tab, ObjectOutputStream out, Class<T> type)
+    public static <T extends Menu> T makeMenu(Client cParent, JFrame parent, 
+            Tab tab, ObjectOutputStream out, Class<T> type)
     {
         
         T  newMenu = null;
         try 
         {
-            if (type.equals(Menu.class))
+            if (type.equals(TillMenu.class))
+            {
+                TillMenu newMenu1 = new TillMenu(cParent, parent, true, tab, out);
+                newMenu = (T)(Object)newMenu1;
+            }
+            else if (type.equals(Menu.class))
             {
                 Menu newMenu1 = new Menu(cParent, parent, true, tab, out);
                 newMenu = (T)(Object)newMenu1;
             }
-            else if (type.equals(TillMenu.class))
-            {
-                TillMenu newMenu1 = new TillMenu(parent, true, tab, out);
-                newMenu = (T)(Object)newMenu1;
-            }
+
             newMenu.addMouseListener(newMenu);
             newMenu.setTotal();
             newMenu.setEnabled(true);

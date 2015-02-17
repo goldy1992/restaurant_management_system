@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package Client.MainMenu;
 
+import Client.MainMenu.MenuCardLinkJButton;
+import Client.MainMenu.Menu;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

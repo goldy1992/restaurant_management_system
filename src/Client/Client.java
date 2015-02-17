@@ -5,12 +5,18 @@
  */
 package Client;
 
+import Message.EventNotification.EventNotification;
+import Message.Message;
+import Message.Response.Response;
 import OutputPrinter.OutputGUI;
 import Server.MyServer;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,9 +33,27 @@ public abstract class Client implements Runnable
     
     // object classes
     public boolean running = true;
-    public Thread thread;   
+    public Thread thread; 
+    
     @Override
-    public abstract void run();
+    public void run()
+    {
+        try 
+        {   
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            while(running)
+            {
+                Message response = (Message)in.readObject();         
+                if (response instanceof Response)
+                    parseResponse((Response)response);
+                else if(response instanceof EventNotification)
+                    parseEventNotification((EventNotification)response);
+            } // while running
+        } // try
+        catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public Client()
     {
@@ -59,4 +83,24 @@ public abstract class Client implements Runnable
    {
        return out;
    }
+   
+    public abstract void parseResponse(Response response) throws IOException, ClassNotFoundException;
+   
+    public abstract void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException;
+   
+    public String sortTimeSyntax(int time)
+    {        
+        if (time == 0) return "00";
+        else if (time > 0 && time <= 9)
+            return "0" + time;
+        else return time + "";
+        
+    } // sortTimeSyntax
+
+    public String timeToString(int hours, int minutes)
+    {
+        return sortTimeSyntax(hours) + ":" + sortTimeSyntax(minutes);
+    }
+   
+
 }

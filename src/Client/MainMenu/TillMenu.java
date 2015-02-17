@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package Client.MainMenu;
 
+import Client.Client;
+import Client.MainMenu.Menu;
 import Item.Tab;
 import java.awt.Component;
 import java.io.ObjectOutputStream;
@@ -24,9 +26,9 @@ public class TillMenu extends Menu {
            "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Send Order"};
        return x;
     }
-    public TillMenu(java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
+    public TillMenu(Client client, java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
     {
-        super(parent, modal, tab, stream);
+        super(client, parent, modal, tab, stream);
     }
     
 

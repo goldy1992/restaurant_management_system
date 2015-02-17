@@ -1,4 +1,4 @@
-package Client;
+package Client.MainMenu;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
