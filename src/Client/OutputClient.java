@@ -84,7 +84,11 @@ public class OutputClient extends Client implements Runnable
         }    
         OutputClient client = Client.makeClient(OutputClient.class);
         client.type = type;
-       
+        if (client.getType() == OutputClient.Type.BAR) 
+            client.debugGUI.setTitle("Bar Client Output");
+        else if (client.getType() == OutputClient.Type.KITCHEN)
+            client.debugGUI.setTitle("Kitchen Client Output"); 
+    
         try
         {                  
             if (type == Type.KITCHEN)

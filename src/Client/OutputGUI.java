@@ -97,14 +97,7 @@ public class OutputGUI extends javax.swing.JFrame {
             till.setTitle("Till Client Output");
         else if (parent.getClass() == WaiterClient.class)
             till.setTitle("Waiter Client Output");
-        else if (parent.getClass() == OutputClient.class)
-        {
-            OutputClient c = (OutputClient)parent;
-            if (c.getType() == OutputClient.Type.BAR) 
-                till.setTitle("Bar Client Output");
-            else if (c.getType() == OutputClient.Type.KITCHEN)
-                till.setTitle("Kitchen Client Output"); 
-        } // else if
+
         till.setVisible(true);
         till.addText("pre while");
         return till;
