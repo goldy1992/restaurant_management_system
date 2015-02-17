@@ -12,7 +12,7 @@ import Message.Request.*;
 import Message.EventNotification.*;
 import static Message.Request.Request.RequestType.REGISTER_BAR;
 import Message.Response.*;
-import OutputPrinter.OutputGUI;
+import Client.OutputGUI;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -50,7 +50,7 @@ public class ClientCommunicationThread implements Runnable
         this.id = id;
         this.isRunning = true;
         this.thread = new Thread(this);
-        gui = new OutputGUI();
+        //gui = new OutputGUI();
         System.out.println("buffer size: " + socket.getReceiveBufferSize());
         //gui.setVisible(true);
     } // constructor

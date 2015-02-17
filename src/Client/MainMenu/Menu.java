@@ -2,7 +2,7 @@ package Client.MainMenu;
 
 import Client.Client;
 import Client.DatabaseConnect;
-import Client.SelectTable;
+import Client.SelectTableMenu.SelectTable;
 import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;

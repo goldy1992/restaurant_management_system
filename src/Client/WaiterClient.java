@@ -6,6 +6,7 @@
 
 package Client;
 
+import Client.SelectTableMenu.SelectTable;
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
 import Server.Table;
@@ -19,17 +20,14 @@ import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;
 import Server.MyServer;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Goldy
  */
-public class MyClient extends Client
+public class WaiterClient extends Client
 {
    
     /**
@@ -41,7 +39,7 @@ public class MyClient extends Client
     public SelectTable selectTable;
     
     
-    public MyClient()
+    public WaiterClient()
     {
         super();
     } // constructor
@@ -79,7 +77,8 @@ public class MyClient extends Client
      */
     public static void main(String[] args) throws InterruptedException
     {
-        MyClient myClient = new MyClient();
+        WaiterClient myClient = Client.makeClient(WaiterClient.class);
+        System.out.println("is MyCLient: " + (myClient.getClass() == WaiterClient.class));
         try
         {
             RegisterClientRequest rWRequest = new RegisterClientRequest(
@@ -169,6 +168,7 @@ public class MyClient extends Client
    @Override
    public void parseResponse(Response resp) throws IOException, ClassNotFoundException
    {
+       System.out.println("response received");
         if (resp instanceof TabResponse) 
             parseTabResponse((TabResponse)resp);
         if (resp instanceof TableStatusResponse) 

@@ -6,7 +6,7 @@
 
 package Message.Response;
 
-import Client.MyClient;
+import Client.WaiterClient;
 import Server.MyServer;
 import Message.Request.NumOfTablesRequest;
 

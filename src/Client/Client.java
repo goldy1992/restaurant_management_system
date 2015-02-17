@@ -8,7 +8,6 @@ package Client;
 import Message.EventNotification.EventNotification;
 import Message.Message;
 import Message.Response.Response;
-import OutputPrinter.OutputGUI;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,18 +31,18 @@ public abstract class Client implements Runnable
     private ObjectOutputStream out = null;
     
     // object classes
-    public boolean running = true;
-    public Thread thread; 
-    
+    public boolean running = true;    
     @Override
     public void run()
     {
         try 
         {   
+            this.debugGUI.addText("thread running");
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             while(running)
             {
-                Message response = (Message)in.readObject();         
+                Message response = (Message)in.readObject();      
+                System.out.println("Message received");
                 if (response instanceof Response)
                     parseResponse((Response)response);
                 else if(response instanceof EventNotification)
@@ -51,7 +50,7 @@ public abstract class Client implements Runnable
             } // while running
         } // try
         catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WaiterClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -59,21 +58,15 @@ public abstract class Client implements Runnable
     {
         try
         {
-            debugGUI = new OutputGUI();
-            debugGUI.setTitle("Client Output");
-            debugGUI.setVisible(true);
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());
-            responseThread = new Thread();
-            responseThread.start();
         } // try
         catch (IOException e)
         {
-            debugGUI.addText("Could not connect to server");
+            System.out.println("Could not connect to server");
         } // catch
-        debugGUI.addText("pre while");
     }
     
         /**
@@ -102,5 +95,34 @@ public abstract class Client implements Runnable
         return sortTimeSyntax(hours) + ":" + sortTimeSyntax(minutes);
     }
    
+    
+    public static <T extends Client> T makeClient(Class<T> type)
+    {
+        T till = null;
+        if (type == TillClient.class)
+        {
+            TillClient till1 = new TillClient();
+            till = (T)till1;       
+        } // if
+        else if (type == WaiterClient.class)
+        {
+            WaiterClient till1 = new WaiterClient();
+            till = (T)till1;    
+        } // else if
+        else if (type == OutputClient.class)
+        {
+            OutputClient till1 = new OutputClient();
+            till = (T)till1;    
+        } // else if
+        
+        if (till != null)
+        {
+            till.responseThread = new Thread(till);
+            till.responseThread.start();
+            till.debugGUI = OutputGUI.makeGUI(till);
+        }
+
+        return till;
+    }
 
 }

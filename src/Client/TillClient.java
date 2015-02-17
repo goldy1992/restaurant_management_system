@@ -5,24 +5,14 @@
  */
 package Client;
 
-import Client.Client;
-import Client.MainMenu.Menu;
-import Client.MyClient;
 import Client.MainMenu.TillMenu;
-import Item.Item;
-import Message.Message;
-import Message.Request.*;
 import Message.EventNotification.*;
 import Message.Response.*;
-import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -30,11 +20,10 @@ import java.util.logging.Logger;
  */
 public class TillClient extends Client implements Runnable
 {
-    private final Thread responseThread;
     
     public TillClient()
     {
-        this.responseThread = new Thread(this);
+        super();
     } // constructor
     
 
@@ -50,7 +39,7 @@ public class TillClient extends Client implements Runnable
      */
     public static void main(String[] args)  
     {   
-        TillClient myClient = new TillClient();
+        TillClient myClient = Client.makeClient(TillClient.class);
 
         TillMenu menu = TillMenu.makeMenu(myClient, null, null, out, TillMenu.class);
 

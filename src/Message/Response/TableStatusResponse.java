@@ -6,8 +6,8 @@
 
 package Message.Response;
 
-import Client.MyClient;
-import static Client.MyClient.lock;
+import Client.WaiterClient;
+import static Client.WaiterClient.lock;
 import Server.MyServer;
 import Server.Table;
 import Message.Request.TableStatusRequest;

@@ -5,7 +5,7 @@
  */
 package Message.Response;
 
-import Client.MyClient;
+import Client.WaiterClient;
 
 import Item.Tab;
 import Message.Request.Request;

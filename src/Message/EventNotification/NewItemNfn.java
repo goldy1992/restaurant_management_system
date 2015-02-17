@@ -5,7 +5,7 @@
  */
 package Message.EventNotification;
 
-import Client.MyClient;
+import Client.WaiterClient;
 import Item.*;
 import Item.Item.Type;
 import Server.Table;

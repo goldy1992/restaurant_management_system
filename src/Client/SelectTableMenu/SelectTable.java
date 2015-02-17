@@ -5,9 +5,10 @@
  * and open the template in the editor.
  */
 
-package Client;
+package Client.SelectTableMenu;
 
 import Client.MainMenu.Menu;
+import Client.WaiterClient;
 import static Message.Message.generateRequestID;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
@@ -44,7 +45,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     public JButton openTable = new JButton("Open Table");
     public JButton moveTable = new JButton("Move Table");
     public Menu menu; // the menu GUI
-    public final MyClient parentClient;
+    public final WaiterClient parentClient;
     
     /**
      * @return The table currently selected.
@@ -131,7 +132,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
      * @param out
      * @param parent
      */
-    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out, MyClient parent) 
+    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out, WaiterClient parent) 
     {
         this.tableStatuses = tableStatuses;
         this.out = out;
@@ -163,7 +164,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 650));
-        setPreferredSize(new java.awt.Dimension(600, 650));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

@@ -5,7 +5,7 @@
  */
 package Message.Response;
 
-import Client.MyClient;
+import Client.WaiterClient;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import static Message.Request.Request.RequestType.*;
@@ -32,19 +32,19 @@ public class RegisterClientResponse extends Response
             return;
         
         RegisterClientRequest req = (RegisterClientRequest)getRequest();
-        MyServer.debugGUI.addText("not already parsed");
+       // MyServer.debugGUI.addText("not already parsed");
         
         if (req.type == REGISTER_BAR)
         {
             permissionGranted = (MyServer.getBarClient() == null);
-            MyServer.debugGUI.addText("permission granted: " + permissionGranted 
-                + "\n" + MyServer.getBarClient());
+            //MyServer.debugGUI.addText("permission granted: " + permissionGranted 
+                //+ "\n" + MyServer.getBarClient());
         }
         else if (req.type == REGISTER_KITCHEN) 
         {
             permissionGranted = (MyServer.getKitchenClient() == null);
-            MyServer.debugGUI.addText("permission granted: " + permissionGranted 
-                                + "\n" + MyServer.getKitchenClient());
+            //MyServer.debugGUI.addText("permission granted: " + permissionGranted 
+                               // + "\n" + MyServer.getKitchenClient());
         }
         else permissionGranted = true;
         

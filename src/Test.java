@@ -44,7 +44,7 @@ public class Test
         {
             try
             {
-                Client.MyClient.main(null);
+                Client.WaiterClient.main(null);
             } 
             catch (InterruptedException ex) 
             {
@@ -69,7 +69,7 @@ public class Test
         public void run()
         {
             String [] array = {"kitchen"};
-            OutputPrinter.OutputClient.main(array);
+            Client.OutputClient.main(array);
             
         }// run
         };
@@ -87,7 +87,7 @@ public class Test
         public void run()
         {
             String [] array = {"bar"};
-            OutputPrinter.OutputClient.main(array);
+            Client.OutputClient.main(array);
             
         }// run
         };
