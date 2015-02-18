@@ -80,14 +80,15 @@ public class ClientCommunicationThread implements Runnable
                     {
                         parseEventNotification((EventNotification)message);
                     }
-                    
+                    //in.available();
                 } // while
                 
             } // try            // try            // try            // try           
             catch(IOException e)
             {
                 e.printStackTrace();
-                System.err.println(e);
+                System.err.println(e.getCause());
+                //System.err.println(e);
                 //gui.addText("Failed to set up buffers" + "\n");
             } 
             catch (ClassNotFoundException  ex) {

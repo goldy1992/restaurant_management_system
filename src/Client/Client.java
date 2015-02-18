@@ -42,7 +42,12 @@ public abstract class Client implements Runnable
             while(running)
             {
                 Message response = (Message)in.readObject();      
-                System.out.println("Message received: " + this.getClass());
+                //System.out.println();
+                if (this instanceof OutputClient)
+                {
+                    OutputClient c = (OutputClient)this;
+                    System.out.println("Message received: " + this.getClass() + ", " + c.getType());
+                }
                 if (response instanceof Response)
                     parseResponse((Response)response);
                 else if(response instanceof EventNotification)

@@ -6,12 +6,9 @@
 package Client.MainMenu;
 
 import Client.Client;
-import Client.MainMenu.Menu;
 import Item.Tab;
-import java.awt.Component;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
-import javax.swing.JPanel;
 
 /**
  *
@@ -31,6 +28,11 @@ public class TillMenu extends Menu {
         super(client, parent, modal, tab, stream);
     }
     
-
+    @Override
+    public void dealWithButtons(Object source)
+    {
+        super.dealWithButtons(source);
+        
+    }
     
 }

@@ -1,9 +1,9 @@
 #!/bin/bash    
 java -cp dist/TestClientServer.jar Server.MyServer&
 sleep 2s
-java -cp dist/TestClientServer.jar Client.OutputClient bar&
-sleep 2s
 java -cp dist/TestClientServer.jar Client.OutputClient kitchen&
+sleep 2s
+java -cp dist/TestClientServer.jar Client.OutputClient bar&
 sleep 2s
 java -cp dist/TestClientServer.jar Client.WaiterClient&
 sleep 2s

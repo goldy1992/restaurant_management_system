@@ -47,8 +47,11 @@ public class OutputClient extends Client implements Runnable
     public void parseEventNotification(EventNotification evntNfn) 
         throws IOException, ClassNotFoundException 
     {
-        NewItemNfn newItemMessage = (NewItemNfn)evntNfn;
-        debugGUI.addMessage(newItemMessage);
+        if (evntNfn instanceof NewItemNfn)
+        {
+            NewItemNfn newItemMessage = (NewItemNfn)evntNfn;
+            debugGUI.addMessage(newItemMessage);
+        } // if
     }
     
 
@@ -99,8 +102,9 @@ public class OutputClient extends Client implements Runnable
                     InetAddress.getByName( client.serverAddress.getHostName()),
                     Message.generateRequestID(),
                     Request.RequestType.REGISTER_KITCHEN);         
+                                client.getOutputStream().reset();
                 client.getOutputStream().writeObject(rKitchenReq);
-                client.getOutputStream().reset();
+                                client.getOutputStream().reset();
                 System.out.println("sent kitch req");
             } // if
             else
@@ -111,10 +115,10 @@ public class OutputClient extends Client implements Runnable
                     InetAddress.getByName(client.serverAddress.getHostName()),
                     Message.generateRequestID(),
                     Request.RequestType.REGISTER_BAR);
-            
+                client.getOutputStream().reset();              
                 client.getOutputStream().writeObject(rBarRequest);
                 client.getOutputStream().reset();
-                                System.out.println("sent bar req");
+                              System.out.println("sent bar req");
                 
             } // else            
        } // try

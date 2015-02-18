@@ -226,7 +226,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
     
     private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
-        parentClient.debugGUI.addText("pressed");
+        //parentClient.debugGUI.addText("pressed");
     }//GEN-LAST:event_OutputAreaKeyPressed
 
     private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
@@ -411,63 +411,70 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         }
         
     } // constructor
+    
+    public void sendOrder()
+    {
+        this.oldTab = oldTab.mergeTabs(newTab);
+            
+        try 
+        {
+            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+                parentClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                generateRequestID(), this.oldTab);
+            out.reset();
+            out.writeObject(newEvt);
+                
+            // send the new items to the bar or kitchen respectively
+            if (this.newTab.getDrinks().size() > 0)
+            {
+                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+                    parentClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                    generateRequestID(), 
+                    Item.Type.DRINK, 
+                    this.newTab.getDrinks(),
+                    newTab.getTable());
+                    out.reset();
+                    out.writeObject(newEvt1);
+            } // if
+                
+            if (this.newTab.getFood().size() > 0)
+            {
+                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+                    parentClient.client.getLocalAddress().getHostName()),
+                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                    generateRequestID(), 
+                    Item.Type.FOOD, 
+                    this.newTab.getFood(),
+                    newTab.getTable());
+                out.reset();
+                out.writeObject(newEvt1);
+            } // if                
+                
+            con.close(); 
+        } // try // try
+        catch (SQLException | IOException ex) 
+        { 
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
+        this.dispose();        
+    } // sendOrder
+    
+    public void dealWithButtons(Object source)
+    {
+        JButton button = (JButton)source;
+        if (button.getText().equals("Send Order"))
+            sendOrder();        
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
+        
         if (ae.getSource() instanceof JButton)
         {
-            JButton b = (JButton)ae.getSource();
-        if (b.getText().equals("Send Order"))
-        {
-            this.oldTab = oldTab.mergeTabs(newTab);
-            
-            try 
-            {
-                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-                    parentClient.client.getLocalAddress().getHostName()),
-                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                    generateRequestID(), this.oldTab);
-                out.reset();
-                out.writeObject(newEvt);
-                
-                // send the new items to the bar or kitchen respectively
-                if (this.newTab.getDrinks().size() > 0)
-                {
-                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-                        parentClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), 
-                        Item.Type.DRINK, 
-                        this.newTab.getDrinks(),
-                        newTab.getTable());
-                        out.reset();
-                        out.writeObject(newEvt1);
-                        parentClient.debugGUI.addText("sent drinks");
-                } // if
-                
-                if (this.newTab.getFood().size() > 0)
-                {
-                    NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-                        parentClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), 
-                        Item.Type.FOOD, 
-                        this.newTab.getFood(),
-                        newTab.getTable());
-                    out.reset();
-                    out.writeObject(newEvt1);
-                    parentClient.debugGUI.addText("sent food");
-                } // if                
-                
-                con.close(); 
-            } // try // try
-            catch (SQLException | IOException ex) 
-            { 
-                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-            } // catch
-            this.dispose();
-        } // if
+            dealWithButtons(ae.getSource());
         }
     } // actionPerformed
     
