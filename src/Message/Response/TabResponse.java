@@ -30,16 +30,9 @@ public class TabResponse extends Response
 
     } // contructor
     
-    /**
-     *
-     */
-    @Override
-    public void parse()
+    public void setTab(Tab tab)
     {
-       TabRequest request = (TabRequest)this.getRequest();
-       int number  = request.getTabNumber();
-       
-       currentTab = MyServer.getTable(number).getCurrentTab();
+        this.currentTab= tab;
     }
     
     public Tab getTab()
@@ -47,10 +40,6 @@ public class TabResponse extends Response
         return currentTab;
     }
 
-    @Override
-    public void onReceiving() 
-    {
 
-    } // onReceiving
     
 } // class

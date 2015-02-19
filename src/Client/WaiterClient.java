@@ -33,15 +33,15 @@ public class WaiterClient extends Client
     /**
      * An object used to ensure tasks are performed asynchronously. 
      */
-    public static final Object lock = new Object();
+    public final Object lock = new Object();
     public ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
     public int numberOfTables = -1;
     public SelectTable selectTable;
     
     
-    public WaiterClient()
+    public WaiterClient(RegisterClientRequest.ClientType  type) throws IOException
     {
-        super();
+        super(type);
     } // constructor
      
     /**
@@ -77,18 +77,11 @@ public class WaiterClient extends Client
      */
     public static void main(String[] args) throws InterruptedException
     {
-        WaiterClient myClient = Client.makeClient(WaiterClient.class);
-        System.out.println("is MyCLient: " + (myClient.getClass() == WaiterClient.class));
+        WaiterClient myClient = null;
         try
         {
-            RegisterClientRequest rWRequest = new RegisterClientRequest(
-                InetAddress.getByName(
-                    myClient.client.getLocalAddress().getHostName() ),
-                InetAddress.getByName(myClient.serverAddress.getHostName()),
-                Message.generateRequestID(),
-                Request.RequestType.REGISTER_WAITER_CLIENT);         
-            myClient.getOutputStream().writeObject(rWRequest);
-
+            myClient = Client.makeClient(RegisterClientRequest.ClientType.WAITER);
+            System.out.println("is MyCLient: " + (myClient.getClass() == WaiterClient.class));
             NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(
                 InetAddress.getByName(
                     myClient.client.getLocalAddress().getHostName()),
@@ -121,11 +114,11 @@ public class WaiterClient extends Client
         myClient.debugGUI.addText("pre while");
         
         
-        synchronized(lock)
+        synchronized(myClient.lock)
         {
             while(myClient.tableStatuses == null)
             {
-                try { lock.wait(); }
+                try { myClient.lock.wait(); }
                 catch (InterruptedException e) 
                 { // treat interrupt as exit request
                     break;
@@ -139,7 +132,7 @@ public class WaiterClient extends Client
             myClient.tableStatuses, myClient.getOutputStream(), myClient);
         myClient.selectTable.setVisible(true);
 
-        
+        System.out.println("end of waiter client");
     } // main
     
     private void parseTabResponse(TabResponse resp)
@@ -157,7 +150,7 @@ public class WaiterClient extends Client
     {
         System.out.println("table status response");
        System.out.println(resp.getTableStatuses());
-                        
+       
         synchronized(lock)
         {
             setTableStatuses(resp.getTableStatuses());
@@ -168,7 +161,9 @@ public class WaiterClient extends Client
    @Override
    public void parseResponse(Response resp) throws IOException, ClassNotFoundException
    {
-       System.out.println("response received");
+        System.out.println("response received");
+        super.parseResponse(resp);
+
         if (resp instanceof TabResponse) 
             parseTabResponse((TabResponse)resp);
         if (resp instanceof TableStatusResponse) 
@@ -178,6 +173,7 @@ public class WaiterClient extends Client
    @Override
    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
    {
+        super.parseEventNotification(evntNfn);
         if (evntNfn instanceof TableStatusEvtNfn)
         {
             TableStatusEvtNfn r = (TableStatusEvtNfn)evntNfn; 

@@ -28,7 +28,6 @@ public abstract class Request extends Message
      */
     public static enum RequestType 
     {
-
         /**
          *  Request the status of a table (FREE, OCCUPIED, IN USE) etc.
          */
@@ -50,21 +49,10 @@ public abstract class Request extends Message
         TAB,
         
         /**
-         *  Request registers the bar client.
+         *  Requests the for the client to be registered.
          */
-        REGISTER_BAR,
-        
-        /**
-         *  Request registers the kitchen client.
-         */
-        REGISTER_KITCHEN,
-        
-        /**
-         *  Request registers the waiter client.
-         */
-        REGISTER_WAITER_CLIENT
-
-    }
+        REGISTER_CLIENT
+    } // requestType
     
     /**
      *

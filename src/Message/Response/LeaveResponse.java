@@ -14,32 +14,26 @@ import Message.Request.Request;
 public class LeaveResponse extends Response
 {
 
-    
+    private boolean permissionGranted = false;
     /**
      *
      * @param request
      */
+    
     public LeaveResponse(Request request)
     {
         super(request);
 
     } // contructor
     
-    /**
-     *
-     */
-    @Override
-    public void parse()
+    public boolean hasPermission()
     {
-
+        return permissionGranted;
     }
 
-
-    @Override
-    public void onReceiving() 
+    public void setPermission(boolean permission)
     {
-        //MyClient.debugGUI.addText("reached exit");
-        System.exit(0);
+        this.permissionGranted = permission;
     }
     
 }

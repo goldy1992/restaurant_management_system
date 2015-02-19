@@ -6,8 +6,6 @@
 
 package Message.Response;
 
-import Client.WaiterClient;
-import static Client.WaiterClient.lock;
 import Server.MyServer;
 import Server.Table;
 import Message.Request.TableStatusRequest;
@@ -31,9 +29,7 @@ public class TableStatusResponse extends Response
         super(request);
         tableStatuses = new ArrayList<Table.TableStatus>();
     } // contructor
-    
-
-    
+       
     /**
      *
      * @return
@@ -42,33 +38,6 @@ public class TableStatusResponse extends Response
     {
         return tableStatuses;
     } // getTableStatuses
-    
-    /**
-     *
-     */
-    @Override
-    public void parse()
-    {
-        if(parsedResponse)
-            return;
-        
-        // cast the request to a table request
-        TableStatusRequest x = (TableStatusRequest)this.getRequest();
- 
-        //System.out.println("gettign statuses");
-        // for each table in the request, add its status to the ArrayList
-        
-        
-        tableStatuses.add(null);
- 
-        for (int i = 1; i < x.getTableList().size(); i++)
-        {
-          //  System.out.println(i + " table number: " + x.getTableList().get(i));
-            tableStatuses.add(MyServer.getTable(x.getTableList().get(i)).getTableStatus());
-        }    
-        // set response to true
-        parsedResponse = true;
-    }
     
     @Override
     public String toString()
@@ -79,13 +48,6 @@ public class TableStatusResponse extends Response
         x+= "\n";
         
         return x;
-    } // to String
+    } // toString
 
-    @Override
-    public void onReceiving() 
-    {
-
-                        
-        //System.out.println("reply for table statuses in client" + MyClient.tableStatuses);
-    } // onReceiving
-}
+} // class

@@ -22,6 +22,7 @@ public abstract class Message implements Serializable
     private final InetAddress fromAddress;
     private final InetAddress toAddress;
     private final String messageID;
+    private static final long serialVersionUID = 1L;
     
     /**
      *

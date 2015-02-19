@@ -10,9 +10,9 @@ import Item.*;
 import Message.*;
 import Message.Request.*;
 import Message.EventNotification.*;
-import static Message.Request.Request.RequestType.REGISTER_BAR;
 import Message.Response.*;
 import Client.OutputGUI;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,10 +29,6 @@ public class ClientCommunicationThread implements Runnable
 {
     private final Socket socket;
     private final Thread thread;
-
-    /**
-     *
-     */
     public long id;
     private ObjectOutputStream out;
     private ObjectInputStream in;   
@@ -43,6 +39,7 @@ public class ClientCommunicationThread implements Runnable
      *
      * @param socket
      * @param id
+     * @throws java.net.SocketException
      */
     public ClientCommunicationThread(Socket socket, long id) throws SocketException
     {
@@ -60,43 +57,37 @@ public class ClientCommunicationThread implements Runnable
     {
         if (socket != null)
         {
-            //gui.addText("socket: " + socket);
+            Message message = null;
             try
             {
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());    
-
-                               
+                              
                 while(isRunning)
                 {
-                    Message message = (Message) in.readObject();
-                    
-                    //gui.addText("read message from " + id);       
+                    message = (Message) in.readObject();
+                          
                     if (message instanceof Request)
-                    {
                         parseRequest((Request)message);                  
-                    }
                     else if(message instanceof EventNotification)
-                    {
                         parseEventNotification((EventNotification)message);
-                    }
-                    //in.available();
                 } // while
                 
-            } // try            // try            // try            // try           
-            catch(IOException e)
-            {
-                e.printStackTrace();
-                System.err.println(e.getCause());
-                //System.err.println(e);
-                //gui.addText("Failed to set up buffers" + "\n");
-            } 
-            catch (ClassNotFoundException  ex) {
-                Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        } // if socket == null
+            } // try        
 
+            catch (EOFException e)
+            {
+               System.err.println(e.getCause() + "\n " + e.getLocalizedMessage() +  "\n  " + e.getMessage());
+                Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, e);
+            }
+             catch(IOException e)
+            {
+            } // catch
+            catch (ClassNotFoundException  ex) 
+            {
+                Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, ex);
+            } // catch            
+        } // if socket == null
     } // run
    
     /**
@@ -135,97 +126,138 @@ public class ClientCommunicationThread implements Runnable
         return in;
     }
     
-    private void parseRequest(Request message) throws IOException
+    private TableStatusResponse parseTableStatusRequest(Request request)
+    {
+        TableStatusResponse response = 
+            new TableStatusResponse((TableStatusRequest)request);        
+        // cast the request to a table request
+        TableStatusRequest x = (TableStatusRequest)response.getRequest();
+ 
+        //System.out.println("gettign statuses");
+        // for each table in the request, add its status to the ArrayList
+        
+        
+        response.getTableStatuses().add(null);
+ 
+        for (int i = 1; i < x.getTableList().size(); i++)
+            response.getTableStatuses()
+                .add(MyServer
+                        .getTable(x.getTableList().get(i))
+                            .getTableStatus());
+        
+
+        return response;
+    }
+    
+    private NumOfTablesResponse parseNumOfTablesRequest(Request request)
+    {
+        NumOfTablesResponse response = new NumOfTablesResponse((NumOfTablesRequest)request);   
+        return response;
+    }
+    
+    private RegisterClientResponse parseRegisterClientRequest(Request request)
+    {
+        RegisterClientResponse response = new RegisterClientResponse((RegisterClientRequest)request);
+
+        // register the bar/kitchen
+        if (response.hasPermission())
+        {         
+            switch(response.getClientType())
+            {
+                case BAR: response.setPermission(MyServer.getBarClient() == null); System.out.println("dealing with bar req"); break;
+                case KITCHEN: response.setPermission(MyServer.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
+                default: break;
+            } // switch      
+       
+            switch (response.getClientType())
+            {
+                case BAR: MyServer.setBarClient(this); break;
+                case KITCHEN: MyServer.setKitchenClient(this);  break;
+                case WAITER: MyServer.addWaiterClient(this);  break;
+                default: break;
+            } // switch
+        } // if
+      
+        return response;
+    }
+    
+    private TabResponse parseTabRequest(Request request)
+    {
+        TabResponse response = new TabResponse((TabRequest)request);
+        TabRequest tabRequest = (TabRequest)response.getRequest();
+        int number  = tabRequest.getTabNumber(); 
+        response.setTab(MyServer.getTable(number).getCurrentTab());
+        return response;
+    }
+    
+    private LeaveResponse parseLeaveRequest(Request request)
+    {
+        LeaveResponse response = new LeaveResponse((LeaveRequest)request); 
+        MyServer.removeWaiterClient(this);
+        isRunning = false;
+        return response;
+    }
+    
+    private void parseRequest(Request request) throws IOException
     {
         Response response = null;  
-        if (message instanceof TableStatusRequest)
-            response = new TableStatusResponse((TableStatusRequest)message);
-        else if (message instanceof NumOfTablesRequest)
-            response = new NumOfTablesResponse((NumOfTablesRequest)message);
-        else if (message instanceof RegisterClientRequest)
-        {
-            response = new RegisterClientResponse((RegisterClientRequest)message);
-
-            RegisterClientResponse rResponse = (RegisterClientResponse)response;
-            rResponse.parse();
-                
-            // register the bar/kitchen
-            if (rResponse.hasPermission())
-            {
-                switch (message.type)
-                {
-                    case REGISTER_BAR: MyServer.setBarClient(this); //gui.addText("id: " + id + ", register bar to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Bar Thread Debug");break;
-                    case REGISTER_KITCHEN: MyServer.setKitchenClient(this); //gui.addText("id: " + id + ", register kitchen to port: " + this.id + "\n object: " + this.getOutStream()); gui.setTitle("Server Kitchen Thread Debug"); break;
-                    case REGISTER_WAITER_CLIENT: MyServer.addWaiterClient(this); //gui.setTitle("Server Client Thread Debug"); break;
-                    default: break;
-                }
-
-            }
-            response = rResponse;
-            
-            //if (response instanceof RegisterClientResponse)
-                //gui.addText("response registered correctly");
-        } // else if
-        else if (message instanceof TabRequest)
-        {
-            response = new TabResponse((TabRequest)message);
-            //gui.addText("id: " + id + ", received Tab Request\n");
-        }
-        else if (message instanceof LeaveRequest)
-        {
-            response = new LeaveResponse((LeaveRequest)message);
-            MyServer.removeWaiterClient(this);
-            //gui.addText("client size " + MyServer.getClients().size());
-            isRunning = false;
-        }
-        
+        if (request instanceof TableStatusRequest)
+            response = parseTableStatusRequest(request);
+        else if (request instanceof NumOfTablesRequest)
+            response = parseNumOfTablesRequest(request);
+        else if (request instanceof RegisterClientRequest)  
+            response = parseRegisterClientRequest(request);
+        else if (request instanceof TabRequest)
+            response = parseTabRequest(request);
+        else if (request instanceof LeaveRequest)
+        response = parseLeaveRequest(request);
+               
         if (response == null)
             return;
         
-        //gui.addText("reponse\n" + message);
-        response.parse();
+        response.setParsed(true);   
         out.reset();
         out.writeObject(response);        
     }
     
-    private void parseEventNotification(EventNotification message) throws IOException
+    private void parseTableStatusEvtNfn(EventNotification message) throws IOException
     {
-        if (message instanceof TableStatusEvtNfn)
-        {
-            TableStatusEvtNfn event = (TableStatusEvtNfn)message;
-            int tableNumber = event.getTableNumber();
-            Table.TableStatus status = event.getTableStatus();
-                           
-            //gui.addText("requested table " + tableNumber);
-            MyServer.getTable(tableNumber).setTableStatus(status);
+        TableStatusEvtNfn event = (TableStatusEvtNfn)message;
+        int tableNumber = event.getTableNumber();
+        Table.TableStatus status = event.getTableStatus();
+                          
+        //gui.addText("requested table " + tableNumber);
+        MyServer.getTable(tableNumber).setTableStatus(status);
                             
-            //gui.addText("new table status " + MyServer.getTable(tableNumber).getTableStatus());
-                                                        
-            //gui.addText("number of clients to send to: " + MyServer.getWaiterClients().size());
+        //gui.addText("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+                                                       
+        //gui.addText("number of clients to send to: " + MyServer.getWaiterClients().size());
 
-            for(int i =0; i < MyServer.getWaiterClients().size(); i++)
-            {
-                ObjectOutputStream otherClientOut = MyServer.getWaiterClients().get(i).getOutStream();
-                TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                        MyServer.getWaiterClients().get(i).getSocket().getInetAddress(),
-                        event.getMessageID(),
-                        tableNumber,
-                        status);
+        for(int i =0; i < MyServer.getWaiterClients().size(); i++)
+        {
+            ObjectOutputStream otherClientOut = MyServer.getWaiterClients().get(i).getOutStream();
+            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+                    MyServer.getWaiterClients().get(i).getSocket().getInetAddress(),
+                    event.getMessageID(),
+                    tableNumber,
+                    status);
                                 
-                otherClientOut.reset();
-                otherClientOut.writeObject(msgToSend);
-                //gui.addText("id: " + id + ", sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
-            } // for
-        } // if
-        else if (message instanceof TabUpdateNfn)
-        {
-            TabUpdateNfn event = (TabUpdateNfn)message;
-            int tableNumber = event.getTab().getTable().getTableNumber();
-            MyServer.getTable(tableNumber).updateTab(event.getTab());
-            //gui.addText("Tab updated");              
-        } // else if
-        else if (message instanceof NewItemNfn)
-        {
+            otherClientOut.reset();
+            otherClientOut.writeObject(msgToSend);
+            //gui.addText("id: " + id + ", sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
+        } // for        
+    } // parseTableStatusEvtNfn
+    
+    private void parseTabUpdateNfn(EventNotification message)
+    {
+        TabUpdateNfn event = (TabUpdateNfn)message;
+        int tableNumber = event.getTab().getTable().getTableNumber();
+        MyServer.getTable(tableNumber).updateTab(event.getTab());
+        //gui.addText("Tab updated");          
+    }
+    
+    private void parseNewItemNfn(EventNotification message) throws IOException
+    {
             //gui.addText("id: " + id + ", bar port: " + MyServer.getBarClient().getSocket().getPort());
             //gui.addText("id: " + id + ", kitchen port: " + MyServer.getKitchenClient().getSocket().getPort());
             NewItemNfn event = (NewItemNfn)message;
@@ -263,8 +295,17 @@ public class ClientCommunicationThread implements Runnable
          //gui.addText("id: " + id + ", Out Stream difference: " + MyServer.getKitchenClient().getOutStream() + " " + MyServer.getBarClient().getOutStream());
                 otherClientOut.writeObject(msgToSend);
                // gui.addText("id: " + id + ", sent to port: " + MyServer.getKitchenClient().getSocket().getPort());
-            } // if
-        } // else if
+            } // if      
+   }
+    
+    private void parseEventNotification(EventNotification message) throws IOException
+    {
+        if (message instanceof TableStatusEvtNfn)
+            parseTableStatusEvtNfn(message);
+        else if (message instanceof TabUpdateNfn)
+            parseTabUpdateNfn(message);
+        else if (message instanceof NewItemNfn)
+            parseNewItemNfn(message);
     }
 
 } // class

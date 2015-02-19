@@ -6,7 +6,6 @@
 
 package Message.Response;
 
-import Client.WaiterClient;
 import Server.MyServer;
 import Message.Request.NumOfTablesRequest;
 
@@ -16,6 +15,7 @@ import Message.Request.NumOfTablesRequest;
  */
 public class NumOfTablesResponse extends Response
 {
+    private int numOfTables;
 
     /**
      *
@@ -27,8 +27,6 @@ public class NumOfTablesResponse extends Response
 
     } // contructor
     
-    private int numOfTables;
-    
     /**
      *
      * @return
@@ -38,20 +36,11 @@ public class NumOfTablesResponse extends Response
         return numOfTables;
     } // getTableStatuses
     
-    /**
-     * This should only be able to be done server side
-     */
-    @Override
-    public void parse()
+    public void setNumberOfTables(int numOfTables)
     {
-        if(parsedResponse)
-            return;
-        
-        numOfTables = MyServer.getNumOfTables();
-        // set response to true
-        parsedResponse = true;
+        this.numOfTables = numOfTables;
     }
-    
+        
     public String toString()
     {
         String x = super.toString() + "SUBTYPE: Number of Tables\ntotal: " + numOfTables; 
@@ -61,12 +50,5 @@ public class NumOfTablesResponse extends Response
         return x;
     }
 
-    @Override
-    public void onReceiving() 
-    {
-        //MyClient.debugGUI.addText("received number of tables: \n" 
-                               // + this.toString());
-        //MyClient.debugGUI.addText("got  num of tables: " + r.getNumOfTables());
-        //MyClient.setNumTables(this.getNumOfTables());
-    }
+
 }

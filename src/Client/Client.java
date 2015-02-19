@@ -7,13 +7,18 @@ package Client;
 
 import Message.EventNotification.EventNotification;
 import Message.Message;
+import Message.Request.RegisterClientRequest;
+import Message.Request.Request;
+import Message.Response.LeaveResponse;
 import Message.Response.Response;
 import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,12 +34,17 @@ public abstract class Client implements Runnable
     public OutputGUI debugGUI;
     public Thread responseThread;    
     private ObjectOutputStream out = null;
+    private final RegisterClientRequest.ClientType type;
+    private static final long serialVersionUID = 1L;
     
     // object classes
     public boolean running = true;    
     @Override
     public void run()
     {
+        System.out.println("start run");
+        this.debugGUI = OutputGUI.makeGUI(this);
+        this.debugGUI.setVisible(true);
         try 
         {   
             this.debugGUI.addText("thread running");
@@ -46,7 +56,7 @@ public abstract class Client implements Runnable
                 if (this instanceof OutputClient)
                 {
                     OutputClient c = (OutputClient)this;
-                    System.out.println("Message received: " + this.getClass() + ", " + c.getType());
+                    System.out.println("Message received: " + this.getClass() + ", " + response);
                 }
                 if (response instanceof Response)
                     parseResponse((Response)response);
@@ -55,18 +65,21 @@ public abstract class Client implements Runnable
             } // while running
         } // try
         catch (IOException | ClassNotFoundException ex) {
+            System.out.println("error in run");
             Logger.getLogger(WaiterClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public Client()
+    public Client(RegisterClientRequest.ClientType type) throws UnknownHostException, IOException
     {
+        this.type = type;
         try
         {
             serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());
+            System.out.println("outputstream made");
         } // try
         catch (IOException e)
         {
@@ -82,9 +95,20 @@ public abstract class Client implements Runnable
        return out;
    }
    
-    public abstract void parseResponse(Response response) throws IOException, ClassNotFoundException;
+    public void parseResponse(Response response) throws IOException, ClassNotFoundException
+    {
+        if (response instanceof LeaveResponse)
+        {
+            LeaveResponse leaveR = (LeaveResponse)response;
+            if (leaveR.hasPermission())
+                System.exit(0);
+        } // if
+    }
    
-    public abstract void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException;
+    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
+    {
+        
+    }
    
     public String sortTimeSyntax(int time)
     {        
@@ -101,34 +125,63 @@ public abstract class Client implements Runnable
     }
    
     
-    public static <T extends Client> T makeClient(Class<T> type)
+    public static <T extends Client> T makeClient(RegisterClientRequest.ClientType clientType) throws IOException
     {
-        T till = null;
-        if (type == TillClient.class)
-        {
-            TillClient till1 = new TillClient();
-            till = (T)till1;       
-        } // if
-        else if (type == WaiterClient.class)
-        {
-            WaiterClient till1 = new WaiterClient();
-            till = (T)till1;    
-        } // else if
-        else if (type == OutputClient.class)
-        {
-            OutputClient till1 = new OutputClient();
-            till = (T)till1;    
-        } // else if
+        T till;
         
-        if (till != null)
+        switch (clientType)
         {
-            till.debugGUI = OutputGUI.makeGUI(till);
+            case WAITER:
+                WaiterClient till1 = new WaiterClient(clientType);
+                till = (T)till1; break;
+            case TILL:
+                TillClient till2 = new TillClient(clientType);
+                till = (T)till2; break;       
+            default:
+                OutputClient till3 = new OutputClient(clientType);
+                till = (T)till3;  
+        }
+        
             till.responseThread = new Thread(till);
             till.responseThread.start();
+            
+            till.registerClient();
+        
 
-        }
 
+            System.out.println("returning");
         return till;
+    } // makeClient
+    
+    public RegisterClientRequest.ClientType getType()
+    {
+        return type;
     }
+    
+    public final void registerClient()
+    {
+
+        try
+        {
+        RegisterClientRequest rKitchenReq = new RegisterClientRequest(
+            InetAddress.getByName(client.getLocalAddress().getHostName()),
+            InetAddress.getByName(serverAddress.getHostName()),
+            Message.generateRequestID(),
+            Request.RequestType.REGISTER_CLIENT,
+            type);     
+        System.out.println("writing object: " + rKitchenReq);
+            getOutputStream().reset();
+            getOutputStream().writeObject(rKitchenReq);
+            
+            getOutputStream().reset();     
+        } 
+        catch (IOException ex) {
+            System.out.println("error thrown here!");
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                                    System.out.println("eXITING");
+    } // REGISTERcLIENT
+    
+
 
 }

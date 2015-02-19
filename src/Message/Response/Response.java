@@ -13,14 +13,10 @@ import Message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message implements DoWhenReceived
+public abstract class Response extends Message
 {    
     private Request request = null;
-
-    /**
-     *
-     */
-    protected boolean parsedResponse;
+    private boolean parsedResponse;
 
     /**
      *
@@ -51,20 +47,17 @@ public abstract class Response extends Message implements DoWhenReceived
         return parsedResponse;
     }
     
-    /**
-     *
-     */
-    public abstract void parse();
+    public void setParsed(boolean parsed)
+    {
+        this.parsedResponse = parsed;
+    }
     
+    @Override
     public String toString()
     {
         return super.toString() + "TYPE: Response\n";
     }
     
-    /**
-     * implements the method to be called when the message is received.
-     */
-    @Override
-    public abstract void onReceiving();
+
     
 } // class

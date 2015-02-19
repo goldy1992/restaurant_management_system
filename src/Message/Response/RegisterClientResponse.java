@@ -5,11 +5,8 @@
  */
 package Message.Response;
 
-import Client.WaiterClient;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
-import static Message.Request.Request.RequestType.*;
-import Server.MyServer;
 
 /**
  *
@@ -18,45 +15,15 @@ import Server.MyServer;
 public class RegisterClientResponse extends Response
 {
     private boolean permissionGranted;
+    private final RegisterClientRequest.ClientType clientType;
     
     public RegisterClientResponse(Request request)
     {
         super(request);
+        RegisterClientRequest req = (RegisterClientRequest)request;
+        clientType = req.getClientType();
     } // constructor
 
-    @Override
-    public void parse() 
-    {
-        
-        if(hasParsedResponse())
-            return;
-        
-        RegisterClientRequest req = (RegisterClientRequest)getRequest();
-       // MyServer.debugGUI.addText("not already parsed");
-        
-        if (req.type == REGISTER_BAR)
-        {
-            permissionGranted = (MyServer.getBarClient() == null);
-            //MyServer.debugGUI.addText("permission granted: " + permissionGranted 
-                //+ "\n" + MyServer.getBarClient());
-        }
-        else if (req.type == REGISTER_KITCHEN) 
-        {
-            permissionGranted = (MyServer.getKitchenClient() == null);
-            //MyServer.debugGUI.addText("permission granted: " + permissionGranted 
-                               // + "\n" + MyServer.getKitchenClient());
-        }
-        else permissionGranted = true;
-        
-        this.parsedResponse = true;
-        
-    }
-
-    @Override
-    public void onReceiving() 
-    {
-
-    } // onReceiving
     
     public boolean hasPermission()
     {
@@ -67,4 +34,9 @@ public class RegisterClientResponse extends Response
     {
         permissionGranted = permission;
     } // setPermission
+    
+    public RegisterClientRequest.ClientType getClientType()
+    {
+        return clientType;
+    }
 } // class

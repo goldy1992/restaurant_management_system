@@ -6,28 +6,56 @@
 package Message.Request;
 
 import java.net.InetAddress;
-
 /**
  *
  * @author mbbx9mg3
  */
 public class RegisterClientRequest extends Request
 {
+    public static enum ClientType
+    {
+        /**
+         *  Request registers the bar client.
+         */
+        BAR,
+        
+        /**
+         *  Request registers the kitchen client.
+         */
+        KITCHEN,
+        
+        /**
+         *  Request registers the waiter client.
+         */
+        WAITER,
+        
+        /**
+         *  Request registers the till client.
+         */
+        TILL
+    } // register
+    
+    private ClientType clientType;
+    
     /**
      *
      * @param from
      * @param to
      * @param messageID
      * @param type
+     * @param clientType
      */
     public RegisterClientRequest(InetAddress from, 
                                 InetAddress to, 
                                 String messageID, 
-                                Request.RequestType type)
+                                RequestType type,
+                                ClientType clientType)
     {
         super(from, to, messageID, type);
+        this.clientType = clientType;
     } // constructor
     
+    @Override
     public String toString()
     {
         String x = super.toString() + "SUBTYPE: " + type;
@@ -35,5 +63,10 @@ public class RegisterClientRequest extends Request
         
         return x;
     } // to String
+    
+    public ClientType getClientType()
+    {
+        return clientType;
+    }
     
 }
