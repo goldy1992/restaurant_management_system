@@ -111,7 +111,7 @@ public class WaiterClient extends Client
         {
             myClient.debugGUI.addText("Could not connect to server");
         } // catch
-        myClient.debugGUI.addText("pre while");
+        //myClient.debugGUI.addText("pre while");
         
         
         synchronized(myClient.lock)

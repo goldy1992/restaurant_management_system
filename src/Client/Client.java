@@ -43,8 +43,8 @@ public abstract class Client implements Runnable
     public void run()
     {
         System.out.println("start run");
-        this.debugGUI = OutputGUI.makeGUI(this);
-        this.debugGUI.setVisible(true);
+
+        //this.debugGUI.setVisible(true);
         try 
         {   
             this.debugGUI.addText("thread running");
@@ -68,6 +68,7 @@ public abstract class Client implements Runnable
             System.out.println("error in run");
             Logger.getLogger(WaiterClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("exiting thread");
     }
     
     public Client(RegisterClientRequest.ClientType type) throws UnknownHostException, IOException
@@ -141,10 +142,10 @@ public abstract class Client implements Runnable
                 OutputClient till3 = new OutputClient(clientType);
                 till = (T)till3;  
         }
-        
+            till.debugGUI = OutputGUI.makeGUI(till);        
             till.responseThread = new Thread(till);
             till.responseThread.start();
-            
+
             till.registerClient();
         
 

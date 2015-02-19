@@ -76,6 +76,7 @@ public class OutputClient extends Client implements Runnable
         {
             
         }
+        client.debugGUI.setVisible(true);
         System.out.println("got here");
 
         //
