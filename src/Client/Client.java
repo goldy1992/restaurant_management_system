@@ -15,7 +15,6 @@ import Server.MyServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -47,7 +46,7 @@ public abstract class Client implements Runnable
         //this.debugGUI.setVisible(true);
         try 
         {   
-            this.debugGUI.addText("thread running");
+            //this.debugGUI.addText("thread running");
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             while(running)
             {
@@ -67,6 +66,10 @@ public abstract class Client implements Runnable
         catch (IOException | ClassNotFoundException ex) {
             System.out.println("error in run");
             Logger.getLogger(WaiterClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                catch (Exception ex) {
+            System.out.println("error thrown here!");
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("exiting thread");
     }
@@ -140,7 +143,8 @@ public abstract class Client implements Runnable
                 till = (T)till2; break;       
             default:
                 OutputClient till3 = new OutputClient(clientType);
-                till = (T)till3;  
+                till = (T)till3;
+                break;
         }
             till.debugGUI = OutputGUI.makeGUI(till);        
             till.responseThread = new Thread(till);
@@ -172,14 +176,15 @@ public abstract class Client implements Runnable
             type);     
         System.out.println("writing object: " + rKitchenReq);
             getOutputStream().reset();
-            getOutputStream().writeObject(rKitchenReq);
-            
+            getOutputStream().writeObject(rKitchenReq);           
             getOutputStream().reset();     
+            System.out.println("written");
         } 
         catch (IOException ex) {
             System.out.println("error thrown here!");
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+
                                     System.out.println("eXITING");
     } // REGISTERcLIENT
     

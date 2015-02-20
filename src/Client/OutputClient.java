@@ -11,6 +11,7 @@ import Message.Request.RegisterClientRequest;
 import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  *
@@ -24,17 +25,20 @@ public class OutputClient extends Client implements Runnable
         throws IOException, ClassNotFoundException 
     {
         super.parseResponse(response);
+        System.out.println("parse response");
         if (response instanceof RegisterClientResponse)
         {
+                    System.out.println("parse register client response");
             RegisterClientResponse rResponse = (RegisterClientResponse)response;
             RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
+            
             if (!rResponse.hasPermission())
             {
                 debugGUI.addText("A client already exists!");
                 System.exit(0);                               
             } // if
                             
-            else debugGUI.addText("Client successfully registered as: " + req);
+            else System.out.println("Client successfully registered as: " + req);
         } // if   
     }
 
@@ -58,8 +62,9 @@ public class OutputClient extends Client implements Runnable
     
     /**
      * @param args the command line arguments
+     * @throws java.lang.InterruptedException
      */
-    public static void main(String[] args)  
+    public static void main(String[] args)  throws InterruptedException
     {
 
         OutputClient client = null;
@@ -67,19 +72,20 @@ public class OutputClient extends Client implements Runnable
         {
             switch(args[0])
             {
-                case "bar": client = Client.makeClient(RegisterClientRequest.ClientType.BAR); break;
-                case "kitchen": client = Client.makeClient(RegisterClientRequest.ClientType.KITCHEN); break;
+                case "bar": System.out.println("making bar"); client = Client.makeClient(RegisterClientRequest.ClientType.BAR); System.out.println("made bar " + client);break;
+                case "kitchen": System.out.println("making kitchen"); client = Client.makeClient(RegisterClientRequest.ClientType.KITCHEN); System.out.println("made kitchen " + client); break;
                 default: System.out.println("invalid argument"); System.exit(0); break;
             }
-        }
-        catch(IOException ex)
-        {
-            
-        }
+            System.out.println("end of switch");
+
         client.debugGUI.setVisible(true);
         System.out.println("got here");
-
-        //
+        while (true);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
            
     } // main
     

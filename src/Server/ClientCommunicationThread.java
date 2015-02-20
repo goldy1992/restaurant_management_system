@@ -79,6 +79,7 @@ public class ClientCommunicationThread implements Runnable
             {
                System.err.println(e.getCause() + "\n " + e.getLocalizedMessage() +  "\n  " + e.getMessage());
                 Logger.getLogger(ClientCommunicationThread.class.getName()).log(Level.SEVERE, null, e);
+                
             }
              catch(IOException e)
             {
@@ -158,17 +159,15 @@ public class ClientCommunicationThread implements Runnable
     private RegisterClientResponse parseRegisterClientRequest(Request request)
     {
         RegisterClientResponse response = new RegisterClientResponse((RegisterClientRequest)request);
-
-        // register the bar/kitchen
-        if (response.hasPermission())
-        {         
-            switch(response.getClientType())
-            {
-                case BAR: response.setPermission(MyServer.getBarClient() == null); System.out.println("dealing with bar req"); break;
-                case KITCHEN: response.setPermission(MyServer.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
-                default: break;
-            } // switch      
+      
+        switch(response.getClientType())
+        {
+            case BAR: response.setPermission(MyServer.getBarClient() == null); System.out.println("dealing with bar req"); break;
+            case KITCHEN: response.setPermission(MyServer.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
+            default: break;
+        } // switch      
        
+        if (response.hasPermission())
             switch (response.getClientType())
             {
                 case BAR: MyServer.setBarClient(this); break;
@@ -176,7 +175,6 @@ public class ClientCommunicationThread implements Runnable
                 case WAITER: MyServer.addWaiterClient(this);  break;
                 default: break;
             } // switch
-        } // if
       
         return response;
     }
