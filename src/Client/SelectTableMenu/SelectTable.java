@@ -15,7 +15,7 @@ import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
 import Message.Request.Request;
 import Message.Request.TabRequest;
-import Server.Table;
+import Message.Table;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

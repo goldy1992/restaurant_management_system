@@ -8,7 +8,7 @@ package Message.EventNotification;
 import Client.WaiterClient;
 import Item.*;
 import Item.Item.Type;
-import Server.Table;
+import Message.Table;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;

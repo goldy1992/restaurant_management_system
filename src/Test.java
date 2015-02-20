@@ -69,7 +69,11 @@ public class Test
         public void run()
         {
             String [] array = {"kitchen"};
-            Client.OutputClient.main(array);
+            try {
+                Client.OutputClient.main(array);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }// run
         };
@@ -82,14 +86,15 @@ public class Test
         }
         
                 // creates the bar client
-        Thread barClient = new Thread(){
-        @Override
-        public void run()
-        {
-            String [] array = {"bar"};
-            Client.OutputClient.main(array);
-            
-        }// run
+        Thread barClient = new Thread(){    
+            @Override
+            public void run()
+            {
+                String [] array = {"bar"};
+                try { Client.OutputClient.main(array); } 
+                catch (InterruptedException ex) 
+                {Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);}           
+            }// run
         };
         myThreadPool.execute(barClient); 
 

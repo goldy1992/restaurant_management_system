@@ -7,6 +7,7 @@ import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
+import Message.Table;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -75,7 +76,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public boolean messageForLatestItem = false;
     
     private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
-    private final JButton SendOrderButton = null;
+
     /**
      * Stores the reference to the JTextPane used on the output
      * @see javax.swing.JTextPane
@@ -268,7 +269,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * 
      * @return the newly created card
      */
-    protected MenuCardPanel createKitchenBarMessageCard()
+    protected final MenuCardPanel createKitchenBarMessageCard()
     {
         MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel(this);
         containerPanel.setName("kitchenBarPanel");
@@ -406,8 +407,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         }
         else
         {
-            this.oldTab = new Tab(null);
-            this.newTab = new Tab(null);
+            this.oldTab = new Tab(new Table(0));
+            this.newTab = new Tab(new Table(0));
         }
         
     } // constructor
@@ -522,10 +523,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     /**
      * Adds the functional features to the main panel
+     * @param panel
      * @param the main panel in the set of panels
      * @return the main panel with the extra buttons added to it
      */
-    protected MenuCardPanel initialiseMainCard(MenuCardPanel panel)
+    protected final MenuCardPanel initialiseMainCard(MenuCardPanel panel)
     {      
         // creates the panel that everything will be created on
         JPanel BillHandlePanel = new JPanel();

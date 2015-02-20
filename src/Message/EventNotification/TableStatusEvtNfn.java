@@ -5,7 +5,7 @@
  */
 package Message.EventNotification;
 
-import Server.Table;
+import Message.Table;
 import java.net.InetAddress;
 
 /**

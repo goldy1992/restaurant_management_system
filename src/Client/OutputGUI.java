@@ -93,13 +93,13 @@ public class OutputGUI extends javax.swing.JFrame {
     {
         OutputGUI till = new OutputGUI(parent);
         // if for each title
-        if (parent.getClass() == TillClient.class)
+        if (parent instanceof TillClient)
             till.setTitle("Till Client Output");
-        else if (parent.getClass() == WaiterClient.class)
+        else if (parent instanceof WaiterClient)
             till.setTitle("Waiter Client Output");
         
         System.out.println("make gui");
-        till.addText("pre while");
+        //till.addText("pre while");
         return till;
     }
     

@@ -7,7 +7,7 @@
 
 package Server;
 
-import Client.OutputGUI;
+import Message.Table;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
@@ -26,6 +26,7 @@ public class MyServer
     private static final int NUM_OF_TABLES = 44;
     private static final Object LOCK = new Object();  
     private static ArrayList<ClientCommunicationThread> waiterClient;
+    private static ArrayList<ClientCommunicationThread> tillClient;
     private static ClientCommunicationThread barClient = null;
     private static ClientCommunicationThread kitchenClient = null;
     private static Table[] tables;
@@ -38,6 +39,7 @@ public class MyServer
     {
 
         waiterClient = new ArrayList<>();
+        tillClient = new ArrayList<>();
         tables = new Table[NUM_OF_TABLES + 1];
         
         // creates a thread for each table
@@ -184,5 +186,38 @@ public class MyServer
     public static void setKitchenClient(ClientCommunicationThread client)
     {
         kitchenClient = client;
+    }
+    
+    public static boolean addTillClient(ClientCommunicationThread client)
+    {
+        synchronized(LOCK)
+        {
+            for (ClientCommunicationThread tillClient1 : tillClient) 
+            {
+                if (client.equals(tillClient1)) {
+                    //debugGUI.addText("client already exits");
+                    return false;
+                }
+            }
+            tillClient.add(client);
+            return true;
+     
+        } // synchronized
+    }
+    
+    /**
+     *
+     * @param client
+     */
+    public static void removeTillClient(ClientCommunicationThread client)
+    {
+        synchronized(LOCK)
+        {
+            for (int i = 0; i < tillClient.size(); i++)
+                if (client.equals(tillClient.get(i)))
+                    tillClient.remove(i);
+            
+            //debugGUI.addText("client removed");
+        } // synchronized
     }
 } // MySocket class

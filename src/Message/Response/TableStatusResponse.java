@@ -7,7 +7,7 @@
 package Message.Response;
 
 import Server.MyServer;
-import Server.Table;
+import Message.Table;
 import Message.Request.TableStatusRequest;
 import java.util.ArrayList;
 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Server;
+package Message;
 
 import Item.Tab;
 import java.io.BufferedReader;
@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Random;
 
 /**
  *
@@ -45,7 +44,7 @@ public class Table implements Runnable, Serializable
          */
         IN_USE, 
     }
-    
+    private static final int PORT_NUMBER = 11000;
     /**
      * the table number
      */
@@ -69,7 +68,7 @@ public class Table implements Runnable, Serializable
     {
         //System.out.println("table number  " + tableNumber);
         this.tableNumber = tableNumber;
-        this.tableNumberPort = tableNumber + MyServer.getLowBoundPortRange();
+        this.tableNumberPort = tableNumber + PORT_NUMBER;
         tableStatus = TableStatus.FREE;
         
         

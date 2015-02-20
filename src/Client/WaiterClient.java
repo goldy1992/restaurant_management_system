@@ -9,7 +9,7 @@ package Client;
 import Client.SelectTableMenu.SelectTable;
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
-import Server.Table;
+import Message.Table;
 import Message.Message;
 import Message.Request.NumOfTablesRequest;
 import Message.Request.RegisterClientRequest;

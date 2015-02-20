@@ -9,10 +9,6 @@ import Message.EventNotification.*;
 import Message.Request.RegisterClientRequest;
 import Message.Response.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +33,7 @@ public class TillClient extends Client implements Runnable
         TillClient myClient = null;
         try 
         {
-            myClient = Client.makeClient(RegisterClientRequest.ClientType .TILL);
+            myClient = Client.makeClient(RegisterClientRequest.ClientType.TILL);
             TillGUI gui = new TillGUI(myClient);
             gui.setVisible(true);
         } 
@@ -45,17 +41,33 @@ public class TillClient extends Client implements Runnable
         {
             Logger.getLogger(TillClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        System.out.println("end of till client");
     } // main
       
     /**
      *
-     * @return
-     */
-    
+     * @param response
+     * @throws java.io.IOException
+     * @throws java.lang.ClassNotFoundException
+     */  
     @Override
     public void parseResponse(Response response) throws IOException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super.parseResponse(response);
+        
+        if (response instanceof RegisterClientResponse)
+        {
+                    System.out.println("parse register client response");
+            RegisterClientResponse rResponse = (RegisterClientResponse)response;
+            RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
+            
+            if (!rResponse.hasPermission())
+            {
+                debugGUI.addText("A client already exists!");
+                System.exit(0);                               
+            } // if
+        
+            else System.out.println("Client successfully registered as: " + req);
+        }
     }
 
     @Override

@@ -7,4 +7,4 @@ java -cp dist/TestClientServer.jar Client.OutputClient bar&
 sleep 2s
 java -cp dist/TestClientServer.jar Client.WaiterClient&
 sleep 2s
-java -cp dist/TestClientServer.jar Till.TillClient&
+java -cp dist/TestClientServer.jar Client.TillClient&

@@ -6,7 +6,7 @@
 package Item;
 
 import static Item.Item.Type.DRINK;
-import Server.Table;
+import Message.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;

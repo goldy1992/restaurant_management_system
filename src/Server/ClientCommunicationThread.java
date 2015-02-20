@@ -6,6 +6,7 @@
 
 package Server;
 
+import Message.Table;
 import Item.*;
 import Message.*;
 import Message.Request.*;
@@ -164,6 +165,8 @@ public class ClientCommunicationThread implements Runnable
         {
             case BAR: response.setPermission(MyServer.getBarClient() == null); System.out.println("dealing with bar req"); break;
             case KITCHEN: response.setPermission(MyServer.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
+            case WAITER: response.setPermission(true);
+            case TILL: response.setPermission(true);
             default: break;
         } // switch      
        
@@ -173,6 +176,7 @@ public class ClientCommunicationThread implements Runnable
                 case BAR: MyServer.setBarClient(this); break;
                 case KITCHEN: MyServer.setKitchenClient(this);  break;
                 case WAITER: MyServer.addWaiterClient(this);  break;
+                case TILL: MyServer.addTillClient(this);  break;
                 default: break;
             } // switch
       
