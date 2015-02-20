@@ -41,9 +41,6 @@ public abstract class Client implements Runnable
     @Override
     public void run()
     {
-        System.out.println("start run");
-
-        //this.debugGUI.setVisible(true);
         try 
         {   
             //this.debugGUI.addText("thread running");

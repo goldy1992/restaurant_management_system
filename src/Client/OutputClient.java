@@ -11,7 +11,6 @@ import Message.Request.RegisterClientRequest;
 import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  *
@@ -38,7 +37,7 @@ public class OutputClient extends Client implements Runnable
                 System.exit(0);                               
             } // if
                             
-            else System.out.println("Client successfully registered as: " + req);
+            else debugGUI.addText("Client successfully registered as: " + req);
         } // if   
     }
 

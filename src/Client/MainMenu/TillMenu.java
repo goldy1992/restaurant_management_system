@@ -30,7 +30,8 @@ public class TillMenu extends Menu
            "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Send Order"};
        return x;
     }
-    public TillMenu(Client client, java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
+    public TillMenu(Client client, java.awt.Frame parent, boolean modal, 
+        Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
     {
         super(client, parent, modal, tab, stream);
         this.till = parentGUI;

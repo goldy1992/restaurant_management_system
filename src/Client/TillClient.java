@@ -35,6 +35,7 @@ public class TillClient extends Client implements Runnable
         {
             myClient = Client.makeClient(RegisterClientRequest.ClientType.TILL);
             TillGUI gui = new TillGUI(myClient);
+            gui.setTitle("Till");
             gui.setVisible(true);
         } 
         catch (IOException ex) 

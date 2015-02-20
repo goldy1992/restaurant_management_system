@@ -163,6 +163,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Select Table");
         setMinimumSize(new java.awt.Dimension(600, 650));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
