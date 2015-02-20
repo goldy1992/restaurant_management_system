@@ -11,6 +11,7 @@ import Message.Response.Response;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import javax.swing.JLabel;
 
 /**
  *
@@ -41,26 +42,46 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     private void initComponents() {
 
         startClientButton = new javax.swing.JButton();
+        changeLabel = new javax.swing.JLabel();
+        changeOutputLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         startClientButton.setText("Start Till Client");
+        startClientButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startClientButtonActionPerformed(evt);
+            }
+        });
+
+        changeLabel.setText("Change:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(133, Short.MAX_VALUE)
-                .addComponent(startClientButton)
-                .addGap(163, 163, 163))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(137, 137, 137)
+                        .addComponent(startClientButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(changeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(changeOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(127, 127, 127)
+                .addGap(69, 69, 69)
                 .addComponent(startClientButton)
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(changeLabel)
+                    .addComponent(changeOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         startClientButton.addActionListener(this);
@@ -68,8 +89,14 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void startClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startClientButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startClientButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel changeLabel;
+    private javax.swing.JLabel changeOutputLabel;
     private javax.swing.JButton startClientButton;
     // End of variables declaration//GEN-END:variables
 
@@ -79,10 +106,14 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         if (ae.getSource() == this.startClientButton)
         {
             TillMenu menu = TillMenu.makeMenu(parent, 
-                null, null, parent.getOutputStream(), 
-                TillMenu.class);
+                null, null, parent.getOutputStream(),  this);
         }
         
+    }
+    
+    public JLabel getChangeOutputLabel()
+    {
+        return changeOutputLabel;
     }
 
 }

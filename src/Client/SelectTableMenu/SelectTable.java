@@ -373,7 +373,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                         } // catch
                     } // synchronized
                     
-                    menu = Menu.makeMenu(parentClient, this, tab, out, Menu.class);
+                    menu = Menu.makeMenu(parentClient, this, tab, out);
                     //MyClient.debugGUI.addText("menu has been made");
 
                     this.tabReceived = false;

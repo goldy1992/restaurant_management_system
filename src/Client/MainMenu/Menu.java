@@ -471,12 +471,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
     @Override
     public void actionPerformed(ActionEvent ae) 
-    {
-        
+    {        
         if (ae.getSource() instanceof JButton)
-        {
             dealWithButtons(ae.getSource());
-        }
+        
+  
     } // actionPerformed
     
     public MenuCardPanel getKitchenBarMsgPanel()
@@ -520,7 +519,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      */
     Connection con = null;    
 
-    
     /**
      * Adds the functional features to the main panel
      * @param panel
@@ -547,17 +545,13 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             newButton.addActionListener(this);
             BillHandlePanel.add(newButton);
             buttons.add(newButton);           
-        }
+        } // for
+        
         System.out.println(layout);
-
-        //panel.remove(2);
         panel.add(BillHandlePanel);
-        //panel.add(panel.getKeypadPanel());
-
         CardPanel.add(panel, panel.getName());
         panels.add(panel);
-        return panel;
-        
+        return panel;       
     } // initialiseCards    
     
     private ArrayList<MenuCardPanel> getCards()
@@ -725,24 +719,14 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @param type
      * @return 
     */
-    public static <T extends Menu> T makeMenu(Client cParent, JFrame parent, 
-            Tab tab, ObjectOutputStream out, Class<T> type)
+    public static Menu makeMenu(Client cParent, JFrame parent, 
+            Tab tab, ObjectOutputStream out)
     {
         
-        T  newMenu = null;
+        Menu newMenu = null;
         try 
         {
-            if (type.equals(TillMenu.class))
-            {
-                TillMenu newMenu1 = new TillMenu(cParent, parent, true, tab, out);
-                newMenu = (T)(Object)newMenu1;
-            }
-            else if (type.equals(Menu.class))
-            {
-                Menu newMenu1 = new Menu(cParent, parent, true, tab, out);
-                newMenu = (T)(Object)newMenu1;
-            }
-
+            newMenu = new Menu(cParent, parent, true, tab, out);
             newMenu.addMouseListener(newMenu);
             newMenu.setTotal();
             newMenu.setEnabled(true);
@@ -783,8 +767,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         return toReturn;
         
     }
-    
-    
+       
     public void setTotal()
     {
         BigDecimal total = oldTab.getTotal();
@@ -796,6 +779,20 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         System.out.println(total);
         this.totalCostArea.setText("Total: £" + totalAsString);
     }
+    
+    public BigDecimal getTotal()
+    {
+        BigDecimal total = oldTab.getTotal();
+        total = total.add(newTab.getTotal()); 
+        return total;
+    } // getTotal
+    
+    public double getTotalDouble()
+    {
+        BigDecimal total = oldTab.getTotal();
+        total = total.add(newTab.getTotal()); 
+        return total.doubleValue();
+    } // getTotal
     
     public static Class<?> findTypeOfParentMenu(Container cont)
     {

@@ -10,7 +10,11 @@ import Client.MainMenu.Menu;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -243,8 +247,28 @@ public class MenuCardPanel extends JPanel
                 public void actionPerformed(ActionEvent e) 
                 {
                     Menu menu = belongsToMenu;
-                    menu.quantitySelected = -1;
-                    menu.quantityTextPane.setText("");
+                    double amount = menu.quantitySelected / 100;
+                    if (amount < menu.getTotalDouble())
+                    {
+                        menu.quantityTextPane.setText("Insufficient amount");
+                        menu.quantitySelected = 0;                        
+                    } // if
+                    else
+                    {
+                        try 
+                        {
+                            TillMenu tMenu = (TillMenu)menu;
+                            double change = (amount - menu.getTotalDouble());
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            String changeString = df.format(change);
+                            tMenu.getTill().getChangeOutputLabel().setText("£" + changeString );
+                            tMenu.con.close();
+                            tMenu.dispose();
+                        } catch (SQLException ex) 
+                        {
+                            Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 } // actionPerformed
             });
             keypadPanel.add(cashPay);      
