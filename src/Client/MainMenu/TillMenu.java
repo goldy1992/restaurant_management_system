@@ -7,12 +7,17 @@ package Client.MainMenu;
 
 import Client.Client;
 import Client.SelectTableMenu.SelectTable;
+import Client.TillClient;
 import Client.TillGUI;
 import Item.Tab;
+import Message.Table;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 /**
@@ -22,7 +27,7 @@ import javax.swing.JFrame;
 public class TillMenu extends Menu 
 {
     private final TillGUI till;
-    
+
     @Override
     protected String[] getOptionNames() { 
        String[] x = {"Print Bill", "Print Last Receipt", "Void", 
@@ -38,9 +43,19 @@ public class TillMenu extends Menu
     }
     
     @Override
-    public void dealWithButtons(Object source)
+    public void dealWithButtons(Object source) 
     {
+        
         super.dealWithButtons(source);
+         JButton button = (JButton)source;
+        if (button.getText().equals("Bar Tab"))
+        {
+            TillClient c = (TillClient)parentClient;
+            ArrayList<Table.TableStatus> tableStatuses = (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
+            HashMap<Integer, Table.TableStatus> list = new HashMap<Integer, Table.TableStatus>(); 
+            for (int i = 1; i < tableStatuses.size(); i++)
+                list.put(i, tableStatuses.get(i));
+        } // bar tab
         
     }
     

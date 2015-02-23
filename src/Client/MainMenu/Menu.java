@@ -63,17 +63,17 @@ import javax.swing.JTextPane;
  */
 public class Menu extends JDialog implements ActionListener, MouseListener
 {
-    private final ArrayList<JComponent> components = new ArrayList<>();
-    private final ArrayList<JButton> buttons = new ArrayList<>();
-    private final ArrayList<JPanel> panels = new ArrayList<>();  
-    private final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
-    private Tab oldTab;
+    protected final ArrayList<JComponent> components = new ArrayList<>();
+    protected final ArrayList<JButton> buttons = new ArrayList<>();
+    protected final ArrayList<JPanel> panels = new ArrayList<>();  
+    protected final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
+    protected Tab oldTab;
     public Tab newTab;
     private final ObjectOutputStream out;
     private final MenuCardPanel kitchenBarMsgPanel;
-
     public int quantitySelected = -1; // -1 defaults to 1
     public boolean messageForLatestItem = false;
+    public boolean seenID = false;
     
     private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public JTextPane outputTextPane;
     public JTextPane quantityTextPane;
     public JTextPane totalCostTextPane;
-    private final Client parentClient;
+    protected final Client parentClient;
     
     protected String[] getOptionNames() { 
         
@@ -249,7 +249,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     private javax.swing.JTextPane totalCostArea;
     private javax.swing.JScrollPane totalCostPane;
     // End of variables declaration//GEN-END:variables
-    
     
     public static boolean isNumeric(String x)
     {
@@ -612,7 +611,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanelsList )
             {
-                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, `FOOD_OR_DRINK` FROM `3YP_ITEMS` " 
+                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, `FOOD_OR_DRINK`, `NEED_AGE_CHECK` FROM `3YP_ITEMS` " 
                     + "LEFT JOIN `3YP_POS_IN_MENU` ON "
                     + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
                     + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" + c.getName() + "\" ";
@@ -624,7 +623,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 while(results.next())
                 {
                     MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), 
-                            results.getInt(2), new BigDecimal(results.getDouble(3)), results.getString(4), c, this);
+                            results.getInt(2), new BigDecimal(results.getDouble(3)), results.getString(4), c, this, results.getBoolean(5));
                     c.addMenuItemButton(newButton);          
                 } // while
                 

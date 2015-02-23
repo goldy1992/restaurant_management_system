@@ -135,18 +135,22 @@ public class ClientCommunicationThread implements Runnable
         // cast the request to a table request
         TableStatusRequest x = (TableStatusRequest)response.getRequest();
  
-        //System.out.println("gettign statuses");
-        // for each table in the request, add its status to the ArrayList
-        
-        
-        response.getTableStatuses().add(null);
- 
-        for (int i = 1; i < x.getTableList().size(); i++)
+        if (x.getTableList().size() == 1 && x.getTableList().get(0) == -1)
+        {
             response.getTableStatuses()
-                .add(MyServer
-                        .getTable(x.getTableList().get(i))
-                            .getTableStatus());
-        
+                    .add(null);
+            for (int i = 1; i <= MyServer.getNumOfTables(); i++)
+                response.getTableStatuses()
+                    .add(MyServer.getTable(i).getTableStatus());            
+        }
+        else
+        {
+            for (int i = 0; i < x.getTableList().size(); i++)
+                response.getTableStatuses()
+                    .add(MyServer
+                            .getTable(x.getTableList().get(i))
+                                .getTableStatus());
+        }
 
         return response;
     }
@@ -196,6 +200,7 @@ public class ClientCommunicationThread implements Runnable
     {
         LeaveResponse response = new LeaveResponse((LeaveRequest)request); 
         MyServer.removeWaiterClient(this);
+        response.setPermission(true);
         isRunning = false;
         return response;
     }
@@ -246,8 +251,20 @@ public class ClientCommunicationThread implements Runnable
                                 
             otherClientOut.reset();
             otherClientOut.writeObject(msgToSend);
-            //gui.addText("id: " + id + ", sent to port " + MyServer.getWaiterClients().get(i).getSocket().getPort() + "   " + i);
-        } // for        
+        } // for    
+        
+        for(int i =0; i < MyServer.getTillClients().size(); i++)
+        {
+            ObjectOutputStream otherClientOut = MyServer.getTillClients().get(i).getOutStream();
+            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+                    MyServer.getTillClients().get(i).getSocket().getInetAddress(),
+                    event.getMessageID(),
+                    tableNumber,
+                    status);
+                                
+            otherClientOut.reset();
+            otherClientOut.writeObject(msgToSend);
+        } // for   
     } // parseTableStatusEvtNfn
     
     private void parseTabUpdateNfn(EventNotification message)

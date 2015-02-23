@@ -15,6 +15,7 @@ import Message.Request.NumOfTablesRequest;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
+import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;
 import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;
@@ -45,12 +46,17 @@ public class WaiterClient extends Client
     } // constructor
      
     /**
-     *
-     * @param x
+     * @param resp
      */
-   public void setTableStatuses(ArrayList<Table.TableStatus>  x)
+   public void setTableStatuses(TableStatusResponse resp)
    {
-        tableStatuses = x;    
+       ArrayList<Table.TableStatus>  x = resp.getTableStatuses();
+       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
+       
+       for (int i = 0; i < req.getTableList().size(); i++)
+           tableStatuses.set(req.getTableList().get(i),
+                   x.get(i));
+       
    }
    
     /**
@@ -82,20 +88,11 @@ public class WaiterClient extends Client
         {
             myClient = Client.makeClient(RegisterClientRequest.ClientType.WAITER);
             System.out.println("is MyCLient: " + (myClient.getClass() == WaiterClient.class));
-            NumOfTablesRequest nTablesRequest = new NumOfTablesRequest(
-                InetAddress.getByName(
-                    myClient.client.getLocalAddress().getHostName()),
-                InetAddress.getByName(myClient.serverAddress.getHostName()),
-                Message.generateRequestID(),
-                Request.RequestType.NUM_OF_TABLES);
-            myClient.getOutputStream().writeObject(nTablesRequest);
-            //debugGUI.addText("sent num table request");
+
 
             ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
-            tables.add(null);
-            for(int  i = 1 ; i <= MyServer.getNumOfTables(); i++ ) 
-                tables.add(i);
+            tables.add(-1);
                 
             TableStatusRequest request = new TableStatusRequest(
                 InetAddress.getByName(
@@ -151,11 +148,30 @@ public class WaiterClient extends Client
         System.out.println("table status response");
        System.out.println(resp.getTableStatuses());
        
+       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
+       
+
+       
         synchronized(lock)
         {
-            setTableStatuses(resp.getTableStatuses());
+            if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
+                this.tableStatuses = resp.getTableStatuses();
+            else
+                setTableStatuses(resp);
             lock.notifyAll();
         }   
+    }
+    
+    private void parseNumOfTablesResponse(NumOfTablesResponse resp)
+    {
+
+        
+        synchronized(lock)
+        {
+        numberOfTables = resp.getNumOfTables();
+            lock.notifyAll();
+        }
+
     }
      
    @Override

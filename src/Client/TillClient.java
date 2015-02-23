@@ -7,8 +7,11 @@ package Client;
 
 import Message.EventNotification.*;
 import Message.Request.RegisterClientRequest;
+import Message.Request.TableStatusRequest;
 import Message.Response.*;
+import Message.Table;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +27,7 @@ public class TillClient extends Client implements Runnable
         super(type);
     } // constructor
     
-    
+    private ArrayList<Table.TableStatus> tableStatuses = null;
     /**
      * @param args the command line arguments
      */
@@ -69,12 +72,37 @@ public class TillClient extends Client implements Runnable
         
             else System.out.println("Client successfully registered as: " + req);
         }
+        if (response instanceof TableStatusResponse)
+        {
+            TableStatusResponse resp = (TableStatusResponse)response;
+             TableStatusRequest req = (TableStatusRequest)resp.getRequest();
+       
+
+            if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
+                tableStatuses = resp.getTableStatuses();          
+        
+        } // if
+        
+        
+        
     }
 
     @Override
-    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException 
+    {
+        if (evntNfn instanceof TableStatusEvtNfn)
+        {
+            TableStatusEvtNfn r = (TableStatusEvtNfn)evntNfn; 
+            if (tableStatuses != null)
+                this.tableStatuses.set(r.getTableNumber(), r.getTableStatus());                 
+         } // inner if
     }
+    
+    public ArrayList<Table.TableStatus> getTableStatuses()
+    {
+        return tableStatuses;
+    }
+       
     
 } // class
 

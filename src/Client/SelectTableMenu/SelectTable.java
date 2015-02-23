@@ -37,7 +37,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
 {
     private final ObjectOutputStream out;
     private final JButton[] tableButtons;
-    private ArrayList<Table.TableStatus> tableStatuses;
+    private final ArrayList<Table.TableStatus> tableStatuses;
     private int tableSelected = -1;
     public boolean tabReceived = false;
     private Tab tab;
@@ -124,15 +124,15 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     }
     
     
-    
-    
+      
     /**
      * Creates new form SelectTable
      * @param tableStatuses
      * @param out
      * @param parent
      */
-    public SelectTable(ArrayList<Table.TableStatus> tableStatuses, ObjectOutputStream out, WaiterClient parent) 
+    public SelectTable(ArrayList<Table.TableStatus> tableStatuses,
+        ObjectOutputStream out, WaiterClient parent) 
     {
         this.tableStatuses = tableStatuses;
         this.out = out;
@@ -271,40 +271,51 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void MenuBarFileExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuBarFileExitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MenuBarFileExitActionPerformed
-
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+    private void exitCode()
+    {
         // TODO add your handling code here:
-                        int confirm = JOptionPane.showOptionDialog(null, 
-                   "Are You Sure to Close Application?", "Exit Confirmation", 
-                   JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
+        int confirm = JOptionPane.showOptionDialog(null, 
+            "Are You Sure to Close Application?", "Exit Confirmation", 
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
                    null, null, null);
                 
                 if (confirm == 0) 
                 {
                     try 
                     {
-                        LeaveRequest leaveRequest = new LeaveRequest(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
-                                InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                                generateRequestID(),
-                                Request.RequestType.LEAVE);
+                        LeaveRequest leaveRequest = new LeaveRequest(
+                            InetAddress.getByName(
+                                parentClient.client.
+                                    getLocalAddress().getHostName()),
+                            InetAddress.getByName(
+                                parentClient.serverAddress.getHostName()),
+                            generateRequestID(),
+                            Request.RequestType.LEAVE);
                         out.writeObject(leaveRequest);
                     } // try 
                     catch (UnknownHostException ex) 
                     {
                         Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                    } 
+                    catch (IOException ex) 
+                    {
                         Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } // catch
                     
-                } // if
+                } // if        
+    }
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        exitCode();
     }//GEN-LAST:event_formWindowClosing
+
+    private void MenuBarFileExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuBarFileExitActionPerformed
+        // TODO add your handling code here:
+                exitCode();
+    }//GEN-LAST:event_MenuBarFileExitActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -405,9 +416,9 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         if(e.getSource() == moveTable)
         {
             
-        }
+        } // if
         
-    }
+    } // action Perfomed
     
 
 

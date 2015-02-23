@@ -6,11 +6,8 @@
 package Client;
 
 import Client.MainMenu.TillMenu;
-import Message.EventNotification.EventNotification;
-import Message.Response.Response;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.JLabel;
 
 /**
@@ -107,9 +104,8 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         {
             TillMenu menu = TillMenu.makeMenu(parent, 
                 null, null, parent.getOutputStream(),  this);
-        }
-        
-    }
+        } // if      
+    } // actionPerformed
     
     public JLabel getChangeOutputLabel()
     {

@@ -5,7 +5,6 @@
  */
 package Client.MainMenu;
 
-import Client.MainMenu.Menu;
 import static Client.MainMenu.Menu.isNumeric;
 import Item.Item;
 import Item.Item.Type;
@@ -15,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,17 +28,21 @@ public class MenuItemJButton extends JButton implements ActionListener
     private final int id;
     private final Type type;
     private final JComponent parent;
+    private final boolean needAgeCheck;
     /**
      *
      * @param name
      */
-    private MenuItemJButton(String name, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu)
+    private MenuItemJButton(String name, int id, 
+            BigDecimal price, String type, JComponent parent, 
+            Menu parentMenu, boolean needAgeCheck)
     {
         super(name);    
         this.price = price;
         this.id = id;
         this.parent = parent;
         this.belongsToMenu = parentMenu;
+        this.needAgeCheck = needAgeCheck;
         
         switch (type)
         {
@@ -53,7 +57,17 @@ public class MenuItemJButton extends JButton implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     { 
-        //Menu belongsToMenu = MyClient.selectTable.menu;
+        if (this.needAgeCheck && !belongsToMenu.seenID)
+        {
+            int number = JOptionPane.showConfirmDialog(
+                this.parent, "Does the customer pass an ID Check?",
+                "ID Check", JOptionPane.YES_NO_OPTION);
+            
+             if (number == 0) belongsToMenu.seenID = true;
+             else return;
+        }
+    
+   
       
         // parse the quantity
         int quantity = belongsToMenu.quantitySelected;
@@ -84,9 +98,9 @@ public class MenuItemJButton extends JButton implements ActionListener
     
     
     
-    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu)
+    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu, boolean ageCheck)
     {
-        MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent, parentMenu);
+        MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent, parentMenu, ageCheck);
         x.addActionListener(x);
         return x;
     }

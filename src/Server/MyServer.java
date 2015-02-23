@@ -126,6 +126,18 @@ public class MyServer
         } // sync
     }
     
+        /**
+     *
+     * @return
+     */
+    public static ArrayList<ClientCommunicationThread> getTillClients()
+    {
+        synchronized(LOCK)
+        {
+            return tillClient;
+        } // sync
+    }
+    
     public static boolean addWaiterClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
