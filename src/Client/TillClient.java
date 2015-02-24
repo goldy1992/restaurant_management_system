@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author mbbx9mg3
  */
-public class TillClient extends Client implements Runnable
+public class TillClient extends UserClient
 {
     
     public TillClient(RegisterClientRequest.ClientType  type) throws IOException
@@ -51,57 +51,24 @@ public class TillClient extends Client implements Runnable
     /**
      *
      * @param response
+     * @return 
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
      */  
-    @Override
-    public void parseResponse(Response response) throws IOException, ClassNotFoundException {
-        super.parseResponse(response);
-        
-        if (response instanceof RegisterClientResponse)
-        {
-                    System.out.println("parse register client response");
-            RegisterClientResponse rResponse = (RegisterClientResponse)response;
-            RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
-            
-            if (!rResponse.hasPermission())
-            {
-                debugGUI.addText("A client already exists!");
-                System.exit(0);                               
-            } // if
-        
-            else System.out.println("Client successfully registered as: " + req);
-        }
-        if (response instanceof TableStatusResponse)
-        {
-            TableStatusResponse resp = (TableStatusResponse)response;
-             TableStatusRequest req = (TableStatusRequest)resp.getRequest();
-       
-
-            if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
-                tableStatuses = resp.getTableStatuses();          
-        
-        } // if
-        
-        
-        
-    }
-
-    @Override
-    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException 
-    {
-        if (evntNfn instanceof TableStatusEvtNfn)
-        {
-            TableStatusEvtNfn r = (TableStatusEvtNfn)evntNfn; 
-            if (tableStatuses != null)
-                this.tableStatuses.set(r.getTableNumber(), r.getTableStatus());                 
-         } // inner if
-    }
     
     public ArrayList<Table.TableStatus> getTableStatuses()
     {
         return tableStatuses;
     }
+
+    @Override
+    protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
+    {
+        if (tableStatuses != null)
+            this.tableStatuses.set(event.getTableNumber(), event.getTableStatus());   
+    } //  parseTableStatusEvtNfn
+    
+
        
     
 } // class

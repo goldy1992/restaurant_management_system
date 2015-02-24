@@ -10,6 +10,7 @@ import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Response.LeaveResponse;
+import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
 import Server.MyServer;
 import java.io.IOException;
@@ -96,6 +97,21 @@ public abstract class Client implements Runnable
        return out;
    }
    
+    private void registerClientResponse(RegisterClientResponse resp)
+    {
+        System.out.println("parse register client response");
+        RegisterClientResponse rResponse = (RegisterClientResponse)resp;
+        RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
+            
+        if (!rResponse.hasPermission())
+        {
+            debugGUI.addText("A client already exists!");
+            System.exit(0);                               
+        } // if
+        else System.out.println("Client successfully registered as: " + req);        
+    } // regClientResp
+      
+   
     public void parseResponse(Response response) throws IOException, ClassNotFoundException
     {
         if (response instanceof LeaveResponse)
@@ -104,6 +120,9 @@ public abstract class Client implements Runnable
             if (leaveR.hasPermission())
                 System.exit(0);
         } // if
+        if (response instanceof RegisterClientResponse)
+            registerClientResponse((RegisterClientResponse)response);
+        
     }
    
     public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException

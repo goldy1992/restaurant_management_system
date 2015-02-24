@@ -11,7 +11,6 @@ import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Table;
 import Message.Message;
-import Message.Request.NumOfTablesRequest;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
 import Message.Request.TableStatusRequest;
@@ -19,7 +18,6 @@ import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;
 import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;
-import Server.MyServer;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -28,14 +26,13 @@ import java.util.ArrayList;
  *
  * @author Goldy
  */
-public class WaiterClient extends Client
+public class WaiterClient extends UserClient
 {
    
     /**
      * An object used to ensure tasks are performed asynchronously. 
      */
-    public final Object lock = new Object();
-    public ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
+
     public int numberOfTables = -1;
     public SelectTable selectTable;
     
@@ -45,19 +42,7 @@ public class WaiterClient extends Client
         super(type);
     } // constructor
      
-    /**
-     * @param resp
-     */
-   public void setTableStatuses(TableStatusResponse resp)
-   {
-       ArrayList<Table.TableStatus>  x = resp.getTableStatuses();
-       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
-       
-       for (int i = 0; i < req.getTableList().size(); i++)
-           tableStatuses.set(req.getTableList().get(i),
-                   x.get(i));
-       
-   }
+
    
     /**
      * @return The number of tables in use.
@@ -143,36 +128,14 @@ public class WaiterClient extends Client
         } // synchronized        
     }
     
-    private void parseTableStatusResponse(TableStatusResponse resp)
-    {
-        System.out.println("table status response");
-       System.out.println(resp.getTableStatuses());
-       
-       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
-       
-
-       
-        synchronized(lock)
-        {
-            if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
-                this.tableStatuses = resp.getTableStatuses();
-            else
-                setTableStatuses(resp);
-            lock.notifyAll();
-        }   
-    }
-    
     private void parseNumOfTablesResponse(NumOfTablesResponse resp)
-    {
-
-        
+    {       
         synchronized(lock)
         {
-        numberOfTables = resp.getNumOfTables();
+            numberOfTables = resp.getNumOfTables();
             lock.notifyAll();
-        }
-
-    }
+        } // sync
+    } // parseNumOfTablesResponse
      
    @Override
    public void parseResponse(Response resp) throws IOException, ClassNotFoundException
@@ -185,16 +148,12 @@ public class WaiterClient extends Client
         if (resp instanceof TableStatusResponse) 
             parseTableStatusResponse((TableStatusResponse)resp);
    }
+
+    @Override
+    protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
+    {
+        selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
+    }
    
-   @Override
-   public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
-   {
-        super.parseEventNotification(evntNfn);
-        if (evntNfn instanceof TableStatusEvtNfn)
-        {
-            TableStatusEvtNfn r = (TableStatusEvtNfn)evntNfn; 
-            selectTable.setTableStatus(r.getTableNumber(), r.getTableStatus());                 
-         } // inner if
-       
-   }
+
 } // MyClientSocketClass

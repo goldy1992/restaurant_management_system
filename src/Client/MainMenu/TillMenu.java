@@ -11,6 +11,7 @@ import Client.TillClient;
 import Client.TillGUI;
 import Item.Tab;
 import Message.Table;
+import java.awt.Dialog;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +29,9 @@ import javax.swing.JFrame;
 public class TillMenu extends Menu 
 {
     private final TillGUI till;
+    public BarTabDialogSelect selectorFrame;
 
+    
     @Override
     protected String[] getOptionNames() { 
        String[] x = {"Print Bill", "Print Last Receipt", "Void", 
@@ -50,11 +54,9 @@ public class TillMenu extends Menu
          JButton button = (JButton)source;
         if (button.getText().equals("Bar Tab"))
         {
-            TillClient c = (TillClient)parentClient;
-            ArrayList<Table.TableStatus> tableStatuses = (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
-            HashMap<Integer, Table.TableStatus> list = new HashMap<Integer, Table.TableStatus>(); 
-            for (int i = 1; i < tableStatuses.size(); i++)
-                list.put(i, tableStatuses.get(i));
+
+            
+            selectorFrame.setVisible(true);
         } // bar tab
         
     }
@@ -71,7 +73,9 @@ public class TillMenu extends Menu
             newMenu.setTotal();
             newMenu.setEnabled(true);
             newMenu.setModal(true);
-            newMenu.setVisible(true);
+            Dialog d = (Dialog)newMenu;
+            newMenu.selectorFrame = new BarTabDialogSelect(d, true);
+    newMenu.setVisible(true);
 
         } // try
         catch (SQLException ex) 
@@ -87,4 +91,20 @@ public class TillMenu extends Menu
         return till;
     }
     
+    public BarTabDialogSelect getBarSelectorDialog()
+    {
+        return selectorFrame;
+    }
+    
+    private BarTabDialogSelect makeBarTabSelector()
+    {
+        BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);
+        TillClient c = (TillClient)parentClient;
+            ArrayList<Table.TableStatus> tableStatuses = (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
+            HashMap<Integer, Table.TableStatus> list = new HashMap<Integer, Table.TableStatus>(); 
+            for (int i = 1; i < tableStatuses.size(); i++)
+                list.put(i, tableStatuses.get(i));
+                    
+        return newBTSelect;
+    }
 } // class
