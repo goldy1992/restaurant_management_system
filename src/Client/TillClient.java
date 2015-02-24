@@ -6,11 +6,14 @@
 package Client;
 
 import Message.EventNotification.*;
+import Message.Message;
 import Message.Request.RegisterClientRequest;
+import Message.Request.Request;
 import Message.Request.TableStatusRequest;
 import Message.Response.*;
 import Message.Table;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,13 +24,13 @@ import java.util.logging.Logger;
  */
 public class TillClient extends UserClient
 {
-    
+    public TillGUI gui = null;
     public TillClient(RegisterClientRequest.ClientType  type) throws IOException
     {
         super(type);
     } // constructor
     
-    private ArrayList<Table.TableStatus> tableStatuses = null;
+    
     /**
      * @param args the command line arguments
      */
@@ -37,9 +40,22 @@ public class TillClient extends UserClient
         try 
         {
             myClient = Client.makeClient(RegisterClientRequest.ClientType.TILL);
-            TillGUI gui = new TillGUI(myClient);
-            gui.setTitle("Till");
-            gui.setVisible(true);
+            
+                        ArrayList<Integer> tables = new ArrayList<>();
+            // add null because there's no table zero
+            tables.add(-1);
+                        TableStatusRequest request = new TableStatusRequest(
+                InetAddress.getByName(
+                    myClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(
+                    myClient.serverAddress.getHostName() ),
+                Message.generateRequestID(),
+                Request.RequestType.TABLE_STATUS,
+                tables);
+            myClient.getOutputStream().writeObject(request);  
+            myClient.gui = new TillGUI(myClient);
+            myClient.gui.setTitle("Till");
+            myClient.gui.setVisible(true);
         } 
         catch (IOException ex) 
         {
@@ -64,8 +80,19 @@ public class TillClient extends UserClient
     @Override
     protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
     {
+
         if (tableStatuses != null)
-            this.tableStatuses.set(event.getTableNumber(), event.getTableStatus());   
+        {
+                    System.out.println("notification for table status received");
+            this.tableStatuses.set(event.getTableNumber(), event.getTableStatus());
+            if (this.gui.getMenu() != null)
+            {
+                System.out.println("updating buttons");
+                this.gui.getMenu().updateButtons((ArrayList<Table.TableStatus>)tableStatuses.clone());
+            }
+            else
+              System.out.println("gui is null");
+        }
     } //  parseTableStatusEvtNfn
     
 

@@ -90,7 +90,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         
        String[] x = {"Print Bill", 
               "Print Last Receipt", "Void", "Void Last Item", "Split Bill",  
-              "Order On Hold", "Delivered", "Bar Tab", "Send Order"};
+              "Order On Hold", "Delivered", "Send Order"};
        return x;
     }
      

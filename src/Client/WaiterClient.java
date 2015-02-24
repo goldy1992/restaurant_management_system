@@ -41,9 +41,7 @@ public class WaiterClient extends UserClient
     {
         super(type);
     } // constructor
-     
-
-   
+      
     /**
      * @return The number of tables in use.
      */
@@ -60,8 +58,7 @@ public class WaiterClient extends UserClient
    {
         numberOfTables = numTables;   
    }
-   
-    
+     
     /**
      * @param args
      * @throws InterruptedException

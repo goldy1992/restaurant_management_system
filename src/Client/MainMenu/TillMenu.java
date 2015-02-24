@@ -12,6 +12,8 @@ import Client.TillGUI;
 import Item.Tab;
 import Message.Table;
 import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -54,9 +55,10 @@ public class TillMenu extends Menu
          JButton button = (JButton)source;
         if (button.getText().equals("Bar Tab"))
         {
-
-            
-            selectorFrame.setVisible(true);
+            if (selectorFrame.numberOfTabs <= 0)
+                this.quantityTextPane.setText("there are no tabs to display!");
+            else
+                selectorFrame.setVisible(true);
         } // bar tab
         
     }
@@ -74,8 +76,7 @@ public class TillMenu extends Menu
             newMenu.setEnabled(true);
             newMenu.setModal(true);
             Dialog d = (Dialog)newMenu;
-            newMenu.selectorFrame = new BarTabDialogSelect(d, true);
-    newMenu.setVisible(true);
+            newMenu.selectorFrame = newMenu.makeBarTabSelector();
 
         } // try
         catch (SQLException ex) 
@@ -96,15 +97,35 @@ public class TillMenu extends Menu
         return selectorFrame;
     }
     
-    private BarTabDialogSelect makeBarTabSelector()
+    public ArrayList<JButton> createJButtons(ArrayList<Table.TableStatus> tableStatuses)
     {
-        BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);
+        ArrayList<JButton> jb = new ArrayList<>();
+        for (int i = 1; i < tableStatuses.size(); i++)
+            if (tableStatuses.get(i) != Table.TableStatus.FREE)
+                  jb.add(new JButton("Table " + i));
+        
+        return jb;  
+    } // createJButtons
+    
+    public void updateButtons(ArrayList<Table.TableStatus> tableStatuses)
+    {
+        System.out.println("update buttons");
+        if (selectorFrame == null)
+            return;
+     
+                System.out.println("set Buttons");
+        selectorFrame.setButtons(createJButtons(tableStatuses));
+    }
+    
+    public BarTabDialogSelect makeBarTabSelector()
+    {
+
         TillClient c = (TillClient)parentClient;
-            ArrayList<Table.TableStatus> tableStatuses = (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
-            HashMap<Integer, Table.TableStatus> list = new HashMap<Integer, Table.TableStatus>(); 
-            for (int i = 1; i < tableStatuses.size(); i++)
-                list.put(i, tableStatuses.get(i));
-                    
+        ArrayList<Table.TableStatus> tableStatuses = 
+            (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
+        ArrayList<JButton> jbs = createJButtons(tableStatuses);
+        BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);
+        newBTSelect.setButtons(jbs);
         return newBTSelect;
     }
 } // class

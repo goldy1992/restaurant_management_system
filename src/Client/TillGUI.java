@@ -18,6 +18,7 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
 {
 
     private final TillClient parent;
+    private final TillMenu menu;
     /**
      * Creates new form TillClient
      * @param parent The parent client of the GUI
@@ -26,6 +27,8 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     {
         super();
         this.parent = parent;
+        this.menu = TillMenu.makeMenu(parent, 
+                null, null, parent.getOutputStream(),  this);
         initComponents();
     }
 
@@ -102,14 +105,18 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     {
         if (ae.getSource() == this.startClientButton)
         {
-            TillMenu menu = TillMenu.makeMenu(parent, 
-                null, null, parent.getOutputStream(),  this);
+                menu.setVisible(true);
         } // if      
     } // actionPerformed
     
     public JLabel getChangeOutputLabel()
     {
         return changeOutputLabel;
+    }
+    
+    public TillMenu getMenu()
+    {
+        return menu;
     }
 
 }
