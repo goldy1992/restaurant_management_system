@@ -5,6 +5,7 @@
  */
 package Client;
 
+import Item.Tab;
 import Message.EventNotification.*;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
@@ -64,13 +65,6 @@ public class TillClient extends UserClient
         System.out.println("end of till client");
     } // main
       
-    /**
-     *
-     * @param response
-     * @return 
-     * @throws java.io.IOException
-     * @throws java.lang.ClassNotFoundException
-     */  
     
     public ArrayList<Table.TableStatus> getTableStatuses()
     {
@@ -98,9 +92,11 @@ public class TillClient extends UserClient
     @Override
     public void parseTabResponse(TabResponse resp) 
     {
-       
-      
-    }
+        Tab t = resp.getTab();
+        gui.getMenu().setOldTab(t);
+        gui.getMenu().outputTextPane.setText(t.toString());
+        gui.getMenu().selectorFrame.setTabReceived(true);     
+    } // parseTabResponse
     
 
        

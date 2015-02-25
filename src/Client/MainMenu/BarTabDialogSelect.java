@@ -5,6 +5,7 @@
  */
 package Client.MainMenu;
 
+import Client.TillClient;
 import Message.Request.Request;
 import Message.Request.TabRequest;
 import java.awt.Dialog;
@@ -26,6 +27,8 @@ import javax.swing.JButton;
 public class BarTabDialogSelect extends javax.swing.JDialog {
 
     public int numberOfTabs;
+    private boolean tabReceived;
+    
     /**
      * Creates new form BarTabDialogSelect
      * @param parent
@@ -34,7 +37,8 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
     public BarTabDialogSelect(Dialog parent, boolean modal) 
     {
         super(parent, modal);
-        initComponents();        
+        initComponents();      
+        this.tabReceived = false;
     }
     
     public void setButtons(HashMap<JButton, Integer> jBs)
@@ -55,31 +59,34 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                 public void actionPerformed(ActionEvent e) 
                 {
                     TillMenu menuParent = (TillMenu)parent.getParent();
+                    TillClient parentClient = (TillClient)menuParent.parentClient;
                     try 
                     {
                         TabRequest req = new TabRequest(                
                             InetAddress.getByName(
-                                menuParent.parentClient.client.getLocalAddress().getHostName()),
+                                parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(
-                                menuParent.parentClient.serverAddress.getHostName()),
+                                parentClient.serverAddress.getHostName()),
                               
                             Message.Message.generateRequestID(), 
                             Request.RequestType.TAB,
                               tableNum);
-                        menuParent.parentClient.getOutputStream().writeObject(req);
+                        parentClient.getOutputStream().writeObject(req);
                         
-                    synchronized(menuParent.)
-                    {
-                        int x = 1;
-                    }
-                            //while(this.tabReceived == false)
-                              //  tabLock.wait();}
+                        synchronized(parentClient.getLock())
+                        {
+                    
+                            while(menuParent.selectorFrame.tabReceived == false)
+                                parentClient.getLock().wait();
+                        } // sync
+                        
+                        
                     } 
                     catch (UnknownHostException ex) 
                     {
                         Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
                     } 
-                    catch (IOException ex) 
+                    catch (IOException | InterruptedException ex) 
                     {
                         Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -102,6 +109,16 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         this.doLayout();
         this.revalidate();
         this.repaint();
+    }
+    
+    public boolean getTabReceived()
+    {
+        return tabReceived;
+    }
+    
+    public void setTabReceived(boolean tabRecevied)
+    {
+        this.tabReceived = tabRecevied;
     }
 
     /**

@@ -828,4 +828,24 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         return null;
     }
     
+    public Tab getOldTab()
+    {
+        return oldTab;
+    }
+    
+    public void setOldTab(Tab tab)
+    {
+        this.oldTab = tab;
+    }
+    
+    public Tab getNewTab()
+    {
+        return newTab;
+    }
+    
+    public void setNewTab(Tab tab)
+    {
+        this.newTab = tab;
+    }
+    
 } // class
