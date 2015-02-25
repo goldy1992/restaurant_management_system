@@ -7,9 +7,7 @@
 package Client;
 
 import Client.SelectTableMenu.SelectTable;
-import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
-import Message.Table;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.Request;
@@ -114,7 +112,8 @@ public class WaiterClient extends UserClient
         System.out.println("end of waiter client");
     } // main
     
-    private void parseTabResponse(TabResponse resp)
+    @Override
+    public void parseTabResponse(TabResponse resp)
     {
         debugGUI.addText("Executing TabResponse's onreceiving");
         synchronized(selectTable.tabLock)

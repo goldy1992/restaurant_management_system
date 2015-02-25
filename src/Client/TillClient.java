@@ -94,6 +94,13 @@ public class TillClient extends UserClient
               System.out.println("gui is null");
         }
     } //  parseTableStatusEvtNfn
+
+    @Override
+    public void parseTabResponse(TabResponse resp) 
+    {
+       
+      
+    }
     
 
        

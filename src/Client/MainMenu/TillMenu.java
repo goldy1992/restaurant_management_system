@@ -12,8 +12,6 @@ import Client.TillGUI;
 import Item.Tab;
 import Message.Table;
 import java.awt.Dialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ public class TillMenu extends Menu
 {
     private final TillGUI till;
     public BarTabDialogSelect selectorFrame;
+    public boolean tabLoaded = false;
 
     
     @Override
@@ -55,10 +54,13 @@ public class TillMenu extends Menu
          JButton button = (JButton)source;
         if (button.getText().equals("Bar Tab"))
         {
-            if (selectorFrame.numberOfTabs <= 0)
-                this.quantityTextPane.setText("there are no tabs to display!");
-            else
-                selectorFrame.setVisible(true);
+            if (!tabLoaded)
+            {
+                if (selectorFrame.numberOfTabs <= 0)
+                    this.quantityTextPane.setText("there are no tabs to display!");
+                else
+                    selectorFrame.setVisible(true);
+            } // if
         } // bar tab
         
     }
@@ -97,12 +99,12 @@ public class TillMenu extends Menu
         return selectorFrame;
     }
     
-    public ArrayList<JButton> createJButtons(ArrayList<Table.TableStatus> tableStatuses)
+    public HashMap<JButton, Integer> createJButtons(ArrayList<Table.TableStatus> tableStatuses)
     {
-        ArrayList<JButton> jb = new ArrayList<>();
+        HashMap<JButton, Integer> jb = new HashMap<>();
         for (int i = 1; i < tableStatuses.size(); i++)
             if (tableStatuses.get(i) != Table.TableStatus.FREE)
-                  jb.add(new JButton("Table " + i));
+                  jb.put(new JButton("Table " + i), i);
         
         return jb;  
     } // createJButtons
@@ -117,15 +119,20 @@ public class TillMenu extends Menu
         selectorFrame.setButtons(createJButtons(tableStatuses));
     }
     
+
+    
     public BarTabDialogSelect makeBarTabSelector()
     {
 
         TillClient c = (TillClient)parentClient;
         ArrayList<Table.TableStatus> tableStatuses = 
             (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
-        ArrayList<JButton> jbs = createJButtons(tableStatuses);
+        
+        HashMap<JButton, Integer> jbs = createJButtons(tableStatuses);
         BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);
         newBTSelect.setButtons(jbs);
         return newBTSelect;
     }
+    
+
 } // class

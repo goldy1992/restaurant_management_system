@@ -5,10 +5,18 @@
  */
 package Client.MainMenu;
 
+import Message.Request.Request;
+import Message.Request.TabRequest;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 
 /**
@@ -29,35 +37,71 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         initComponents();        
     }
     
-    public void setButtons(ArrayList<JButton> jBs)
+    public void setButtons(HashMap<JButton, Integer> jBs)
     {
         System.out.println("set buttons: " + jBs.size() + " buttons");
         numberOfTabs = jBs.size();
         if (jBs.size() <= 0)
             return;
 
-
         this.getContentPane().removeAll();
-        
-        for (JButton jb : jBs)
+        final BarTabDialogSelect parent = this;       
+        for (JButton jb : jBs.keySet())
         {
-            final BarTabDialogSelect parent = this;
+            final int tableNum = jBs.get(jb);
             jb.addActionListener(new ActionListener()
             {
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    TillMenu menuParent = (TillMenu)parent.getParent();
+                    try 
+                    {
+                        TabRequest req = new TabRequest(                
+                            InetAddress.getByName(
+                                menuParent.parentClient.client.getLocalAddress().getHostName()),
+                            InetAddress.getByName(
+                                menuParent.parentClient.serverAddress.getHostName()),
+                              
+                            Message.Message.generateRequestID(), 
+                            Request.RequestType.TAB,
+                              tableNum);
+                        menuParent.parentClient.getOutputStream().writeObject(req);
+                        
+                    synchronized(menuParent.)
+                    {
+                        int x = 1;
+                    }
+                            //while(this.tabReceived == false)
+                              //  tabLock.wait();}
+                    } 
+                    catch (UnknownHostException ex) 
+                    {
+                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                    catch (IOException ex) 
+                    {
+                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    parent.dispose();
+                }
+            }); // actionListener
+            this.getContentPane().add(jb);         
+        } // for
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener()
+        {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     parent.dispose();
                 }
-            });
-            this.getContentPane().add(jb);
-            this.pack();
-            this.repaint();
-
-            this.doLayout();
-            this.revalidate();
-            this.repaint();
-        }
+        });;
+        this.getContentPane().add(cancelButton);
+        this.pack();
+        this.doLayout();
+        this.revalidate();
+        this.repaint();
     }
 
     /**

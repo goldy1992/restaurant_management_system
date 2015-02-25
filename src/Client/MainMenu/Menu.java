@@ -68,9 +68,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     protected final ArrayList<JPanel> panels = new ArrayList<>();  
     protected final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
     protected Tab oldTab;
-    public Tab newTab;
-    private final ObjectOutputStream out;
-    private final MenuCardPanel kitchenBarMsgPanel;
+    protected Tab newTab;
+    protected final ObjectOutputStream out;
+    protected final MenuCardPanel kitchenBarMsgPanel;
     public int quantitySelected = -1; // -1 defaults to 1
     public boolean messageForLatestItem = false;
     public boolean seenID = false;

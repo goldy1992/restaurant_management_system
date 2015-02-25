@@ -53,10 +53,8 @@ public abstract class UserClient extends Client
         }           
     }
     
-    private void parseTabResponse(TabResponse resp)
-    {
-        
-    }
+    public abstract void parseTabResponse(TabResponse resp);
+    
     
 
     
@@ -85,6 +83,7 @@ public abstract class UserClient extends Client
        for (int i = 0; i < req.getTableList().size(); i++)
            tableStatuses.set(req.getTableList().get(i),
                    x.get(i));
+      
        
    }
    
@@ -98,5 +97,10 @@ public abstract class UserClient extends Client
         if (evntNfn instanceof TableStatusEvtNfn)
             parseTableStatusEvtNfn((TableStatusEvtNfn)evntNfn);                     
    } // parseEventNot
+   
+   public Object getLock()
+   {
+       return lock;
+   }
    
 }
