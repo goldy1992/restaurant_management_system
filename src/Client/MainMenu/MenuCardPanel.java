@@ -5,8 +5,6 @@
  */
 package Client.MainMenu;
 
-import Client.MainMenu.MenuCardLinkJButton;
-import Client.MainMenu.Menu;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -247,7 +245,7 @@ public class MenuCardPanel extends JPanel
                 public void actionPerformed(ActionEvent e) 
                 {
                     Menu menu = belongsToMenu;
-                    double amount = menu.quantitySelected / 100;
+                    double amount = menu.quantitySelected / 100.00;
                     if (amount < menu.getTotalDouble())
                     {
                         menu.quantityTextPane.setText("Insufficient amount");

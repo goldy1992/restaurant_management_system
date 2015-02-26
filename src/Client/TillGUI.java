@@ -6,9 +6,19 @@
 package Client;
 
 import Client.MainMenu.TillMenu;
+import static Message.Message.generateRequestID;
+import Message.Request.LeaveRequest;
+import Message.Request.Request;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,6 +40,9 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         this.menu = TillMenu.makeMenu(parent, 
                 null, null, parent.getOutputStream(),  this);
         initComponents();
+        
+        
+     
     }
 
     /**
@@ -46,13 +59,13 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         changeOutputLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        startClientButton.setText("Start Till Client");
-        startClientButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startClientButtonActionPerformed(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
+
+        startClientButton.setText("Start Till Client");
 
         changeLabel.setText("Change:");
 
@@ -89,9 +102,37 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void startClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startClientButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_startClientButtonActionPerformed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+       
+        int confirm = JOptionPane.showOptionDialog(null, 
+            "Are You Sure to Close Application?", "Exit Confirmation", 
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
+            null, null, null);
+                
+        if (confirm == 0) 
+        { 
+            try 
+            {
+                // TODO add your handling code here:
+                menu.con.close();
+                LeaveRequest leaveRequest = new LeaveRequest(
+                    InetAddress.getByName(
+                        parent.client.
+                    getLocalAddress().getHostName()),
+                    InetAddress.getByName(
+                        parent.serverAddress.getHostName()),
+                    generateRequestID(),
+                    Request.RequestType.LEAVE);
+                parent.getOutputStream().writeObject(leaveRequest);
+            } catch (SQLException ex) {
+                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_formWindowClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -397,20 +397,30 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             t.requestFocus(false);
         } // for   
         
+        setUpTab(tab);
+        
+
+        
+    } // constructor
+    
+    public final void setUpTab(Tab tab)
+    {
         if (tab != null)
         {
             outputTextPane.setText(tab.toString());
             // set up current tab
             this.oldTab = tab;
+            // sets the table
             this.newTab = new Tab(oldTab.getParent());
+
         }
         else
         {
             this.oldTab = new Tab(new Table(0));
             this.newTab = new Tab(new Table(0));
-        }
-        
-    } // constructor
+        }       
+        setTotal();
+    }
     
     public void sendOrder()
     {
@@ -452,28 +462,30 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 out.writeObject(newEvt1);
             } // if                
                 
-            con.close(); 
+
         } // try // try
-        catch (SQLException | IOException ex) 
+        catch (IOException ex) 
         { 
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         } // catch
-        this.dispose();        
+    
     } // sendOrder
     
-    public void dealWithButtons(Object source)
+    public void dealWithButtons(Object source) throws SQLException
     {
         JButton button = (JButton)source;
         if (button.getText().equals("Send Order"))
-            sendOrder();        
+        {    sendOrder();  con.close(); this.dispose();   }   
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) 
     {        
         if (ae.getSource() instanceof JButton)
-            dealWithButtons(ae.getSource());
-        
+        {
+            try { dealWithButtons(ae.getSource());} 
+            catch (SQLException ex) {Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
+        } // if
   
     } // actionPerformed
     
@@ -516,7 +528,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     /**
      * The reference to the object that stores the database connection
      */
-    Connection con = null;    
+    public Connection con = null;    
 
     /**
      * Adds the functional features to the main panel

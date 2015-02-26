@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public abstract class Client implements Runnable
 {
-    public InetAddress serverAddress; 
+    public final InetAddress serverAddress = InetAddress.getByName(null); 
     public int serverPort;  
     public Socket client;
     public OutputGUI debugGUI;
@@ -77,7 +77,6 @@ public abstract class Client implements Runnable
         this.type = type;
         try
         {
-            serverAddress = InetAddress.getByName(null);
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());

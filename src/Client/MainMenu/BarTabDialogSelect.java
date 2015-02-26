@@ -5,20 +5,27 @@
  */
 package Client.MainMenu;
 
+import Client.Pair;
 import Client.TillClient;
+import Message.EventNotification.TableStatusEvtNfn;
+import static Message.Message.generateRequestID;
 import Message.Request.Request;
 import Message.Request.TabRequest;
+import Message.Table;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,8 +33,12 @@ import javax.swing.JButton;
  */
 public class BarTabDialogSelect extends javax.swing.JDialog {
 
+    public static enum Functionality {GET_TAB, ADD_TO_TAB};
+    
+    public Functionality func = Functionality.GET_TAB;
     public int numberOfTabs;
     private boolean tabReceived;
+    public final Object lock = new Object();
     
     /**
      * Creates new form BarTabDialogSelect
@@ -41,18 +52,21 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         this.tabReceived = false;
     }
     
-    public void setButtons(HashMap<JButton, Integer> jBs)
+    public void setButtons(HashMap<JButton, Pair<Integer, Table.TableStatus>> jBs)
     {
         System.out.println("set buttons: " + jBs.size() + " buttons");
+        ValueComparator bvc =  new ValueComparator(jBs);
+        TreeMap<JButton, Pair<Integer, Table.TableStatus>> sortedMap = new TreeMap<>(bvc);
+        sortedMap.putAll(jBs);
         numberOfTabs = jBs.size();
         if (jBs.size() <= 0)
             return;
 
         this.getContentPane().removeAll();
         final BarTabDialogSelect parent = this;       
-        for (JButton jb : jBs.keySet())
+        for (JButton jb : sortedMap.keySet())
         {
-            final int tableNum = jBs.get(jb);
+            final Pair<Integer, Table.TableStatus> pair = jBs.get(jb);
             jb.addActionListener(new ActionListener()
             {
                 @Override
@@ -62,6 +76,21 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                     TillClient parentClient = (TillClient)menuParent.parentClient;
                     try 
                     {
+                        if (pair.getSecond() == Table.TableStatus.IN_USE)
+                        {
+                            JOptionPane.showMessageDialog(parent, "Tab " + pair.getFirst() + " is currently in use!" );
+                            return;
+                        } // if
+                        
+                        /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
+                        IN USE */
+                        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                        generateRequestID(), pair.getFirst(), Table.TableStatus.IN_USE);
+                        menuParent.out.reset();
+                        menuParent.out.writeObject(newEvt);
+                        
+                        
                         TabRequest req = new TabRequest(                
                             InetAddress.getByName(
                                 parentClient.client.getLocalAddress().getHostName()),
@@ -70,17 +99,27 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                               
                             Message.Message.generateRequestID(), 
                             Request.RequestType.TAB,
-                              tableNum);
+                              pair.getFirst());
                         parentClient.getOutputStream().writeObject(req);
                         
-                        synchronized(parentClient.getLock())
-                        {
-                    
+                        synchronized(lock)
+                        {      
                             while(menuParent.selectorFrame.tabReceived == false)
-                                parentClient.getLock().wait();
+                                lock.wait();
                         } // sync
-                        
-                        
+
+                        if (parent.func == Functionality.GET_TAB)
+                            menuParent.tabLoaded = true;
+                        else if (parent.func == Functionality.ADD_TO_TAB)
+                        {
+                            menuParent.tabLoaded = false;
+                            menuParent.oldTab = menuParent.oldTab.mergeTabs(menuParent.newTab);
+                            menuParent.sendOrder();
+                            menuParent.outputTextPane.setText("");
+                            menuParent.setUpTab(null);
+                            parent.dispose();
+                            menuParent.dispose();
+                        } // else if
                     } 
                     catch (UnknownHostException ex) 
                     {
@@ -109,6 +148,23 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         this.doLayout();
         this.revalidate();
         this.repaint();
+    }
+    
+    class ValueComparator implements Comparator<JButton> {
+
+    Map<JButton, Pair<Integer, Table.TableStatus>> base;
+    public ValueComparator(Map<JButton, Pair<Integer, Table.TableStatus>> base) {
+        this.base = base;
+    }
+
+    @Override 
+    public int compare(JButton a, JButton b) {
+        if (base.get(a).getFirst() < base.get(b).getFirst()) {
+            return -1;
+        } else {
+            return 1;
+        } // returning 0 would merge keys
+    }
     }
     
     public boolean getTabReceived()

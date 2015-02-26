@@ -5,6 +5,7 @@
  */
 package Client;
 
+import Client.MainMenu.BarTabDialogSelect;
 import Item.Tab;
 import Message.EventNotification.*;
 import Message.Message;
@@ -13,6 +14,7 @@ import Message.Request.Request;
 import Message.Request.TableStatusRequest;
 import Message.Response.*;
 import Message.Table;
+import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.logging.Logger;
 public class TillClient extends UserClient
 {
     public TillGUI gui = null;
+    
     public TillClient(RegisterClientRequest.ClientType  type) throws IOException
     {
         super(type);
@@ -37,7 +40,7 @@ public class TillClient extends UserClient
      */
     public static void main(String[] args)  
     {   
-        TillClient myClient = null;
+        final TillClient myClient;
         try 
         {
             myClient = Client.makeClient(RegisterClientRequest.ClientType.TILL);
@@ -92,10 +95,16 @@ public class TillClient extends UserClient
     @Override
     public void parseTabResponse(TabResponse resp) 
     {
-        Tab t = resp.getTab();
-        gui.getMenu().setOldTab(t);
-        gui.getMenu().outputTextPane.setText(t.toString());
-        gui.getMenu().selectorFrame.setTabReceived(true);     
+        synchronized(this.gui.getMenu().selectorFrame.lock)
+        {            
+            Tab t = resp.getTab();
+            if(this.gui.getMenu().selectorFrame.func == BarTabDialogSelect.Functionality.GET_TAB)
+                gui.getMenu().setUpTab(t);
+            else
+                gui.getMenu().setOldTab(t);
+            gui.getMenu().selectorFrame.setTabReceived(true); 
+            this.gui.getMenu().selectorFrame.lock.notifyAll();
+        }
     } // parseTabResponse
     
 

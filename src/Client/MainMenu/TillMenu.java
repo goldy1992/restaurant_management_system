@@ -5,14 +5,20 @@
  */
 package Client.MainMenu;
 
+import Client.Pair;
 import Client.Client;
 import Client.SelectTableMenu.SelectTable;
 import Client.TillClient;
 import Client.TillGUI;
 import Item.Tab;
+import Message.EventNotification.TableStatusEvtNfn;
+import static Message.Message.generateRequestID;
 import Message.Table;
 import java.awt.Dialog;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,20 +53,49 @@ public class TillMenu extends Menu
     }
     
     @Override
-    public void dealWithButtons(Object source) 
-    {
-        
+    public void dealWithButtons(Object source) throws SQLException 
+    {       
         super.dealWithButtons(source);
          JButton button = (JButton)source;
+                   
         if (button.getText().equals("Bar Tab"))
         {
             if (!tabLoaded)
             {
+                if (oldTab.getNumberOfItems() + newTab.getNumberOfItems() <= 0)
+                    selectorFrame.func = BarTabDialogSelect.Functionality.GET_TAB;
+                else
+                    selectorFrame.func = BarTabDialogSelect.Functionality.ADD_TO_TAB; 
+                            
                 if (selectorFrame.numberOfTabs <= 0)
                     this.quantityTextPane.setText("there are no tabs to display!");
                 else
                     selectorFrame.setVisible(true);
             } // if
+            else
+            {
+                sendOrder();
+                 /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
+                 Occupied */
+                TableStatusEvtNfn newEvt;
+                try 
+                {
+                    newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                            InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                            generateRequestID(), newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+               
+                out.reset();
+                out.writeObject(newEvt);
+                 } catch (UnknownHostException ex) {
+                    Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.setUpTab(null);
+                this.outputTextPane.setText("");
+                this.tabLoaded = false;
+                this.dispose();
+            } // else
         } // bar tab
         
     }
@@ -99,12 +134,12 @@ public class TillMenu extends Menu
         return selectorFrame;
     }
     
-    public HashMap<JButton, Integer> createJButtons(ArrayList<Table.TableStatus> tableStatuses)
+    public HashMap<JButton, Pair<Integer, Table.TableStatus>> createJButtons(ArrayList<Table.TableStatus> tableStatuses)
     {
-        HashMap<JButton, Integer> jb = new HashMap<>();
+        HashMap<JButton, Pair<Integer, Table.TableStatus>> jb = new HashMap<>();
         for (int i = 1; i < tableStatuses.size(); i++)
             if (tableStatuses.get(i) != Table.TableStatus.FREE)
-                  jb.put(new JButton("Table " + i), i);
+                  jb.put(new JButton("Table " + i), new Pair<Integer, Table.TableStatus>(i, tableStatuses.get(i)));
         
         return jb;  
     } // createJButtons
@@ -128,7 +163,7 @@ public class TillMenu extends Menu
         ArrayList<Table.TableStatus> tableStatuses = 
             (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
         
-        HashMap<JButton, Integer> jbs = createJButtons(tableStatuses);
+        HashMap<JButton, Pair<Integer, Table.TableStatus>> jbs = createJButtons(tableStatuses);
         BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);
         newBTSelect.setButtons(jbs);
         return newBTSelect;
