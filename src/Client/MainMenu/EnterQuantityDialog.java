@@ -20,12 +20,14 @@ import javax.swing.JPanel;
 public class EnterQuantityDialog extends javax.swing.JDialog {
 
     
+    private int tabNumber = 0;
     /**
      * Creates new form EnterQuantityDialog
      * @param parent
      * @param modal
      */
-    public EnterQuantityDialog(java.awt.Frame parent, boolean modal) {
+    public EnterQuantityDialog(java.awt.Frame parent, boolean modal) 
+    {
         super(parent, modal);
         initComponents();
 
@@ -35,44 +37,50 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
     {       
         JPanel newKeypadPanel = new JPanel();
         newKeypadPanel.setLayout(new GridLayout(4,3));
+        final EnterQuantityDialog jd = this;
+        final JButton cashPay = new JButton("Enter");
+            cashPay.addActionListener(new ActionListener() 
+            {        
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                   tabNumber = Integer.parseInt(output.getText());                   
+                    jd.dispose();
+                } // actionPerformed
+            });
         
         // makes the first 9 buttons
         for (int i= 1; i <= 10; i++)
         {
              final int x; if (i == 10)  x = 0; else x = i; // declared final so can be used in the actionlistener method
-            JButton number = new JButton(x + "");
+            final JButton number = new JButton(x + "");
             number.addActionListener(new ActionListener() 
             {
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
                     output.setText(output.getText() + x);
+                    cashPay.setEnabled(true);
                 } // act performed
             });
             newKeypadPanel.add(number);
         } // for
         /* Make the clear button */
-        JButton clear = new JButton("Clear");
+        final JButton clear = new JButton("Clear");
         clear.addActionListener(new ActionListener() 
         {        
             @Override
             public void actionPerformed(ActionEvent e) 
             {
                     output.setText("");
+                    cashPay.setEnabled(false);
             }
         });
         newKeypadPanel.add(clear);    
         
-        JButton cashPay = new JButton("Enter");
-            cashPay.addActionListener(new ActionListener() 
-            {        
-                @Override
-                public void actionPerformed(ActionEvent e) 
-                {
 
-                } // actionPerformed
-            });
-            newKeypadPanel.add(cashPay);      
+            newKeypadPanel.add(cashPay);
+            cashPay.setEnabled(false);
          
 
         return newKeypadPanel;
@@ -96,6 +104,8 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
         layout.columnWeights = new double[] {1.0};
         layout.rowWeights = new double[] {0.2, 0.8};
         getContentPane().setLayout(layout);
+
+        output.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -127,7 +137,12 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
     private javax.swing.JTextField output;
     // End of variables declaration//GEN-END:variables
 
-public static void main(String[] args)
+    public int getValue()
+    {
+        return tabNumber;
+    } // getValue
+    
+    public static void main(String[] args)
 {
     JFrame j = new JFrame();
     j.setVisible(true);

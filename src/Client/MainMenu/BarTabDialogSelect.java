@@ -55,6 +55,22 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
     public void setButtons(HashMap<JButton, Pair<Integer, Table.TableStatus>> jBs)
     {
         System.out.println("set buttons: " + jBs.size() + " buttons");
+        final BarTabDialogSelect parent = this;      
+        if (func == Functionality.ADD_TO_TAB)
+        {
+        JButton newTabButton = new JButton("New Tab");
+        newTabButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                //EnterQuantityDialog = new EnterQuantityDialog(this, true);
+                parent.dispose();
+            }
+        });;
+        this.getContentPane().add(newTabButton);            
+        }
         ValueComparator bvc =  new ValueComparator(jBs);
         TreeMap<JButton, Pair<Integer, Table.TableStatus>> sortedMap = new TreeMap<>(bvc);
         sortedMap.putAll(jBs);
@@ -63,7 +79,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
             return;
 
         this.getContentPane().removeAll();
-        final BarTabDialogSelect parent = this;       
+      
         for (JButton jb : sortedMap.keySet())
         {
             final Pair<Integer, Table.TableStatus> pair = jBs.get(jb);
