@@ -10,6 +10,7 @@ import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
 import static Message.Message.generateRequestID;
 import Message.Table;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,10 +39,13 @@ public class MenuCardPanel extends JPanel
     private final JPanel menuSelectPanel;
     private JPanel keypadPanel;
     
+    
+   
     /**
      *
+     * @param parentMenu
      */
-    private MenuCardPanel(Menu parentMenu)
+    public MenuCardPanel(Menu parentMenu)
     {
         super();
         cardMenuItems = new ArrayList<>();
@@ -53,6 +57,7 @@ public class MenuCardPanel extends JPanel
         keypadPanel = null;
         this.belongsToMenu = parentMenu;
     }
+    
     
     /**
      *
@@ -210,8 +215,8 @@ public class MenuCardPanel extends JPanel
     
     public JPanel createKeypadPanel()
     {       
-        JPanel keypadPanel = new JPanel();
-        keypadPanel.setLayout(new GridLayout(4,3));
+        JPanel newKeypadPanel = new JPanel();
+        newKeypadPanel.setLayout(new GridLayout(4,3));
         
         // makes the first 9 buttons
         for (int i= 1; i <= 10; i++)
@@ -226,7 +231,7 @@ public class MenuCardPanel extends JPanel
                     addNumberToQuantity(x);
                 } // act performed
             });
-            keypadPanel.add(number);
+            newKeypadPanel.add(number);
         } // for
         /* Make the clear button */
         JButton clear = new JButton("Clear");
@@ -235,12 +240,18 @@ public class MenuCardPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                Menu menu = belongsToMenu;
-                menu.quantitySelected = -1;
-                menu.quantityTextPane.setText("");
+                if (belongsToMenu instanceof Menu)
+                {
+                    Menu menu = (Menu)belongsToMenu;
+                    menu.quantitySelected = -1;
+                    menu.quantityTextPane.setText("");
+                }
+
+                
+                
             } // actionPerformed
         });
-        keypadPanel.add(clear);    
+        newKeypadPanel.add(clear);    
         
         if (belongsToMenu.getClass() == TillMenu.class)
         {
@@ -303,11 +314,12 @@ public class MenuCardPanel extends JPanel
                     } // else
                 } // actionPerformed
             });
-            keypadPanel.add(cashPay);      
+            newKeypadPanel.add(cashPay);      
          
         }
-        this.keypadPanel = keypadPanel;
-        return keypadPanel;
+        
+        this.keypadPanel = newKeypadPanel;
+        return newKeypadPanel;
     }
     
     /**
@@ -328,16 +340,16 @@ public class MenuCardPanel extends JPanel
     }
     
     public void addNumberToQuantity(int number)
-    {
-        //Menu belongsToMenu = MyClient.selectTable.menu;
-        Integer quantity  = belongsToMenu.quantitySelected;
+    {       
+        Menu m = (Menu)belongsToMenu;
+        
+        Integer quantity  = m.quantitySelected;
         if (quantity <= 0)
             quantity = number;
         else
             quantity = (quantity * 10) + number;
-        belongsToMenu.quantityTextPane.setText(quantity.toString());
-        
-        belongsToMenu.quantitySelected = quantity;
+        m.quantityTextPane.setText(quantity.toString());        
+        m.quantitySelected = quantity;
         
     }
     
