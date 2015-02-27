@@ -5,10 +5,17 @@
  */
 package Client.MainMenu;
 
+import Message.EventNotification.TabUpdateNfn;
+import Message.EventNotification.TableStatusEvtNfn;
+import Message.Message;
+import static Message.Message.generateRequestID;
+import Message.Table;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -244,7 +251,7 @@ public class MenuCardPanel extends JPanel
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    Menu menu = belongsToMenu;
+                    TillMenu menu = (TillMenu)belongsToMenu;
                     double amount = menu.quantitySelected / 100.00;
                     if (amount < menu.getTotalDouble())
                     {
@@ -255,18 +262,45 @@ public class MenuCardPanel extends JPanel
                     {
                         try 
                         {
-                            TillMenu tMenu = (TillMenu)menu;
                             double change = (amount - menu.getTotalDouble());
                             DecimalFormat df = new DecimalFormat("0.00");
                             String changeString = df.format(change);
-                            tMenu.getTill().getChangeOutputLabel().setText("£" + changeString );
-                            tMenu.con.close();
-                            tMenu.dispose();
-                        } catch (SQLException ex) 
-                        {
+                            menu.getTill().getChangeOutputLabel().setText("£" + changeString ); 
+                                menu.oldTab.mergeTabs(menu.newTab);
+                                boolean x = menu.oldTab.removeAll();
+                                menu.newTab.removeAll();
+                                System.out.println("got here in cash off: " + x);                            
+                            if (menu.tabLoaded)
+                            {
+
+                                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+                                    menu.parentClient.client.getLocalAddress().getHostName()),
+                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
+                                    Message.generateRequestID(), menu.oldTab);
+                                menu.out.reset();
+                                menu.out.writeObject(newEvt);
+                                    
+                                TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(menu.parentClient.client.getLocalAddress().getHostName()),
+                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
+                                    generateRequestID(), menu.oldTab.getTable().getTableNumber(), Table.TableStatus.DIRTY);
+               
+                                menu.out.reset();
+                                menu.out.writeObject(newEvt1);
+                                menu.tabLoaded = false;
+                            }
+                            //tMenu.con.close();
+                            menu.dispose();
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
                             Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    }
+                        menu.outputTextPane.setText("");
+                        menu.setTotal();
+                        menu.quantitySelected = 0;  
+                        menu.quantityTextPane.setText("");
+            
+                    } // else
                 } // actionPerformed
             });
             keypadPanel.add(cashPay);      

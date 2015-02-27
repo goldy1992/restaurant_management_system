@@ -44,6 +44,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
     public final Object tabLock = new Object();
     public JButton openTable = new JButton("Open Table");
     public JButton moveTable = new JButton("Move Table");
+    public JButton cleanTable = new JButton("Clean Table");
     public Menu menu; // the menu GUI
     public final WaiterClient parentClient;
     
@@ -109,6 +110,10 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
             case OCCUPIED:
                 tableButtons[index].setBackground(Color.RED);
                 tableButtons[index].setText("<html>Table " + index + "<br>Occupied</html>");
+                break;
+            case DIRTY:
+                tableButtons[index].setBackground(Color.BLACK);
+                tableButtons[index].setText("<html><font color=white>Table " + index + "<br>Dirty</font></html>");
                 break;
         } // switch
     } // setTableStatus
@@ -222,6 +227,8 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         openTable.addActionListener(this);
         ExternalOptionsPanel.add(moveTable);
         moveTable.addActionListener(this);
+        ExternalOptionsPanel.add(cleanTable);
+        cleanTable.addActionListener(this);
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TableNumPanel.setMinimumSize(new java.awt.Dimension(400, 500));
@@ -341,6 +348,28 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                 setTableSelected(i);
                             parentClient.debugGUI.addText("select table " +  getTableSelected());
             } // if
+        
+        if (e.getSource() == cleanTable)
+        {
+            if (this.getTableStatus(this.getTableSelected()) == Table.TableStatus.DIRTY)
+            {
+                try
+                {
+                    this.setTableStatus(getTableSelected(), Table.TableStatus.FREE);
+                    /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
+                    IN USE */
+                    TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                        generateRequestID(), tableSelected, Table.TableStatus.FREE);
+                    out.reset();
+                     out.writeObject(newEvt);  
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                } // catch
+            } // if
+        } // if getSource
 
         
         if (e.getSource() == openTable)

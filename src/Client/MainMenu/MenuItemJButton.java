@@ -5,10 +5,8 @@
  */
 package Client.MainMenu;
 
-import static Client.MainMenu.Menu.isNumeric;
 import Item.Item;
 import Item.Item.Type;
-import Item.Tab;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;

@@ -125,7 +125,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExternalOptionsPanel.add(openTable);&#xa;openTable.addActionListener(this);&#xa;ExternalOptionsPanel.add(moveTable);&#xa;moveTable.addActionListener(this);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExternalOptionsPanel.add(openTable);&#xa;openTable.addActionListener(this);&#xa;ExternalOptionsPanel.add(moveTable);&#xa;moveTable.addActionListener(this);&#xa;ExternalOptionsPanel.add(cleanTable);&#xa;cleanTable.addActionListener(this);"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

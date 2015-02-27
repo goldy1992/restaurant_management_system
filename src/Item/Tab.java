@@ -53,12 +53,76 @@ public class Tab implements Serializable
         
     } // addItem
     
+    public boolean removeItem(Item newItem)
+    {
+        boolean removed = false;
+        
+        boolean removedFromAllItems = false;        
+        for (int i = 0; i < allitems.size(); i++)
+            if (allitems.get(i).compareTo(newItem) == 0)
+            {
+                allitems.remove(i);
+                removedFromAllItems = true;
+            } // if
+        
+        boolean removedFromForDItems = false;
+        
+        switch(newItem.type)
+        {
+            case FOOD:
+                for (int i = 0; i < food.size(); i++)
+                    if (food.get(i).compareTo(newItem) == 0)
+                    {
+                        food.remove(i);
+                        removedFromForDItems = true;
+                    } // if
+                break;
+            case DRINK:
+                for (int i = 0; i < drinks.size(); i++)
+                    if (drinks.get(i).compareTo(newItem) == 0)
+                    {
+                        drinks.remove(i);
+                        removedFromForDItems = true;
+                    } // if
+                break;
+        }
+        
+        if (removedFromForDItems && removedFromAllItems)
+            removed = true;
+        
+        return removed;
+    } // addItem
+    
+    public boolean removeAll()
+    {
+        allitems.removeAll(allitems);
+        drinks.removeAll(drinks);
+        food.removeAll(food);
+        
+        this.total = calculateTotal();
+        System.out.println(allitems.isEmpty() + " " +
+               food.isEmpty() + " " +
+               drinks.isEmpty());
+        
+        return allitems.isEmpty() &&
+               food.isEmpty() &&
+               drinks.isEmpty();
+
+    }
+    
+    public BigDecimal calculateTotal()
+    {
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Item i : allitems)
+            total.add(i.getTotalPrice());
+        
+        return total;
+                
+    } // calc Total
+    
     public Tab mergeTabs(Tab otherTab)
     {
-        
-        /*
-        MAKE THIS METHOD
-        */
         for (Item i : otherTab.getItems())
             addItem(i);
         

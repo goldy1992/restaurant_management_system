@@ -84,8 +84,8 @@ public class TillMenu extends Menu
                             InetAddress.getByName(parentClient.serverAddress.getHostName()),
                             generateRequestID(), newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
                
-                out.reset();
-                out.writeObject(newEvt);
+                    out.reset();
+                    out.writeObject(newEvt);
                  } catch (UnknownHostException ex) {
                     Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {

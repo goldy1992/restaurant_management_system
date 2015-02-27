@@ -43,6 +43,8 @@ public class Table implements Runnable, Serializable
          *
          */
         IN_USE, 
+        
+        DIRTY
     }
     private static final int PORT_NUMBER = 11000;
     /**

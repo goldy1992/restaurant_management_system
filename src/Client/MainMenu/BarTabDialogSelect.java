@@ -90,7 +90,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                         menuParent.out.reset();
                         menuParent.out.writeObject(newEvt);
                         
-                        
                         TabRequest req = new TabRequest(                
                             InetAddress.getByName(
                                 parentClient.client.getLocalAddress().getHostName()),
@@ -109,9 +108,13 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                         } // sync
 
                         if (parent.func == Functionality.GET_TAB)
+                        {
                             menuParent.tabLoaded = true;
+                            System.out.println("GET TAB: set tab loaded = true");
+                        }
                         else if (parent.func == Functionality.ADD_TO_TAB)
                         {
+                            System.out.println("ADD TAB: set tab loaded = false");
                             menuParent.tabLoaded = false;
                             menuParent.oldTab = menuParent.oldTab.mergeTabs(menuParent.newTab);
                             menuParent.sendOrder();

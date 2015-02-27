@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
  *
  * @author mbbx9mg3
  */
-public class Item implements Serializable 
+public class Item implements Serializable, Comparable 
 {   
 
     /**
@@ -54,7 +54,7 @@ public class Item implements Serializable
      * @param quantity
      */
     public Item(int id, String name, 
-                BigDecimal price, Type type, int quantity)
+                BigDecimal price, Type type, int quantity) 
     {
         this.id = id;
         this.message = "";
@@ -153,6 +153,26 @@ public class Item implements Serializable
     public Type getType()
     {
         return type;
+    }
+    
+
+    @Override
+    public int compareTo(Object obj)
+    {
+        if ((obj instanceof Item) == false )
+            return -1;
+   
+        Item compareItem = (Item) obj;
+        if (this.id == compareItem.id &&
+            this.message.equals(compareItem.message) &&
+            this.name.equals(compareItem.name) &&
+            this.pricePerItem.equals(compareItem.pricePerItem) &&
+            this.quantity == compareItem.quantity &&
+            this.totalPrice.equals(compareItem.totalPrice) &&
+            this.type == compareItem.type)
+            return 0;
+        
+        return -1;
     }
     
 
