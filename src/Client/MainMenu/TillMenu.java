@@ -52,56 +52,60 @@ public class TillMenu extends Menu
         this.till = parentGUI;
     }
     
+    private void barTabPressed()
+    {
+        if (!tabLoaded) {
+            System.out.println("tabLoaded == false");
+            if (oldTab.getNumberOfItems() + newTab.getNumberOfItems() <= 0) {
+                System.out.println("get tab selected");
+                selectorFrame.setState(BarTabDialogSelect.Functionality.GET_TAB);
+            } else {
+                selectorFrame.setState(BarTabDialogSelect.Functionality.ADD_TO_TAB);
+            }
+
+            if (selectorFrame.getState() == BarTabDialogSelect.Functionality.GET_TAB && selectorFrame.numberOfTabs <= 0) {
+                this.quantityTextPane.setText("there are no tabs to display!");
+            } else {
+                selectorFrame.setVisible(true);
+            }
+        } // if
+        else 
+        {
+            sendOrder();
+            /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
+             Occupied */
+            TableStatusEvtNfn newEvt;
+            try {
+                newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                        generateRequestID(), newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+
+                out.reset();
+                out.writeObject(newEvt);
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.setUpTab(null);
+            this.outputTextPane.setText("");
+            this.tabLoaded = false;
+            this.dispose();     
+        }
+    }
+    
+    
     @Override
     public void dealWithButtons(Object source) throws SQLException 
     {       
         super.dealWithButtons(source);
          JButton button = (JButton)source;
-                   
-        if (button.getText().equals("Bar Tab"))
-        {
-            if (!tabLoaded)
-            {
-                System.out.println("tabLoaded == false");
-                if (oldTab.getNumberOfItems() + newTab.getNumberOfItems() <= 0)
-                {
-                    System.out.println("get tab selected");
-                    selectorFrame.setState(BarTabDialogSelect.Functionality.GET_TAB);
-                }
-                else
-                    selectorFrame.setState(BarTabDialogSelect.Functionality.ADD_TO_TAB); 
-                            
-                if (selectorFrame.getState() == BarTabDialogSelect.Functionality.GET_TAB && selectorFrame.numberOfTabs <= 0 )
-                  this.quantityTextPane.setText("there are no tabs to display!");
-                else
-                    selectorFrame.setVisible(true);
-            } // if
-            else
-            {
-                sendOrder();
-                 /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
-                 Occupied */
-                TableStatusEvtNfn newEvt;
-                try 
-                {
-                    newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
-                            InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                            generateRequestID(), newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
-               
-                    out.reset();
-                    out.writeObject(newEvt);
-                 } catch (UnknownHostException ex) {
-                    Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                this.setUpTab(null);
-                this.outputTextPane.setText("");
-                this.tabLoaded = false;
-                this.dispose();
-            } // else
-        } // bar tab
         
+        switch (button.getText())
+        {
+            case "Bar Tab": barTabPressed(); break;
+            default: break;
+        } // switch
     }
     
     public static TillMenu makeMenu(Client cParent, JFrame parent, 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author mbbx9mg3
  */
-public class Tab implements Serializable  
+public class Tab implements Serializable, Cloneable
 {
     private final Table parent;
     private final ArrayList<Item> allitems;
@@ -30,6 +30,21 @@ public class Tab implements Serializable
         this.drinks = new ArrayList<>();
         this.food = new ArrayList<>();
         this.total = BigDecimal.ZERO;
+    } // tab
+    
+    public Tab(Tab t)
+    {
+        this.parent = t.parent;
+        this.allitems = new ArrayList<>();
+        for (Item i : t.allitems)
+            this.allitems.add(new Item(i));
+        this.drinks = new ArrayList<>();
+        for (Item i : t.drinks)
+            this.drinks.add(new Item(i));
+        this.food = new ArrayList<>();
+        for (Item i : t.food)
+            this.food.add(new Item(i));
+        this.total = new BigDecimal(t.total.doubleValue());
     } // tab
     
     @Override
@@ -165,5 +180,19 @@ public class Tab implements Serializable
     {
         return allitems;
     }
+    
+    @Override
+    public Object clone() 
+    {  
+        try
+        {  
+            return super.clone();  
+        }
+        catch(Exception e)
+        { 
+            return null; 
+        }
+    } // clone
+    
     
 } // class

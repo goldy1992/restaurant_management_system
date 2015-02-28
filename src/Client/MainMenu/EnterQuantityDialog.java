@@ -144,10 +144,12 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
     } // getValue
     
     public static void main(String[] args)
-{
+    {
     JDialog j = new JDialog();
     j.setVisible(true);
     EnterQuantityDialog x = new EnterQuantityDialog(j, true);
     x.setVisible(true);
-}
-}
+    
+   
+    } // main
+} // class

@@ -14,8 +14,7 @@ import java.text.DecimalFormat;
  * @author mbbx9mg3
  */
 public class Item implements Serializable, Comparable 
-{   
-
+{  
     /**
      *
      */
@@ -41,10 +40,9 @@ public class Item implements Serializable, Comparable
     private String message;
     private final String name;
     private final BigDecimal pricePerItem;
-    private final int quantity;
-    private final BigDecimal totalPrice;    
-    
-    
+    private int quantity;
+    private BigDecimal totalPrice;    
+       
     /**
      *
      * @param id
@@ -66,12 +64,24 @@ public class Item implements Serializable, Comparable
         this.totalPrice = pricePerItem.multiply(quantityBD);
     } // item
     
+    public Item(Item i)
+    {
+        this.type = i.type;
+        this.id = i.id;
+        this.message = i.message;
+        this.name = i.name;
+        this.pricePerItem = i.pricePerItem;
+        this.quantity = new Integer(i.quantity);
+        this.totalPrice = new BigDecimal(i.totalPrice.doubleValue());
+    }
+    
     public void setMessage(String message)
     {
         this.message += message;
     } // setMessage
     
-    public String outputToScreen()
+    
+    public String firstLineScreenOutput()
     {
         String stringToReturn = "";
         DecimalFormat df = new DecimalFormat("0.00");
@@ -79,8 +89,24 @@ public class Item implements Serializable, Comparable
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
             + "\t\t\t£" + df.format(this.getTotalPrice().doubleValue()) + "\n";
             
+        
+        return stringToReturn;       
+    }
+    
+    public String secondLineScreenOutput()
+    {
+        String stringToReturn = "";
+            
         if (!this.getMessage().equals(""))
             stringToReturn += this.getMessage() + "\n";
+        
+        return stringToReturn;       
+    }
+    public String outputToScreen()
+    {
+        String stringToReturn = "";
+        stringToReturn += this.firstLineScreenOutput();
+        stringToReturn += this.secondLineScreenOutput();
         
         return stringToReturn;
     } // outputToScreen
@@ -128,6 +154,18 @@ public class Item implements Serializable, Comparable
         return totalPrice;
     }
     
+    private void setTotalPrice()
+    {
+        totalPrice = pricePerItem;
+        totalPrice = totalPrice.multiply(new BigDecimal(quantity));
+    }
+    
+    public void setQuantity(int q)
+    {
+        this.quantity = q;
+        setTotalPrice();
+    }
+    
     /**
      *
      * @return
@@ -155,7 +193,6 @@ public class Item implements Serializable, Comparable
         return type;
     }
     
-
     @Override
     public int compareTo(Object obj)
     {
@@ -174,7 +211,5 @@ public class Item implements Serializable, Comparable
         
         return -1;
     }
-    
-
-          
+              
 } // item

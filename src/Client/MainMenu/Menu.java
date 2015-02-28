@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
@@ -31,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -471,12 +474,68 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     } // sendOrder
     
+    public void printBill()
+    {
+
+        Tab methodOldTab = new Tab(getOldTab());
+        Tab methodNewTab = new Tab(getNewTab());
+        methodOldTab.mergeTabs(methodNewTab);
+
+        HashMap<String, Item> billFormat = new HashMap();
+
+        for (Item i : methodOldTab.getItems())
+        {
+            if (billFormat.containsKey(i.getName()))
+            {
+                Item item = billFormat.get(i.getName());
+                item.setQuantity(item.getQuantity() + i.getQuantity());
+            } else
+                billFormat.put(i.getName(), new Item(i));
+        }
+        System.out.println(billFormat.values());
+        try 
+        {            
+            File file = new File("Bill_Table_" + methodOldTab.getTable().getTableNumber() + ".txt");
+            int i = 1;
+            while (file.exists())
+            {    
+                file = new File("Bill_Table_" + methodOldTab.getTable().getTableNumber() + "(" + i + ")" + ".txt");
+                i++;
+            }
+            String bill = "";
+            for (Item item : billFormat.values())
+                bill += item.firstLineScreenOutput();
+            // creates the file
+            file.createNewFile();
+            // creates a FileWriter Object
+            FileWriter writer = new FileWriter(file);
+            // Writes the content to the file
+            writer.write(bill);
+            writer.flush();
+            writer.close();
+            
+            sendOrder(); 
+            if (this instanceof TillMenu)
+                con.close();
+            
+            this.dispose();
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void dealWithButtons(Object source) throws SQLException
     {
         JButton button = (JButton)source;
-        if (button.getText().equals("Send Order"))
-        {    sendOrder();  con.close(); this.dispose();   }   
-    }
+        switch(button.getText())
+        {
+            case "Send Order":  sendOrder();  con.close(); this.dispose(); break;
+            case "Print Bill":  printBill(); break;
+            default: break;
+        } // switch 
+    } // dealWithButtons()
 
     @Override
     public void actionPerformed(ActionEvent ae) 
