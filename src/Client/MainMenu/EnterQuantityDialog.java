@@ -5,11 +5,12 @@
  */
 package Client.MainMenu;
 
+import java.awt.Dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 
@@ -26,7 +27,7 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
      * @param parent
      * @param modal
      */
-    public EnterQuantityDialog(java.awt.Frame parent, boolean modal) 
+    public EnterQuantityDialog(Dialog parent, boolean modal) 
     {
         super(parent, modal);
         initComponents();
@@ -45,7 +46,7 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
                 public void actionPerformed(ActionEvent e) 
                 {
                    tabNumber = Integer.parseInt(output.getText());                   
-                    jd.dispose();
+                   jd.dispose();
                 } // actionPerformed
             });
         
@@ -144,7 +145,7 @@ public class EnterQuantityDialog extends javax.swing.JDialog {
     
     public static void main(String[] args)
 {
-    JFrame j = new JFrame();
+    JDialog j = new JDialog();
     j.setVisible(true);
     EnterQuantityDialog x = new EnterQuantityDialog(j, true);
     x.setVisible(true);

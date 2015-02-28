@@ -7,6 +7,7 @@ package Client.MainMenu;
 
 import Client.Pair;
 import Client.TillClient;
+import Client.TillGUI;
 import Message.EventNotification.TableStatusEvtNfn;
 import static Message.Message.generateRequestID;
 import Message.Request.Request;
@@ -65,8 +66,20 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                //EnterQuantityDialog = new EnterQuantityDialog(this, true);
-                parent.dispose();
+                EnterQuantityDialog chooseNewTab = new EnterQuantityDialog(parent, true);
+                chooseNewTab.setVisible(true);
+                int chosenTable = chooseNewTab.getValue();
+                // EDITA ESA Mañana
+                TillMenu tGUI = (TillMenu) parent.getParent();
+                TillClient tClient = (TillClient)tGUI.parentClient;
+                
+                if (chosenTable <= 0 || chosenTable >= tClient.tableStatuses.size())
+                    JOptionPane.showMessageDialog(parent, "Invalid Tab Number.");
+                else
+                {
+                    // necesito editar aqui
+                    parent.dispose();
+                }
             }
         });;
         this.getContentPane().add(newTabButton);            
