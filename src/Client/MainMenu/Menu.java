@@ -462,7 +462,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 out.writeObject(newEvt1);
             } // if                
                 
-
+            this.seenID = false;
         } // try // try
         catch (IOException ex) 
         { 

@@ -6,8 +6,9 @@
 package Client.MainMenu;
 
 import Client.Pair;
+import Client.SelectTableMenu.SelectTable;
 import Client.TillClient;
-import Client.TillGUI;
+import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
 import static Message.Message.generateRequestID;
 import Message.Request.Request;
@@ -36,10 +37,11 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
 
     public static enum Functionality {GET_TAB, ADD_TO_TAB};
     
-    public Functionality func = Functionality.GET_TAB;
+    private Functionality func = Functionality.GET_TAB;
     public int numberOfTabs;
     private boolean tabReceived;
     public final Object lock = new Object();
+    private HashMap<JButton, Pair<Integer, Table.TableStatus>> currentStatuses;
     
     /**
      * Creates new form BarTabDialogSelect
@@ -53,45 +55,117 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         this.tabReceived = false;
     }
     
-    public void setButtons(HashMap<JButton, Pair<Integer, Table.TableStatus>> jBs)
+    public synchronized void setButtons(HashMap<JButton, Pair<Integer, Table.TableStatus>> jBs)
     {
+          this.getContentPane().removeAll();      
+        this.currentStatuses = jBs;
+        // SET UP NEW TAB BUTTON
         System.out.println("set buttons: " + jBs.size() + " buttons");
         final BarTabDialogSelect parent = this;      
         if (func == Functionality.ADD_TO_TAB)
         {
-        JButton newTabButton = new JButton("New Tab");
-        newTabButton.addActionListener(new ActionListener()
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent e) 
+            JButton newTabButton = new JButton("New Tab");
+            newTabButton.addActionListener(new ActionListener()
             {
-                EnterQuantityDialog chooseNewTab = new EnterQuantityDialog(parent, true);
-                chooseNewTab.setVisible(true);
-                int chosenTable = chooseNewTab.getValue();
-                // EDITA ESA Mañana
-                TillMenu tGUI = (TillMenu) parent.getParent();
-                TillClient tClient = (TillClient)tGUI.parentClient;
-                
-                if (chosenTable <= 0 || chosenTable >= tClient.tableStatuses.size())
-                    JOptionPane.showMessageDialog(parent, "Invalid Tab Number.");
-                else
+
+                @Override
+                public void actionPerformed(ActionEvent e) 
                 {
-                    // necesito editar aqui
-                    parent.dispose();
+                    EnterQuantityDialog chooseNewTab = new EnterQuantityDialog(parent, true);
+                    chooseNewTab.setVisible(true);
+                    final int chosenTable = chooseNewTab.getValue();
+                    // EDITA ESA Mañana
+                    TillMenu tGUI = (TillMenu) parent.getParent();
+                    TillClient tClient = (TillClient)tGUI.parentClient;
+
+                    if (chosenTable <= 0 || chosenTable >= tClient.tableStatuses.size())
+                        JOptionPane.showMessageDialog(parent, "Invalid Tab Number.");
+                    else
+                    {
+                        try
+                        {
+                            /*  SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE 
+                                IS NOW  IN USE */
+                            TableStatusEvtNfn newEvt = new TableStatusEvtNfn(
+                                InetAddress.getByName(
+                                   tClient.client.getLocalAddress()
+                                        .getHostName()),
+                                InetAddress.
+                                    getByName(tClient.serverAddress
+                                        .getHostName()),
+                                generateRequestID(), 
+                                chosenTable, 
+                                Table.TableStatus.IN_USE);
+                            tClient.getOutputStream().reset();
+                            tClient.getOutputStream().writeObject(newEvt);
+
+                            /* Request the tab of this table from the server */
+                            TabRequest tabStatusRequest = new TabRequest(
+                                InetAddress.getByName(tClient.client
+                                    .getLocalAddress().getHostName()),
+                                InetAddress.getByName(tClient
+                                    .serverAddress.getHostName()),
+                                generateRequestID(), 
+                                Request.RequestType.TAB,
+                                    chosenTable);
+                            tClient.getOutputStream().reset();
+                            tClient.getOutputStream().writeObject(tabStatusRequest);
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        synchronized(parent.lock)
+                        {
+                            try
+                            {
+                                while(parent.tabReceived == false)
+                                    parent.lock.wait();
+                            }
+                            catch (InterruptedException ex) 
+                            {
+                                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
+                            } // catch
+                        } // synchronized
+                        
+
+                            parent.dispose();
+                            tGUI.sendOrder();
+                            tGUI.setUpTab(null);
+                            tGUI.outputTextPane.setText("");
+                            tGUI.tabLoaded = false;
+                            tGUI.dispose();
+                            TableStatusEvtNfn newEvt;
+                            try 
+                            {
+                                newEvt = new TableStatusEvtNfn(InetAddress.getByName(tClient.client.getLocalAddress().getHostName()),
+                                        InetAddress.getByName(tClient.serverAddress.getHostName()),
+                                        generateRequestID(), chosenTable, Table.TableStatus.OCCUPIED);
+
+                                tGUI.out.reset();
+                                tGUI.out.writeObject(newEvt);
+                             } catch (UnknownHostException ex) {
+                                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException ex) {
+                                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } //else
                 }
-            }
-        });;
-        this.getContentPane().add(newTabButton);            
-        }
+            });; // added action listener to new tab button
+        
+            this.getContentPane().add(newTabButton);            
+        } // if
+        
+        // MAKE AND ORDERED LIST OF THE BUTTONS
         ValueComparator bvc =  new ValueComparator(jBs);
         TreeMap<JButton, Pair<Integer, Table.TableStatus>> sortedMap = new TreeMap<>(bvc);
         sortedMap.putAll(jBs);
         numberOfTabs = jBs.size();
-        if (jBs.size() <= 0)
-            return;
+        //if (jBs.size() <= 0)
+          //  return;
 
-        this.getContentPane().removeAll();
+
       
         for (JButton jb : sortedMap.keySet())
         {
@@ -150,6 +224,12 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             menuParent.outputTextPane.setText("");
                             menuParent.setUpTab(null);
                             parent.dispose();
+                          
+                            newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                            InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                            generateRequestID(), pair.getFirst(), Table.TableStatus.IN_USE);
+                            menuParent.out.reset();
+                            menuParent.out.writeObject(newEvt);
                             menuParent.dispose();
                         } // else if
                     } 
@@ -182,6 +262,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
         this.repaint();
     }
     
+    // inner class to compare buttons
     class ValueComparator implements Comparator<JButton> {
 
     Map<JButton, Pair<Integer, Table.TableStatus>> base;
@@ -207,6 +288,17 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
     public void setTabReceived(boolean tabRecevied)
     {
         this.tabReceived = tabRecevied;
+    }
+    
+    public Functionality getState()
+    {
+        return func;
+    }
+    
+    public void setState(Functionality f)
+    {
+        this.func = f;
+        this.setButtons(currentStatuses);
     }
 
     /**

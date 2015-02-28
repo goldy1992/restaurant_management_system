@@ -62,13 +62,17 @@ public class TillMenu extends Menu
         {
             if (!tabLoaded)
             {
+                System.out.println("tabLoaded == false");
                 if (oldTab.getNumberOfItems() + newTab.getNumberOfItems() <= 0)
-                    selectorFrame.func = BarTabDialogSelect.Functionality.GET_TAB;
+                {
+                    System.out.println("get tab selected");
+                    selectorFrame.setState(BarTabDialogSelect.Functionality.GET_TAB);
+                }
                 else
-                    selectorFrame.func = BarTabDialogSelect.Functionality.ADD_TO_TAB; 
+                    selectorFrame.setState(BarTabDialogSelect.Functionality.ADD_TO_TAB); 
                             
-                if (selectorFrame.numberOfTabs <= 0)
-                    this.quantityTextPane.setText("there are no tabs to display!");
+                if (selectorFrame.getState() == BarTabDialogSelect.Functionality.GET_TAB && selectorFrame.numberOfTabs <= 0 )
+                  this.quantityTextPane.setText("there are no tabs to display!");
                 else
                     selectorFrame.setVisible(true);
             } // if
@@ -139,7 +143,7 @@ public class TillMenu extends Menu
         HashMap<JButton, Pair<Integer, Table.TableStatus>> jb = new HashMap<>();
         for (int i = 1; i < tableStatuses.size(); i++)
             if (tableStatuses.get(i) != Table.TableStatus.FREE)
-                  jb.put(new JButton("Table " + i), new Pair<Integer, Table.TableStatus>(i, tableStatuses.get(i)));
+                  jb.put(new JButton("Table " + i), new Pair<>(i, tableStatuses.get(i)));
         
         return jb;  
     } // createJButtons
