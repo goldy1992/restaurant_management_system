@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
  *
  * @author mbbx9mg3
  */
-public class Item implements Serializable, Comparable 
+public class Item implements Serializable, Comparable, Cloneable
 {  
     /**
      *
@@ -39,9 +39,9 @@ public class Item implements Serializable, Comparable
     private final int id;
     private String message;
     private final String name;
-    private final BigDecimal pricePerItem;
+    private final double pricePerItem;
     private int quantity;
-    private BigDecimal totalPrice;    
+    private double totalPrice;    
        
     /**
      *
@@ -52,7 +52,7 @@ public class Item implements Serializable, Comparable
      * @param quantity
      */
     public Item(int id, String name, 
-                BigDecimal price, Type type, int quantity) 
+                double price, Type type, int quantity) 
     {
         this.id = id;
         this.message = "";
@@ -60,8 +60,7 @@ public class Item implements Serializable, Comparable
         this.pricePerItem = price;
         this.type = type;
         this.quantity = quantity;
-        BigDecimal quantityBD = new BigDecimal(quantity);
-        this.totalPrice = pricePerItem.multiply(quantityBD);
+        this.totalPrice = pricePerItem * quantity;
     } // item
     
     public Item(Item i)
@@ -71,8 +70,8 @@ public class Item implements Serializable, Comparable
         this.message = i.message;
         this.name = i.name;
         this.pricePerItem = i.pricePerItem;
-        this.quantity = new Integer(i.quantity);
-        this.totalPrice = new BigDecimal(i.totalPrice.doubleValue());
+        this.quantity = i.quantity;
+        this.totalPrice = i.totalPrice;
     }
     
     public void setMessage(String message)
@@ -87,7 +86,7 @@ public class Item implements Serializable, Comparable
         DecimalFormat df = new DecimalFormat("0.00");
         
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
-            + "\t\t\t£" + df.format(this.getTotalPrice().doubleValue()) + "\n";
+            + "\t\t\t£" + df.format(this.getTotalPrice()) + "\n";
             
         
         return stringToReturn;       
@@ -144,12 +143,12 @@ public class Item implements Serializable, Comparable
      *
      * @return
      */
-    public BigDecimal getPricePerItem()
+    public double getPricePerItem()
     {
         return pricePerItem;
     }
     
-    public BigDecimal getTotalPrice()
+    public double getTotalPrice()
     {
         return totalPrice;
     }
@@ -157,7 +156,7 @@ public class Item implements Serializable, Comparable
     private void setTotalPrice()
     {
         totalPrice = pricePerItem;
-        totalPrice = totalPrice.multiply(new BigDecimal(quantity));
+        totalPrice = totalPrice * quantity;
     }
     
     public void setQuantity(int q)
@@ -170,7 +169,7 @@ public class Item implements Serializable, Comparable
      *
      * @return
      */
-    public int getQuantity()
+    public Integer getQuantity()
     {
         return quantity;
     }
@@ -203,13 +202,23 @@ public class Item implements Serializable, Comparable
         if (this.id == compareItem.id &&
             this.message.equals(compareItem.message) &&
             this.name.equals(compareItem.name) &&
-            this.pricePerItem.equals(compareItem.pricePerItem) &&
+            this.pricePerItem == compareItem.pricePerItem &&
             this.quantity == compareItem.quantity &&
-            this.totalPrice.equals(compareItem.totalPrice) &&
+            this.totalPrice == compareItem.totalPrice &&
             this.type == compareItem.type)
             return 0;
         
         return -1;
     }
+    
+    @Override
+    public Item clone() {
+        try {
+                return (Item) super.clone();
+        } catch (CloneNotSupportedException e) {
+                return null;
+        }
+}   
+
               
 } // item

@@ -42,7 +42,7 @@ public class OutputGUI extends javax.swing.JFrame {
         
         for (Item i : msg.getItems())
         {
-            currentText += i.getQuantity() + "\t" + i.getName() + "\n";
+            currentText += i.getQuantity().toString() + "\t" + i.getName() + "\n";
             
             if (!i.getMessage().equals(""))
                 currentText += i.getMessage() + "\n";

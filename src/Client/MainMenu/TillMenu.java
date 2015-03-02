@@ -15,6 +15,8 @@ import Message.EventNotification.TableStatusEvtNfn;
 import static Message.Message.generateRequestID;
 import Message.Table;
 import java.awt.Dialog;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -36,8 +38,7 @@ public class TillMenu extends Menu
     private final TillGUI till;
     public BarTabDialogSelect selectorFrame;
     public boolean tabLoaded = false;
-
-    
+  
     @Override
     protected String[] getOptionNames() { 
        String[] x = {"Print Bill", "Print Last Receipt", "Void", 
@@ -71,6 +72,7 @@ public class TillMenu extends Menu
         } // if
         else 
         {
+            this.oldTab = oldTab.mergeTabs(newTab);
             sendOrder();
             /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
              Occupied */
@@ -94,7 +96,44 @@ public class TillMenu extends Menu
         }
     }
     
-    
+    public void writeLastReceipt()
+    {
+        System.out.println("called last receipt");
+        if (this.lastReceipt == null)
+            return;
+        try
+        {
+            System.out.println("last receipt not null");
+            File file = new File("Last _Bill_Receipt_" + oldTab.getTable().getTableNumber() + ".txt");
+            int i = 1;
+            while (file.exists())
+            {    
+                file = new File("Last _Bill_Receipt_" + oldTab.getTable().getTableNumber() + "(" + i + ")" + ".txt");
+                i++;
+            } // while
+
+            // creates the file
+            file.createNewFile();
+            // Writes the content to the file
+            try ( FileWriter writer = new FileWriter(file) ) 
+            {
+                // Writes the content to the file
+                writer.write(this.lastReceipt);
+                writer.flush();
+            } 
+            sendOrder(); 
+            if (this instanceof TillMenu)
+                con.close();
+            
+            this.dispose();
+
+        }
+        catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);} catch (SQLException ex) {    
+            Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    } // writeBill
+       
     @Override
     public void dealWithButtons(Object source) throws SQLException 
     {       
@@ -104,6 +143,7 @@ public class TillMenu extends Menu
         switch (button.getText())
         {
             case "Bar Tab": barTabPressed(); break;
+            case "Print Last Receipt": writeLastReceipt(); break;
             default: break;
         } // switch
     }
@@ -161,9 +201,7 @@ public class TillMenu extends Menu
                 System.out.println("set Buttons");
         selectorFrame.setButtons(createJButtons(tableStatuses));
     }
-    
-
-    
+        
     public BarTabDialogSelect makeBarTabSelector()
     {
 

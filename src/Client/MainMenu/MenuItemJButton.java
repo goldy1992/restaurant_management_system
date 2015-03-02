@@ -22,7 +22,7 @@ public class MenuItemJButton extends JButton implements ActionListener
 {
 
     private final Menu belongsToMenu;
-    private final BigDecimal price; 
+    private final double price; 
     private final int id;
     private final Type type;
     private final JComponent parent;
@@ -32,7 +32,7 @@ public class MenuItemJButton extends JButton implements ActionListener
      * @param name
      */
     private MenuItemJButton(String name, int id, 
-            BigDecimal price, String type, JComponent parent, 
+            double price, String type, JComponent parent, 
             Menu parentMenu, boolean needAgeCheck)
     {
         super(name);    
@@ -96,7 +96,7 @@ public class MenuItemJButton extends JButton implements ActionListener
     
     
     
-    public static MenuItemJButton createMenuItemJButton(String text, int id, BigDecimal price, String type, JComponent parent, Menu parentMenu, boolean ageCheck)
+    public static MenuItemJButton createMenuItemJButton(String text, int id, double price, String type, JComponent parent, Menu parentMenu, boolean ageCheck)
     {
         MenuItemJButton x = new MenuItemJButton(text, id, price, type, parent, parentMenu, ageCheck);
         x.addActionListener(x);

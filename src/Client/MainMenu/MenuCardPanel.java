@@ -264,6 +264,7 @@ public class MenuCardPanel extends JPanel
                 {
                     TillMenu menu = (TillMenu)belongsToMenu;
                     double amount = menu.quantitySelected / 100.00;
+                    System.out.println("current total: " + menu.getTotalDouble());
                     if (amount < menu.getTotalDouble())
                     {
                         menu.quantityTextPane.setText("Insufficient amount");
@@ -275,12 +276,16 @@ public class MenuCardPanel extends JPanel
                         {
                             double change = (amount - menu.getTotalDouble());
                             DecimalFormat df = new DecimalFormat("0.00");
+                            menu.lastReceipt = menu.calculateBill();
+                            menu.lastReceipt += "Amount given: \t\t" + amount + "\n";
+                            menu.lastReceipt += "Change: \t\t" + change;
                             String changeString = df.format(change);
                             menu.getTill().getChangeOutputLabel().setText("£" + changeString ); 
-                                menu.oldTab.mergeTabs(menu.newTab);
-                                boolean x = menu.oldTab.removeAll();
-                                menu.newTab.removeAll();
-                                System.out.println("got here in cash off: " + x);                            
+                            menu.oldTab.mergeTabs(menu.newTab);
+                            boolean x = menu.oldTab.removeAll();
+                            menu.newTab.removeAll();
+                            System.out.println("got here in cash off: " + x);      
+
                             if (menu.tabLoaded)
                             {
 
@@ -308,7 +313,7 @@ public class MenuCardPanel extends JPanel
                         }
                         menu.outputTextPane.setText("");
                         menu.setTotal();
-                        menu.quantitySelected = 0;  
+                        menu.quantitySelected = -1;  
                         menu.quantityTextPane.setText("");
             
                     } // else
@@ -316,7 +321,7 @@ public class MenuCardPanel extends JPanel
             });
             newKeypadPanel.add(cashPay);      
          
-        }
+        } // if 
         
         this.keypadPanel = newKeypadPanel;
         return newKeypadPanel;
@@ -325,6 +330,7 @@ public class MenuCardPanel extends JPanel
     /**
     * A factory method to make a new Menu Card Panel
     * 
+     * @param parentMenu
     * @return a new Menu Card Panel
     */
     public static MenuCardPanel createMenuCardPanel(Menu parentMenu)
@@ -350,9 +356,9 @@ public class MenuCardPanel extends JPanel
             quantity = (quantity * 10) + number;
         m.quantityTextPane.setText(quantity.toString());        
         m.quantitySelected = quantity;
-        
-    }
+        System.out.println("new quantity: " + m.quantitySelected);
+    } // addNumberToQUantity
     
-}
+} // class
 
 

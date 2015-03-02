@@ -7,6 +7,11 @@ package Item;
 
 import static Item.Item.Type.DRINK;
 import Message.Table;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ public class Tab implements Serializable, Cloneable
     private final ArrayList<Item> allitems;
     private final ArrayList<Item> drinks;
     private final ArrayList<Item> food;
-    private BigDecimal total;
+    private double total;
     
     public Tab(Table parent)
     {
@@ -29,7 +34,7 @@ public class Tab implements Serializable, Cloneable
         this.allitems = new ArrayList<>();
         this.drinks = new ArrayList<>();
         this.food = new ArrayList<>();
-        this.total = BigDecimal.ZERO;
+        this.total = 0;
     } // tab
     
     public Tab(Tab t)
@@ -44,7 +49,7 @@ public class Tab implements Serializable, Cloneable
         this.food = new ArrayList<>();
         for (Item i : t.food)
             this.food.add(new Item(i));
-        this.total = new BigDecimal(t.total.doubleValue());
+        this.total = t.total;
     } // tab
     
     @Override
@@ -59,7 +64,7 @@ public class Tab implements Serializable, Cloneable
     public void addItem(Item newItem)
     {
         allitems.add(newItem);
-        total = total.add(newItem.getTotalPrice());
+        total += newItem.getTotalPrice();
       
         if (newItem.getType() == DRINK)
             drinks.add(allitems.get(allitems.size() - 1));
@@ -125,12 +130,12 @@ public class Tab implements Serializable, Cloneable
 
     }
     
-    public BigDecimal calculateTotal()
+    public double calculateTotal()
     {
-        BigDecimal total = BigDecimal.ZERO;
+        double total = 0;
         
         for (Item i : allitems)
-            total.add(i.getTotalPrice());
+            total += i.getTotalPrice();
         
         return total;
                 
@@ -150,8 +155,9 @@ public class Tab implements Serializable, Cloneable
         return parent;
     }
     
-    public BigDecimal getTotal()
+    public double getTotal()
     {
+        System.out.println(total + ": " + total);
         return total;
     }
     
@@ -181,18 +187,34 @@ public class Tab implements Serializable, Cloneable
         return allitems;
     }
     
+    public static Tab cloneTab(Tab tab) throws IOException, ClassNotFoundException
+    {
+        Tab newTab = null;       
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectInputStream in1;
+        
+        try (ObjectOutputStream o = new ObjectOutputStream(baos)) {
+            o.writeObject(tab);
+            o.reset();
+            ByteArrayInputStream baos1 = new ByteArrayInputStream(baos.toByteArray());
+            in1 = new ObjectInputStream(baos1);
+
+            newTab = (Tab) in1.readObject();
+        }
+        in1.close();
+
+        return newTab;
+                 
+    }
+    
     @Override
-    public Object clone() 
-    {  
-        try
-        {  
-            return super.clone();  
-        }
-        catch(Exception e)
-        { 
-            return null; 
-        }
-    } // clone
+    public Tab clone() {
+            try {
+                    return (Tab) super.clone();
+            } catch (CloneNotSupportedException e) {
+                    return null;
+            }
+    }
     
     
 } // class
