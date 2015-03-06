@@ -304,7 +304,6 @@ public class MenuCardPanel extends JPanel
                                 menu.out.writeObject(newEvt1);
                                 menu.tabLoaded = false;
                             }
-                            //tMenu.con.close();
                             menu.dispose();
                         } catch (UnknownHostException ex) {
                             Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);

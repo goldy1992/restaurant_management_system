@@ -8,7 +8,7 @@ package Client;
 import Client.MainMenu.TillMenu;
 import static Message.Message.generateRequestID;
 import Message.Request.LeaveRequest;
-import Message.Request.Request;
+import Message.Request.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;

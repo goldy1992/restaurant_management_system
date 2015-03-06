@@ -10,7 +10,7 @@ import Client.SelectTableMenu.SelectTable;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
-import Message.Request.Request;
+import Message.Request.*;
 import Message.Request.TableStatusRequest;
 import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;

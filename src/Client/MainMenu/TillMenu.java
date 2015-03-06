@@ -122,16 +122,12 @@ public class TillMenu extends Menu
                 writer.flush();
             } 
             sendOrder(); 
-            if (this instanceof TillMenu)
-                con.close();
             
             this.dispose();
 
         }
         catch (IOException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);} catch (SQLException ex) {    
-            Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}    
     } // writeBill
        
     @Override

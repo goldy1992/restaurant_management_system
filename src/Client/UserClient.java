@@ -4,8 +4,6 @@ import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.RegisterClientRequest;
 import Message.Request.TableStatusRequest;
-import Message.Response.LeaveResponse;
-import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
 import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;

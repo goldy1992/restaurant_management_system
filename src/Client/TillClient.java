@@ -10,7 +10,7 @@ import Item.Tab;
 import Message.EventNotification.*;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
-import Message.Request.Request;
+import Message.Request.*;
 import Message.Request.TableStatusRequest;
 import Message.Response.*;
 import Message.Table;

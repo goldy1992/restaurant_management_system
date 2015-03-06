@@ -113,7 +113,7 @@ public class Item implements Serializable, Comparable, Cloneable
     @Override
     public String toString()
     {
-        return "Food\nName: " + name + 
+        return "\nName: " + name + 
                 "\nid: " + id + 
                 "\nType " + type +
                 "\nprice " + pricePerItem +

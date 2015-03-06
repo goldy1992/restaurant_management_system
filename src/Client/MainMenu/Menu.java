@@ -406,7 +406,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         
         setUpTab(tab);
         
-
+        con.close();
         
     } // constructor
     
@@ -430,9 +430,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     }
     
     public void sendOrder()
-    {
-
-            
+    {  
+        System.out.println("called send order");
+        this.oldTab.mergeTabs(newTab);
         try 
         {
             TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
@@ -470,11 +470,16 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             } // if                
                 
             this.seenID = false;
+            
+            if (!(this instanceof TillMenu))
+                con.close();
         } // try // try
-        catch (IOException ex) 
+        catch (IOException | SQLException ex) 
         { 
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
+        }
+        // catch
+         // catch
     
     } // sendOrder
     
@@ -485,15 +490,18 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         try 
         {
             methodOldTab = Tab.cloneTab(getOldTab());
-            methodNewTab = Tab.cloneTab(getNewTab());
-
-            
-         } catch (IOException | ClassNotFoundException ex) {
+            methodNewTab = Tab.cloneTab(getNewTab());    
+        } // try
+        catch (IOException | ClassNotFoundException ex) 
+        {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            if (methodOldTab == null || methodNewTab == null)
-                return "";
+        } // catch
+        
+        if (methodOldTab == null || methodNewTab == null)
+            return "";
+        
         methodOldTab.mergeTabs(methodNewTab);
+        System.out.println("methodOldtab: " + methodOldTab.getItems());
 
         HashMap<String, Item> billFormat = new HashMap();
 
@@ -501,14 +509,12 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         {
             if (billFormat.containsKey(i.getName()))
             {
-                Item item = new Item(billFormat.get(i.getName()));
+                Item item = billFormat.get(i.getName());
                 item.setQuantity(item.getQuantity() + i.getQuantity());            
             }  // if
             else
                 billFormat.put(i.getName(), new Item(i));      
         } // for
-  
-        System.out.println(billFormat.values()); 
         
         String bill = "";
         for (Item item : billFormat.values())
@@ -519,25 +525,26 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     public void writeBill() throws IOException
     {
-     
-            File file = new File("Bill_Table_" + oldTab.getTable().getTableNumber() + ".txt");
-            int i = 1;
-            while (file.exists())
-            {    
-                file = new File("Bill_Table_" + oldTab.getTable().getTableNumber() + "(" + i + ")" + ".txt");
-                i++;
-            }
 
-            // creates the file
-            file.createNewFile();
+        File file = new File("Bill_Table_" + oldTab.getTable().getTableNumber() + ".txt");
+        int i = 1;
+        while (file.exists())
+        {    
+            file = new File("Bill_Table_" + oldTab.getTable().getTableNumber() + "(" + i + ")" + ".txt");
+            i++;
+        }
+
+        // creates the file
+        file.createNewFile();
+        // Writes the content to the file
+        try ( FileWriter writer = new FileWriter(file) ) 
+        {
             // Writes the content to the file
-            try ( FileWriter writer = new FileWriter(file) ) 
-            {
-                // Writes the content to the file
-                writer.write(this.currentBill);
-                writer.flush();
-            } catch (IOException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}    
+            writer.write(this.currentBill);
+            writer.flush();
+
+        } catch (IOException ex) {
+        Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}    
     } // writeBill
     
     public void printBill()
@@ -547,24 +554,27 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         {            
             writeBill();
                       
-            sendOrder(); 
             if (this instanceof TillMenu)
+            {
+                this.setVisible(false);
                 con.close();
-            
-            System.out.println("old tab: " + oldTab.getTotal());
-            System.out.println("new tab: " + newTab.getTotal());            
-            this.dispose();
-        } catch (IOException | SQLException ex) {
+            } // if      
+            else
+            {
+                this.dispose();
+            }
+        } // try 
+        catch (IOException | SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        } // catch
+    } // printBill
     
     public void dealWithButtons(Object source) throws SQLException
     {
         JButton button = (JButton)source;
         switch(button.getText())
         {
-            case "Send Order":         this.oldTab = oldTab.mergeTabs(newTab); sendOrder();  con.close(); this.dispose(); break;
+            case "Send Order":  sendOrder();  this.dispose(); break;
             case "Print Bill":  printBill(); break;
             default: break;
         } // switch 
