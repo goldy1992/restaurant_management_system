@@ -277,8 +277,8 @@ public class MenuCardPanel extends JPanel
                             double change = (amount - menu.getTotalDouble());
                             DecimalFormat df = new DecimalFormat("0.00");
                             menu.lastReceipt = menu.calculateBill();
-                            menu.lastReceipt += "Amount given: \t\t" + amount + "\n";
-                            menu.lastReceipt += "Change: \t\t" + change;
+                            menu.lastReceipt += "Amount given: \t\t£" + df.format(amount) + "\n";
+                            menu.lastReceipt += "Change: \t\t£" + df.format(change);
                             String changeString = df.format(change);
                             menu.getTill().getChangeOutputLabel().setText("£" + changeString ); 
                             menu.oldTab.mergeTabs(menu.newTab);

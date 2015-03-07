@@ -517,9 +517,15 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         } // for
         
         String bill = "";
+        double total = 0;
         for (Item item : billFormat.values())
+        {
+            total += item.getTotalPrice();
             bill += item.firstLineScreenOutput();
+        }
         
+        DecimalFormat df = new DecimalFormat("0.00");
+        bill += "\nTotal: £" + df.format(total) + "\n";
         return bill;      
     } // calculateBill
     

@@ -1,0 +1,5 @@
+2	Peroni			£8.00
+1	14oz Cola			£1.50
+
+Total: £9.50Amount given: 		£10.00
+Change: 		£0.50
