@@ -469,6 +469,14 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             this.seenID = false;
             
             if (!(this instanceof TillMenu))
+            {
+                TableStatusEvtNfn newEvt1;
+                newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+                generateRequestID(), oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+                out.reset();
+                out.writeObject(newEvt);
+            }    
                 con.close();
         } // try // try
         catch (IOException | SQLException ex) 

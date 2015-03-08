@@ -227,7 +227,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                           
                             newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                            generateRequestID(), pair.getFirst(), Table.TableStatus.IN_USE);
+                            generateRequestID(), pair.getFirst(), Table.TableStatus.OCCUPIED);
                             menuParent.out.reset();
                             menuParent.out.writeObject(newEvt);
                             menuParent.dispose();
