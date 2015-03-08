@@ -130,14 +130,6 @@ public class TillMenu extends Menu
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}    
     } // writeBill
     
-    private void voidItem()
-    {
-        VoidItemsDialog vItem = new VoidItemsDialog(this, true, new Pair<>(oldTab, newTab));
-        
-        Pair<Tab, Tab> result = vItem.startDialog();
-        oldTab = result.getFirst();
-        newTab = result.getSecond();
-    }
        
     @Override
     public void dealWithButtons(Object source) throws SQLException 
@@ -149,7 +141,6 @@ public class TillMenu extends Menu
         {
             case "Bar Tab": barTabPressed(); break;
             case "Print Last Receipt": writeLastReceipt(); break;
-            case "Void": voidItem(); break;
             default: break;
         } // switch
     }

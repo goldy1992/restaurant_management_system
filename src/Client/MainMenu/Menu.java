@@ -2,6 +2,7 @@ package Client.MainMenu;
 
 import Client.Client;
 import Client.DatabaseConnect;
+import Client.Pair;
 import Client.SelectTableMenu.SelectTable;
 import static Message.Message.generateRequestID;
 import Item.Item;
@@ -15,14 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -575,6 +572,27 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         } // catch
     } // printBill
     
+    private void voidItem()
+    {
+        VoidItemsDialog vItem = new VoidItemsDialog(this, true, new Pair<>(oldTab, newTab));
+        
+        Pair<Tab, Tab> result = vItem.startDialog();
+        oldTab = result.getFirst();
+        newTab = result.getSecond();
+        
+        this.setTotal();
+        this.outputTextPane.setText(oldTab.toString() + newTab.toString());
+    }
+    
+    private void voidLastItem()
+    {
+        if (newTab.getItems().isEmpty())
+            return;       
+        newTab.removeItem(newTab.getItems().get(newTab.getItems().size() - 1));
+        this.outputTextPane.setText(oldTab.toString() + newTab.toString());
+        this.setTotal();
+    }
+    
     public void dealWithButtons(Object source) throws SQLException
     {
         JButton button = (JButton)source;
@@ -582,6 +600,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         {
             case "Send Order":  sendOrder();  this.dispose(); break;
             case "Print Bill":  printBill(); break;
+            case "Void": voidItem(); break;
+            case "Void Last Item": voidLastItem(); break;
             default: break;
         } // switch 
     } // dealWithButtons()

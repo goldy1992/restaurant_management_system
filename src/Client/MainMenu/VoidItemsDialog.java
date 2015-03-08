@@ -10,11 +10,13 @@ import Item.Item;
 import Item.Tab;
 import java.awt.Dialog;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -23,8 +25,10 @@ import javax.swing.SwingConstants;
 public class VoidItemsDialog extends javax.swing.JDialog {
 
     private final Tab oldTab;
-    private final Tab newTab;    
-    ArrayList<JCheckBox> cBoxes = new ArrayList<>();
+    private final Tab newTab;  
+    private final JButton submitButton = new JButton("Submit");
+    ArrayList<Pair<JCheckBox, Item>> cBoxesOldTab = new ArrayList<Pair<JCheckBox, Item>>();
+    ArrayList<Pair<JCheckBox, Item>> cBoxesNewTab = new ArrayList<Pair<JCheckBox, Item>>();
     
     /**
      * Creates new form VoidItemsDialog
@@ -53,17 +57,17 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         mainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
         mainPanelScrollPane.setViewportView(mainPanel);
         mainPanel.setLayout(new GridLayout(oldTab.getItems().size() + newTab.getItems().size(), 1));
-        mainPanel.setAlignmentX(JScrollPane.RIGHT_ALIGNMENT);
-        for (JCheckBox cb : cBoxes)
-        mainPanel.add(cb);
+        for (Pair<JCheckBox, Item> cb : cBoxesOldTab)
+        mainPanel.add(cb.getFirst());
+        for (Pair<JCheckBox, Item> cb : cBoxesNewTab)
+        mainPanel.add(cb.getFirst());
 
         getContentPane().add(mainPanelScrollPane);
-        mainPanelScrollPane.setAlignmentX(RIGHT_ALIGNMENT);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -73,22 +77,52 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         for (Item item : oldTab.getItems())    
         {
             JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            jcb.setAlignmentX(RIGHT_ALIGNMENT);
-            jcb.setHorizontalTextPosition(SwingConstants.LEFT);
-            cBoxes.add(jcb);   
-        }
+            cBoxesOldTab.add(new Pair<>(jcb, item));   
+        } // for
         
         for (Item item : newTab.getItems())        
         {
             JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            jcb.setAlignmentX(RIGHT_ALIGNMENT);
-            jcb.setHorizontalTextPosition(SwingConstants.LEFT);
-            cBoxes.add(jcb);   
-        }    
+            cBoxesNewTab.add(new Pair<>(jcb, item));   
+        } // for
     } 
     
     public Pair<Tab, Tab> startDialog()
     {
+        final VoidItemsDialog thisInstance = this;
+       submitButton.addActionListener(new ActionListener()
+        {
+            public void removeItems(ArrayList<Pair<JCheckBox, Item>> cBoxes, Tab tab)
+            {
+                CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();  
+                temp.addAll(tab.getItems());
+                
+                for (Pair<JCheckBox, Item> jCB : cBoxes)
+                {
+                    if (jCB.getFirst().isSelected())
+                    {
+                        for (Item i : temp)
+                            if (jCB.getSecond() == i)
+                                temp.remove(i);
+                    }
+                } // for     
+                
+                tab.removeAll();
+                for (Item i :temp )
+                    tab.addItem(i);
+                
+            }
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                removeItems(cBoxesOldTab, oldTab);
+                removeItems(cBoxesNewTab, newTab); 
+                thisInstance.setVisible(false);
+            } // actionPerformed
+        });
+        getContentPane().add(submitButton);
+        pack();
+        
         this.setVisible(true);
         return new Pair<>(oldTab, newTab);
     }

@@ -5,8 +5,8 @@
  */
 package Item;
 
+import Message.Message;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
@@ -42,6 +42,7 @@ public class Item implements Serializable, Comparable, Cloneable
     private final double pricePerItem;
     private int quantity;
     private double totalPrice;    
+    public final String uniqueID;
        
     /**
      *
@@ -61,6 +62,7 @@ public class Item implements Serializable, Comparable, Cloneable
         this.type = type;
         this.quantity = quantity;
         this.totalPrice = pricePerItem * quantity;
+        this.uniqueID = id + name + type + message + quantity + Message.generateRequestID();
     } // item
     
     public Item(Item i)
@@ -72,6 +74,7 @@ public class Item implements Serializable, Comparable, Cloneable
         this.pricePerItem = i.pricePerItem;
         this.quantity = i.quantity;
         this.totalPrice = i.totalPrice;
+        this.uniqueID = i.uniqueID;
     }
     
     public void setMessage(String message)
@@ -199,13 +202,7 @@ public class Item implements Serializable, Comparable, Cloneable
             return -1;
    
         Item compareItem = (Item) obj;
-        if (this.id == compareItem.id &&
-            this.message.equals(compareItem.message) &&
-            this.name.equals(compareItem.name) &&
-            this.pricePerItem == compareItem.pricePerItem &&
-            this.quantity == compareItem.quantity &&
-            this.totalPrice == compareItem.totalPrice &&
-            this.type == compareItem.type)
+        if (this.uniqueID.equals(compareItem.uniqueID))
             return 0;
         
         return -1;

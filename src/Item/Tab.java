@@ -110,6 +110,8 @@ public class Tab implements Serializable, Cloneable
         if (removedFromForDItems && removedFromAllItems)
             removed = true;
         
+        total = calculateTotal();
+        
         return removed;
     } // addItem
     
