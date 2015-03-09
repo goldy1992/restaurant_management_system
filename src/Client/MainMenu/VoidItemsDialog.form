@@ -25,6 +25,13 @@
     <Property name="axis" type="int" value="1"/>
   </Layout>
   <SubComponents>
+    <Container class="javax.swing.JPanel" name="titlePanel">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="titlePanel.setLayout(new GridLayout(0,3));&#xa;titlePanel.add(new JLabel(&quot;Item&quot;));&#xa;titlePanel.add(new JLabel(&quot;Wastage&quot;));&#xa;titlePanel.add(new JLabel(&quot;Amount&quot;));"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+    </Container>
     <Container class="javax.swing.JScrollPane" name="mainPanelScrollPane">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
