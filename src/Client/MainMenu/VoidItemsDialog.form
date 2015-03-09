@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -31,7 +31,7 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="mainPanel">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="mainPanel.setLayout(new GridLayout(oldTab.getItems().size() + newTab.getItems().size(), 1));&#xa;for (Pair&lt;JCheckBox, Item&gt; cb : cBoxesOldTab)&#xa;    mainPanel.add(cb.getFirst());&#xa;for (Pair&lt;JCheckBox, Item&gt; cb : cBoxesNewTab)&#xa;    mainPanel.add(cb.getFirst());"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="mainPanel.setLayout(new GridLayout(0, 3));&#xa;for (Pair&lt;Pair&lt;JCheckBox, Item&gt;, Pair&lt;Component, Component&gt;&gt; cb : cBoxesOldTab)&#xa;{&#xa;    mainPanel.add(cb.getFirst().getFirst());&#xa;    mainPanel.add(cb.getSecond().getFirst());&#xa;    mainPanel.add(cb.getSecond().getSecond());&#xa;}&#xa;for (Pair&lt;Pair&lt;JCheckBox, Item&gt;, Pair&lt;Component, Component&gt;&gt; cb : cBoxesNewTab)&#xa;{&#xa;    mainPanel.add(cb.getFirst().getFirst());&#xa;    mainPanel.add(cb.getSecond().getFirst());&#xa;    mainPanel.add(cb.getSecond().getSecond());&#xa;}"/>
           </AuxValues>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>

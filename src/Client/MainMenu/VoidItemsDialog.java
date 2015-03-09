@@ -8,6 +8,7 @@ package Client.MainMenu;
 import Client.Pair;
 import Item.Item;
 import Item.Tab;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -27,8 +30,8 @@ public class VoidItemsDialog extends javax.swing.JDialog {
     private final Tab oldTab;
     private final Tab newTab;  
     private final JButton submitButton = new JButton("Submit");
-    ArrayList<Pair<JCheckBox, Item>> cBoxesOldTab = new ArrayList<Pair<JCheckBox, Item>>();
-    ArrayList<Pair<JCheckBox, Item>> cBoxesNewTab = new ArrayList<Pair<JCheckBox, Item>>();
+    ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxesOldTab = new ArrayList<>();
+    ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxesNewTab = new ArrayList<>();
     
     /**
      * Creates new form VoidItemsDialog
@@ -56,16 +59,24 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         mainPanelScrollPane = new javax.swing.JScrollPane();
         mainPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
         mainPanelScrollPane.setViewportView(mainPanel);
-        mainPanel.setLayout(new GridLayout(oldTab.getItems().size() + newTab.getItems().size(), 1));
-        for (Pair<JCheckBox, Item> cb : cBoxesOldTab)
-        mainPanel.add(cb.getFirst());
-        for (Pair<JCheckBox, Item> cb : cBoxesNewTab)
-        mainPanel.add(cb.getFirst());
+        mainPanel.setLayout(new GridLayout(0, 3));
+        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> cb : cBoxesOldTab)
+        {
+            mainPanel.add(cb.getFirst().getFirst());
+            mainPanel.add(cb.getSecond().getFirst());
+            mainPanel.add(cb.getSecond().getSecond());
+        }
+        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> cb : cBoxesNewTab)
+        {
+            mainPanel.add(cb.getFirst().getFirst());
+            mainPanel.add(cb.getSecond().getFirst());
+            mainPanel.add(cb.getSecond().getSecond());
+        }
 
         getContentPane().add(mainPanelScrollPane);
 
@@ -77,13 +88,39 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         for (Item item : oldTab.getItems())    
         {
             JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            cBoxesOldTab.add(new Pair<>(jcb, item));   
+            Component first;
+            if (item.stockCount)
+                first = new JCheckBox("Wasted");
+            else
+                first = new JLabel("");
+            
+            Component second;
+            if (item.getQuantity() > 1)
+            {
+                second = new JTextField("");
+            }
+            else second = new JLabel("");
+            
+            cBoxesOldTab.add(new Pair(new Pair(jcb, item), new Pair(first, second)));   
         } // for
         
         for (Item item : newTab.getItems())        
         {
             JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            cBoxesNewTab.add(new Pair<>(jcb, item));   
+            Component first;
+            if (item.stockCount)
+                first = new JCheckBox("Wasted");
+            else
+                first = new JLabel("");
+            
+            Component second;
+            if (item.getQuantity() > 1)
+            {
+                second = new JTextField("");
+            }
+            else second = new JLabel("");
+            
+            cBoxesNewTab.add(new Pair(new Pair(jcb, item), new Pair(first, second))); 
         } // for
     } 
     
@@ -92,17 +129,17 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         final VoidItemsDialog thisInstance = this;
        submitButton.addActionListener(new ActionListener()
         {
-            public void removeItems(ArrayList<Pair<JCheckBox, Item>> cBoxes, Tab tab)
+            public void removeItems(ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxes, Tab tab)
             {
                 CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();  
                 temp.addAll(tab.getItems());
                 
-                for (Pair<JCheckBox, Item> jCB : cBoxes)
+                for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> jCB : cBoxes)
                 {
-                    if (jCB.getFirst().isSelected())
+                    if (jCB.getFirst().getFirst().isSelected())
                     {
                         for (Item i : temp)
-                            if (jCB.getSecond() == i)
+                            if (jCB.getFirst().getSecond() == i)
                                 temp.remove(i);
                     }
                 } // for     

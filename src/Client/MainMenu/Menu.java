@@ -475,7 +475,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 InetAddress.getByName(parentClient.serverAddress.getHostName()),
                 generateRequestID(), oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
                 out.reset();
-                out.writeObject(newEvt);
+                out.writeObject(newEvt1);
             }    
                 con.close();
         } // try // try
@@ -759,10 +759,13 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuCardPanel c : cardPanelsList )
             {
-                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, `FOOD_OR_DRINK`, `NEED_AGE_CHECK` FROM `3YP_ITEMS` " 
+                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, "
+                    + "`FOOD_OR_DRINK`, `NEED_AGE_CHECK`, `STOCK_COUNT_ON` "
+                    + "FROM `3YP_ITEMS` " 
                     + "LEFT JOIN `3YP_POS_IN_MENU` ON "
                     + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
-                    + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" + c.getName() + "\" ";
+                    + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" 
+                    + c.getName() + "\" ";
                 
                 numberOfButtonsQuery = con.prepareStatement(query);
                 numberOfButtonsQuery.executeQuery();
@@ -770,8 +773,11 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 
                 while(results.next())
                 {
-                    MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(results.getString(1), 
-                            results.getInt(2), results.getDouble(3), results.getString(4), c, this, results.getBoolean(5));
+                    MenuItemJButton newButton = MenuItemJButton.
+                        createMenuItemJButton(results.getString(1), 
+                            results.getInt(2), results.getDouble(3), 
+                            results.getString(4), c, this, 
+                            results.getBoolean(5), results.getBoolean(6));
                     c.addMenuItemButton(newButton);          
                 } // while
                 

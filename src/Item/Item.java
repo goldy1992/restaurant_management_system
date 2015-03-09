@@ -43,6 +43,7 @@ public class Item implements Serializable, Comparable, Cloneable
     private int quantity;
     private double totalPrice;    
     public final String uniqueID;
+    public final boolean stockCount;
        
     /**
      *
@@ -53,7 +54,8 @@ public class Item implements Serializable, Comparable, Cloneable
      * @param quantity
      */
     public Item(int id, String name, 
-                double price, Type type, int quantity) 
+                double price, Type type, 
+                int quantity, boolean stockCount) 
     {
         this.id = id;
         this.message = "";
@@ -63,6 +65,7 @@ public class Item implements Serializable, Comparable, Cloneable
         this.quantity = quantity;
         this.totalPrice = pricePerItem * quantity;
         this.uniqueID = id + name + type + message + quantity + Message.generateRequestID();
+        this.stockCount = stockCount;
     } // item
     
     public Item(Item i)
@@ -75,6 +78,7 @@ public class Item implements Serializable, Comparable, Cloneable
         this.quantity = i.quantity;
         this.totalPrice = i.totalPrice;
         this.uniqueID = i.uniqueID;
+        this.stockCount = i.stockCount;
     }
     
     public void setMessage(String message)
@@ -209,7 +213,7 @@ public class Item implements Serializable, Comparable, Cloneable
     }
     
     @Override
-    public Item clone() {
+    public Item clone() throws CloneNotSupportedException {
         try {
                 return (Item) super.clone();
         } catch (CloneNotSupportedException e) {
