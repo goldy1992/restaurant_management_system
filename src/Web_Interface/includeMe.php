@@ -36,7 +36,6 @@
                         <li class=\"active\"><a href=\"index.php\">Home"; 
         
         if (strpos(__FILE__, 'index.php') !== FALSE)
-        if (strcmp(__FILE__, "index.php")) 
         {
             $returnThis .= "<span class=\"sr-only\">(current)</span>";
         }
