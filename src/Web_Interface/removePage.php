@@ -1,31 +1,6 @@
 <?php
     include 'includeMe.php';
     
-    class item
-    {
-        var $name;
-        var $id;
-    }
-
-function getItemID($item_name, $con)
-{
-    $idQuery = "SELECT ID FROM 3YP_ITEMS WHERE NAME = '" . $item_name . "'"; 
-    $result = mysqli_query($con, $idQuery); 
-    $newItemID;
-    
-    if ($result->num_rows > 0) 
-    {
-        // output data of each row
-        $row = $result->fetch_assoc(); 
-        $newItemID = $row["ID"];
-        //echo "ID = " . $newItemID;
-    } // if
-    
-    else
-        printf("no results!");
-        
-    return $newItemID;
-}  
 
 function removePage($page, $con)
 {
@@ -126,10 +101,10 @@ and open the template in the editor.
                         
                         print "<tr>   
                                     <td>
-                 <input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] -> name . "\" "; 
+                 <input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
                
                         
-                        print ">  ". $array[$i] -> name ."                </td>
+                        print ">  ". $array[$i] ."                </td>
             </tr>";
                     }
                     ?>
