@@ -27,13 +27,12 @@ function getItemID($item_name, $con)
     return $newItemID;
 }  
 
-function removeItem($itemID, $con)
+function updateStock($itemID, $amount, $con)
 {
-    $idQuery = "DELETE FROM 3YP_POS_IN_MENU WHERE ID = '" . $itemID . "'";  
+    $idQuery = "UPDATE `3YP_ITEMS` SET QUANTITY = '" . $amount . "' WHERE ID = '" . $itemID . "'";  
     $result = mysqli_query($con, $idQuery); 
     
-    $idQuery = "DELETE FROM 3YP_ITEMS WHERE ID = '" . $itemID . "'";  
-    $result = mysqli_query($con, $idQuery); 
+ 
         
 }
 
@@ -78,7 +77,7 @@ function selectItems($con)
             $item = new item;
             $item -> name = $row["NAME"];
             $item -> id = $row["ID"];
-            $item -> id = $row["QUANTITY"];
+            $item -> quantity = $row["QUANTITY"];
             $array[] = $item;
         }
     } // if
@@ -95,23 +94,30 @@ function selectItems($con)
 $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
 
-
+  $validNewAmount = false;
 
 if(isset($_POST["submit_button"]))
 {
 
-    $itemsList = $_POST['items'];
+    $itemSelected = $_POST['item'];
+    $newAmount = $_POST['newAmount'];
     $message = "";
     
-
-
-    foreach($_POST['items'] as $check) 
-    {
-            $newItemID = getItemID($check, $con);
-        removeItem($newItemID, $con);
-    }
+    $validNewAmount = is_int($newAmount) && $newAmount >= 0;
     
-    $message = "Removed Successfully!";
+
+    if ($validNewAmount)
+    {
+        $id = getItemID($itemSelected);
+        updateStock($id, $newAmount, $con);
+        
+        $message = "Stock updated successfully!";
+        
+    }
+    else
+    {
+        $message = "Please check your input again!";
+    }
 } // isInserted
         
     
@@ -156,9 +162,9 @@ and open the template in the editor.
                     {
                         print " <tr>   
                 <td>
-                        <input type=\"radio\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
+                        <input type=\"radio\" name=\"item\" value=\"" . $array[$i] -> name . "\" "; 
                
-                        
+                         if ($i == 0) echo "checked";                       
                   
                         print ">  ". $array[$i] -> name ."</td>
                             <td> " . $array[$i] -> quantity . " </td>
