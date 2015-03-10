@@ -5,13 +5,13 @@ function insertItem($item_name, $price,
                     $quantity, $stock_count, 
                     $age_check, $food_or_drink, $con)
 {
-    print "called insert_item \n";
+    //print "called insert_item \n";
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
                             $item_name . "', " . $price . ", " . $quantity 
                             . ", " . $stock_count . ", " . $age_check . ", '"
                             . $food_or_drink . "')";
     
-    echo "query: " . $insert_item_query;
+    //echo "query: " . $insert_item_query;
     
     $reason = "success";
     $success = true;
@@ -50,7 +50,7 @@ function insertItemPagePosition($itemID, $itemPage, $con)
 {
     $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $itemID . ", '" . $itemPage  . "')";
         
-    echo $insert_item_query;
+    //echo $insert_item_query;
     
     $reason = "success";
     $success = true;
@@ -114,12 +114,12 @@ if(isset($_POST["submit_button"]))
     $food_or_drink;
     ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
     
-    echo "item: " . $item_name . "\n" .
+   /* echo "item: " . $item_name . "\n" .
           "price: " . $price . "\n" .
           "quantity: " . $quantity . "\n" .
           "stock_count: " . $stock_count . "\n" .
           "age_check: " . $age_check . "\n" .
-          "food or drink: " . $food_or_drink . "\n";
+          "food or drink: " . $food_or_drink . "\n";*/
     
     $validName = !empty($item_name);
     $validPrice = is_numeric($price) && ($price > 0);
@@ -207,13 +207,13 @@ and open the template in the editor.
                 <td colspan="2">Need Age Check</td>
                 <td><input type="radio" name="age_check" value=0 
                      <?php if(isset($_POST["submit_button"])) 
-                                if ($age_check == 0) echo "checked";
+                                if ($age_check == 1) echo "checked";
                     ?>> Yes<br>
                     <input type="radio" name="age_check" value=1 
                     <?php 
                           if(isset($_POST["submit_button"]))
                           { 
-                              if($age_check == 1) echo "checked";
+                              if($age_check == 0) echo "checked";
                           }
                           else echo "checked";
                     ?>> No</td>
