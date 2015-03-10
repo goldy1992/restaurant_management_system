@@ -109,7 +109,7 @@ if(isset($_POST["submit_button"]))
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
     $pagesList = $_POST['pages'];
-    $f_o_d = $_POST['f_o_d'];  
+    $f_o_d = $_POST['food_drink'];  
     
     $food_or_drink;
     ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
