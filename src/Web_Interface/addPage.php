@@ -5,7 +5,7 @@ function insertPage($page_name, $parentPage, $buttonName, $con)
 {
    
     $insert_page_query = "INSERT INTO 3YP_MENU_PAGES VALUES ('" . 
-                            $pageName. "', '" . $parentPage . "', '" . $buttonName 
+                            $page_name. "', '" . $parentPage . "', '" . $buttonName 
                             . "')";
     
     //echo "query: " . $insert_item_query;
@@ -13,7 +13,7 @@ function insertPage($page_name, $parentPage, $buttonName, $con)
     $reason = "success";
     $success = true;
     
-    if (!mysqli_query($con, $insert_item_query))
+    if (!mysqli_query($con, $insert_page_query))
     {
         $reason = "Error insert 3YP_ITEMS VALUES: " . mysqli_error($con);
         echo $reason . "\n";
