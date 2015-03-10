@@ -244,10 +244,7 @@ and open the template in the editor.
                 </td>
             </tr>
             
-            
-            <tr>
-                            <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
-            </tr>
+         
             <tr>
                 <td colspan="2">Type</td>
                 <td><input type="radio" name="food_drink" value=0 
@@ -262,6 +259,10 @@ and open the template in the editor.
                           }
                           else echo "checked";
                     ?>> Drink</td>
+            </tr>
+            
+            <tr>
+                <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
             </tr>
             
             
