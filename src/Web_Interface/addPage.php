@@ -95,15 +95,6 @@ if(isset($_POST["submit_button"]))
     if ($validName && $validButtonName)
     {
         $insertedItem = insertPage($page_name, $pPage, $bName, $con);
-
-        if ($insertedItem[0])
-        {
-            $newItemID = getItemID($item_name, $con);
-            foreach($_POST['pages'] as $check) 
-            {
-                insertItemPagePosition($newItemID, $check, $con);
-            }
-        } // isInserted
         
         $message .= "Successfully Added To Database!";
     } // if valid input
