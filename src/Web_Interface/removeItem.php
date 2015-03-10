@@ -150,19 +150,21 @@ and open the template in the editor.
             <tr>
                 <td><h2>Item Name</h2></td>
             </tr>
-            <tr>   
-                <td>
+
                     <?php
                     for ($i = 0; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
+                        
+                        print "<tr>   
+                                    <td>
+                 <input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
                
                         
-                        print ">  ". $array[$i] -> name ."<br>\n";
+                        print ">  ". $array[$i] -> name ."                </td>
+            </tr>";
                     }
                     ?>
-                </td>
-            </tr>
+
             
       
             
