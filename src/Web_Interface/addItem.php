@@ -37,7 +37,7 @@ function getItemID($item_name, $con)
         // output data of each row
         $row = $result->fetch_assoc(); 
         $newItemID = $row["ID"];
-        echo "ID = " . $newItemID;
+        //echo "ID = " . $newItemID;
     } // if
     
     else
@@ -222,7 +222,7 @@ and open the template in the editor.
                 <td colspan="2" align="top">Add to Pages</td>
                 <td>
                     <?php
-                    for ($i = 1; $i < sizeof($array); $i++) 
+                    for ($i = 0; $i < sizeof($array); $i++) 
                     {
                         print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
                         
