@@ -205,11 +205,11 @@ and open the template in the editor.
             </tr>
             <tr>
                 <td colspan="2">Need Age Check</td>
-                <td><input type="radio" name="age_check" value=0 
+                <td><input type="radio" name="age_check" value=1 
                      <?php if(isset($_POST["submit_button"])) 
                                 if ($age_check == 1) echo "checked";
                     ?>> Yes<br>
-                    <input type="radio" name="age_check" value=1 
+                    <input type="radio" name="age_check" value=0 
                     <?php 
                           if(isset($_POST["submit_button"]))
                           { 
