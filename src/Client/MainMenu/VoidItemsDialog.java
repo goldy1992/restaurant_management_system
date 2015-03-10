@@ -13,8 +13,16 @@ import java.awt.Dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -142,7 +150,7 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         } // for
         
         return returnList;
-    } 
+    }  // add check boxes
     
     public Pair<Tab, Tab> startDialog()
     {
@@ -151,10 +159,36 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         final VoidItemsDialog thisInstance = this;
         submitButton.addActionListener(new ActionListener()
         {
-            public void addToStock(Item item, int quantity)
+            public void addToStock(Item item, int quantity) 
             {
-                
-            }
+                try
+                {
+                    Connection con;
+                    //initialise the connection to the database
+                    con = DriverManager.getConnection(
+                        "jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", 
+                        "mbbx9mg3",
+                        "Fincherz+2013");
+
+                    // query: UPDATE `3YP_ITEMS` SET `QUANTITY` = `QUANTITY` - 1 WHERE ID = 27 
+                    PreparedStatement numberOfButtonsQuery = null;
+                    String query = "UPDATE `3YP_ITEMS` " 
+                        + "SET `QUANTITY` = `QUANTITY` + \"" + quantity + "\" " 
+                        + "WHERE `3YP_ITEMS`.`ID` = \"" 
+                        + item.getID() + "\"";
+
+                    System.out.println("Query: " + query);
+
+                    numberOfButtonsQuery = con.prepareStatement(query);
+                    numberOfButtonsQuery.executeUpdate();
+
+                    con.close();    
+                }
+                catch (SQLException ex) 
+                {
+                    Logger.getLogger(VoidItemsDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } // addToStock
             
             public boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>, 
                 Pair<Component, Component>>> cBoxes, Tab tab)
@@ -202,7 +236,11 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                                 {
                                     temp.remove(i); 
                                     if (i.stockCount)
-                                        addToStock(i, 1);
+                                    {
+                                        JCheckBox tf = (JCheckBox)jCB.getSecond().getFirst();
+                                        if (!tf.isSelected())
+                                            addToStock(i, 1);
+                                    } // if
                                 } // if
                                 else
                                 {
@@ -214,7 +252,11 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                                         i.setQuantity(i.getQuantity() - amount);
                          
                                     if (i.stockCount)
-                                        addToStock(i, 1);
+                                    {
+                                        JCheckBox tf1 = (JCheckBox)jCB.getSecond().getFirst();
+                                        if (!tf1.isSelected())
+                                            addToStock(i, amount);
+                                    } // if
                                 } // else
                             } // if                  
                     } // if
