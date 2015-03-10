@@ -1,5 +1,5 @@
 <?php
-
+    include 'includeMe.php';
 function insertItem($item_name, $price, 
                     $quantity, $stock_count, 
                     $age_check, $con)
@@ -163,6 +163,8 @@ and open the template in the editor.
 
     </head>
     <body>
+        
+        <?php echo displayNavBar(); ?>
 <SCRIPT> javaSays(); </SCRIPT>
         <h1>Add Item To Database</h1>
         <form method="post">

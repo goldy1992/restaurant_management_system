@@ -1,0 +1,6 @@
+8	Steak Pie			£55.60
+1	Peroni			£4.00
+2	Cheese Pie			£13.90
+2	14oz Cola			£3.00
+
+Total: £76.50
