@@ -1,13 +1,15 @@
 <?php
     include 'includeMe.php';
+    
 function insertItem($item_name, $price, 
                     $quantity, $stock_count, 
-                    $age_check, $con)
+                    $age_check, $food_or_drink, $con)
 {
     print "called insert_item \n";
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
                             $item_name . "', " . $price . ", " . $quantity 
-                            . ", " . $stock_count . ", " . $age_check . ")";
+                            . ", " . $stock_count . ", " . $age_check 
+                            . $food_or_drink . ")";
     
     echo "query: " . $insert_item_query;
     
@@ -107,12 +109,17 @@ if(isset($_POST["submit_button"]))
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
     $pagesList = $_POST['pages'];
+    $fd = $_POST['f_o_d'];  
+    
+    $food_or_drink;
+    ($fd == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
     
     echo "item: " . $item_name . "\n" .
           "price: " . $price . "\n" .
           "quantity: " . $quantity . "\n" .
           "stock_count: " . $stock_count . "\n" .
-          "age_check: " . $age_check . "\n" ;
+          "age_check: " . $age_check . "\n" .
+          "food or drink: " . $food_or_drink . "\n";
     
     $validName = !empty($item_name);
     $validPrice = is_numeric($price) && ($price > 0);
@@ -123,7 +130,7 @@ if(isset($_POST["submit_button"]))
     {
         $insertedItem = insertItem($item_name, $price, 
                     $quantity, $stock_count, 
-                    $age_check, $con);
+                    $age_check, $food_or_drink, $con);
 
         if ($insertedItem[0])
         {
@@ -161,7 +168,7 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php echo includeBootStrap(); ?>
     </head>
-    <body onload="alert('<?php echo __FILE__; ?>')">
+    <body>
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
@@ -236,10 +243,26 @@ and open the template in the editor.
                     ?>
                 </td>
             </tr>
+            
+            
             <tr>
                             <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
             </tr>
-
+            <tr>
+                <td colspan="2">Type</td>
+                <td><input type="radio" name="food_drink" value=0 
+                     <?php if(isset($_POST["submit_button"])) 
+                                if ($f_o_d == 0) echo "checked";
+                    ?>> Food<br>
+                    <input type="radio" name="food_drink" value=1 
+                    <?php 
+                          if(isset($_POST["submit_button"]))
+                          { 
+                              if($f_o_d == 1) echo "checked";
+                          }
+                          else echo "checked";
+                    ?>> Drink</td>
+            </tr>
             
             
         </table>
