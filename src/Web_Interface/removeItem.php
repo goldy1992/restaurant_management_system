@@ -1,30 +1,11 @@
 <?php
     include 'includeMe.php';
     
-function insertItem($item_name, $price, 
-                    $quantity, $stock_count, 
-                    $age_check, $food_or_drink, $con)
-{
-    //print "called insert_item \n";
-    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
-                            $item_name . "', " . $price . ", " . $quantity 
-                            . ", " . $stock_count . ", " . $age_check . ", '"
-                            . $food_or_drink . "')";
-    
-    //echo "query: " . $insert_item_query;
-    
-    $reason = "success";
-    $success = true;
-    
-    if (!mysqli_query($con, $insert_item_query))
+    class item
     {
-        $reason = "Error insert 3YP_ITEMS VALUES: " . mysqli_error($con);
-        echo $reason . "\n";
-        $success = false;
+        var $name;
+        var $id;
     }
-    
-    return array($success, $reason);
-} 
 
 function getItemID($item_name, $con)
 {
@@ -44,6 +25,16 @@ function getItemID($item_name, $con)
         printf("no fucking results!");
         
     return $newItemID;
+}  
+
+function removeItem($itemID, $con)
+{
+    $idQuery = "DELETE FROM 3YP_POS_IN_MENU WHERE ID = '" . $itemID . "'";  
+    $result = mysqli_query($con, $idQuery); 
+    
+    $idQuery = "DELETE FROM 3YP_ITEMS WHERE ID = '" . $itemID . "'";  
+    $result = mysqli_query($con, $idQuery); 
+        
 }
 
 
@@ -84,7 +75,10 @@ function selectItems($con)
         // output data of each row
         while($row = $result->fetch_assoc()) 
         {
-            $array[] = $row;
+            $item = new item;
+            $item -> name = $row["NAME"];
+            $item -> id = $row["ID"];
+            $array[] = $item;
         }
     } // if
     else
@@ -101,62 +95,27 @@ $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("
 mysqli_select_db($con, "mbbx9mg3");
 
 
-$validName = false;
-$validPrice = false;
-$validQuantity = false;
-$insertedItem = array(false, "");
-$insertedPages = array(false, "");
 
 
 
 if(isset($_POST["submit_button"]))
 {
-    $item_name = $_POST["item_name"];
-    $price = $_POST["price"];
-    $quantity = $_POST["quantity"];
-    $stock_count = $_POST["stock_count"];
-    $age_check = $_POST["age_check"];
-    $pagesList = $_POST['pages'];
-    $f_o_d = $_POST['food_drink'];  
+
+    $itemsList = $_POST['items'];
     $message = "";
     
-    $food_or_drink;
-    ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
-    
-   /* echo "item: " . $item_name . "\n" .
-          "price: " . $price . "\n" .
-          "quantity: " . $quantity . "\n" .
-          "stock_count: " . $stock_count . "\n" .
-          "age_check: " . $age_check . "\n" .
-          "food or drink: " . $food_or_drink . "\n";*/
-    
-    $validName = !empty($item_name);
-    $validPrice = is_numeric($price) && ($price > 0);
-    $validQuantity = is_numeric($quantity) && ($quantity >= 0);
-    
 
-    if ($validName && $validPrice && $validQuantity)
+
+    foreach($_POST['items'] as $check) 
     {
-        $insertedItem = insertItem($item_name, $price, 
-                    $quantity, $stock_count, 
-                    $age_check, $food_or_drink, $con);
-
-        if ($insertedItem[0])
-        {
-            $newItemID = getItemID($item_name, $con);
-            foreach($_POST['pages'] as $check) 
-            {
-                insertItemPagePosition($newItemID, $check, $con);
-            }
-        } // isInserted
-        
-        $message .= "Successfully Added To Database!";
-    } // if valid input
-    else
-        $message .= "NOT VALID\n name " . $validName . "\n price " . $validPrice .
-             "\n quantity " . $validQuantity . "\n";
+            $newItemID = getItemID($check, $con);
+        removeItem($newItemID, $con);
+    }
     
-} // if post
+    $message = "Removed Successfully!";
+} // isInserted
+        
+    
 
 
 $array = selectItems($con);
@@ -196,7 +155,7 @@ and open the template in the editor.
                     <?php
                     for ($i = 0; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
+                        print "<input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
                         
                         if(isset($_POST["submit_button"]))
                         {
@@ -210,7 +169,7 @@ and open the template in the editor.
                            
                         } // if
                         
-                        print ">". $array[$i] ."<br>\n";
+                        print ">". $array[$i] -> name ."<br>\n";
                     }
                     ?>
                 </td>
