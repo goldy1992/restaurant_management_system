@@ -75,7 +75,7 @@ function selectPages($con)
 function selectItems($con)
 {
     
-    $result = mysqli_query($con, "SELECT * FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($con));
+    $result = mysqli_query($con, "SELECT * FROM 3YP_ITEMS") or die("Error " . mysqli_error($con));
 
     $array = array();
 
@@ -185,12 +185,11 @@ and open the template in the editor.
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
-        <h1>Add Item To Database</h1>
+        <h1>Remove Item To Database</h1>
         <form method="post">
         <table>
             <tr>
                 <td>Item Name</td>
-                <td>Remove</td>
             </tr>
             <tr>   
                 <td>
