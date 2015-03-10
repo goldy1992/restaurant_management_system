@@ -148,7 +148,8 @@ and open the template in the editor.
         <form method="post">
         <table>
             <tr>
-                <td><h2>Item Name</h2></td>
+                <td><h3>Item Name</h3></td>
+                <td><h3>Stock Count</h3></td>
             </tr>
 
                     <?php

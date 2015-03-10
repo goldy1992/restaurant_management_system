@@ -70,6 +70,26 @@
         {
             $returnThis .= "<li ><a href=\"updateStock.php\">Update Stock</a></li>";
         } // else
+        
+        if (strpos($name, 'addPage.php') !== FALSE) 
+        {
+            $returnThis .= "<li class=\"active\"><a href=\"addPage.php\">Add Page<span class=\"sr-only\">(current)</span></a></li>";
+        } // if
+        else 
+        {
+            $returnThis .= "<li ><a href=\"addPage.php\">Add Page</a></li>";
+        } // else
+        
+        if (strpos($name, 'removePage.php') !== FALSE) 
+        {
+            $returnThis .= "<li class=\"active\"><a href=\"removePage.php\">Remove Page<span class=\"sr-only\">(current)</span></a></li>";
+        } // if
+        else 
+        {
+            $returnThis .= "<li ><a href=\"removePage.php\">Remove Page</a></li>";
+        } // else
+        
+
 
 
         $returnThis .= "
