@@ -13,7 +13,7 @@
         
         return $returnThis;
     }
-    function displayNavBar()
+    function displayNavBar($name)
     {
         $returnThis = "
                 
@@ -32,23 +32,29 @@
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">
-                      <ul class=\"nav navbar-nav\">
-                        <li class=\"active\"><a href=\"index.php\">Home"; 
-        
-        if (strpos(__FILE__, 'index.php') !== FALSE)
+                      <ul class=\"nav navbar-nav\">";
+
+        if (strpos($name, 'index.php') !== FALSE) 
         {
-            $returnThis .= "<span class=\"sr-only\">(current)</span>";
-        }
+            $returnThis .= "<li class=\"active\"><a href=\"index.php\">Home<span class=\"sr-only\">(current)</span></a></li>";
+        } // if
+        else 
+        {
+            $returnThis .= "<li ><a href=\"index.php\">Home</a></li>";
+        } // else
 
-        $returnThis .= "</a></li>
-                        <li><a href=\"addItem.php\">Add Item";
-        
-        if (strpos(__FILE__, 'addItem.php') !== FALSE)
-                {
-        $returnThis .= "<span class=\"sr-only\">(current)</span>";
-    }
 
-        $returnThis .= "</a></li>
+        if (strpos($name, 'addItem.php') !== FALSE) 
+        {
+            $returnThis .= "<li class=\"active\"><a href=\"addItem.php\">Add Item<span class=\"sr-only\">(current)</span></a></li>";
+        } // if
+        else 
+        {
+            $returnThis .= "<li ><a href=\"addItem.php\">Add Item</a></li>";
+        } // else       
+
+
+        $returnThis .= "
                       </ul>
 
 

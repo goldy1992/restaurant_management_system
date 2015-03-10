@@ -163,7 +163,7 @@ and open the template in the editor.
     </head>
     <body onload="alert('<?php echo __FILE__; ?>')">
         
-        <?php echo displayNavBar(); ?>
+        <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
         <h1>Add Item To Database</h1>
         <form method="post">
