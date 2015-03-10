@@ -22,7 +22,7 @@ function getItemID($item_name, $con)
     } // if
     
     else
-        printf("no fucking results!");
+        printf("no results!");
         
     return $newItemID;
 }  

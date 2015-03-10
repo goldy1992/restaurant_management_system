@@ -1,27 +1,11 @@
 <?php
     include 'includeMe.php';
     
-function insertPage($page_name, $parentPage, $buttonName, $con)
-{
-   
-    $insert_page_query = "INSERT INTO 3YP_MENU_PAGES VALUES ('" . 
-                            $page_name. "', '" . $parentPage . "', '" . $buttonName 
-                            . "')";
-    
-    //echo "query: " . $insert_item_query;
-    
-    $reason = "success";
-    $success = true;
-    
-    if (!mysqli_query($con, $insert_page_query))
+    class item
     {
-        $reason = "Error insert 3YP_ITEMS VALUES: " . mysqli_error($con);
-        echo $reason . "\n";
-        $success = false;
+        var $name;
+        var $id;
     }
-    
-    return array($success, $reason);
-} 
 
 function getItemID($item_name, $con)
 {
@@ -38,10 +22,21 @@ function getItemID($item_name, $con)
     } // if
     
     else
-        printf("no fucking results!");
+        printf("no results!");
         
     return $newItemID;
+}  
+
+function removePage($page, $con)
+{
+    $idQuery = "DELETE FROM 3YP_POS_IN_MENU WHERE ID = '" . $page . "'";  
+    $result = mysqli_query($con, $idQuery); 
+    
+    $idQuery = "DELETE FROM 3YP_MENU_PAGES WHERE NAME = '" . $page . "'";  
+    $result = mysqli_query($con, $idQuery); 
+        
 }
+
 
 
 function selectPages($con)
@@ -61,48 +56,35 @@ function selectPages($con)
     } // if
     else
     {
-        printf("no results!");
+        printf("no fucking results!");
     }
     mysqli_free_result($result);
  
     return $array;
 }
 
-
 $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
 
 
-$validName = false;
-$validButtonName = false;
-
-
-
 if(isset($_POST["submit_button"]))
 {
-    $page_name = $_POST["page_name"];
-    $pPage = $_POST['parent_page'];
-    $bName = $_POST['button_name'];
- 
+
+    $itemsList = $_POST['pages'];
     $message = "";
     
-    
-    $validName = !empty($page_name);
-    $validButtonName = !empty($bName);
 
-    
 
-    if ($validName && $validButtonName)
+    foreach($_POST['pages'] as $check) 
     {
-        $insertedItem = insertPage($page_name, $pPage, $bName, $con);
-        
-        $message .= "Successfully Added To Database!";
-    } // if valid input
-    else
-        $message .= "NOT VALID\n name " . $validName . "\n price " . $validPrice .
-             "\n quantity " . $validQuantity . "\n";
+           
+        removePage($check, $con);
+    }
     
-} // if post
+    $message = "Removed Successfully!";
+} // isInserted
+        
+    
 
 
 $array = selectPages($con);
@@ -119,7 +101,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Insert Item</title>
+        <title>Remove Item</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php echo includeBootStrap(); ?>
@@ -131,34 +113,29 @@ and open the template in the editor.
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
-        <h1>Add Item To Database</h1>
+        <h1>Remove Item From Database</h1>
         <form method="post">
         <table>
             <tr>
-                <td colspan="2">Item Name</td>
-                <td><input type="text" name="page_name" value="<?php if(isset($_POST["submit_button"])) echo $page_name; ?>"></td>
+                <td><h2>Item Name</h2></td>
             </tr>
 
-            <tr>
-                <td colspan="2" align="top">Parent Page</td>
-                <td>
                     <?php
                     for ($i = 0; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"radio\" name=\"parent_page\" value=\"" . $array[$i] . "\" "; 
                         
-                        if ($i == 0) echo "checked";
+                        print "<tr>   
+                                    <td>
+                 <input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] -> name . "\" "; 
+               
                         
-                        print ">  ". $array[$i] ."<br>\n";
+                        print ">  ". $array[$i] -> name ."                </td>
+            </tr>";
                     }
                     ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">Button Name</td>
-                <td><input type="text" name="button_name" value="<?php if(isset($_POST["submit_button"])) echo $bName; ?>"></td>
-            </tr>
+
             
+      
             
             <tr>
                 <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
