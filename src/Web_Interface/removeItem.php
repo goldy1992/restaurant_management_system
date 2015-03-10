@@ -159,7 +159,7 @@ if(isset($_POST["submit_button"]))
 } // if post
 
 
-$array = selectPages($con);
+$array = selectItems($con);
 
 mysqli_close($con);
 
