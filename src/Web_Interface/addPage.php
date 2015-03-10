@@ -1,15 +1,12 @@
 <?php
     include 'includeMe.php';
     
-function insertItem($item_name, $price, 
-                    $quantity, $stock_count, 
-                    $age_check, $food_or_drink, $con)
+function insertPage($page_name, $parentPage, $buttonName, $con)
 {
-    //print "called insert_item \n";
-    $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
-                            $item_name . "', " . $price . ", " . $quantity 
-                            . ", " . $stock_count . ", " . $age_check . ", '"
-                            . $food_or_drink . "')";
+   
+    $insert_page_query = "INSERT INTO 3YP_MENU_PAGES VALUES ('" . 
+                            $pageName. "', '" . $parentPage . "', '" . $buttonName 
+                            . "')";
     
     //echo "query: " . $insert_item_query;
     
@@ -46,23 +43,6 @@ function getItemID($item_name, $con)
     return $newItemID;
 }
 
-function insertItemPagePosition($itemID, $itemPage, $con)
-{
-    $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $itemID . ", '" . $itemPage  . "')";
-        
-    //echo $insert_item_query;
-    
-    $reason = "success";
-    $success = true;
-        
-    if(!mysqli_query($con, $insert_item_query))
-    {
-        $reason =  "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
-        $success = false;
-    }
-    
-    return array($success, $reason);
-}
 
 function selectPages($con)
 {
@@ -94,44 +74,27 @@ mysqli_select_db($con, "mbbx9mg3");
 
 
 $validName = false;
-$validPrice = false;
-$validQuantity = false;
-$insertedItem = array(false, "");
-$insertedPages = array(false, "");
+$validButtonName = false;
 
 
 
 if(isset($_POST["submit_button"]))
 {
-    $item_name = $_POST["item_name"];
-    $price = $_POST["price"];
-    $quantity = $_POST["quantity"];
-    $stock_count = $_POST["stock_count"];
-    $age_check = $_POST["age_check"];
-    $pagesList = $_POST['pages'];
-    $f_o_d = $_POST['food_drink'];  
+    $page_name = $_POST["page_name"];
+    $pPage = $_POST['parent_page'];
+    $bName = $_POST['button_name'];
+ 
     $message = "";
     
-    $food_or_drink;
-    ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
     
-   /* echo "item: " . $item_name . "\n" .
-          "price: " . $price . "\n" .
-          "quantity: " . $quantity . "\n" .
-          "stock_count: " . $stock_count . "\n" .
-          "age_check: " . $age_check . "\n" .
-          "food or drink: " . $food_or_drink . "\n";*/
-    
-    $validName = !empty($item_name);
-    $validPrice = is_numeric($price) && ($price > 0);
-    $validQuantity = is_numeric($quantity) && ($quantity >= 0);
+    $validName = !empty($page_name);
+    $validButtonName = !empty($bName);
+
     
 
-    if ($validName && $validPrice && $validQuantity)
+    if ($validName && $validButtonName)
     {
-        $insertedItem = insertItem($item_name, $price, 
-                    $quantity, $stock_count, 
-                    $age_check, $food_or_drink, $con);
+        $insertedItem = insertPage($page_name, $pPage, $bName, $con);
 
         if ($insertedItem[0])
         {
@@ -182,7 +145,7 @@ and open the template in the editor.
         <table>
             <tr>
                 <td colspan="2">Item Name</td>
-                <td><input type="text" name="item_name" value="<?php if(isset($_POST["submit_button"])) echo $item_name; ?>"></td>
+                <td><input type="text" name="page_name" value="<?php if(isset($_POST["submit_button"])) echo $item_name; ?>"></td>
             </tr>
 
             <tr>
@@ -191,7 +154,7 @@ and open the template in the editor.
                     <?php
                     for ($i = 0; $i < sizeof($array); $i++) 
                     {
-                        print "<input type=\"radio\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
+                        print "<input type=\"radio\" name=\"parent_page\" value=\"" . $array[$i] . "\" "; 
                         
                         if ($i == 0) echo "checked";
                         
@@ -199,6 +162,10 @@ and open the template in the editor.
                     }
                     ?>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="2">Button Name</td>
+                <td><input type="text" name="button_name" value="<?php if(isset($_POST["submit_button"])) echo $item_name; ?>"></td>
             </tr>
             
             
