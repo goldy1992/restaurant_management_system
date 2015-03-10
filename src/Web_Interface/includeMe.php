@@ -35,6 +35,7 @@
                       <ul class=\"nav navbar-nav\">
                         <li class=\"active\"><a href=\"index.php\">Home"; 
         
+        if (strpos(__FILE__, 'index.php') !== FALSE)
         if (strcmp(__FILE__, "index.php")) 
         {
             $returnThis .= "<span class=\"sr-only\">(current)</span>";
@@ -43,7 +44,7 @@
         $returnThis .= "</a></li>
                         <li><a href=\"addItem.php\">Add Item";
         
-        if(strcmp(__FILE__, "addItem.php")) 
+        if (strpos(__FILE__, 'addItem.php') !== FALSE)
                 {
         $returnThis .= "<span class=\"sr-only\">(current)</span>";
     }
