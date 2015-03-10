@@ -108,7 +108,7 @@ if(isset($_POST["submit_button"]))
 
     if ($validNewAmount)
     {
-        $id = getItemID($itemSelected);
+        $id = getItemID($itemSelected, $con);
         updateStock($id, $newAmount, $con);
         
         $message = "Stock updated successfully!";
