@@ -110,6 +110,7 @@ if(isset($_POST["submit_button"]))
     $age_check = $_POST["age_check"];
     $pagesList = $_POST['pages'];
     $f_o_d = $_POST['food_drink'];  
+    $message = "";
     
     $food_or_drink;
     ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
@@ -140,10 +141,11 @@ if(isset($_POST["submit_button"]))
                 insertItemPagePosition($newItemID, $check, $con);
             }
         } // isInserted
-    
+        
+        $message .= "Successfully Added To Database!";
     } // if valid input
     else
-        print "NOT VALID\n name " . $validName . "\n price " . $validPrice .
+        $message .= "NOT VALID\n name " . $validName . "\n price " . $validPrice .
              "\n quantity " . $validQuantity . "\n";
     
 } // if post
@@ -168,7 +170,10 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php echo includeBootStrap(); ?>
     </head>
-    <body>
+    <body <?php    if (isset($_POST["submit_button"])) {
+        echo "onclick=\"alert('" . $message . "')\"";
+    }
+    ?> >
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
