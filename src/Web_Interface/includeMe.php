@@ -27,7 +27,7 @@
                         <span class=\"icon-bar\"></span>
                         <span class=\"icon-bar\"></span>
                       </button>
-                      <a class=\"navbar-brand\" href=\"#\">Restaurant Web Interface</a>
+                      <a class=\"navbar-brand\" href=\"index.php\">Restaurant Web Interface</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -43,7 +43,8 @@
         $returnThis .= "</a></li>
                         <li><a href=\"addItem.php\">Add Item";
         
-        if(strcmp(__FILE__, "addItem.php")) {
+        if(strcmp(__FILE__, "addItem.php")) 
+                {
         $returnThis .= "<span class=\"sr-only\">(current)</span>";
     }
 
