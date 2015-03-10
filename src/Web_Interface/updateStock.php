@@ -132,7 +132,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Remove Item</title>
+        <title>Update Stock</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php echo includeBootStrap(); ?>
@@ -144,7 +144,7 @@ and open the template in the editor.
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
-        <h1>Remove Item From Database</h1>
+        <h1>Item List</h1>
         <form method="post">
         <table>
             <tr>
@@ -158,7 +158,9 @@ and open the template in the editor.
                         print "<input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
                
                         
-                        print ">  ". $array[$i] -> name ."<br>\n";
+                  
+                        print ">  ". $array[$i] -> name ."</td>
+                            <td> <input type=\"text\" name=\"stock[]\" ><br>\n";
                     }
                     ?>
                 </td>
