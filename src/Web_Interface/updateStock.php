@@ -103,7 +103,7 @@ if(isset($_POST["submit_button"]))
     $newAmount = $_POST['newAmount'];
     $message = "";
     
-    $validNewAmount = is_int($newAmount) && $newAmount >= 0;
+    $validNewAmount = is_numeric($newAmount) && $newAmount >= 0;
     
 
     if ($validNewAmount)
