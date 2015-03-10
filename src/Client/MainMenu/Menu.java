@@ -430,6 +430,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     {  
         System.out.println("called send order");
         this.oldTab.mergeTabs(newTab);
+
         try 
         {
             TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
@@ -485,6 +486,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         }
         // catch
          // catch
+        
+        this.newTab = new Tab(oldTab.getTable());
     
     } // sendOrder
     

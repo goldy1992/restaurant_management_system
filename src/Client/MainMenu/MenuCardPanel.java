@@ -10,15 +10,22 @@ import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
 import static Message.Message.generateRequestID;
 import Message.Table;
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -259,6 +266,59 @@ public class MenuCardPanel extends JPanel
             JButton cashPay = new JButton("Cash Pay");
             cashPay.addActionListener(new ActionListener() 
             {        
+                
+                public void updateTakings(double amount)
+                {
+                    try
+                    {
+                        Connection con;
+                        //initialise the connection to the database
+                        con = DriverManager.getConnection(
+                            "jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", 
+                            "mbbx9mg3",
+                            "Fincherz+2013");
+
+                        DateFormat df= new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        String fechaDeHoy = df.format(date);
+                        System.out.println("date: " + fechaDeHoy);
+                        // query: UPDATE `3YP_ITEMS` SET `QUANTITY` = `QUANTITY` - 1 WHERE ID = 27 
+                        PreparedStatement numberOfButtonsQuery = null;
+                        
+                        String query = "SELECT * FROM `3YP_TAKINGS` "
+                            + "WHERE `3YP_TAKINGS`.`DATE` = \"" 
+                            + fechaDeHoy + "\"";
+
+                        numberOfButtonsQuery = con.prepareStatement(query);
+                        numberOfButtonsQuery.executeQuery();
+                        ResultSet results = numberOfButtonsQuery.getResultSet();
+
+                        boolean gotResult = false;
+
+                        while(results.next())                 
+                            gotResult = true;
+                        
+                        if (!gotResult)
+                        {
+                            query = "INSERT INTO `3YP_TAKINGS` "
+                            + "VALUES (\"" + fechaDeHoy + "\", \"0\")"; 
+                            numberOfButtonsQuery = con.prepareStatement(query);
+                            numberOfButtonsQuery.executeUpdate();
+                        } // if
+                        
+                        // update amount
+                        query = "UPDATE `3YP_TAKINGS` "
+                        + "SET `AMOUNT` = `AMOUNT` + \"" + amount + "\"" 
+                        + "WHERE `3YP_TAKINGS`.`DATE` = \"" 
+                        + fechaDeHoy + "\"";
+                        numberOfButtonsQuery = con.prepareStatement(query);
+                        numberOfButtonsQuery.executeUpdate();                        
+                        con.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }                
+                }
+                
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
@@ -285,6 +345,8 @@ public class MenuCardPanel extends JPanel
                             boolean x = menu.oldTab.removeAll();
                             menu.newTab.removeAll();
                             System.out.println("got here in cash off: " + x);      
+                            
+                            updateTakings(menu.getTotalDouble());
 
                             if (menu.tabLoaded)
                             {
