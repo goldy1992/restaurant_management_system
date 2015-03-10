@@ -35,18 +35,19 @@
                       <ul class=\"nav navbar-nav\">
                         <li class=\"active\"><a href=\"index.php\">Home"; 
         
-        if (strcmp(__FILE__, "index.php")) {
-        $returnThis += "<span class=\"sr-only\">(current)</span>";
-    }
+        if (strcmp(__FILE__, "index.php")) 
+        {
+            $returnThis .= "<span class=\"sr-only\">(current)</span>";
+        }
 
-    $returnThis += "</a></li>
+        $returnThis .= "</a></li>
                         <li><a href=\"addItem.php\">Add Item";
         
-    if(strcmp(__FILE__, "addItem.php")) {
-        $returnThis += "<span class=\"sr-only\">(current)</span>";
+        if(strcmp(__FILE__, "addItem.php")) {
+        $returnThis .= "<span class=\"sr-only\">(current)</span>";
     }
 
-    $returnThis += "</a></li>
+        $returnThis .= "</a></li>
                       </ul>
 
 
