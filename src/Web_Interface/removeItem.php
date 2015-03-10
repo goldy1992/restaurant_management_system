@@ -156,20 +156,9 @@ and open the template in the editor.
                     for ($i = 0; $i < sizeof($array); $i++) 
                     {
                         print "<input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
+               
                         
-                        if(isset($_POST["submit_button"]))
-                        {
-                            $match = false;
-                            for ($t = 0; $t < count($itemsList); $t++)
-                                if (strcmp($pagesList[$t], $array[$i]["NAME"]) == 0)
-                                        $match = true;
-                            
-                            if ($match == true)
-                                echo "checked";
-                           
-                        } // if
-                        
-                        print ">". $array[$i] -> name ."<br>\n";
+                        print ">  ". $array[$i] -> name ."<br>\n";
                     }
                     ?>
                 </td>

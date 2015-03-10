@@ -243,7 +243,7 @@ and open the template in the editor.
                            
                         } // if
                         
-                        print ">". $array[$i] ."<br>\n";
+                        print ">  ". $array[$i] ."<br>\n";
                     }
                     ?>
                 </td>
