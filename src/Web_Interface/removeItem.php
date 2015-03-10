@@ -160,7 +160,7 @@ and open the template in the editor.
                         if(isset($_POST["submit_button"]))
                         {
                             $match = false;
-                            for ($t = 0; $t < count($pagesList); $t++)
+                            for ($t = 0; $t < count($itemsList); $t++)
                                 if (strcmp($pagesList[$t], $array[$i]["NAME"]) == 0)
                                         $match = true;
                             
