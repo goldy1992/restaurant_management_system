@@ -92,7 +92,7 @@ and open the template in the editor.
         <form method="post">
         <table>
             <tr>
-                <td><h2>Item Name</h2></td>
+                <td><h3>Page Name</h3></td>
             </tr>
 
                     <?php

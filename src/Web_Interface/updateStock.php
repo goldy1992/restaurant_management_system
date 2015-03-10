@@ -5,6 +5,7 @@
     {
         var $name;
         var $id;
+        var $quantity;
     }
 
 function getItemID($item_name, $con)
@@ -18,11 +19,10 @@ function getItemID($item_name, $con)
         // output data of each row
         $row = $result->fetch_assoc(); 
         $newItemID = $row["ID"];
-        //echo "ID = " . $newItemID;
     } // if
     
     else
-        printf("no fucking results!");
+        printf("no results!");
         
     return $newItemID;
 }  
@@ -78,6 +78,7 @@ function selectItems($con)
             $item = new item;
             $item -> name = $row["NAME"];
             $item -> id = $row["ID"];
+            $item -> id = $row["QUANTITY"];
             $array[] = $item;
         }
     } // if
@@ -93,8 +94,6 @@ function selectItems($con)
 
 $con = mysqli_connect("dbhost.cs.man.ac.uk","mbbx9mg3","Fincherz+2013") or die("Error " . mysqli_error($link));
 mysqli_select_db($con, "mbbx9mg3");
-
-
 
 
 
@@ -149,7 +148,7 @@ and open the template in the editor.
         <table>
             <tr>
                 <td><h3>Item Name</h3></td>
-                <td><h3>Stock Count</h3></td>
+                <td><h3>Current Stock Count</h3></td>
             </tr>
 
                     <?php
@@ -157,19 +156,20 @@ and open the template in the editor.
                     {
                         print " <tr>   
                 <td>
-                        <input type=\"checkbox\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
+                        <input type=\"radio\" name=\"items[]\" value=\"" . $array[$i] -> name . "\" "; 
                
                         
                   
                         print ">  ". $array[$i] -> name ."</td>
-                            <td> <input type=\"text\" name=\"stock[]\" >               </td>
+                            <td> " . $array[$i] -> quantity . " </td>
             </tr>";
                     }
-                    ?>
- 
+                    ?>    
             
-      
-            
+            <tr> 
+                <td>New Count</td>
+                <td><input type="text" name="newAmount" value="" ></td>
+            </tr>
             <tr>
                 <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
             </tr>
