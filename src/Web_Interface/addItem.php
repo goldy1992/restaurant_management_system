@@ -81,7 +81,7 @@ function selectPages($con)
     } // if
     else
     {
-        printf("no fucking results!");
+        printf("no results!");
     }
     mysqli_free_result($result);
  
@@ -171,7 +171,7 @@ and open the template in the editor.
         <?php echo includeBootStrap(); ?>
     </head>
     <body <?php    if (isset($_POST["submit_button"])) {
-        echo "onclick=\"alert('" . $message . "')\"";
+        echo "onload=\"alert('" . $message . "')\"";
     }
     ?> >
         

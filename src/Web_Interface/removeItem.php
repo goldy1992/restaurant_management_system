@@ -1,15 +1,17 @@
 <?php
     include 'includeMe.php';
+    
 function insertItem($item_name, $price, 
                     $quantity, $stock_count, 
-                    $age_check, $con)
+                    $age_check, $food_or_drink, $con)
 {
-    print "called insert_item \n";
+    //print "called insert_item \n";
     $insert_item_query = "INSERT INTO 3YP_ITEMS VALUES (NULL, '" . 
                             $item_name . "', " . $price . ", " . $quantity 
-                            . ", " . $stock_count . ", " . $age_check . ")";
+                            . ", " . $stock_count . ", " . $age_check . ", '"
+                            . $food_or_drink . "')";
     
-    echo "query: " . $insert_item_query;
+    //echo "query: " . $insert_item_query;
     
     $reason = "success";
     $success = true;
@@ -35,7 +37,7 @@ function getItemID($item_name, $con)
         // output data of each row
         $row = $result->fetch_assoc(); 
         $newItemID = $row["ID"];
-        echo "ID = " . $newItemID;
+        //echo "ID = " . $newItemID;
     } // if
     
     else
@@ -44,23 +46,7 @@ function getItemID($item_name, $con)
     return $newItemID;
 }
 
-function insertItemPagePosition($itemID, $itemPage, $con)
-{
-    $insert_item_query = "INSERT INTO 3YP_POS_IN_MENU VALUES (" . $itemID . ", '" . $itemPage  . "')";
-        
-    echo $insert_item_query;
-    
-    $reason = "success";
-    $success = true;
-        
-    if(!mysqli_query($con, $insert_item_query))
-    {
-        $reason =  "Error insert 3YP_POS_IN_MENU VALUES" . mysqli_error($con);
-        $success = false;
-    }
-    
-    return array($success, $reason);
-}
+
 
 function selectPages($con)
 {
@@ -80,6 +66,30 @@ function selectPages($con)
     else
     {
         printf("no fucking results!");
+    }
+    mysqli_free_result($result);
+ 
+    return $array;
+}
+
+function selectItems($con)
+{
+    
+    $result = mysqli_query($con, "SELECT * FROM 3YP_MENU_PAGES") or die("Error " . mysqli_error($con));
+
+    $array = array();
+
+    if ($result->num_rows > 0) 
+    {
+        // output data of each row
+        while($row = $result->fetch_assoc()) 
+        {
+            $array[] = $row;
+        }
+    } // if
+    else
+    {
+        printf("no results!");
     }
     mysqli_free_result($result);
  
@@ -107,12 +117,18 @@ if(isset($_POST["submit_button"]))
     $stock_count = $_POST["stock_count"];
     $age_check = $_POST["age_check"];
     $pagesList = $_POST['pages'];
+    $f_o_d = $_POST['food_drink'];  
+    $message = "";
     
-    echo "item: " . $item_name . "\n" .
+    $food_or_drink;
+    ($f_o_d == 0) ? $food_or_drink = "FOOD" : $food_or_drink = "DRINK";
+    
+   /* echo "item: " . $item_name . "\n" .
           "price: " . $price . "\n" .
           "quantity: " . $quantity . "\n" .
           "stock_count: " . $stock_count . "\n" .
-          "age_check: " . $age_check . "\n" ;
+          "age_check: " . $age_check . "\n" .
+          "food or drink: " . $food_or_drink . "\n";*/
     
     $validName = !empty($item_name);
     $validPrice = is_numeric($price) && ($price > 0);
@@ -123,7 +139,7 @@ if(isset($_POST["submit_button"]))
     {
         $insertedItem = insertItem($item_name, $price, 
                     $quantity, $stock_count, 
-                    $age_check, $con);
+                    $age_check, $food_or_drink, $con);
 
         if ($insertedItem[0])
         {
@@ -133,10 +149,11 @@ if(isset($_POST["submit_button"]))
                 insertItemPagePosition($newItemID, $check, $con);
             }
         } // isInserted
-    
+        
+        $message .= "Successfully Added To Database!";
     } // if valid input
     else
-        print "NOT VALID\n name " . $validName . "\n price " . $validPrice .
+        $message .= "NOT VALID\n name " . $validName . "\n price " . $validPrice .
              "\n quantity " . $validQuantity . "\n";
     
 } // if post
@@ -156,27 +173,55 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Remove Item</title>
+        <title>Insert Item</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php echo includeBootStrap(); ?>
     </head>
-    <body>
+    <body <?php    if (isset($_POST["submit_button"])) {
+        echo "onload=\"alert('" . $message . "')\"";
+    }
+    ?> >
         
         <?php echo displayNavBar(__FILE__); ?>
 <SCRIPT> javaSays(); </SCRIPT>
-        <h1>Remove Item From Database</h1>
+        <h1>Add Item To Database</h1>
         <form method="post">
         <table>
             <tr>
-                <td colspan="2">Item Name</td>
-                <td><input type="text" name="item_name" value="<?php if(isset($_POST["submit_button"])) echo $item_name; ?>"></td>
+                <td>Item Name</td>
+                <td>Remove</td>
+            </tr>
+            <tr>   
+                <td>
+                    <?php
+                    for ($i = 0; $i < sizeof($array); $i++) 
+                    {
+                        print "<input type=\"checkbox\" name=\"pages[]\" value=\"" . $array[$i] . "\" "; 
+                        
+                        if(isset($_POST["submit_button"]))
+                        {
+                            $match = false;
+                            for ($t = 0; $t < count($pagesList); $t++)
+                                if (strcmp($pagesList[$t], $array[$i]["NAME"]) == 0)
+                                        $match = true;
+                            
+                            if ($match == true)
+                                echo "checked";
+                           
+                        } // if
+                        
+                        print ">". $array[$i] ."<br>\n";
+                    }
+                    ?>
+                </td>
             </tr>
             
+      
+            
             <tr>
-                 <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
+                <td colspan="2"><input type="submit" value="Submit" name="submit_button"></td>
             </tr>
-
             
             
         </table>

@@ -51,7 +51,16 @@
         else 
         {
             $returnThis .= "<li ><a href=\"addItem.php\">Add Item</a></li>";
-        } // else       
+        } // else   
+        
+        if (strpos($name, 'removeItem.php') !== FALSE) 
+        {
+            $returnThis .= "<li class=\"active\"><a href=\"removeItem.php\">Remove Item<span class=\"sr-only\">(current)</span></a></li>";
+        } // if
+        else 
+        {
+            $returnThis .= "<li ><a href=\"removeItem.php\">Remove Item</a></li>";
+        } // else
 
 
         $returnThis .= "
