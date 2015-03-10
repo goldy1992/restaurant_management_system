@@ -116,7 +116,7 @@ if(isset($_POST["submit_button"]))
     }
     else
     {
-        $message = "Please check your input again!";
+        $message = "Please check your input again!\n  is int: " . is_int($newAmount) . ", >= 0 : " . ($newAmount >= 0);
     }
 } // isInserted
         
