@@ -1,10 +1,4 @@
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Server;
 
 import Message.Table;
@@ -13,31 +7,32 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
  * @author Goldy
  */
 
-public class MyServer
+public class MyServer implements Runnable
 {
-    // the lower bound of the port range
-    private static final int PORT_NUMBER = 11000;
-    private static final int NUM_OF_TABLES = 44;
-    private static final Object LOCK = new Object();  
-    private static ArrayList<ClientCommunicationThread> waiterClient;
-    private static ArrayList<ClientCommunicationThread> tillClient;
-    private static ClientCommunicationThread barClient = null;
-    private static ClientCommunicationThread kitchenClient = null;
-    private static Table[] tables;
+    public static MyServer server;
     
-    /**
-     *
-     * @param args
-     */
-    public static void main(String[] args)
+    // the lower bound of the port range
+    private final ServerSocket socket;
+    private final int PORT_NUMBER = 11000;
+    private final int NUM_OF_TABLES = 44;
+    private final Object LOCK = new Object();  
+    private final ArrayList<ClientCommunicationThread> waiterClient;
+    private final ArrayList<ClientCommunicationThread> tillClient;
+    private ClientCommunicationThread barClient = null;
+    private ClientCommunicationThread kitchenClient = null;
+    private final Table[] tables;
+    public Thread listenThread;
+    public boolean socketListening;
+    
+    public MyServer() throws IOException
     {
-
         waiterClient = new ArrayList<>();
         tillClient = new ArrayList<>();
         tables = new Table[NUM_OF_TABLES + 1];
@@ -45,34 +40,37 @@ public class MyServer
         // creates a thread for each table
         for (int i = 1; i <= NUM_OF_TABLES; i++)
             tables[i] = Table.createTable(i);
-            //new Thread(tables[i]).start();
         
-        ServerSocket mySocket;
-        boolean socketListening;
-        
+        socket = new ServerSocket(PORT_NUMBER);
+    }
+    
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args)
+    { 
         try
         {
-            //debugGUI.addText("got here");
-            mySocket = new ServerSocket(PORT_NUMBER);
-              //  debugGUI.addText("socket listening");
-            socketListening = true;
-            //debugGUI.addText("Currently listening on port " + PORT_NUMBER);
-            
-            long clientNumber = 0;
-            
-            while (socketListening)
-            {
-                Socket acceptSocket = mySocket.accept();
-                ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber);
-                newThread.getThread().start();
+           server = new MyServer();        
+           server.start();
+           
+           boolean exit = false;
+           while(!exit)
+           {
+                Scanner sc = new Scanner(System.in);
+    
+                while (sc.hasNextLine())
+                {
+                    String s = sc.nextLine();
+                    if (s.equals("exit"))
+                        exit = true;
+                }
+           }
+           server.end();
 
-                //debugGUI.addText("accept client number " + clientNumber);
-                clientNumber++;
-            } // while
-   
-            mySocket.close();
             
-        } // try // try // try // try
+        } // try // try // try // try // try // try // try // try
         catch (BindException e)
         {
             e.printStackTrace();
@@ -89,7 +87,7 @@ public class MyServer
      * @param number
      * @return
      */
-    public static Table getTable(int number)
+    public Table getTable(int number)
     {
         if (number < 1 || number > NUM_OF_TABLES)
             return null;
@@ -100,7 +98,7 @@ public class MyServer
      *
      * @return
      */
-    public static int getNumOfTables()
+    public int getNumOfTables()
     {
         return NUM_OF_TABLES;
     }
@@ -109,7 +107,7 @@ public class MyServer
      *
      * @return
      */
-    public static int getLowBoundPortRange()
+    public int getLowBoundPortRange()
     {
         return PORT_NUMBER;
     }
@@ -118,7 +116,7 @@ public class MyServer
      *
      * @return
      */
-    public static ArrayList<ClientCommunicationThread> getWaiterClients()
+    public ArrayList<ClientCommunicationThread> getWaiterClients()
     {
         synchronized(LOCK)
         {
@@ -130,7 +128,7 @@ public class MyServer
      *
      * @return
      */
-    public static ArrayList<ClientCommunicationThread> getTillClients()
+    public ArrayList<ClientCommunicationThread> getTillClients()
     {
         synchronized(LOCK)
         {
@@ -138,7 +136,7 @@ public class MyServer
         } // sync
     }
     
-    public static boolean addWaiterClient(ClientCommunicationThread client)
+    public boolean addWaiterClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
         {
@@ -159,7 +157,7 @@ public class MyServer
      *
      * @param client
      */
-    public static void removeWaiterClient(ClientCommunicationThread client)
+    public void removeWaiterClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
         {
@@ -175,32 +173,32 @@ public class MyServer
      *
      * @return
      */
-    public static Table[] getTables()
+    public Table[] getTables()
     {
         return tables;
     }
     
-    public static ClientCommunicationThread getBarClient()
+    public ClientCommunicationThread getBarClient()
     {
         return barClient;
     }
     
-    public static void setBarClient(ClientCommunicationThread client)
+    public void setBarClient(ClientCommunicationThread client)
     {
         barClient = client;
     }
     
-    public static ClientCommunicationThread getKitchenClient()
+    public ClientCommunicationThread getKitchenClient()
     {
         return kitchenClient;
     }
     
-    public static void setKitchenClient(ClientCommunicationThread client)
+    public void setKitchenClient(ClientCommunicationThread client)
     {
         kitchenClient = client;
     }
     
-    public static boolean addTillClient(ClientCommunicationThread client)
+    public boolean addTillClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
         {
@@ -221,7 +219,7 @@ public class MyServer
      *
      * @param client
      */
-    public static void removeTillClient(ClientCommunicationThread client)
+    public void removeTillClient(ClientCommunicationThread client)
     {
         synchronized(LOCK)
         {
@@ -231,5 +229,53 @@ public class MyServer
             
             //debugGUI.addText("client removed");
         } // synchronized
+    }
+
+    @Override
+    public void run() 
+    {
+        try
+        {
+            socketListening = true;
+            //debugGUI.addText("Currently listening on port " + PORT_NUMBER);
+
+            long clientNumber = 0;
+
+            while (socketListening)
+            {
+                Socket acceptSocket = server.socket.accept();
+                ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber, this);
+                newThread.getThread().start();
+
+                //debugGUI.addText("accept client number " + clientNumber);
+                clientNumber++;
+            } // while  
+        } // try
+        catch (BindException e)
+        {
+            e.printStackTrace();
+        } // catch 
+        catch (IOException e)
+        {
+            System.out.println(e);
+        } // catch
+    }
+    
+    public void start()
+    {
+        this.listenThread.start();
+    }
+    
+    public void end() throws IOException
+    {
+        socketListening = false;
+        socket.close();
+    }
+    public static MyServer makeServer() throws IOException
+    {
+        MyServer server = new MyServer();  
+        server.listenThread = new Thread(server);
+        
+        return server;
     }
 } // MySocket class

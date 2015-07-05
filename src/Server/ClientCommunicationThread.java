@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  */
 public class ClientCommunicationThread implements Runnable
 {
+    private final MyServer parent;
     private final Socket socket;
     private final Thread thread;
     public long id;
@@ -41,10 +42,11 @@ public class ClientCommunicationThread implements Runnable
      * @param id
      * @throws java.net.SocketException
      */
-    public ClientCommunicationThread(Socket socket, long id) throws SocketException
+    public ClientCommunicationThread(Socket socket, long id, MyServer parent) throws SocketException
     {
         this.socket = socket;
         this.id = id;
+        this.parent = parent;
         this.isRunning = true;
         this.thread = new Thread(this);
         //gui = new OutputGUI();
@@ -138,15 +140,15 @@ public class ClientCommunicationThread implements Runnable
         {
             response.getTableStatuses()
                     .add(null);
-            for (int i = 1; i <= MyServer.getNumOfTables(); i++)
+            for (int i = 1; i <= parent.getNumOfTables(); i++)
                 response.getTableStatuses()
-                    .add(MyServer.getTable(i).getTableStatus());            
+                    .add(parent.getTable(i).getTableStatus());            
         }
         else
         {
             for (int i = 0; i < x.getTableList().size(); i++)
                 response.getTableStatuses()
-                    .add(MyServer
+                    .add(parent
                             .getTable(x.getTableList().get(i))
                                 .getTableStatus());
         }
@@ -166,8 +168,8 @@ public class ClientCommunicationThread implements Runnable
       
         switch(response.getClientType())
         {
-            case BAR: response.setPermission(MyServer.getBarClient() == null); System.out.println("dealing with bar req"); break;
-            case KITCHEN: response.setPermission(MyServer.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
+            case BAR: response.setPermission(parent.getBarClient() == null); System.out.println("dealing with bar req"); break;
+            case KITCHEN: response.setPermission(parent.getKitchenClient() == null); System.out.println("dealing with kitchen req"); break;
             case WAITER: response.setPermission(true);
             case TILL: response.setPermission(true);
             default: break;
@@ -176,10 +178,10 @@ public class ClientCommunicationThread implements Runnable
         if (response.hasPermission())
             switch (response.getClientType())
             {
-                case BAR: MyServer.setBarClient(this); break;
-                case KITCHEN: MyServer.setKitchenClient(this);  break;
-                case WAITER: MyServer.addWaiterClient(this);  break;
-                case TILL: MyServer.addTillClient(this);  break;
+                case BAR: parent.setBarClient(this); break;
+                case KITCHEN: parent.setKitchenClient(this);  break;
+                case WAITER: parent.addWaiterClient(this);  break;
+                case TILL: parent.addTillClient(this);  break;
                 default: break;
             } // switch
       
@@ -191,14 +193,14 @@ public class ClientCommunicationThread implements Runnable
         TabResponse response = new TabResponse((TabRequest)request);
         TabRequest tabRequest = (TabRequest)response.getRequest();
         int number  = tabRequest.getTabNumber(); 
-        response.setTab(MyServer.getTable(number).getCurrentTab());
+        response.setTab(parent.getTable(number).getCurrentTab());
         return response;
     }
     
     private LeaveResponse parseLeaveRequest(Request request)
     {
         LeaveResponse response = new LeaveResponse((LeaveRequest)request); 
-        MyServer.removeWaiterClient(this);
+        parent.removeWaiterClient(this);
         response.setPermission(true);
         isRunning = false;
         return response;
@@ -233,17 +235,17 @@ public class ClientCommunicationThread implements Runnable
         Table.TableStatus status = event.getTableStatus();
                           
         //gui.addText("requested table " + tableNumber);
-        MyServer.getTable(tableNumber).setTableStatus(status);
+        parent.getTable(tableNumber).setTableStatus(status);
                             
-        //gui.addText("new table status " + MyServer.getTable(tableNumber).getTableStatus());
+        //gui.addText("new table status " + parent.getTable(tableNumber).getTableStatus());
                                                        
-        //gui.addText("number of clients to send to: " + MyServer.getWaiterClients().size());
+        //gui.addText("number of clients to send to: " + parent.getWaiterClients().size());
 
-        for(int i =0; i < MyServer.getWaiterClients().size(); i++)
+        for(int i =0; i < parent.getWaiterClients().size(); i++)
         {
-            ObjectOutputStream otherClientOut = MyServer.getWaiterClients().get(i).getOutStream();
+            ObjectOutputStream otherClientOut = parent.getWaiterClients().get(i).getOutStream();
             TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    MyServer.getWaiterClients().get(i).getSocket().getInetAddress(),
+                    parent.getWaiterClients().get(i).getSocket().getInetAddress(),
                     event.getMessageID(),
                     tableNumber,
                     status);
@@ -252,11 +254,11 @@ public class ClientCommunicationThread implements Runnable
             otherClientOut.writeObject(msgToSend);
         } // for    
         
-        for(int i =0; i < MyServer.getTillClients().size(); i++)
+        for(int i =0; i < parent.getTillClients().size(); i++)
         {
-            ObjectOutputStream otherClientOut = MyServer.getTillClients().get(i).getOutStream();
+            ObjectOutputStream otherClientOut = parent.getTillClients().get(i).getOutStream();
             TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    MyServer.getTillClients().get(i).getSocket().getInetAddress(),
+                    parent.getTillClients().get(i).getSocket().getInetAddress(),
                     event.getMessageID(),
                     tableNumber,
                     status);
@@ -271,50 +273,50 @@ public class ClientCommunicationThread implements Runnable
         TabUpdateNfn event = (TabUpdateNfn)message;
         int tableNumber = event.getTab().getTable().getTableNumber();
         
-        if (tableNumber >= 1 && tableNumber <= MyServer.getNumOfTables())
-        MyServer.getTable(tableNumber).updateTab(event.getTab());
+        if (tableNumber >= 1 && tableNumber <= parent.getNumOfTables())
+        parent.getTable(tableNumber).updateTab(event.getTab());
         //gui.addText("Tab updated");          
     }
     
     private void parseNewItemNfn(EventNotification message) throws IOException
     {
-            //gui.addText("id: " + id + ", bar port: " + MyServer.getBarClient().getSocket().getPort());
-            //gui.addText("id: " + id + ", kitchen port: " + MyServer.getKitchenClient().getSocket().getPort());
+            //gui.addText("id: " + id + ", bar port: " + parent.getBarClient().getSocket().getPort());
+            //gui.addText("id: " + id + ", kitchen port: " + parent.getKitchenClient().getSocket().getPort());
             NewItemNfn event = (NewItemNfn)message;
             //gui.addText("id: " + id + ", new notifaction for " + event.getType());
             
-            if (event.getType() == Item.Type.DRINK && MyServer.getBarClient() != null)
+            if (event.getType() == Item.Type.DRINK && parent.getBarClient() != null)
             {
-                ObjectOutputStream otherClientOut = MyServer.getBarClient().getOutStream();
+                ObjectOutputStream otherClientOut = parent.getBarClient().getOutStream();
            
                 NewItemNfn msgToSend1 = new NewItemNfn(event.getToAddress(),
-                        MyServer.getBarClient().getSocket().getInetAddress(),
+                        parent.getBarClient().getSocket().getInetAddress(),
                         event.getMessageID(),
                         event.getType(),
                         event.getItems(),
                         event.getTable());
                 otherClientOut.reset();
-                                     //gui.addText("id: " + id + ", got here drink: send to port: " + MyServer.getBarClient().getOutStream().toString());
+                                     //gui.addText("id: " + id + ", got here drink: send to port: " + parent.getBarClient().getOutStream().toString());
                 otherClientOut.writeObject(msgToSend1);
-                //gui.addText("id: " + id + ", sent to port: " + MyServer.getBarClient().getSocket().getPort());
+                //gui.addText("id: " + id + ", sent to port: " + parent.getBarClient().getSocket().getPort());
                 
             } // if
             
-            else if (event.getType() == Item.Type.FOOD && MyServer.getKitchenClient() != null)
+            else if (event.getType() == Item.Type.FOOD && parent.getKitchenClient() != null)
             { 
-                //gui.addText("got here food: send to port: " + MyServer.getBarClient().getSocket().getPort());
-                ObjectOutputStream otherClientOut = MyServer.getKitchenClient().getOutStream();
+                //gui.addText("got here food: send to port: " + parent.getBarClient().getSocket().getPort());
+                ObjectOutputStream otherClientOut = parent.getKitchenClient().getOutStream();
                 NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
-                       MyServer.getKitchenClient().getSocket().getInetAddress(),
+                       parent.getKitchenClient().getSocket().getInetAddress(),
                         event.getMessageID(),
                         event.getType(),
                         event.getItems(),
                         event.getTable());
                 otherClientOut.reset();
-         //gui.addText("id: " + id + ", port difference: " + MyServer.getKitchenClient().getSocket().getPort() + " " + MyServer.getBarClient().getSocket().getPort());  
-         //gui.addText("id: " + id + ", Out Stream difference: " + MyServer.getKitchenClient().getOutStream() + " " + MyServer.getBarClient().getOutStream());
+         //gui.addText("id: " + id + ", port difference: " + parent.getKitchenClient().getSocket().getPort() + " " + parent.getBarClient().getSocket().getPort());  
+         //gui.addText("id: " + id + ", Out Stream difference: " + parent.getKitchenClient().getOutStream() + " " + parent.getBarClient().getOutStream());
                 otherClientOut.writeObject(msgToSend);
-               // gui.addText("id: " + id + ", sent to port: " + MyServer.getKitchenClient().getSocket().getPort());
+               // gui.addText("id: " + id + ", sent to port: " + parent.getKitchenClient().getSocket().getPort());
             } // if      
    }
     
