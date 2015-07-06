@@ -17,11 +17,11 @@ import java.util.Scanner;
 public class MyServer implements Runnable
 {
     public static MyServer server;
+    private static final int PORT_NUMBER = 11000;
+    private static final int NUM_OF_TABLES = 44;
     
     // the lower bound of the port range
     private final ServerSocket socket;
-    private final int PORT_NUMBER = 11000;
-    private final int NUM_OF_TABLES = 44;
     private final Object LOCK = new Object();  
     private final ArrayList<ClientCommunicationThread> waiterClient;
     private final ArrayList<ClientCommunicationThread> tillClient;
@@ -31,17 +31,17 @@ public class MyServer implements Runnable
     public Thread listenThread;
     public boolean socketListening;
     
-    public MyServer() throws IOException
+    public MyServer(int numOfTables, int portNumber) throws IOException
     {
         waiterClient = new ArrayList<>();
         tillClient = new ArrayList<>();
-        tables = new Table[NUM_OF_TABLES + 1];
+        tables = new Table[numOfTables + 1];
         
         // creates a thread for each table
-        for (int i = 1; i <= NUM_OF_TABLES; i++)
+        for (int i = 1; i <= numOfTables; i++)
             tables[i] = Table.createTable(i);
         
-        socket = new ServerSocket(PORT_NUMBER);
+        socket = new ServerSocket(portNumber);
     }
     
     /**
@@ -52,7 +52,7 @@ public class MyServer implements Runnable
     { 
         try
         {
-           server = new MyServer();        
+           server = makeServer(NUM_OF_TABLES, PORT_NUMBER);        
            server.start();
            
            boolean exit = false;
@@ -100,16 +100,7 @@ public class MyServer implements Runnable
      */
     public int getNumOfTables()
     {
-        return NUM_OF_TABLES;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public int getLowBoundPortRange()
-    {
-        return PORT_NUMBER;
+        return tables.length - 1;
     }
 
     /**
@@ -271,11 +262,20 @@ public class MyServer implements Runnable
         socketListening = false;
         socket.close();
     }
-    public static MyServer makeServer() throws IOException
+    public static MyServer makeServer(int numOfTables, int portNumber) throws IOException
     {
-        MyServer server = new MyServer();  
+        MyServer server = new MyServer(numOfTables, portNumber);  
         server.listenThread = new Thread(server);
         
         return server;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public static int getLowBoundPortRange()
+    {
+        return PORT_NUMBER;
     }
 } // MySocket class

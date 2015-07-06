@@ -358,7 +358,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         this.parentClient = parentClient;
      
         // initialise the connection to the database
-        con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+        con = DriverManager.getConnection("jdbc:mysql://sql4.freemysqlhosting.net:3306/sql482884", "sql482884", "aN9*kG1!");
       
         // initialises the part of the GUI made automatically by netbeans
         initComponents();

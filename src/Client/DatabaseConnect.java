@@ -31,8 +31,8 @@ public class DatabaseConnect
         Connection con = null; 
         try 
         {
-           
-            con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
+            con = DriverManager.getConnection("jdbc:mysql://sql4.freemysqlhosting.net:3306/sql482884", "sql482884", "aN9*kG1!");           
+ //           con = DriverManager.getConnection("jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", "mbbx9mg3", "Fincherz+2013");
             PreparedStatement numberOfButtonsQuery = null;
             String query = "SELECT COUNT(ID) FROM 3YP_POS_IN_MENU WHERE LOCATION = 'MAIN_PAGE'";
             numberOfButtonsQuery = con.prepareStatement(query);

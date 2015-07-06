@@ -77,7 +77,7 @@ public abstract class Client implements Runnable
         this.type = type;
         try
         {
-            serverPort = MyServer.server.getLowBoundPortRange();
+            serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());
             System.out.println("outputstream made");
