@@ -7,6 +7,7 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 /**
@@ -21,28 +22,32 @@ public class MyServer implements Runnable
     private static final int NUM_OF_TABLES = 44;
     
     // the lower bound of the port range
-    private final ServerSocket socket;
-    private final Object LOCK = new Object();  
-    private final ArrayList<ClientCommunicationThread> waiterClient;
-    private final ArrayList<ClientCommunicationThread> tillClient;
+    private final ServerSocket socket; 
+    private final HashSet<ClientCommunicationThread> waiterClient;
+    private final HashSet<ClientCommunicationThread> tillClient;
+    
     private ClientCommunicationThread barClient = null;
     private ClientCommunicationThread kitchenClient = null;
     private final Table[] tables;
     public Thread listenThread;
     public boolean socketListening;
     
-    public MyServer(int numOfTables, int portNumber) throws IOException
+    public MyServer(ServerSocket socket,
+                    HashSet<ClientCommunicationThread> waiterClient,
+                    HashSet<ClientCommunicationThread> tillClient,
+                    Table[] tables) throws IOException
     {
-        waiterClient = new ArrayList<>();
-        tillClient = new ArrayList<>();
-        tables = new Table[numOfTables + 1];
+        this.waiterClient = waiterClient;
+        this.tillClient = tillClient;
+        this.tables = tables;
         
         // creates a thread for each table
-        for (int i = 1; i <= numOfTables; i++)
+        for (int i = 1; i <= tables.length -1; i++)
             tables[i] = Table.createTable(i);
         
-        socket = new ServerSocket(portNumber);
+        this.socket = socket;
     }
+    
     
     /**
      *
@@ -107,9 +112,9 @@ public class MyServer implements Runnable
      *
      * @return
      */
-    public ArrayList<ClientCommunicationThread> getWaiterClients()
+    public HashSet<ClientCommunicationThread> getWaiterClients()
     {
-        synchronized(LOCK)
+        synchronized(waiterClient)
         {
             return waiterClient;
         } // sync
@@ -119,45 +124,12 @@ public class MyServer implements Runnable
      *
      * @return
      */
-    public ArrayList<ClientCommunicationThread> getTillClients()
+    public HashSet<ClientCommunicationThread> getTillClients()
     {
-        synchronized(LOCK)
+        synchronized(tillClient)
         {
             return tillClient;
         } // sync
-    }
-    
-    public boolean addWaiterClient(ClientCommunicationThread client)
-    {
-        synchronized(LOCK)
-        {
-            for (ClientCommunicationThread waiterClient1 : waiterClient) 
-            {
-                if (client.equals(waiterClient1)) {
-                    //debugGUI.addText("client already exits");
-                    return false;
-                }
-            }
-            waiterClient.add(client);
-            return true;
-     
-        } // synchronized
-    }
-    
-    /**
-     *
-     * @param client
-     */
-    public void removeWaiterClient(ClientCommunicationThread client)
-    {
-        synchronized(LOCK)
-        {
-            for (int i = 0; i < waiterClient.size(); i++)
-                if (client.equals(waiterClient.get(i)))
-                    waiterClient.remove(i);
-            
-            //debugGUI.addText("client removed");
-        } // synchronized
     }
 
     /**
@@ -187,39 +159,6 @@ public class MyServer implements Runnable
     public void setKitchenClient(ClientCommunicationThread client)
     {
         kitchenClient = client;
-    }
-    
-    public boolean addTillClient(ClientCommunicationThread client)
-    {
-        synchronized(LOCK)
-        {
-            for (ClientCommunicationThread tillClient1 : tillClient) 
-            {
-                if (client.equals(tillClient1)) {
-                    //debugGUI.addText("client already exits");
-                    return false;
-                }
-            }
-            tillClient.add(client);
-            return true;
-     
-        } // synchronized
-    }
-    
-    /**
-     *
-     * @param client
-     */
-    public void removeTillClient(ClientCommunicationThread client)
-    {
-        synchronized(LOCK)
-        {
-            for (int i = 0; i < tillClient.size(); i++)
-                if (client.equals(tillClient.get(i)))
-                    tillClient.remove(i);
-            
-            //debugGUI.addText("client removed");
-        } // synchronized
     }
 
     @Override
@@ -262,12 +201,17 @@ public class MyServer implements Runnable
         socketListening = false;
         socket.close();
     }
+    
     public static MyServer makeServer(int numOfTables, int portNumber) throws IOException
     {
-        MyServer server = new MyServer(numOfTables, portNumber);  
-        server.listenThread = new Thread(server);
+        HashSet<ClientCommunicationThread> waiterClient = new HashSet<>();
+        HashSet<ClientCommunicationThread> tillClient = new HashSet<>(); 
+        Table[] tables = new Table[numOfTables + 1];
+        ServerSocket socket = new ServerSocket(portNumber);
+        MyServer newServer = new MyServer(socket, waiterClient, tillClient, tables);  
+        newServer.listenThread = new Thread(newServer);
         
-        return server;
+        return newServer;
     }
     
     /**

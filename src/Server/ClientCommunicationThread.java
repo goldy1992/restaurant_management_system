@@ -18,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -147,10 +148,12 @@ public class ClientCommunicationThread implements Runnable
         else
         {
             for (int i = 0; i < x.getTableList().size(); i++)
+            {
                 response.getTableStatuses()
                     .add(parent
                             .getTable(x.getTableList().get(i))
                                 .getTableStatus());
+            } // for
         }
 
         return response;
@@ -176,15 +179,16 @@ public class ClientCommunicationThread implements Runnable
         } // switch      
        
         if (response.hasPermission())
+        {
             switch (response.getClientType())
             {
                 case BAR: parent.setBarClient(this); break;
                 case KITCHEN: parent.setKitchenClient(this);  break;
-                case WAITER: parent.addWaiterClient(this);  break;
-                case TILL: parent.addTillClient(this);  break;
+                case WAITER: parent.getWaiterClients().add(this);  break;
+                case TILL: parent.getTillClients().add(this);  break;
                 default: break;
             } // switch
-      
+        }
         return response;
     }
     
@@ -200,7 +204,7 @@ public class ClientCommunicationThread implements Runnable
     private LeaveResponse parseLeaveRequest(Request request)
     {
         LeaveResponse response = new LeaveResponse((LeaveRequest)request); 
-        parent.removeWaiterClient(this);
+        parent.getWaiterClients().remove(this);
         response.setPermission(true);
         isRunning = false;
         return response;
@@ -241,31 +245,29 @@ public class ClientCommunicationThread implements Runnable
                                                        
         //gui.addText("number of clients to send to: " + parent.getWaiterClients().size());
 
-        for(int i =0; i < parent.getWaiterClients().size(); i++)
+        for (ClientCommunicationThread c : parent.getWaiterClients())
         {
-            ObjectOutputStream otherClientOut = parent.getWaiterClients().get(i).getOutStream();
+            ObjectOutputStream otherClientOut = c.getOutStream();
             TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    parent.getWaiterClients().get(i).getSocket().getInetAddress(),
+                    c.getSocket().getInetAddress(),
                     event.getMessageID(),
                     tableNumber,
                     status);
-                                
-            otherClientOut.reset();
+                        otherClientOut.reset();
             otherClientOut.writeObject(msgToSend);
-        } // for    
+        }  
+        for (ClientCommunicationThread c : parent.getTillClients())
+        {
+            ObjectOutputStream otherClientOut = c.getOutStream();
+            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+                    c.getSocket().getInetAddress(),
+                    event.getMessageID(),
+                    tableNumber,
+                    status);
+                        otherClientOut.reset();
+            otherClientOut.writeObject(msgToSend);
+        } 
         
-        for(int i =0; i < parent.getTillClients().size(); i++)
-        {
-            ObjectOutputStream otherClientOut = parent.getTillClients().get(i).getOutStream();
-            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    parent.getTillClients().get(i).getSocket().getInetAddress(),
-                    event.getMessageID(),
-                    tableNumber,
-                    status);
-                                
-            otherClientOut.reset();
-            otherClientOut.writeObject(msgToSend);
-        } // for   
     } // parseTableStatusEvtNfn
     
     private void parseTabUpdateNfn(EventNotification message)
