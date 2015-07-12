@@ -102,7 +102,7 @@ public class Table implements Runnable, Serializable
      *
      * @return
      */
-    public TableStatus getTableStatus()
+    public TableStatus getStatus()
     {
         return tableStatus;
     }

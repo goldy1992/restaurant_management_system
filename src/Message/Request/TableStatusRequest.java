@@ -35,6 +35,9 @@ public class TableStatusRequest extends Request
         this.tableList = tableList;
     } // constructor
     
+    public static final int ALL = -1;
+    public static final int SELECTION = -2;
+    
     /**
      *
      * @return
@@ -43,6 +46,11 @@ public class TableStatusRequest extends Request
     public ArrayList<Integer> getTableList()
     {
         return tableList;
+    }
+    
+    public Integer getFirstValue()
+    {
+        return tableList.get(0);
     }
     
     public String toString()

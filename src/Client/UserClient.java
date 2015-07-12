@@ -35,7 +35,7 @@ public abstract class UserClient extends Client
     protected void parseTableStatusResponse(TableStatusResponse resp)
     {
         System.out.println("table status response");
-       System.out.println(resp.getTableStatuses());
+       System.out.println(resp.getStatuses());
        
        TableStatusRequest req = (TableStatusRequest)resp.getRequest();
        
@@ -44,7 +44,7 @@ public abstract class UserClient extends Client
         synchronized(lock)
         {
             if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
-                this.tableStatuses = resp.getTableStatuses();
+                this.tableStatuses = resp.getStatuses();
             else
                 setTableStatuses(resp);
             lock.notifyAll();
@@ -75,7 +75,7 @@ public abstract class UserClient extends Client
      */
    public void setTableStatuses(TableStatusResponse resp)
    {
-       ArrayList<Table.TableStatus>  x = resp.getTableStatuses();
+       ArrayList<Table.TableStatus>  x = resp.getStatuses();
        TableStatusRequest req = (TableStatusRequest)resp.getRequest();
        
        for (int i = 0; i < req.getTableList().size(); i++)

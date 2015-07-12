@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Client;
 
 import Client.SelectTableMenu.SelectTable;
@@ -12,6 +6,7 @@ import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.*;
 import Message.Request.TableStatusRequest;
+import static Message.Request.TableStatusRequest.ALL;
 import Message.Response.NumOfTablesResponse;
 import Message.Response.Response;
 import Message.Response.TabResponse;
@@ -72,7 +67,7 @@ public class WaiterClient extends UserClient
 
             ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
-            tables.add(-1);
+            tables.add(ALL);
                 
             TableStatusRequest request = new TableStatusRequest(
                 InetAddress.getByName(

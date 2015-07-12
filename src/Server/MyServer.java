@@ -1,12 +1,11 @@
-
 package Server;
 
+import Message.TableList;
 import Message.Table;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -14,7 +13,6 @@ import java.util.Scanner;
  *
  * @author Goldy
  */
-
 public class MyServer implements Runnable
 {
     public static MyServer server;
@@ -23,31 +21,25 @@ public class MyServer implements Runnable
     
     // the lower bound of the port range
     private final ServerSocket socket; 
-    private final HashSet<ClientCommunicationThread> waiterClient;
-    private final HashSet<ClientCommunicationThread> tillClient;
+    private final HashSet<ClientConnection> waiterClient;
+    private final HashSet<ClientConnection> tillClient;
     
-    private ClientCommunicationThread barClient = null;
-    private ClientCommunicationThread kitchenClient = null;
-    private final Table[] tables;
+    private ClientConnection barClient = null;
+    private ClientConnection kitchenClient = null;
+    private final TableList tables;
     public Thread listenThread;
     public boolean socketListening;
     
     public MyServer(ServerSocket socket,
-                    HashSet<ClientCommunicationThread> waiterClient,
-                    HashSet<ClientCommunicationThread> tillClient,
-                    Table[] tables) throws IOException
+                    HashSet<ClientConnection> waiterClient,
+                    HashSet<ClientConnection> tillClient,
+                    TableList tables) throws IOException
     {
         this.waiterClient = waiterClient;
         this.tillClient = tillClient;
-        this.tables = tables;
-        
-        // creates a thread for each table
-        for (int i = 1; i <= tables.length -1; i++)
-            tables[i] = Table.createTable(i);
-        
+        this.tables = tables; 
         this.socket = socket;
-    }
-    
+    } // myserver
     
     /**
      *
@@ -92,27 +84,16 @@ public class MyServer implements Runnable
      * @param number
      * @return
      */
-    public Table getTable(int number)
+    public TableList getTables()
     {
-        if (number < 1 || number > NUM_OF_TABLES)
-            return null;
-        else return tables[number];
+        return tables;
     } // table
-    
-    /**
-     *
-     * @return
-     */
-    public int getNumOfTables()
-    {
-        return tables.length - 1;
-    }
 
     /**
      *
      * @return
      */
-    public HashSet<ClientCommunicationThread> getWaiterClients()
+    public HashSet<ClientConnection> getWaiterClients()
     {
         synchronized(waiterClient)
         {
@@ -124,39 +105,30 @@ public class MyServer implements Runnable
      *
      * @return
      */
-    public HashSet<ClientCommunicationThread> getTillClients()
+    public HashSet<ClientConnection> getTillClients()
     {
         synchronized(tillClient)
         {
             return tillClient;
         } // sync
     }
-
-    /**
-     *
-     * @return
-     */
-    public Table[] getTables()
-    {
-        return tables;
-    }
     
-    public ClientCommunicationThread getBarClient()
+    public ClientConnection getBarClient()
     {
         return barClient;
     }
     
-    public void setBarClient(ClientCommunicationThread client)
+    public void setBarClient(ClientConnection client)
     {
         barClient = client;
     }
     
-    public ClientCommunicationThread getKitchenClient()
+    public ClientConnection getKitchenClient()
     {
         return kitchenClient;
     }
     
-    public void setKitchenClient(ClientCommunicationThread client)
+    public void setKitchenClient(ClientConnection client)
     {
         kitchenClient = client;
     }
@@ -167,14 +139,15 @@ public class MyServer implements Runnable
         try
         {
             socketListening = true;
-            //debugGUI.addText("Currently listening on port " + PORT_NUMBER);
-
             long clientNumber = 0;
 
             while (socketListening)
             {
                 Socket acceptSocket = server.socket.accept();
-                ClientCommunicationThread newThread = new ClientCommunicationThread(acceptSocket, clientNumber, this);
+                ClientConnection newThread = 
+                    ClientConnection.makeClientThread(acceptSocket, 
+                                                    clientNumber, 
+                                                    this);
                 newThread.getThread().start();
 
                 //debugGUI.addText("accept client number " + clientNumber);
@@ -204,11 +177,17 @@ public class MyServer implements Runnable
     
     public static MyServer makeServer(int numOfTables, int portNumber) throws IOException
     {
-        HashSet<ClientCommunicationThread> waiterClient = new HashSet<>();
-        HashSet<ClientCommunicationThread> tillClient = new HashSet<>(); 
+        HashSet<ClientConnection> waiterClient = new HashSet<>();
+        HashSet<ClientConnection> tillClient = new HashSet<>(); 
         Table[] tables = new Table[numOfTables + 1];
+
+        // creates a thread for each table
+        for (int i = 1; i <= tables.length -1; i++)
+            tables[i] = Table.createTable(i);
+        
+        TableList tableList = new TableList(tables);
         ServerSocket socket = new ServerSocket(portNumber);
-        MyServer newServer = new MyServer(socket, waiterClient, tillClient, tables);  
+        MyServer newServer = new MyServer(socket, waiterClient, tillClient, tableList);  
         newServer.listenThread = new Thread(newServer);
         
         return newServer;

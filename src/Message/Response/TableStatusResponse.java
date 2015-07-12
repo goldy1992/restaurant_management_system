@@ -34,7 +34,7 @@ public class TableStatusResponse extends Response
      *
      * @return
      */
-    public ArrayList<Table.TableStatus> getTableStatuses()
+    public ArrayList<Table.TableStatus> getStatuses()
     {
         return tableStatuses;
     } // getTableStatuses
