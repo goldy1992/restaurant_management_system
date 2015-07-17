@@ -24,7 +24,7 @@ public class TabResponse extends Response
      *
      * @param request
      */
-    public TabResponse(Request request)
+    public TabResponse(TabRequest request)
     {
         super(request);
 

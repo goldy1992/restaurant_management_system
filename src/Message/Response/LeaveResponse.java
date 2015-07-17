@@ -5,6 +5,7 @@
  */
 package Message.Response;
 
+import Message.Request.LeaveRequest;
 import Message.Request.Request;
 
 /**
@@ -20,7 +21,7 @@ public class LeaveResponse extends Response
      * @param request
      */
     
-    public LeaveResponse(Request request)
+    public LeaveResponse(LeaveRequest request)
     {
         super(request);
 

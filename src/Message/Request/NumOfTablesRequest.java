@@ -24,10 +24,9 @@ public class NumOfTablesRequest extends Request
      */
     public NumOfTablesRequest(InetAddress from, 
                               InetAddress to, 
-                              String messageID, 
                               Request.RequestType type)
     {
-        super(from, to, messageID, type);
+        super(from, to, type);
     } // constructor
     
 

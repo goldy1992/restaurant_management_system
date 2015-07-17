@@ -8,6 +8,8 @@ package Client;
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.NewItemNfn;
 import Message.Request.RegisterClientRequest;
+import static Message.Request.RegisterClientRequest.ClientType.BAR;
+import static Message.Request.RegisterClientRequest.ClientType.KITCHEN;
 import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
 import java.io.IOException;
@@ -71,10 +73,13 @@ public class OutputClient extends Client implements Runnable
         {
             switch(args[0])
             {
-                case "bar": System.out.println("making bar"); client = Client.makeClient(RegisterClientRequest.ClientType.BAR); 
+                case "bar": System.out.println("making bar"); 
+                client = (OutputClient)Client.makeClient(BAR); 
                 System.out.println("made bar " + client);break;
-                case "kitchen": System.out.println("making kitchen"); client = Client.makeClient(RegisterClientRequest.ClientType.KITCHEN); System.out.println("made kitchen " + client); break;
-                default: System.out.println("invalid argument"); System.exit(0); break;
+                case "kitchen": System.out.println("making kitchen"); 
+                client = (OutputClient)Client.makeClient(KITCHEN); 
+                System.out.println("made kitchen " + client); break;
+                default: System.out.println("invalid argument"); System.exit(0); 
             }
             System.out.println("end of switch");
 

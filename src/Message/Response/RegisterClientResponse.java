@@ -17,11 +17,10 @@ public class RegisterClientResponse extends Response
     private boolean permissionGranted;
     private final RegisterClientRequest.ClientType clientType;
     
-    public RegisterClientResponse(Request request)
+    public RegisterClientResponse(RegisterClientRequest request)
     {
         super(request);
-        RegisterClientRequest req = (RegisterClientRequest)request;
-        clientType = req.getClientType();
+        clientType = request.getClientType();
     } // constructor
 
     

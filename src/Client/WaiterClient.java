@@ -5,6 +5,9 @@ import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.*;
+import Message.Request.RegisterClientRequest.ClientType;
+import static Message.Request.RegisterClientRequest.ClientType.WAITER;
+import static Message.Request.Request.RequestType.TABLE_STATUS;
 import Message.Request.TableStatusRequest;
 import static Message.Request.TableStatusRequest.ALL;
 import Message.Response.NumOfTablesResponse;
@@ -21,16 +24,10 @@ import java.util.ArrayList;
  */
 public class WaiterClient extends UserClient
 {
-   
-    /**
-     * An object used to ensure tasks are performed asynchronously. 
-     */
-
     public int numberOfTables = -1;
-    public SelectTable selectTable;
+    public SelectTable selectTable;  
     
-    
-    public WaiterClient(RegisterClientRequest.ClientType  type) throws IOException
+    public WaiterClient(ClientType  type) throws IOException
     {
         super(type);
     } // constructor
@@ -38,17 +35,17 @@ public class WaiterClient extends UserClient
     /**
      * @return The number of tables in use.
      */
-   public int getNumTables()
-   {
-        return numberOfTables;
-   }
+    public int getNumTables()
+    {
+         return numberOfTables;
+    }
    
     /**
      * A mutator method to set the number of tables.
      * @param numTables the number of the tables to be run
      */
     public void setNumTables(int numTables)
-   {
+    {
         numberOfTables = numTables;   
    }
      
@@ -61,23 +58,21 @@ public class WaiterClient extends UserClient
         WaiterClient myClient = null;
         try
         {
-            myClient = Client.makeClient(RegisterClientRequest.ClientType.WAITER);
-            System.out.println("is MyCLient: " + (myClient.getClass() == WaiterClient.class));
-
+            myClient = (WaiterClient)Client.makeClient(WAITER);
 
             ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
             tables.add(ALL);
-                
+            InetAddress thisAddress = myClient.address;
+            InetAddress serverAddress = myClient.serverAddress; 
+            
             TableStatusRequest request = new TableStatusRequest(
-                InetAddress.getByName(
-                    myClient.client.getLocalAddress().getHostName()),
-                InetAddress.getByName(
-                    myClient.serverAddress.getHostName() ),
-                Message.generateRequestID(),
-                Request.RequestType.TABLE_STATUS,
-                tables);
+                thisAddress,
+                serverAddress,
+                TABLE_STATUS,
+                tables);            
             myClient.getOutputStream().writeObject(request);  
+            
         } // try
         catch (IOException e)
         {
@@ -145,6 +140,5 @@ public class WaiterClient extends UserClient
     {
         selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
     }
-   
-
+    
 } // MyClientSocketClass

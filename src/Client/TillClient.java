@@ -8,13 +8,12 @@ package Client;
 import Client.MainMenu.BarTabDialogSelect;
 import Item.Tab;
 import Message.EventNotification.*;
-import Message.Message;
 import Message.Request.RegisterClientRequest;
 import Message.Request.*;
+import static Message.Request.RegisterClientRequest.ClientType.TILL;
 import Message.Request.TableStatusRequest;
 import Message.Response.*;
 import Message.Table;
-import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author mbbx9mg3
  */
-public class TillClient extends UserClient
+public class TillClient extends UserClient 
 {
     public TillGUI gui = null;
     
@@ -43,17 +42,14 @@ public class TillClient extends UserClient
         final TillClient myClient;
         try 
         {
-            myClient = Client.makeClient(RegisterClientRequest.ClientType.TILL);
+            myClient = (TillClient)Client.makeClient(TILL);
             
-                        ArrayList<Integer> tables = new ArrayList<>();
+            ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
             tables.add(-1);
-                        TableStatusRequest request = new TableStatusRequest(
-                InetAddress.getByName(
-                    myClient.client.getLocalAddress().getHostName()),
-                InetAddress.getByName(
-                    myClient.serverAddress.getHostName() ),
-                Message.generateRequestID(),
+            TableStatusRequest request = new TableStatusRequest(
+                myClient.address,
+                myClient.serverAddress,
                 Request.RequestType.TABLE_STATUS,
                 tables);
             myClient.getOutputStream().writeObject(request);  

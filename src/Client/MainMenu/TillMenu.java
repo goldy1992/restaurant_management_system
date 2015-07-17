@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client.MainMenu;
 
 import Client.Pair;
@@ -12,7 +7,6 @@ import Client.TillClient;
 import Client.TillGUI;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
-import static Message.Message.generateRequestID;
 import Message.Table;
 import java.awt.Dialog;
 import java.io.File;
@@ -80,7 +74,7 @@ public class TillMenu extends Menu
             try {
                 newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+                         newTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
 
                 out.reset();
                 out.writeObject(newEvt);

@@ -1,22 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Message;
 
+import OtherClasses.Uniqueness;
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Random;
 
 /**
  *
  * @author Goldy
  */
-public abstract class Message implements Serializable 
+public abstract class Message implements Serializable, Uniqueness
 {
     
     private final InetAddress fromAddress;
@@ -30,11 +22,11 @@ public abstract class Message implements Serializable
      * @param to
      * @param messageID
      */
-    public Message(InetAddress from, InetAddress to, String messageID)
+    public Message(InetAddress from, InetAddress to)
     {
         this.fromAddress = from;
         this.toAddress = to;
-        this.messageID = messageID;
+        this.messageID = generateUniqueID();
     } // constructor
     
     /**
@@ -71,19 +63,4 @@ public abstract class Message implements Serializable
         + "\nMESSAGE ID: " + messageID + "\n";
     }
     
-        /**
-     *
-     * @return
-     */
-    public static String generateRequestID()
-   {
-      String request_ID;
-      Random random = new Random();
-      int x = random.nextInt();
-      request_ID = "" + x;
-      Date currentDate = new Date();
-      Timestamp t = new Timestamp(currentDate.getTime());
-      request_ID = request_ID + t;
-      return request_ID;
-   } // generateRequestID
 }

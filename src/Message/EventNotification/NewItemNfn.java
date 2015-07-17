@@ -36,12 +36,11 @@ public class NewItemNfn extends EventNotification
      */
     public NewItemNfn(InetAddress from, 
                       InetAddress to, 
-                      String messageID,
                       Type type,
                       ArrayList<Item> items,
                       Table table)
     {
-        super(from, to, messageID);
+        super(from, to);
         this.type = type;
         this.items = items;
         this.table = table;

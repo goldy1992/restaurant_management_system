@@ -75,8 +75,9 @@ public class ClientConnection implements Runnable
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, e);
                 
             }
-             catch(IOException e)
+            catch(IOException e)
             {
+                System.err.println(e);
             } // catch
             catch (ClassNotFoundException  ex) 
             {
@@ -84,6 +85,11 @@ public class ClientConnection implements Runnable
             } // catch             // catch             // catch             // catch            
         } // if socket == null
     } // run
+    
+    public void stop()
+    {
+        this.isRunning = false;
+    }
    
     /**
      *

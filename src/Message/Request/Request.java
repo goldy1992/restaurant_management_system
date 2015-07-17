@@ -68,10 +68,9 @@ public abstract class Request extends Message
      */
     public Request(InetAddress from, 
                           InetAddress to, 
-                          String messageID, 
                           RequestType type)
     {
-       super(from, to, messageID);
+       super(from, to);
        this.type = type;
     }
     

@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client;
 
 import Message.EventNotification.EventNotification;
 import Message.Message;
 import Message.Request.RegisterClientRequest;
+import Message.Request.RegisterClientRequest.ClientType;
 import Message.Request.Request;
 import Message.Response.LeaveResponse;
 import Message.Response.RegisterClientResponse;
@@ -28,13 +24,15 @@ import java.util.logging.Logger;
  */
 public abstract class Client implements Runnable
 {
+    // localhost
     public final InetAddress serverAddress = InetAddress.getByName(null); 
+    public final InetAddress address;
     public int serverPort;  
     public Socket client;
     public OutputGUI debugGUI;
     public Thread responseThread;    
     private ObjectOutputStream out = null;
-    private final RegisterClientRequest.ClientType type;
+    private final ClientType type;
     private static final long serialVersionUID = 1L;
     
     // object classes
@@ -80,12 +78,15 @@ public abstract class Client implements Runnable
             serverPort = MyServer.getLowBoundPortRange();
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());
+            this.debugGUI = null;
+            this.responseThread = null;
             System.out.println("outputstream made");
         } // try
         catch (IOException e)
         {
             System.out.println("Could not connect to server");
         } // catch
+            this.address = client.getLocalAddress();
     }
     
         /**
@@ -144,34 +145,38 @@ public abstract class Client implements Runnable
     }
    
     
-    public static <T extends Client> T makeClient(RegisterClientRequest.ClientType clientType) throws IOException
+    @SuppressWarnings("unchecked")
+    public static Client makeClient(ClientType clientType) throws IOException
     {
-        T till;
+        Client till;
         
         switch (clientType)
         {
             case WAITER:
-                WaiterClient till1 = new WaiterClient(clientType);
-                till = (T)till1; break;
-            case TILL:
-                TillClient till2 = new TillClient(clientType);
-                till = (T)till2; break;       
-            default:
-                OutputClient till3 = new OutputClient(clientType);
-                till = (T)till3;
+                till = new WaiterClient(clientType);
+
                 break;
+            case TILL:
+                till = new TillClient(clientType);
+                break;       
+            default:
+                till = new OutputClient(clientType);
         }
             till.debugGUI = OutputGUI.makeGUI(till);        
             till.responseThread = new Thread(till);
             till.responseThread.start();
-
             till.registerClient();
-        
-
-
-            System.out.println("returning");
-        return till;
+            return till;
     } // makeClient
+    
+    public static boolean startClient(Client c)
+    {
+        c.debugGUI = OutputGUI.makeGUI(c);
+        c.responseThread = new Thread(c);
+        c.responseThread.start();
+        c.registerClient();        
+        return true;
+    }
     
     public RegisterClientRequest.ClientType getType()
     {
@@ -186,7 +191,6 @@ public abstract class Client implements Runnable
         RegisterClientRequest rKitchenReq = new RegisterClientRequest(
             InetAddress.getByName(client.getLocalAddress().getHostName()),
             InetAddress.getByName(serverAddress.getHostName()),
-            Message.generateRequestID(),
             Request.RequestType.REGISTER_CLIENT,
             type);     
         System.out.println("writing object: " + rKitchenReq);

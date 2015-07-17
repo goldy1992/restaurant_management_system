@@ -23,10 +23,9 @@ public class LeaveRequest extends Request
      */
     public LeaveRequest(InetAddress from, 
                               InetAddress to, 
-                              String messageID, 
                               Request.RequestType type)
     {
-        super(from, to, messageID, type);
+        super(from, to, type);
     } // constructor
     
 

@@ -1,15 +1,7 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Client.SelectTableMenu;
 
 import Client.MainMenu.Menu;
 import Client.WaiterClient;
-import static Message.Message.generateRequestID;
 import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.LeaveRequest;
@@ -30,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Goldy
  */
 public class SelectTable extends javax.swing.JFrame implements ActionListener 
@@ -300,7 +291,6 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                                     getLocalAddress().getHostName()),
                             InetAddress.getByName(
                                 parentClient.serverAddress.getHostName()),
-                            generateRequestID(),
                             Request.RequestType.LEAVE);
                         out.writeObject(leaveRequest);
                     } // try 
@@ -360,7 +350,7 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     IN USE */
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), tableSelected, Table.TableStatus.FREE);
+                        tableSelected, Table.TableStatus.FREE);
                     out.reset();
                      out.writeObject(newEvt);  
                 } catch (UnknownHostException ex) {
@@ -388,14 +378,13 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                        IN USE */
                     TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                    generateRequestID(), tableSelected, Table.TableStatus.IN_USE);
+                    tableSelected, Table.TableStatus.IN_USE);
                     out.reset();
                     out.writeObject(newEvt);
                     
                     /* Request the tab of this table from the server */
                     TabRequest tabStatusRequest = new TabRequest(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), 
                         Request.RequestType.TAB,
                             tableSelected);
                     out.reset();
@@ -418,12 +407,10 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
                     //MyClient.debugGUI.addText("menu has been made");
 
                     this.tabReceived = false;
-                
-
 
                     TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                    generateRequestID(), tableSelected, Table.TableStatus.OCCUPIED);
+                    tableSelected, Table.TableStatus.OCCUPIED);
                     out.writeObject(newEvt1);
                     OutputLabel.setText("");
                     tableSelected = -1;
@@ -448,7 +435,4 @@ public class SelectTable extends javax.swing.JFrame implements ActionListener
         } // if
         
     } // action Perfomed
-    
-
-
-}
+} // class

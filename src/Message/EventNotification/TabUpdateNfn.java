@@ -26,10 +26,9 @@ public class TabUpdateNfn extends EventNotification {
      */
     public TabUpdateNfn(InetAddress from, 
                                 InetAddress to, 
-                                String messageID,
                                 Tab t)
     {
-        super(from, to, messageID);
+        super(from, to);
         this.tab = t;
     }
     

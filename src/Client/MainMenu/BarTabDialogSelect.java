@@ -8,9 +8,7 @@ package Client.MainMenu;
 import Client.Pair;
 import Client.SelectTableMenu.SelectTable;
 import Client.TillClient;
-import Item.Tab;
 import Message.EventNotification.TableStatusEvtNfn;
-import static Message.Message.generateRequestID;
 import Message.Request.Request;
 import Message.Request.TabRequest;
 import Message.Table;
@@ -30,7 +28,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author mbbx9mg3
  */
 public class BarTabDialogSelect extends javax.swing.JDialog {
@@ -93,7 +90,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                                 InetAddress.
                                     getByName(tClient.serverAddress
                                         .getHostName()),
-                                generateRequestID(), 
                                 chosenTable, 
                                 Table.TableStatus.IN_USE);
                             tClient.getOutputStream().reset();
@@ -105,7 +101,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                                     .getLocalAddress().getHostName()),
                                 InetAddress.getByName(tClient
                                     .serverAddress.getHostName()),
-                                generateRequestID(), 
                                 Request.RequestType.TAB,
                                     chosenTable);
                             tClient.getOutputStream().reset();
@@ -141,7 +136,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             {
                                 newEvt = new TableStatusEvtNfn(InetAddress.getByName(tClient.client.getLocalAddress().getHostName()),
                                         InetAddress.getByName(tClient.serverAddress.getHostName()),
-                                        generateRequestID(), chosenTable, Table.TableStatus.OCCUPIED);
+                                         chosenTable, Table.TableStatus.OCCUPIED);
 
                                 tGUI.out.reset();
                                 tGUI.out.writeObject(newEvt);
@@ -189,7 +184,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                         IN USE */
                         TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                        generateRequestID(), pair.getFirst(), Table.TableStatus.IN_USE);
+                         pair.getFirst(), Table.TableStatus.IN_USE);
                         menuParent.out.reset();
                         menuParent.out.writeObject(newEvt);
                         
@@ -199,7 +194,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             InetAddress.getByName(
                                 parentClient.serverAddress.getHostName()),
                               
-                            Message.Message.generateRequestID(), 
                             Request.RequestType.TAB,
                               pair.getFirst());
                         parentClient.getOutputStream().writeObject(req);
@@ -227,7 +221,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                           
                             newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                            generateRequestID(), pair.getFirst(), Table.TableStatus.OCCUPIED);
+                             pair.getFirst(), Table.TableStatus.OCCUPIED);
                             menuParent.out.reset();
                             menuParent.out.writeObject(newEvt);
                             menuParent.dispose();

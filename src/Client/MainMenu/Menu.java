@@ -4,7 +4,6 @@ import Client.Client;
 import Client.DatabaseConnect;
 import Client.Pair;
 import Client.SelectTableMenu.SelectTable;
-import static Message.Message.generateRequestID;
 import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
@@ -436,7 +435,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
                 parentClient.client.getLocalAddress().getHostName()),
                 InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                generateRequestID(), this.oldTab);
+                 this.oldTab);
             out.reset();
             out.writeObject(newEvt);
                 
@@ -446,7 +445,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                     parentClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                    generateRequestID(), 
                     Item.Type.DRINK, 
                     this.newTab.getDrinks(),
                     newTab.getTable());
@@ -459,7 +457,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
                     parentClient.client.getLocalAddress().getHostName()),
                     InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                    generateRequestID(), 
                     Item.Type.FOOD, 
                     this.newTab.getFood(),
                     newTab.getTable());
@@ -474,7 +471,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
                 TableStatusEvtNfn newEvt1;
                 newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                 InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                generateRequestID(), oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+                oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
                 out.reset();
                 out.writeObject(newEvt1);
             }    

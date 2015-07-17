@@ -6,14 +6,16 @@
 package Item;
 
 import Message.Message;
+import OtherClasses.Uniqueness;
 import java.io.Serializable;
 import java.text.DecimalFormat;
+
 
 /**
  *
  * @author mbbx9mg3
  */
-public class Item implements Serializable, Comparable, Cloneable
+public class Item implements Serializable, Comparable, Cloneable, Uniqueness 
 {  
     /**
      *
@@ -64,7 +66,7 @@ public class Item implements Serializable, Comparable, Cloneable
         this.type = type;
         this.quantity = quantity;
         this.totalPrice = pricePerItem * quantity;
-        this.uniqueID = id + name + type + message + quantity + Message.generateRequestID();
+        this.uniqueID = id + name + type + message + quantity + generateUniqueID();
         this.stockCount = stockCount;
     } // item
     

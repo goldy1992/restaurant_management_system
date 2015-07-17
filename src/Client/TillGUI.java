@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client;
 
 import Client.MainMenu.TillMenu;
-import static Message.Message.generateRequestID;
 import Message.Request.LeaveRequest;
 import Message.Request.*;
 import java.awt.event.ActionEvent;
@@ -21,14 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author mbbx9mg3
  */
 public class TillGUI extends javax.swing.JFrame implements ActionListener
 {
-
     private final TillClient parent;
     private final TillMenu menu;
+    
     /**
      * Creates new form TillClient
      * @param parent The parent client of the GUI
@@ -40,9 +33,6 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         this.menu = TillMenu.makeMenu(parent, 
                 null, null, parent.getOutputStream(),  this);
         initComponents();
-        
-        
-     
     }
 
     /**
@@ -121,7 +111,6 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
                     getLocalAddress().getHostName()),
                     InetAddress.getByName(
                         parent.serverAddress.getHostName()),
-                    generateRequestID(),
                     Request.RequestType.LEAVE);
                 parent.getOutputStream().writeObject(leaveRequest);
             } catch (SQLException ex) {
@@ -133,7 +122,6 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
             }
         }
     }//GEN-LAST:event_formWindowClosing
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel changeLabel;
@@ -159,6 +147,4 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     {
         return menu;
     }
-
 }
-

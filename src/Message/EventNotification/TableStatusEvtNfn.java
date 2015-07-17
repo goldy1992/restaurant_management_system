@@ -27,11 +27,10 @@ public class TableStatusEvtNfn extends EventNotification
      */
     public TableStatusEvtNfn(InetAddress from, 
                                 InetAddress to, 
-                                String messageID,
                                 int tableNumber,
                                 Table.TableStatus t)
     {
-        super(from, to, messageID);
+        super(from, to);
         this.tableNumber = tableNumber;
         this.tStatus = t;
     }

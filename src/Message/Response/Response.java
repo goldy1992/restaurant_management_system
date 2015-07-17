@@ -24,7 +24,7 @@ public abstract class Response extends Message
      */
     public Response(Request request)
     {
-       super(request.getToAddress(), request.getFromAddress(), request.getMessageID());
+       super(request.getToAddress(), request.getFromAddress());
        this.request = request;
        parsedResponse = false;
     } // constructor

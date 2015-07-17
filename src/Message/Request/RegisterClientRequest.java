@@ -47,11 +47,10 @@ public class RegisterClientRequest extends Request
      */
     public RegisterClientRequest(InetAddress from, 
                                 InetAddress to, 
-                                String messageID, 
                                 RequestType type,
                                 ClientType clientType)
     {
-        super(from, to, messageID, type);
+        super(from, to, type);
         this.clientType = clientType;
     } // constructor
     

@@ -23,12 +23,11 @@ public class TabRequest extends Request
      * @param tableNumber
      */
     public TabRequest(InetAddress from, 
-                              InetAddress to, 
-                              String messageID, 
+                              InetAddress to,  
                               Request.RequestType type,
                               int tableNumber)
     {
-        super(from, to, messageID, type);
+        super(from, to, type);
         this.tabNumber = tableNumber;
     } // constructor
     

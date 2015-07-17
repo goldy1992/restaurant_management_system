@@ -8,7 +8,6 @@ package Client.MainMenu;
 import Message.EventNotification.TabUpdateNfn;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Message;
-import static Message.Message.generateRequestID;
 import Message.Table;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -354,13 +353,13 @@ public class MenuCardPanel extends JPanel
                                 TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
                                     menu.parentClient.client.getLocalAddress().getHostName()),
                                     InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
-                                    Message.generateRequestID(), menu.oldTab);
+                                     menu.oldTab);
                                 menu.out.reset();
                                 menu.out.writeObject(newEvt);
                                     
                                 TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(menu.parentClient.client.getLocalAddress().getHostName()),
                                     InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
-                                    generateRequestID(), menu.oldTab.getTable().getTableNumber(), Table.TableStatus.DIRTY);
+                                    menu.oldTab.getTable().getTableNumber(), Table.TableStatus.DIRTY);
                
                                 menu.out.reset();
                                 menu.out.writeObject(newEvt1);

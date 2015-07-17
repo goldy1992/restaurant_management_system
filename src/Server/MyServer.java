@@ -19,7 +19,6 @@ public class MyServer implements Runnable
     private static final int PORT_NUMBER = 11000;
     private static final int NUM_OF_TABLES = 44;
     
-    // the lower bound of the port range
     private final ServerSocket socket; 
     private final HashSet<ClientConnection> waiterClient;
     private final HashSet<ClientConnection> tillClient;
@@ -90,8 +89,7 @@ public class MyServer implements Runnable
     } // table
 
     /**
-     *
-     * @return
+     * @return A HashSet of all the waiter clients
      */
     public HashSet<ClientConnection> getWaiterClients()
     {
@@ -103,7 +101,7 @@ public class MyServer implements Runnable
     
         /**
      *
-     * @return
+     * @return A hash set of all the till clients
      */
     public HashSet<ClientConnection> getTillClients()
     {
@@ -120,7 +118,10 @@ public class MyServer implements Runnable
     
     public void setBarClient(ClientConnection client)
     {
-        barClient = client;
+        synchronized(barClient)
+        {
+            barClient = client;
+        }
     }
     
     public ClientConnection getKitchenClient()

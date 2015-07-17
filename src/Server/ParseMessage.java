@@ -53,10 +53,10 @@ public class ParseMessage
             parseEventNotification((EventNotification)message);        
     } // parse
     
-    private TableStatusResponse parseTableStatusRequest(Request request)
+    private TableStatusResponse parseTableStatusRequest(TableStatusRequest request)
     {
         TableStatusResponse response = 
-            new TableStatusResponse((TableStatusRequest)request);        
+            new TableStatusResponse(request);        
         // cast the request to a table request
         TableStatusRequest x = (TableStatusRequest)response.getRequest();
         
@@ -83,81 +83,96 @@ public class ParseMessage
         return response;
     }
     
-    private NumOfTablesResponse parseNumOfTablesRequest(Request request)
+    private NumOfTablesResponse parseNumOfTablesRequest(NumOfTablesRequest request)
     {
-        NumOfTablesResponse response = new NumOfTablesResponse((NumOfTablesRequest)request);   
+        NumOfTablesResponse response = new NumOfTablesResponse(request);   
         return response;
     }
     
-    private RegisterClientResponse parseRegisterClientRequest(Request request)
+    private RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request)
     {
-        RegisterClientResponse response = new RegisterClientResponse((RegisterClientRequest)request);
-        boolean permission;
+        RegisterClientResponse response = new RegisterClientResponse(request);
+        boolean hasPermission;
         
         switch(response.getClientType())
         {
             case BAR:
-                permission = server.getBarClient() == null;
-                response.setPermission(permission); 
+                hasPermission = server.getBarClient() == null;
+                response.setPermission(hasPermission); 
                 System.out.println("dealing with bar req"); 
+                if (hasPermission)
+                {
+                    server.setBarClient(client);    
+                }
                 break;
             case KITCHEN:
-                permission = server.getKitchenClient() == null;
-                response.setPermission(permission); 
-                System.out.println("dealing with kitchen req"); 
+                hasPermission = server.getKitchenClient() == null;
+                response.setPermission(hasPermission); 
+                System.out.println("dealing with kitchen req");
+                if (hasPermission)
+                {
+                    server.setKitchenClient(client);    
+                }
                 break;
-            case WAITER: response.setPermission(true);
-            case TILL: response.setPermission(true);
+            case WAITER: 
+                response.setPermission(true);
+                break;
+            case TILL: 
+                response.setPermission(true); 
+                break;
             default: break;
         } // switch      
        
-        if (response.hasPermission())
-        {
-            switch (response.getClientType())
-            {
-                case BAR: server.setBarClient(client); break;
-                case KITCHEN: server.setKitchenClient(client);  break;
-                case WAITER: server.getWaiterClients().add(client);  break;
-                case TILL: server.getTillClients().add(client);  break;
-                default: break;
-            } // switch
-        }
         return response;
     }
     
-    private TabResponse parseTabRequest(Request request)
+    private TabResponse parseTabRequest(TabRequest request)
     {
-        TabResponse response = new TabResponse((TabRequest)request);
-        TabRequest tabRequest = (TabRequest)response.getRequest();
-        int number  = tabRequest.getTabNumber();
-        TableList tables = client.getServer().getTables();
+        TabResponse response = new TabResponse(request);
+        int number  = request.getTabNumber();
+        TableList tables = server.getTables();
         response.setTab(tables.getTable(number).getCurrentTab());
         return response;
     }
     
-    private LeaveResponse parseLeaveRequest(Request request)
+    private LeaveResponse parseLeaveRequest(LeaveRequest request)
     {
         LeaveResponse response = new LeaveResponse((LeaveRequest)request); 
         server.getWaiterClients().remove(client);
         response.setPermission(true);
-        client.isRunning = false;
+        client.stop();
         return response;
     }
     
     private boolean parseRequest(Request request) throws IOException
     {
-        Response response = null;  
+        Response response;
+        
         if (request instanceof TableStatusRequest)
-            response = parseTableStatusRequest(request);
+        {
+            response = parseTableStatusRequest((TableStatusRequest)request);
+        }
         else if (request instanceof NumOfTablesRequest)
-            response = parseNumOfTablesRequest(request);
+        {
+            response = parseNumOfTablesRequest((NumOfTablesRequest)request);
+        }
         else if (request instanceof RegisterClientRequest)  
-            response = parseRegisterClientRequest(request);
+        {
+            response = parseRegisterClientRequest((RegisterClientRequest)request);
+        }
         else if (request instanceof TabRequest)
-            response = parseTabRequest(request);
+        {
+            response = parseTabRequest((TabRequest)request);
+        }
         else if (request instanceof LeaveRequest)
-        response = parseLeaveRequest(request);
-                       
+        {
+        response = parseLeaveRequest((LeaveRequest)request);
+        }
+        else 
+        {
+            return false;
+        }
+        
         response.setParsed(true);    
         return sendMessage(response, client.getOutStream());
     }
@@ -180,7 +195,6 @@ public class ParseMessage
             ObjectOutputStream otherClientOut = c.getOutStream();
             TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
                     c.getSocket().getInetAddress(),
-                    event.getMessageID(),
                     tableNumber,
                     status);
             sendMessage(msgToSend, otherClientOut);
@@ -190,7 +204,6 @@ public class ParseMessage
             ObjectOutputStream otherClientOut = c.getOutStream();
             TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
                     c.getSocket().getInetAddress(),
-                    event.getMessageID(),
                     tableNumber,
                     status);
             sendMessage(msgToSend, otherClientOut);
@@ -220,7 +233,6 @@ public class ParseMessage
 
             NewItemNfn msgToSend1 = new NewItemNfn(event.getToAddress(),
                     server.getBarClient().getSocket().getInetAddress(),
-                    event.getMessageID(),
                     event.getType(),
                     event.getItems(),
                     event.getTable());
@@ -234,7 +246,6 @@ public class ParseMessage
             ObjectOutputStream otherClientOut = server.getKitchenClient().getOutStream();
             NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
                    server.getKitchenClient().getSocket().getInetAddress(),
-                    event.getMessageID(),
                     event.getType(),
                     event.getItems(),
                     event.getTable());

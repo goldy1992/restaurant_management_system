@@ -21,9 +21,9 @@ public abstract class EventNotification extends Message
      * @param to
      * @param messageID
      */
-    public EventNotification(InetAddress from, InetAddress to, String messageID)
+    public EventNotification(InetAddress from, InetAddress to)
     {
-        super(from, to, messageID);
+        super(from, to);
     }
     
     /**

@@ -27,11 +27,10 @@ public class TableStatusRequest extends Request
      */
     public TableStatusRequest(InetAddress from, 
                               InetAddress to, 
-                              String messageID, 
                               RequestType type,
                               ArrayList<Integer> tableList)
     {
-        super(from, to, messageID, type);
+        super(from, to, type);
         this.tableList = tableList;
     } // constructor
     
