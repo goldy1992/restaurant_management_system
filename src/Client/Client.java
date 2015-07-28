@@ -2,19 +2,19 @@ package Client;
 
 import Message.EventNotification.EventNotification;
 import Message.Message;
+import Message.Request.LeaveRequest;
 import Message.Request.RegisterClientRequest;
 import Message.Request.RegisterClientRequest.ClientType;
-import Message.Request.Request;
 import Message.Response.LeaveResponse;
 import Message.Response.RegisterClientResponse;
 import Message.Response.Response;
-import Server.MyServer;
+import Server.Server;
+import Server.StartServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,13 +25,13 @@ import java.util.logging.Logger;
 public abstract class Client implements Runnable
 {
     // localhost
-    public final InetAddress serverAddress = InetAddress.getByName(null); 
+    public final InetAddress serverAddress; 
     public final InetAddress address;
     public int serverPort;  
     public Socket client;
     public OutputGUI debugGUI;
     public Thread responseThread;    
-    private ObjectOutputStream out = null;
+    protected ObjectOutputStream out = null;
     private final ClientType type;
     private static final long serialVersionUID = 1L;
     
@@ -70,23 +70,27 @@ public abstract class Client implements Runnable
         System.out.println("exiting thread");
     }
     
-    public Client(RegisterClientRequest.ClientType type) throws UnknownHostException, IOException
+    public Client(RegisterClientRequest.ClientType type)
     {
         this.type = type;
+        InetAddress serverAddress = null;
         try
         {
-            serverPort = MyServer.getLowBoundPortRange();
+            serverPort = StartServer.getPORT_NUMBER();
+            serverAddress  = InetAddress.getByName(null);
             client = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(client.getOutputStream());
             this.debugGUI = null;
             this.responseThread = null;
             System.out.println("outputstream made");
-        } // try
+        } // try // try
         catch (IOException e)
         {
             System.out.println("Could not connect to server");
         } // catch
+ // catch
             this.address = client.getLocalAddress();
+            this.serverAddress = serverAddress;
     }
     
         /**
@@ -145,8 +149,7 @@ public abstract class Client implements Runnable
     }
    
     
-    @SuppressWarnings("unchecked")
-    public static Client makeClient(ClientType clientType) throws IOException
+    public static Client makeClient(ClientType clientType)
     {
         Client till;
         
@@ -169,44 +172,43 @@ public abstract class Client implements Runnable
             return till;
     } // makeClient
     
-    public static boolean startClient(Client c)
-    {
-        c.debugGUI = OutputGUI.makeGUI(c);
-        c.responseThread = new Thread(c);
-        c.responseThread.start();
-        c.registerClient();        
-        return true;
-    }
     
-    public RegisterClientRequest.ClientType getType()
+    public ClientType getType()
     {
         return type;
     }
     
-    public final void registerClient()
+    public final boolean registerClient()
     {
-
-        try
-        {
         RegisterClientRequest rKitchenReq = new RegisterClientRequest(
-            InetAddress.getByName(client.getLocalAddress().getHostName()),
-            InetAddress.getByName(serverAddress.getHostName()),
-            Request.RequestType.REGISTER_CLIENT,
-            type);     
-        System.out.println("writing object: " + rKitchenReq);
-            getOutputStream().reset();
-            getOutputStream().writeObject(rKitchenReq);           
-            getOutputStream().reset();     
-            System.out.println("written");
-        } 
-        catch (IOException ex) {
-            System.out.println("error thrown here!");
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-                                    System.out.println("eXITING");
-    } // REGISTERcLIENT
+                this.address,
+                this.serverAddress,
+                type);
+        return writeMessage(rKitchenReq);
+    } // registerClient
     
-
+    public final boolean leaveRequest()
+    {
+        LeaveRequest leaveRequest = new LeaveRequest(
+                this.address,
+                this.serverAddress
+        );
+        return writeMessage(leaveRequest);
+    } // registerClient
+    
+    public <M extends Message> boolean writeMessage(M message)
+    {
+        try 
+        {           
+            out.writeObject(message);
+            out.reset();
+        } 
+        catch (IOException ex) 
+        {
+            System.out.println("failed to send message:" + message);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return true;
+    }
 
 }

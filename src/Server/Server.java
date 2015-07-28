@@ -1,24 +1,18 @@
 package Server;
 
 import Message.TableList;
-import Message.Table;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
-import java.util.Scanner;
 
 /**
  *
  * @author Goldy
  */
-public class MyServer implements Runnable
-{
-    public static MyServer server;
-    private static final int PORT_NUMBER = 11000;
-    private static final int NUM_OF_TABLES = 44;
-    
+public class Server implements Runnable
+{    
     private final ServerSocket socket; 
     private final HashSet<ClientConnection> waiterClient;
     private final HashSet<ClientConnection> tillClient;
@@ -29,7 +23,7 @@ public class MyServer implements Runnable
     public Thread listenThread;
     public boolean socketListening;
     
-    public MyServer(ServerSocket socket,
+    public Server(ServerSocket socket,
                     HashSet<ClientConnection> waiterClient,
                     HashSet<ClientConnection> tillClient,
                     TableList tables) throws IOException
@@ -40,49 +34,7 @@ public class MyServer implements Runnable
         this.socket = socket;
     } // myserver
     
-    /**
-     *
-     * @param args
-     */
-    public static void main(String[] args)
-    { 
-        try
-        {
-           server = makeServer(NUM_OF_TABLES, PORT_NUMBER);        
-           server.start();
-           
-           boolean exit = false;
-           while(!exit)
-           {
-                Scanner sc = new Scanner(System.in);
-    
-                while (sc.hasNextLine())
-                {
-                    String s = sc.nextLine();
-                    if (s.equals("exit"))
-                        exit = true;
-                }
-           }
-           server.end();
 
-            
-        } // try // try // try // try // try // try // try // try
-        catch (BindException e)
-        {
-            e.printStackTrace();
-        } // catch 
-        catch (IOException e)
-        {
-            System.out.println(e);
-        } // catch   
-        
-    } // main
-    
-    /**
-     *
-     * @param number
-     * @return
-     */
     public TableList getTables()
     {
         return tables;
@@ -144,7 +96,7 @@ public class MyServer implements Runnable
 
             while (socketListening)
             {
-                Socket acceptSocket = server.socket.accept();
+                Socket acceptSocket = socket.accept();
                 ClientConnection newThread = 
                     ClientConnection.makeClientThread(acceptSocket, 
                                                     clientNumber, 
@@ -175,31 +127,5 @@ public class MyServer implements Runnable
         socketListening = false;
         socket.close();
     }
-    
-    public static MyServer makeServer(int numOfTables, int portNumber) throws IOException
-    {
-        HashSet<ClientConnection> waiterClient = new HashSet<>();
-        HashSet<ClientConnection> tillClient = new HashSet<>(); 
-        Table[] tables = new Table[numOfTables + 1];
 
-        // creates a thread for each table
-        for (int i = 1; i <= tables.length -1; i++)
-            tables[i] = Table.createTable(i);
-        
-        TableList tableList = new TableList(tables);
-        ServerSocket socket = new ServerSocket(portNumber);
-        MyServer newServer = new MyServer(socket, waiterClient, tillClient, tableList);  
-        newServer.listenThread = new Thread(newServer);
-        
-        return newServer;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public static int getLowBoundPortRange()
-    {
-        return PORT_NUMBER;
-    }
 } // MySocket class

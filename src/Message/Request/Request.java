@@ -22,42 +22,6 @@ public abstract class Request extends Message
     public Object getTableList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    /**
-     *
-     */
-    public static enum RequestType 
-    {
-        /**
-         *  Request the status of a table (FREE, OCCUPIED, IN USE) etc.
-         */
-        TABLE_STATUS,
-
-        /**
-         *  Request the number of tables currently in use.
-         */
-        NUM_OF_TABLES,
-
-        /**
-         *  Requests permission to leave.
-         */
-        LEAVE,
-        
-        /**
-         *  Requests the current tab from the table server.
-         */
-        TAB,
-        
-        /**
-         *  Requests the for the client to be registered.
-         */
-        REGISTER_CLIENT
-    } // requestType
-    
-    /**
-     *
-     */
-    public RequestType type;
     
     /**
      *
@@ -67,11 +31,9 @@ public abstract class Request extends Message
      * @param type
      */
     public Request(InetAddress from, 
-                          InetAddress to, 
-                          RequestType type)
+                          InetAddress to)
     {
        super(from, to);
-       this.type = type;
     }
     
     public String toString()

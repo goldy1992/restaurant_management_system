@@ -10,7 +10,7 @@ import Client.WaiterClient;
 import Item.Tab;
 import Message.Request.Request;
 import Message.Request.TabRequest;
-import Server.MyServer;
+import Server.Server;
 
 /**
  *

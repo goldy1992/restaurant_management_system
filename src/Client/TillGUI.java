@@ -110,8 +110,7 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
                         parent.client.
                     getLocalAddress().getHostName()),
                     InetAddress.getByName(
-                        parent.serverAddress.getHostName()),
-                    Request.RequestType.LEAVE);
+                        parent.serverAddress.getHostName()));
                 parent.getOutputStream().writeObject(leaveRequest);
             } catch (SQLException ex) {
                 Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);

@@ -23,10 +23,9 @@ public class NumOfTablesRequest extends Request
      * @param type
      */
     public NumOfTablesRequest(InetAddress from, 
-                              InetAddress to, 
-                              Request.RequestType type)
+                              InetAddress to)
     {
-        super(from, to, type);
+        super(from, to);
     } // constructor
     
 

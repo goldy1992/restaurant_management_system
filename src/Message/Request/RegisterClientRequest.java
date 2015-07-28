@@ -41,23 +41,20 @@ public class RegisterClientRequest extends Request
      *
      * @param from
      * @param to
-     * @param messageID
-     * @param type
      * @param clientType
      */
     public RegisterClientRequest(InetAddress from, 
                                 InetAddress to, 
-                                RequestType type,
                                 ClientType clientType)
     {
-        super(from, to, type);
+        super(from, to);
         this.clientType = clientType;
     } // constructor
     
     @Override
     public String toString()
     {
-        String x = super.toString() + "SUBTYPE: " + type;
+        String x = super.toString() + "SUBTYPE: " + clientType;
         x+= "\n";
         
         return x;

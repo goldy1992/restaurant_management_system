@@ -3,7 +3,7 @@ package Client.MainMenu;
 import Client.Client;
 import Client.DatabaseConnect;
 import Client.Pair;
-import Client.SelectTableMenu.SelectTable;
+
 import Item.Item;
 import Item.Tab;
 import Message.EventNotification.*;
@@ -350,10 +350,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @param stream
      * @throws java.sql.SQLException
      */
-    public Menu(Client parentClient, java.awt.Frame parent, boolean modal, Tab tab, ObjectOutputStream stream) throws SQLException
+    public Menu(Client parentClient, java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
     {
         super(parent, modal);
-        this.out = stream;
+        this.out = null;
         this.parentClient = parentClient;
      
         // initialise the connection to the database
@@ -873,13 +873,13 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @return 
     */
     public static Menu makeMenu(Client cParent, JFrame parent, 
-            Tab tab, ObjectOutputStream out)
+            Tab tab)
     {
         
         Menu newMenu = null;
         try 
         {
-            newMenu = new Menu(cParent, parent, true, tab, out);
+            newMenu = new Menu(cParent, parent, true, tab);
             newMenu.addMouseListener(newMenu);
             newMenu.setTotal();
             newMenu.setEnabled(true);
@@ -889,8 +889,8 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         } // try
         catch (SQLException ex) 
         {
-            Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
+            //Logger.getLogger(SelectTableGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch // catch
         
         return newMenu;
     } // makeMenu

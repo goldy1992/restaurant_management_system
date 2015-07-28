@@ -21,16 +21,13 @@ public class TableStatusRequest extends Request
      *
      * @param from
      * @param to
-     * @param messageID
-     * @param type
      * @param tableList
      */
     public TableStatusRequest(InetAddress from, 
                               InetAddress to, 
-                              RequestType type,
                               ArrayList<Integer> tableList)
     {
-        super(from, to, type);
+        super(from, to);
         this.tableList = tableList;
     } // constructor
     

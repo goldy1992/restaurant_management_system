@@ -6,7 +6,7 @@
 
 package Message.Response;
 
-import Server.MyServer;
+import Server.Server;
 import Message.Request.NumOfTablesRequest;
 
 /**

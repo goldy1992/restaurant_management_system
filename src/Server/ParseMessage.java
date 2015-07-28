@@ -34,7 +34,7 @@ public class ParseMessage
 {
     private final Message message;
     private final ClientConnection client;
-    private final MyServer server;
+    private final Server server;
     private final TableList tables;
     
     public ParseMessage(Message m, ClientConnection client)

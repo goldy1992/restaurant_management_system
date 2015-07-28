@@ -22,10 +22,9 @@ public class LeaveRequest extends Request
      * @param type
      */
     public LeaveRequest(InetAddress from, 
-                              InetAddress to, 
-                              Request.RequestType type)
+                              InetAddress to)
     {
-        super(from, to, type);
+        super(from, to);
     } // constructor
     
 

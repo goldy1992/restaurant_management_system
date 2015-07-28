@@ -1,13 +1,9 @@
 package Client;
 
-import Client.SelectTableMenu.SelectTable;
+import Client.SelectTableMenu.SelectTableController;
 import Message.EventNotification.TableStatusEvtNfn;
-import Message.Message;
-import Message.Request.RegisterClientRequest;
-import Message.Request.*;
 import Message.Request.RegisterClientRequest.ClientType;
 import static Message.Request.RegisterClientRequest.ClientType.WAITER;
-import static Message.Request.Request.RequestType.TABLE_STATUS;
 import Message.Request.TableStatusRequest;
 import static Message.Request.TableStatusRequest.ALL;
 import Message.Response.NumOfTablesResponse;
@@ -15,7 +11,6 @@ import Message.Response.Response;
 import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 /**
@@ -25,9 +20,9 @@ import java.util.ArrayList;
 public class WaiterClient extends UserClient
 {
     public int numberOfTables = -1;
-    public SelectTable selectTable;  
+    public SelectTableController selectTable;  
     
-    public WaiterClient(ClientType  type) throws IOException
+    public WaiterClient(ClientType  type)
     {
         super(type);
     } // constructor
@@ -55,37 +50,16 @@ public class WaiterClient extends UserClient
      */
     public static void main(String[] args) throws InterruptedException
     {
-        WaiterClient myClient = null;
-        try
-        {
-            myClient = (WaiterClient)Client.makeClient(WAITER);
-
-            ArrayList<Integer> tables = new ArrayList<>();
-            // add null because there's no table zero
-            tables.add(ALL);
-            InetAddress thisAddress = myClient.address;
-            InetAddress serverAddress = myClient.serverAddress; 
-            
-            TableStatusRequest request = new TableStatusRequest(
-                thisAddress,
-                serverAddress,
-                TABLE_STATUS,
-                tables);            
-            myClient.getOutputStream().writeObject(request);  
-            
-        } // try
-        catch (IOException e)
-        {
-            myClient.debugGUI.addText("Could not connect to server");
-        } // catch
-        //myClient.debugGUI.addText("pre while");
+        WaiterClient client = (WaiterClient)Client.makeClient(WAITER);
+        ArrayList<Integer> tables = new ArrayList<>();
+        tables.add(ALL); 
+        client.sendTableStatusRequest(tables);
         
-        
-        synchronized(myClient.lock)
+        synchronized(client.lock)
         {
-            while(myClient.tableStatuses == null)
+            while(client.tableStatuses == null)
             {
-                try { myClient.lock.wait(); }
+                try { client.lock.wait(); }
                 catch (InterruptedException e) 
                 { // treat interrupt as exit request
                     break;
@@ -93,11 +67,11 @@ public class WaiterClient extends UserClient
             } // while
         
         } // synchronized
-        myClient.debugGUI.addText("post while");
+        client.debugGUI.addText("post while");
         
-        myClient.selectTable = new SelectTable(
-            myClient.tableStatuses, myClient.getOutputStream(), myClient);
-        myClient.selectTable.setVisible(true);
+        client.selectTable = new SelectTableController(
+            client.tableStatuses, client);
+       
 
         System.out.println("end of waiter client");
     } // main
@@ -106,7 +80,7 @@ public class WaiterClient extends UserClient
     public void parseTabResponse(TabResponse resp)
     {
         debugGUI.addText("Executing TabResponse's onreceiving");
-        synchronized(selectTable.tabLock)
+        synchronized(selectTable)
         {
             selectTable.setTab(resp.getTab());
             selectTable.setTabReceived(true);      
@@ -139,6 +113,15 @@ public class WaiterClient extends UserClient
     protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
     {
         selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
+    }
+    
+    public boolean sendTableStatusRequest(ArrayList<Integer> tables)
+    {
+        TableStatusRequest request = new TableStatusRequest(
+            address,
+            serverAddress,
+            tables);            
+        return writeMessage(request);
     }
     
 } // MyClientSocketClass

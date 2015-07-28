@@ -2,7 +2,6 @@ package Client.MainMenu;
 
 import Client.Pair;
 import Client.Client;
-import Client.SelectTableMenu.SelectTable;
 import Client.TillClient;
 import Client.TillGUI;
 import Item.Tab;
@@ -43,7 +42,7 @@ public class TillMenu extends Menu
     public TillMenu(Client client, java.awt.Frame parent, boolean modal, 
         Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
     {
-        super(client, parent, modal, tab, stream);
+        super(client, parent, modal, tab);
         this.till = parentGUI;
     }
     
@@ -157,8 +156,8 @@ public class TillMenu extends Menu
         } // try
         catch (SQLException ex) 
         {
-            Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
+            //Logger.getLogger(SelectTableGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch // catch
         
         return newMenu;
     } // makeMenu

@@ -40,8 +40,8 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
-    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
     <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="formComponentResized"/>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
   </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -84,6 +84,9 @@
               <Dimension value="[500, 100]"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="outputLabel = new OutputLabel();&#xa;&#xa;outputLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);&#xa;FormPanel.add(outputLabel);"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="0" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="0.16666"/>
@@ -93,22 +96,15 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="OutputLabel" alignment="0" pref="498" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="498" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="OutputLabel" alignment="0" pref="98" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="98" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="OutputLabel">
-              <Properties>
-                <Property name="verticalAlignment" type="int" value="1"/>
-              </Properties>
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="ExternalOptionsPanel">
           <Properties>
@@ -125,7 +121,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExternalOptionsPanel.add(openTable);&#xa;openTable.addActionListener(this);&#xa;ExternalOptionsPanel.add(moveTable);&#xa;moveTable.addActionListener(this);&#xa;ExternalOptionsPanel.add(cleanTable);&#xa;cleanTable.addActionListener(this);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExternalOptionsPanel.add(openTable);&#xa;openTable.addActionListener(controller);&#xa;ExternalOptionsPanel.add(moveTable);&#xa;moveTable.addActionListener(controller);&#xa;ExternalOptionsPanel.add(cleanTable);&#xa;cleanTable.addActionListener(controller);"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -152,9 +148,6 @@
               <Dimension value="[400, 500]"/>
             </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="for(int i = 1; i &lt; tableButtons.length; i++)&#xa;{&#xa;    tableButtons[i] = new JButton();&#xa;    TableNumPanel.add(tableButtons[i]); &#xa;    tableButtons[i].addActionListener(this);&#xa;    setTableStatus(i, tableStatuses.get(i));&#xa;}"/>
-          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class ClientConnection implements Runnable
 {
-    private final MyServer parent;
+    private final Server parent;
     private final Socket socket;
     private Thread thread;
     public long id;
@@ -33,7 +33,7 @@ public class ClientConnection implements Runnable
      * @param parent
      * @throws java.net.SocketException
      */
-    public ClientConnection(Socket socket, long id, MyServer parent) throws SocketException
+    public ClientConnection(Socket socket, long id, Server parent) throws SocketException
     {
         this.socket = socket;
         this.id = id;
@@ -48,6 +48,16 @@ public class ClientConnection implements Runnable
     {
         this.thread = t;
     }
+    
+    public void setIn(ObjectInputStream in)
+    {
+        this.in = in;
+    }
+    
+    public void setOut(ObjectOutputStream out)
+    {
+        this.out = out;
+    }
    
     @Override
     public void run()
@@ -56,10 +66,7 @@ public class ClientConnection implements Runnable
         {
             Message message = null;
             try
-            {
-                out = new ObjectOutputStream(socket.getOutputStream());
-                in = new ObjectInputStream(socket.getInputStream());    
-                              
+            {                              
                 while(isRunning)
                 {
                     message = (Message) in.readObject();                        
@@ -127,15 +134,17 @@ public class ClientConnection implements Runnable
         return in;
     }
     
-    public MyServer getServer()
+    public Server getServer()
     {
         return parent;
     }
     
-     public static ClientConnection makeClientThread(Socket socket, long id, MyServer parent) throws SocketException
+     public static ClientConnection makeClientThread(Socket socket, long id, Server parent) throws SocketException, IOException
      {
          ClientConnection cThread = new ClientConnection(socket, id, parent);
          cThread.thread = new Thread(cThread);
+         cThread.setIn(new ObjectInputStream(socket.getInputStream()));
+         cThread.setOut(new ObjectOutputStream(socket.getOutputStream()));
          return cThread;
      }
 

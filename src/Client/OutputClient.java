@@ -55,7 +55,7 @@ public class OutputClient extends Client implements Runnable
         } // if
     }
      
-    public OutputClient(RegisterClientRequest.ClientType type) throws IOException 
+    public OutputClient(RegisterClientRequest.ClientType type)  
     {
         super(type);
     } // constructor

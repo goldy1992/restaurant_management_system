@@ -6,7 +6,6 @@
 package Client.MainMenu;
 
 import Client.Pair;
-import Client.SelectTableMenu.SelectTable;
 import Client.TillClient;
 import Message.EventNotification.TableStatusEvtNfn;
 import Message.Request.Request;
@@ -101,7 +100,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                                     .getLocalAddress().getHostName()),
                                 InetAddress.getByName(tClient
                                     .serverAddress.getHostName()),
-                                Request.RequestType.TAB,
                                     chosenTable);
                             tClient.getOutputStream().reset();
                             tClient.getOutputStream().writeObject(tabStatusRequest);
@@ -120,8 +118,8 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             }
                             catch (InterruptedException ex) 
                             {
-                                Logger.getLogger(SelectTable.class.getName()).log(Level.SEVERE, null, ex);
-                            } // catch
+                                //Logger.getLogger(SelectTableGUI.class.getName()).log(Level.SEVERE, null, ex);
+                            } // catch // catch
                         } // synchronized
                         
 
@@ -193,8 +191,6 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                                 parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(
                                 parentClient.serverAddress.getHostName()),
-                              
-                            Request.RequestType.TAB,
                               pair.getFirst());
                         parentClient.getOutputStream().writeObject(req);
                         

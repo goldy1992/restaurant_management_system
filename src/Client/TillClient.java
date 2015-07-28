@@ -9,13 +9,12 @@ import Client.MainMenu.BarTabDialogSelect;
 import Item.Tab;
 import Message.EventNotification.*;
 import Message.Request.RegisterClientRequest;
-import Message.Request.*;
+import Message.Request.RegisterClientRequest.ClientType;
 import static Message.Request.RegisterClientRequest.ClientType.TILL;
 import Message.Request.TableStatusRequest;
 import Message.Response.*;
 import Message.Table;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +27,7 @@ public class TillClient extends UserClient
 {
     public TillGUI gui = null;
     
-    public TillClient(RegisterClientRequest.ClientType  type) throws IOException
+    public TillClient(ClientType  type) 
     {
         super(type);
     } // constructor
@@ -50,7 +49,6 @@ public class TillClient extends UserClient
             TableStatusRequest request = new TableStatusRequest(
                 myClient.address,
                 myClient.serverAddress,
-                Request.RequestType.TABLE_STATUS,
                 tables);
             myClient.getOutputStream().writeObject(request);  
             myClient.gui = new TillGUI(myClient);

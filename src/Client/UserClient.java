@@ -2,14 +2,15 @@ package Client;
 
 import Message.EventNotification.EventNotification;
 import Message.EventNotification.TableStatusEvtNfn;
-import Message.Request.RegisterClientRequest;
+import Message.Request.RegisterClientRequest.ClientType;
+import Message.Request.TabRequest;
 import Message.Request.TableStatusRequest;
 import Message.Response.Response;
 import Message.Response.TabResponse;
 import Message.Response.TableStatusResponse;
 import Message.Table;
+import Message.Table.TableStatus;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /*
@@ -27,7 +28,7 @@ public abstract class UserClient extends Client
     public final Object lock = new Object();
     public ArrayList<Table.TableStatus> tableStatuses = null; // temp variable
 
-    public UserClient(RegisterClientRequest.ClientType type) throws UnknownHostException, IOException 
+    public UserClient(ClientType type) 
     {
         super(type);
     }
@@ -100,5 +101,23 @@ public abstract class UserClient extends Client
    {
        return lock;
    }
+   
+    public boolean sendTableStatusEventNotification(int tableNumber, 
+                                                     TableStatus status)
+    {
+        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(address,
+            serverAddress,
+            tableNumber, status);
+        return writeMessage(newEvt);  
+    
+    }
+    
+    public boolean sendTabRequest(int table)
+    {
+        TabRequest tabStatusRequest = new TabRequest(this.address,
+            this.serverAddress,
+            table);        
+        return writeMessage(tabStatusRequest);
+    }
    
 }
