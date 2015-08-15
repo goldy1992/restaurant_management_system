@@ -27,7 +27,6 @@ public class StartServer
         try
         {
            Server server = makeServer(NUM_OF_TABLES, getPORT_NUMBER());        
-           server.start();
            
            boolean exit = false;
            while(!exit)
@@ -41,7 +40,7 @@ public class StartServer
                         exit = true;
                 }
            }
-           server.end();
+
 
             
         } // try // try // try // try // try // try // try // try
@@ -69,10 +68,10 @@ public class StartServer
         TableList tableList = new TableList(tables);
         ServerSocket socket = new ServerSocket(portNumber);
         Server newServer = new Server(socket, waiterClient, tillClient, tableList);  
-        newServer.listenThread = new Thread(newServer);
+        ServerRunThread serverThread = new ServerRunThread();
         
         return newServer;
-    }
+    } // makeServer
 
     /**
      * @return the PORT_NUMBER

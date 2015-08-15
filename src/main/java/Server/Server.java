@@ -11,22 +11,19 @@ import java.util.HashSet;
  *
  * @author Goldy
  */
-public class Server implements Runnable
+public class Server
 {    
     private final ServerSocket socket; 
+    private ServerRunThread listener;
     private final HashSet<ClientConnection> waiterClient;
-    private final HashSet<ClientConnection> tillClient;
-    
+    private final HashSet<ClientConnection> tillClient;   
     private ClientConnection barClient = null;
     private ClientConnection kitchenClient = null;
     private final TableList tables;
-    public Thread listenThread;
     public boolean socketListening;
     
-    public Server(ServerSocket socket,
-                    HashSet<ClientConnection> waiterClient,
-                    HashSet<ClientConnection> tillClient,
-                    TableList tables) throws IOException
+    public Server(ServerSocket socket, HashSet<ClientConnection> waiterClient,
+                HashSet<ClientConnection> tillClient, TableList tables) throws IOException
     {
         this.waiterClient = waiterClient;
         this.tillClient = tillClient;
@@ -34,7 +31,6 @@ public class Server implements Runnable
         this.socket = socket;
     } // myserver
     
-
     public TableList getTables()
     {
         return tables;
@@ -51,7 +47,7 @@ public class Server implements Runnable
         } // sync
     }
     
-        /**
+    /**
      *
      * @return A hash set of all the till clients
      */
@@ -86,46 +82,17 @@ public class Server implements Runnable
         kitchenClient = client;
     }
 
-    @Override
-    public void run() 
-    {
-        try
-        {
-            socketListening = true;
-            long clientNumber = 0;
-
-            while (socketListening)
-            {
-                Socket acceptSocket = socket.accept();
-                ClientConnection newThread = 
-                    ClientConnection.makeClientThread(acceptSocket, 
-                                                    clientNumber, 
-                                                    this);
-                newThread.getThread().start();
-
-                //debugGUI.addText("accept client number " + clientNumber);
-                clientNumber++;
-            } // while  
-        } // try
-        catch (BindException e)
-        {
-            e.printStackTrace();
-        } // catch 
-        catch (IOException e)
-        {
-            System.out.println(e);
-        } // catch
-    }
-    
-    public void start()
-    {
-        this.listenThread.start();
-    }
-    
-    public void end() throws IOException
-    {
-        socketListening = false;
-        socket.close();
+    /**
+     * @return the listener
+     */
+    public ServerRunThread getListener() {
+        return listener;
     }
 
+    /**
+     * @param listener the listener to set
+     */
+    public void setListener(ServerRunThread listener) {
+        this.listener = listener;
+    }
 } // MySocket class
