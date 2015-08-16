@@ -14,20 +14,20 @@ public class ServerRunThread extends Thread
     private boolean socketListening;
     private Server server;
     
+    @Override
     public void run()
     {
        try
         {
-            socketListening = true;
+            setSocketListening(true);
             long clientNumber = 0;
 
-            while (socketListening)
+            while (isSocketListening())
             {
-                Socket acceptSocket = socket.accept();
+                Socket acceptSocket = getSocket().accept();
                 ClientConnection newThread = 
-                    ClientConnection.makeClientThread(acceptSocket, 
-                                                    clientNumber, 
-                                                    server);
+                ClientConnection.makeClientThread(acceptSocket, 
+                                                    clientNumber, getServer());
                 newThread.getThread().start();
 
                 //debugGUI.addText("accept client number " + clientNumber);
@@ -48,8 +48,50 @@ public class ServerRunThread extends Thread
     
     public void end() throws IOException
     {
-        socketListening = false;
-        socket.close();
+        setSocketListening(false);
+        getSocket().close();
+    }
+
+    /**
+     * @return the socket
+     */
+    public ServerSocket getSocket() {
+        return socket;
+    }
+
+    /**
+     * @param socket the socket to set
+     */
+    public void setSocket(ServerSocket socket) {
+        this.socket = socket;
+    }
+
+    /**
+     * @return the socketListening
+     */
+    public boolean isSocketListening() {
+        return socketListening;
+    }
+
+    /**
+     * @param socketListening the socketListening to set
+     */
+    public void setSocketListening(boolean socketListening) {
+        this.socketListening = socketListening;
+    }
+
+    /**
+     * @return the server
+     */
+    public Server getServer() {
+        return server;
+    }
+
+    /**
+     * @param server the server to set
+     */
+    public void setServer(Server server) {
+        this.server = server;
     }
     
 }

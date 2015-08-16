@@ -69,6 +69,7 @@ public class StartServer
         ServerSocket socket = new ServerSocket(portNumber);
         Server newServer = new Server(socket, waiterClient, tillClient, tableList);  
         ServerRunThread serverThread = new ServerRunThread();
+        serverThread.setServer(newServer);
         
         return newServer;
     } // makeServer

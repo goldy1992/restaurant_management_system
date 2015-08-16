@@ -14,7 +14,6 @@ import java.util.HashSet;
 public class Server
 {    
     private final ServerSocket socket; 
-    private ServerRunThread listener;
     private final HashSet<ClientConnection> waiterClient;
     private final HashSet<ClientConnection> tillClient;   
     private ClientConnection barClient = null;
@@ -82,17 +81,4 @@ public class Server
         kitchenClient = client;
     }
 
-    /**
-     * @return the listener
-     */
-    public ServerRunThread getListener() {
-        return listener;
-    }
-
-    /**
-     * @param listener the listener to set
-     */
-    public void setListener(ServerRunThread listener) {
-        this.listener = listener;
-    }
 } // MySocket class
