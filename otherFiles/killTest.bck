@@ -1,0 +1,2 @@
+#!/bin/bash
+kill `ps -ef | grep TestClientServer | grep -v grep | awk '{print $2}'`
