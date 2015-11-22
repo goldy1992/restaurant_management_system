@@ -2,14 +2,18 @@ package com.mike.message;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import org.springframework.messaging.MessageHeaders;
+import sun.nio.cs.ext.TIS_620;
+
+
 
 /**
  *
  * @author Goldy
  */
-public abstract class Message implements Serializable, Uniqueness
+public abstract class Message implements Uniqueness, Serializable
 {
-    
+    private MessageHeaders messageHeaders;
     private final InetAddress fromAddress;
     private final InetAddress toAddress;
     private final String messageID;
@@ -28,6 +32,11 @@ public abstract class Message implements Serializable, Uniqueness
         this.messageID = generateUniqueID();
     } // constructor
     
+    public Message(){
+    fromAddress=null;toAddress=null;messageID=null;
+            }
+    
+
     /**
      *
      * @return
@@ -61,5 +70,6 @@ public abstract class Message implements Serializable, Uniqueness
         + "\nFROM: " + fromAddress.toString()
         + "\nMESSAGE ID: " + messageID + "\n";
     }
+
     
 }

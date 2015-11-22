@@ -9,14 +9,16 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.springframework.integration.annotation.ServiceActivator;
+
 import static com.mike.message.Request.TableStatusRequest.ALL;
 
 /**
  *
  * @author Terry
  */
-public class ParseMessage 
-{
+public class ParseMessage {
     private final Message message;
     private final ClientConnection client;
     private final Server server;
@@ -34,8 +36,8 @@ public class ParseMessage
     {
         if (message instanceof Request)
             parseRequest((Request)message);                  
-        else if(message instanceof EventNotification)
-            parseEventNotification((EventNotification)message);        
+     //   else if(message instanceof EventNotification)
+       //     parseEventNotification((EventNotification)message);        
     } // parse
     
     private TableStatusResponse parseTableStatusRequest(TableStatusRequest request)
@@ -74,8 +76,11 @@ public class ParseMessage
         return response;
     }
     
+    
+    @ServiceActivator(inputChannel="messageRegisterClientRequest")
     private RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request)
     {
+    	System.out.println("hit register client");
         RegisterClientResponse response = new RegisterClientResponse(request);
         boolean hasPermission;
         
@@ -162,39 +167,39 @@ public class ParseMessage
         return sendMessage(response, client.getOutStream());
     }
     
-    private void parseTableStatusEvtNfn(EventNotification message) 
-    {
-        TableStatusEvtNfn event = (TableStatusEvtNfn)message;
-        int tableNumber = event.getTableNumber();
-        Table.TableStatus status = event.getTableStatus();
-                          
-        //gui.addText("requested table " + tableNumber);
-        tables.getTable(tableNumber).setTableStatus(status);
-                            
-        //gui.addText("new table status " + parent.getTable(tableNumber).getTableStatus());
-                                                       
-        //gui.addText("number of clients to send to: " + parent.getWaiterClients().size());
-
-        for (ClientConnection c : server.getWaiterClients())
-        {
-            ObjectOutputStream otherClientOut = c.getOutStream();
-            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    c.getSocket().getInetAddress(),
-                    tableNumber,
-                    status);
-            sendMessage(msgToSend, otherClientOut);
-        }  
-        for (ClientConnection c : server.getTillClients())
-        {
-            ObjectOutputStream otherClientOut = c.getOutStream();
-            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
-                    c.getSocket().getInetAddress(),
-                    tableNumber,
-                    status);
-            sendMessage(msgToSend, otherClientOut);
-        } 
-        
-    } // parseTableStatusEvtNfn
+//    private void parseTableStatusEvtNfn(EventNotification message) 
+//    {
+//        TableStatusEvtNfn event = (TableStatusEvtNfn)message;
+//        int tableNumber = event.getTableNumber();
+//        Table.TableStatus status = event.getTableStatus();
+//                          
+//        //gui.addText("requested table " + tableNumber);
+//        tables.getTable(tableNumber).setTableStatus(status);
+//                            
+//        //gui.addText("new table status " + parent.getTable(tableNumber).getTableStatus());
+//                                                       
+//        //gui.addText("number of clients to send to: " + parent.getWaiterClients().size());
+//
+//        for (ClientConnection c : server.getWaiterClients())
+//        {
+//            ObjectOutputStream otherClientOut = c.getOutStream();
+//            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+//                    c.getSocket().getInetAddress(),
+//                    tableNumber,
+//                    status);
+//            sendMessage(msgToSend, otherClientOut);
+//        }  
+//        for (ClientConnection c : server.getTillClients())
+//        {
+//            ObjectOutputStream otherClientOut = c.getOutStream();
+//            TableStatusEvtNfn msgToSend = new TableStatusEvtNfn(event.getToAddress(),
+//                    c.getSocket().getInetAddress(),
+//                    tableNumber,
+//                    status);
+//            sendMessage(msgToSend, otherClientOut);
+//        } 
+//        
+//    } // parseTableStatusEvtNfn
     
     private void parseTabUpdateNfn(EventNotification message)
     {
@@ -208,44 +213,44 @@ public class ParseMessage
         //gui.addText("Tab updated");          
     } // parseTabUpdateNfn
     
-    private void parseNewItemNfn(EventNotification message) 
-    {
-        NewItemNfn event = (NewItemNfn)message;
-
-        if (event.getType() == Item.Type.DRINK && server.getBarClient() != null)
-        {
-            ObjectOutputStream otherClientOut = server.getBarClient().getOutStream();
-
-            NewItemNfn msgToSend1 = new NewItemNfn(event.getToAddress(),
-                    server.getBarClient().getSocket().getInetAddress(),
-                    event.getType(),
-                    event.getItems(),
-                    event.getTable());
-
-            sendMessage(msgToSend1, otherClientOut);
-        } // if
-
-        else if (event.getType() == Item.Type.FOOD && server.getKitchenClient() != null)
-        { 
-            //gui.addText("got here food: send to port: " + parent.getBarClient().getSocket().getPort());
-            ObjectOutputStream otherClientOut = server.getKitchenClient().getOutStream();
-            NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
-                   server.getKitchenClient().getSocket().getInetAddress(),
-                    event.getType(),
-                    event.getItems(),
-                    event.getTable());
-            sendMessage(msgToSend, otherClientOut);
-        } // if      
-   }
+//   private void parseNewItemNfn(EventNotification message) 
+//    {
+//        NewItemNfn event = (NewItemNfn)message;
+//
+//        if (event.getType() == Item.Type.DRINK && server.getBarClient() != null)
+//        {
+//            ObjectOutputStream otherClientOut = server.getBarClient().getOutStream();
+//
+//            NewItemNfn msgToSend1 = new NewItemNfn(event.getToAddress(),
+//                    server.getBarClient().getSocket().getInetAddress(),
+//                    event.getType(),
+//                    event.getItems(),
+//                    event.getTable());
+//
+//            sendMessage(msgToSend1, otherClientOut);
+//        } // if
+//
+//        else if (event.getType() == Item.Type.FOOD && server.getKitchenClient() != null)
+//        { 
+//            //gui.addText("got here food: send to port: " + parent.getBarClient().getSocket().getPort());
+//            ObjectOutputStream otherClientOut = server.getKitchenClient().getOutStream();
+//            NewItemNfn msgToSend = new NewItemNfn(event.getToAddress(),
+//                   server.getKitchenClient().getSocket().getInetAddress(),
+//                    event.getType(),
+//                    event.getItems(),
+//                    event.getTable());
+//            sendMessage(msgToSend, otherClientOut);
+//        } // if      
+//   }
     
     private void parseEventNotification(EventNotification message) 
     {
-        if (message instanceof TableStatusEvtNfn)
-            parseTableStatusEvtNfn(message);
+        if (message instanceof TableStatusEvtNfn);
+           // parseTableStatusEvtNfn(message);
         else if (message instanceof TabUpdateNfn)
             parseTabUpdateNfn(message);
-        else if (message instanceof NewItemNfn)
-            parseNewItemNfn(message);
+        else if (message instanceof NewItemNfn);
+        //    parseNewItemNfn(message);
     } // parseEventNotification
 
     private <T extends Message> boolean sendMessage(T message, 

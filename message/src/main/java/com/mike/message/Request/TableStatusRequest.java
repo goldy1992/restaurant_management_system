@@ -6,8 +6,10 @@
 
 package com.mike.message.Request;
 
+import com.mike.message.Message;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -57,6 +59,16 @@ public class TableStatusRequest extends Request
         x+= "\n";
         
         return x;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

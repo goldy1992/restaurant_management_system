@@ -5,8 +5,9 @@
  */
 package com.mike.message.Response;
 
+import com.mike.message.Message;
 import com.mike.message.Request.RegisterClientRequest;
-import com.mike.message.Request.Request;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -37,5 +38,15 @@ public class RegisterClientResponse extends Response
     public RegisterClientRequest.ClientType getClientType()
     {
         return clientType;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 } // class

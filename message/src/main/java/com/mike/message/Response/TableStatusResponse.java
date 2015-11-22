@@ -6,9 +6,11 @@
 
 package com.mike.message.Response;
 
+import com.mike.message.Message;
 import com.mike.message.Table;
 import com.mike.message.Request.TableStatusRequest;
 import java.util.ArrayList;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -48,5 +50,15 @@ public class TableStatusResponse extends Response
         
         return x;
     } // toString
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 } // class

@@ -70,8 +70,8 @@ public class ClientConnection implements Runnable
                 while(isRunning)
                 {
                     message = (Message) in.readObject();                        
-                    ParseMessage parse = new ParseMessage(message, this);
-                    parse.parse();
+                  //  ParseMessage parse = new ParseMessage(message, this);
+                    //parse.parse();
                 } // while
             } // try        
             catch (EOFException e)

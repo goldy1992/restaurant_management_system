@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/integration/ip 
+        http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+<!--   <message-bus />-->
+    <int:annotation-config />
+    <context:component-scan base-package="com.mike.client"/>
+    
+    <int:gateway id="messageSender"
+		service-interface="com.mike.client.MessageSender"
+		default-request-channel="inputChannel" />
+    
+    <bean id="waiterClient" class="com.mike.client.WaiterClient" />
+    <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
+    <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
+
+    <int-ip:tcp-connection-factory id="clientFactory"
+        type="client"
+        host="localhost"
+        deserializer="javaDeserializer"
+        serializer="javaSerializer"
+        port="1234" />
+    
+    <int-ip:tcp-connection-factory id="serverFactory"
+        type="server"
+        deserializer="javaDeserializer"
+        serializer="javaSerializer"
+        port="1235" />
+    
+    <int-ip:tcp-outbound-channel-adapter id="outboundTcpAdapter"
+        channel="inputChannel"
+        connection-factory="clientFactory"/>
+    
+    <int-ip:tcp-inbound-channel-adapter id="inboundTcpAdapter"
+        channel="outputChannel"
+        connection-factory="serverFactory"/>
+
+    
+    <int:channel id="inputChannel" />
+    <int:channel id="outputChannel" />
+       
+</beans>

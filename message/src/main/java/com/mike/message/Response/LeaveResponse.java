@@ -5,8 +5,10 @@
  */
 package com.mike.message.Response;
 
+import com.mike.message.Message;
 import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.Request;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -35,6 +37,16 @@ public class LeaveResponse extends Response
     public void setPermission(boolean permission)
     {
         this.permissionGranted = permission;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

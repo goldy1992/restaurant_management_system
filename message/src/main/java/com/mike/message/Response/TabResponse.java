@@ -7,7 +7,9 @@ package com.mike.message.Response;
 
 
 import com.mike.item.Tab;
+import com.mike.message.Message;
 import com.mike.message.Request.TabRequest;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -35,6 +37,16 @@ public class TabResponse extends Response
     public Tab getTab()
     {
         return currentTab;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

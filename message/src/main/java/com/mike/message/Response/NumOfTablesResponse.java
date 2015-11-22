@@ -6,7 +6,9 @@
 
 package com.mike.message.Response;
 
+import com.mike.message.Message;
 import com.mike.message.Request.NumOfTablesRequest;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -47,6 +49,16 @@ public class NumOfTablesResponse extends Response
         x+= "\n";
         
         return x;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

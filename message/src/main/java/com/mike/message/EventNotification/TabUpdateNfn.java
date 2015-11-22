@@ -6,7 +6,9 @@
 package com.mike.message.EventNotification;
 
 import com.mike.item.Tab;
+import com.mike.message.Message;
 import java.net.InetAddress;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -38,6 +40,16 @@ public class TabUpdateNfn extends EventNotification {
     public Tab getTab()
     {
         return tab;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

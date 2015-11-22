@@ -5,14 +5,16 @@
  */
 package com.mike.message.EventNotification;
 
-import com.mike.message.Message;
+
 import java.net.InetAddress;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
  * @author Goldy
  */
-public abstract class EventNotification extends Message 
+public abstract class EventNotification implements Message<EventNotification>
 {
 
     /**
@@ -21,9 +23,9 @@ public abstract class EventNotification extends Message
      * @param to
      * @param messageID
      */
-    public EventNotification(InetAddress from, InetAddress to)
+    public EventNotification()
     {
-        super(from, to);
+       
     }
     
     /**
@@ -34,7 +36,17 @@ public abstract class EventNotification extends Message
     @Override
     public String toString()
     {
-        return super.toString() + "TYPE: Event Notification\n";
+        return "TYPE: Event Notification\n";
+    }
+
+    @Override
+    public EventNotification getPayload() {
+        return this;
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        return null;
     }
     
 }

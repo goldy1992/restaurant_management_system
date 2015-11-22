@@ -5,13 +5,8 @@
  */
 package com.mike.server;
 
-import com.mike.message.Table;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.SocketAddress;
-import java.util.Scanner;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -23,28 +18,28 @@ public class StartServer {
     private static final int NUM_OF_TABLES = 44;
     
     public static void main(String[] args) throws IOException {
-
-        ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-        Server server = (Server) context.getBean("server");
-        Table[] tables = new Table[NUM_OF_TABLES + 1];
-        for(int i=1; i < tables.length; i++) {
-            tables[i] = (Table) context.getBean("table");
-            tables[i].setTableNumber(i);
-        }
-        try {
-            server.setSocket(new ServerSocket(PORT_NUMBER));
-            boolean exit = false;
-            while(!exit) {
-                Scanner sc = new Scanner(System.in);  
-                while (sc.hasNextLine()) {
-                    String s = sc.nextLine();
-                    if (s.equals("exit"))
-                        exit = true;
-                } // while
-            } // while
-        } catch(IOException e) {
-            
-        }
+        AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/context.xml", StartServer.class);
+     //   ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+        //Server server = (Server) context.getBean("server");
+//        Table[] tables = new Table[NUM_OF_TABLES + 1];
+//        for(int i=1; i < tables.length; i++) {
+//            tables[i] = (Table) context.getBean("table");
+//            tables[i].setTableNumber(i);
+//        }
+//        try {
+//            server.setSocket(new ServerSocket(PORT_NUMBER));
+//            boolean exit = false;
+//            while(!exit) {
+//                Scanner sc = new Scanner(System.in);  
+//                while (sc.hasNextLine()) {
+//                    String s = sc.nextLine();
+//                    if (s.equals("exit"))
+//                        exit = true;
+//                } // while
+//            } // while
+//        } catch(IOException e) {
+//            
+//        }
     } // main
     
 //    public static Server makeServer(int numOfTables, int portNumber) throws IOException

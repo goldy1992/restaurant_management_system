@@ -6,7 +6,7 @@
 package com.mike.message.Request;
 
 import com.mike.message.Message;
-import java.net.InetAddress;
+
 
 /**
  *
@@ -30,16 +30,14 @@ public abstract class Request extends Message
      * @param messageID
      * @param type
      */
-    public Request(InetAddress from, 
-                          InetAddress to)
+    public Request()
     {
-       super(from, to);
+        super();
     }
     
     public String toString()
     {
-        return super.toString() + "TYPE: Request\n";
+        return "TYPE: Request\n";
     }
-    
     
 }

@@ -8,10 +8,12 @@ package com.mike.message.EventNotification;
 import com.mike.item.*;
 import com.mike.message.Table;
 import com.mike.item.Item.Type;
+import com.mike.message.Message;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -91,6 +93,16 @@ public class NewItemNfn extends EventNotification
         for(Item i : items)
             sToReturn += i;
         return sToReturn;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 

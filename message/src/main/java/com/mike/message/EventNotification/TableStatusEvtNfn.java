@@ -5,8 +5,10 @@
  */
 package com.mike.message.EventNotification;
 
+import com.mike.message.Message;
 import com.mike.message.Table;
 import java.net.InetAddress;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -51,6 +53,16 @@ public class TableStatusEvtNfn extends EventNotification
     public Table.TableStatus getTableStatus()
     {
         return tStatus;
+    }
+
+    @Override
+    public Message getPayload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MessageHeaders getHeaders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

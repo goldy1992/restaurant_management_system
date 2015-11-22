@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/integration/ip 
+        http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+    <int:annotation-config />
+    <context:component-scan base-package="com.mike.server"/>
+    <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
+    <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
+
+
+    <int-ip:tcp-connection-factory id="serverFactory"
+        type="server"
+        deserializer="javaDeserializer"
+        serializer="javaSerializer"
+        port="1234"/>
+    
+    <int-ip:tcp-inbound-gateway id="gatewayCrLf"
+        connection-factory="serverFactory"
+        request-channel="gatewayToFilterChannel"
+        error-channel="errorChannel"/>
+
+    <int:channel id="gatewayToFilterChannel" />
+    
+    <!-- Message Type channels -->    
+    <int:channel id="filterToMessageTypeRouterChannel" /> 
+    <int:channel id="messageRequestChannel" />  
+    <int:channel id="messageEventNotificationChannel" />  
+    
+    
+    <!-- Request channels -->
+	<int:channel id="messageRegisterClientRequest" />    
+</beans>

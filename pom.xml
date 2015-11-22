@@ -9,6 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <spring.version>4.1.7.RELEASE</spring.version>
     </properties>
     <modules>
         <module>message</module> 
@@ -16,4 +17,5 @@
         <module>client</module>
         <module>item</module>
     </modules>
+  
 </project>
