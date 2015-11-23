@@ -8,8 +8,11 @@ package com.mike.server;
 import com.mike.message.Message;
 import com.mike.message.Request.RegisterClientRequest;
 
+import java.util.Map;
+
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
+import org.springframework.messaging.handler.annotation.Headers;
 
 /**
  *
@@ -19,8 +22,8 @@ import org.springframework.integration.annotation.MessageEndpoint;
 public class MessageFilter {
     
     @Filter(inputChannel = "gatewayToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
-    public boolean accept(Object message){
-        System.out.println("message received filter");
+    public boolean accept(Object message, @Headers Map<String, Object> headerMap){
+        System.out.println("message received filter\nFilter headers: " + headerMap);
         if (message instanceof Message) {
         	System.out.println("returning true");
         	return true; 

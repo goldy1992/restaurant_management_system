@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
 import static com.mike.message.Request.TableStatusRequest.ALL;
@@ -77,7 +78,7 @@ public class ParseMessage {
     }
     
     
-    @ServiceActivator(inputChannel="messageRegisterClientRequest")
+    @ServiceActivator(inputChannel="messageRegisterClientRequestChannel")
     private RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request)
     {
     	System.out.println("hit register client");

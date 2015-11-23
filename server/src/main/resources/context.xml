@@ -38,5 +38,5 @@
     
     
     <!-- Request channels -->
-	<int:channel id="messageRegisterClientRequest" />    
+	<int:channel id="messageRegisterClientRequestChannel" />    
 </beans>

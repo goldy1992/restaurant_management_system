@@ -22,7 +22,7 @@ public class MessageRequestRouter {
     public String accept(Request request){
         System.out.println("reached message request router");
         if (request instanceof RegisterClientRequest) {
-        	return "messageRegisterClientRequest";
+        	return "messageRegisterClientRequestChannel";
         }
         return "messageRequestChannel";}
 }
