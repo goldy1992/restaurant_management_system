@@ -51,14 +51,5 @@ public class TableStatusResponse extends Response
         return x;
     } // toString
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 } // class

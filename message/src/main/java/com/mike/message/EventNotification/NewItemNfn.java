@@ -30,7 +30,6 @@ public class NewItemNfn extends EventNotification
     /**
      * @param from
      * @param to
-     * @param messageID
      * @param type
      * @param items
      * @param table
@@ -41,7 +40,7 @@ public class NewItemNfn extends EventNotification
                       ArrayList<Item> items,
                       Table table)
     {
-        super(from, to);
+        super();
         this.type = type;
         this.items = items;
         this.table = table;
@@ -95,15 +94,7 @@ public class NewItemNfn extends EventNotification
         return sToReturn;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
 
     

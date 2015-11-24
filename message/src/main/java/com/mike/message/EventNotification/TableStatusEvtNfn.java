@@ -23,7 +23,6 @@ public class TableStatusEvtNfn extends EventNotification
      *
      * @param from
      * @param to
-     * @param messageID
      * @param tableNumber
      * @param t
      */
@@ -32,7 +31,7 @@ public class TableStatusEvtNfn extends EventNotification
                                 int tableNumber,
                                 Table.TableStatus t)
     {
-        super(from, to);
+        super();
         this.tableNumber = tableNumber;
         this.tStatus = t;
     }
@@ -55,14 +54,5 @@ public class TableStatusEvtNfn extends EventNotification
         return tStatus;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

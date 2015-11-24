@@ -18,10 +18,11 @@ import org.springframework.integration.annotation.Router;
 @MessageEndpoint
 public class MessageRequestRouter {
     
-    @Router(inputChannel = "filterToMessageTypeRouterChannel")
+    @Router(inputChannel = "messageRequestChannel")
     public String accept(Request request){
         System.out.println("reached message request router");
         if (request instanceof RegisterClientRequest) {
+			System.out.println("return registerclient request router");
         	return "messageRegisterClientRequestChannel";
         }
         return "messageRequestChannel";}

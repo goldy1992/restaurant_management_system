@@ -29,7 +29,7 @@ public class TableStatusRequest extends Request
                               InetAddress to, 
                               ArrayList<Integer> tableList)
     {
-        super(from, to);
+        super();
         this.tableList = tableList;
     } // constructor
     
@@ -61,15 +61,6 @@ public class TableStatusRequest extends Request
         return x;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 }

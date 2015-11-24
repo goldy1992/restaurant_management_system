@@ -26,7 +26,7 @@ public class TabRequest extends Request
                               InetAddress to,  
                               int tableNumber)
     {
-        super(from, to);
+        super();
         this.tabNumber = tableNumber;
     } // constructor
     
@@ -45,15 +45,6 @@ public class TabRequest extends Request
         return tabNumber;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 
     

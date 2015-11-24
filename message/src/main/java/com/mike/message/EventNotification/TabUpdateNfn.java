@@ -29,7 +29,7 @@ public class TabUpdateNfn extends EventNotification {
                                 InetAddress to, 
                                 Tab t)
     {
-        super(from, to);
+        super();
         this.tab = t;
     }
     
@@ -42,14 +42,5 @@ public class TabUpdateNfn extends EventNotification {
         return tab;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }

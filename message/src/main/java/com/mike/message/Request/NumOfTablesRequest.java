@@ -21,13 +21,11 @@ public class NumOfTablesRequest extends Request
      *
      * @param from
      * @param to
-     * @param messageID
-     * @param type
      */
     public NumOfTablesRequest(InetAddress from, 
                               InetAddress to)
     {
-        super(from, to);
+        super();
     } // constructor
     
 
@@ -40,15 +38,6 @@ public class NumOfTablesRequest extends Request
         return x;
     }
 
-    @Override
-    public Message getPayload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public MessageHeaders getHeaders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 }
