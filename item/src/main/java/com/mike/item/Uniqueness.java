@@ -17,15 +17,15 @@ import java.util.Random;
  */
 public interface Uniqueness 
 {
-    public default String generateUniqueID()
-    {
-        String request_ID;
-        Random random = new Random();
-        int x = random.nextInt();
-        request_ID = "" + x;
-        Date currentDate = new Date();
-        Timestamp t = new Timestamp(currentDate.getTime());
-        request_ID = request_ID + t;
-        return request_ID;
-    }
+//    public default String generateUniqueID()
+//    {
+//        String request_ID;
+//        Random random = new Random();
+//        int x = random.nextInt();
+//        request_ID = "" + x;
+//        Date currentDate = new Date();
+//        Timestamp t = new Timestamp(currentDate.getTime());
+//        request_ID = request_ID + t;
+//        return request_ID;
+//    }
 }

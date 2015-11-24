@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
  *
  * @author mbbx9mg3
  */
-public class Item implements Serializable, Comparable, Cloneable, Uniqueness 
+public class Item implements Serializable, Comparable, Cloneable, com.mike.item.Uniqueness
 {  
     /**
      *
