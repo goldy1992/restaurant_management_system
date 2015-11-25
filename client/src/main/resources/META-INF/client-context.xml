@@ -48,5 +48,6 @@
     
     <int:channel id="inputChannel" />
     <int:channel id="outputChannel" />
+    <int:channel id="filterToMessageTypeRouterChannel" />
        
 </beans>

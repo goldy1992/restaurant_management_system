@@ -18,7 +18,7 @@ public class StartServer {
     private static final int NUM_OF_TABLES = 44;
     
     public static void main(String[] args) throws IOException {
-        AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/context.xml", StartServer.class);
+        AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/server-context.xml", StartServer.class);
      //   ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
         //Server server = (Server) context.getBean("server");
 //        Table[] tables = new Table[NUM_OF_TABLES + 1];

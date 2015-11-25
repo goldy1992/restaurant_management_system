@@ -19,7 +19,7 @@ import java.util.Map;
 @MessageEndpoint
 public class MessageFilter {
     
-    @Filter(inputChannel = "inputChannel")
+    @Filter(inputChannel = "inputChannel", outputChannel="filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
         System.out.println("message received filter\nFilter headers: " + headerMap);
         if (message instanceof Message) {

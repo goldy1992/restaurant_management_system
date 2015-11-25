@@ -57,7 +57,7 @@ public class WaiterClient extends UserClient
      */
     public static void main(String[] args) throws InterruptedException
     {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/context.xml");
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/client-context.xml");
         WaiterClient waiterClient = (WaiterClient)context.getBean("waiterClient");
         //MessageSender messageSender = (MessageSender)context.getBean("messageSender");
         waiterClient.registerClient();
