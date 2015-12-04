@@ -21,7 +21,7 @@ import org.springframework.messaging.handler.annotation.Headers;
 @MessageEndpoint
 public class MessageFilter {
     
-    @Filter(inputChannel = "gatewayToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
+    @Filter(inputChannel = "inboundAdapterToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
         System.out.println("message received filter\nFilter headers: " + headerMap);
         if (message instanceof Message) {

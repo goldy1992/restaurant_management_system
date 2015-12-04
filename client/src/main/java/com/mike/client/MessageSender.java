@@ -16,7 +16,7 @@ import org.springframework.integration.annotation.Gateway;
  */
 public interface MessageSender {
 
-    @Gateway(requestChannel="inputChannel")
+    @Gateway(requestChannel="outputChannel")
     public void send(Object message);
     
 }

@@ -13,12 +13,10 @@
         http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
 <!--   <message-bus />-->
+<context:property-placeholder />
     <int:annotation-config />
     <context:component-scan base-package="com.mike.client"/>
-    
-    <int:gateway id="messageSender"
-		service-interface="com.mike.client.MessageSender"
-		default-request-channel="inputChannel" />
+   
     
     <bean id="waiterClient" class="com.mike.client.WaiterClient" />
     <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
@@ -29,20 +27,20 @@
         host="localhost"
         deserializer="javaDeserializer"
         serializer="javaSerializer"
-        port="1234" />
+		port="1234" />
     
     <int-ip:tcp-connection-factory id="serverFactory"
         type="server"
         deserializer="javaDeserializer"
         serializer="javaSerializer"
-        port="1235" />
+        port="${availableServerSocket}" />
     
     <int-ip:tcp-outbound-channel-adapter id="outboundTcpAdapter"
-        channel="inputChannel"
+        channel="outputChannel"
         connection-factory="clientFactory"/>
     
     <int-ip:tcp-inbound-channel-adapter id="inboundTcpAdapter"
-        channel="outputChannel"
+        channel="inputChannel"
         connection-factory="serverFactory"/>
 
     

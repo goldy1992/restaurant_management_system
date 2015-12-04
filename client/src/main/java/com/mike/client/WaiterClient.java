@@ -12,9 +12,15 @@ import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.SocketUtils;
 
 /**
  *
@@ -57,7 +63,7 @@ public class WaiterClient extends UserClient
      */
     public static void main(String[] args) throws InterruptedException
     {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/client-context.xml");
+    	GenericXmlApplicationContext context = setupContext();
         WaiterClient waiterClient = (WaiterClient)context.getBean("waiterClient");
         //MessageSender messageSender = (MessageSender)context.getBean("messageSender");
         waiterClient.registerClient();
@@ -136,5 +142,27 @@ public class WaiterClient extends UserClient
       //  return writeMessage(request);
         return true;
     }
+    
+    public static GenericXmlApplicationContext setupContext() {
+		final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
+
+		System.out.print("Detect open server socket...");
+		int availableServerSocket = SocketUtils.findAvailableTcpPort();
+
+		final Map<String, Object> sockets = new HashMap<String, Object>();
+		sockets.put("availableServerSocket", availableServerSocket);
+
+		final MapPropertySource propertySource = new MapPropertySource("sockets", sockets);
+
+		context.getEnvironment().getPropertySources().addLast(propertySource);
+
+		System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
+
+		context.load("/META-INF/client-context.xml");
+		context.registerShutdownHook();
+		context.refresh();
+
+		return context;
+	}
     
 } // MyClientSocketClass

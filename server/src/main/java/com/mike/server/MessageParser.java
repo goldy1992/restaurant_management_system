@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageParser {
 
-	@ServiceActivator(inputChannel="messageRegisterClientRequestChannel")
+	@ServiceActivator(inputChannel="messageRegisterClientRequestChannel", outputChannel="messageResponseChannel")
 	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request)
 	{
 		System.out.println("hit register client");
