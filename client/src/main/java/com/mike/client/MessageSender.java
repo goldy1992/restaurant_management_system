@@ -14,6 +14,7 @@ import org.springframework.integration.annotation.Gateway;
  *
  * @author Mike
  */
+
 public interface MessageSender {
 
     @Gateway(requestChannel="outputChannel")

@@ -22,6 +22,10 @@
     <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
     <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
+    <int:gateway id="messageSender"
+                 service-interface="com.mike.client.MessageSender"
+                 default-request-channel="inputChannel" />
+
     <int-ip:tcp-connection-factory id="clientFactory"
         type="client"
         host="localhost"

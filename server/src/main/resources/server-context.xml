@@ -24,20 +24,20 @@
         serializer="javaSerializer"
         port="1234"/>
         
-    <int-ip:tcp-connection-factory id="clientFactory"
-        type="client"
-        deserializer="javaDeserializer"
-        serializer="javaSerializer"
-      />
+    <!--<int-ip:tcp-connection-factory id="clientFactory"-->
+        <!--type="client"-->
+        <!--deserializer="javaDeserializer"-->
+        <!--serializer="javaSerializer"-->
+      <!--/>-->
     
     <int-ip:tcp-inbound-channel-adapter id="inboundCrLf"
         connection-factory="serverFactory"
         channel="inboundAdapterToFilterChannel"
         error-channel="errorChannel"/>
         
-  	<int-ip:tcp-outbound-gateway id="outboundCrLf"
-        connection-factory="clientFactory"
-        request-channel="inboundAdapterToFilterChannel"
+  	<int-ip:tcp-outbound-channel-adapter id="outboundCrLf"
+        connection-factory="serverFactory"
+        channel="messageResponseChannel"
       />
 
     <int:channel id="inboundAdapterToFilterChannel" />
