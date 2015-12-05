@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/integration/spring-integration.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
-	http://www.springframework.org/schema/integration/ip 
+		http://www.springframework.org/schema/integration/ip 
         http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
     <int:annotation-config />
@@ -17,19 +17,13 @@
     <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
     <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
-
     <int-ip:tcp-connection-factory id="serverFactory"
         type="server"
         deserializer="javaDeserializer"
         serializer="javaSerializer"
+        single-use="false"
         port="1234"/>
-        
-    <!--<int-ip:tcp-connection-factory id="clientFactory"-->
-        <!--type="client"-->
-        <!--deserializer="javaDeserializer"-->
-        <!--serializer="javaSerializer"-->
-      <!--/>-->
-    
+            
     <int-ip:tcp-inbound-channel-adapter id="inboundCrLf"
         connection-factory="serverFactory"
         channel="inboundAdapterToFilterChannel"
@@ -37,8 +31,7 @@
         
   	<int-ip:tcp-outbound-channel-adapter id="outboundCrLf"
         connection-factory="serverFactory"
-        channel="messageResponseChannel"
-      />
+        channel="messageResponseChannel"      />
 
     <int:channel id="inboundAdapterToFilterChannel" />
     
@@ -46,7 +39,6 @@
     <int:channel id="filterToMessageTypeRouterChannel" /> 
     <int:channel id="messageRequestChannel" />  
     <int:channel id="messageEventNotificationChannel" />  
-    
     
     <!-- Request channels -->
 	<int:channel id="messageRegisterClientRequestChannel" />   

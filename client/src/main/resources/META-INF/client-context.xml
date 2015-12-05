@@ -33,23 +33,18 @@
         serializer="javaSerializer"
 		port="1234" />
     
-    <int-ip:tcp-connection-factory id="serverFactory"
-        type="server"
-        deserializer="javaDeserializer"
-        serializer="javaSerializer"
-        port="${availableServerSocket}" />
-    
     <int-ip:tcp-outbound-channel-adapter id="outboundTcpAdapter"
         channel="outputChannel"
         connection-factory="clientFactory"/>
     
     <int-ip:tcp-inbound-channel-adapter id="inboundTcpAdapter"
         channel="inputChannel"
-        connection-factory="serverFactory"/>
-
+        connection-factory="clientFactory"/>
     
     <int:channel id="inputChannel" />
     <int:channel id="outputChannel" />
     <int:channel id="filterToMessageTypeRouterChannel" />
+    
+    <int:channel id="processFinished" />
        
 </beans>

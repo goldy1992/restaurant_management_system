@@ -17,11 +17,6 @@
     
     <dependencies>
         <dependency>
-            <artifactId>item</artifactId>
-            <groupId>com.mike.item</groupId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.mike</groupId>
             <artifactId>item</artifactId>
             <version>1.0-SNAPSHOT</version>

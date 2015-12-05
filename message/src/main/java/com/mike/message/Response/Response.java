@@ -55,7 +55,7 @@ public abstract class Response extends Message
     @Override
     public String toString()
     {
-        return super.toString() + "TYPE: Response\n";
+        return "TYPE: Response\n";
     }
     
 
