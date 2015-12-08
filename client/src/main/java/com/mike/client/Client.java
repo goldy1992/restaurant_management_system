@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,7 +40,7 @@ public abstract class Client
         this.type = type;
     }
     
-    
+    @ServiceActivator(inputChannel="registerClientResponseChannel")
     private void registerClientResponse(RegisterClientResponse resp)
     {
         System.out.println("parse register client response");
@@ -51,7 +52,10 @@ public abstract class Client
            // debugGUI.addText("A client already exists!");
             System.exit(0);                               
         } // if
-        else System.out.println("Client successfully registered as: " + req);        
+        else { 
+        	
+        	System.out.println("Client successfully registered as: " + req);        
+        }
     } // regClientResp
       
    

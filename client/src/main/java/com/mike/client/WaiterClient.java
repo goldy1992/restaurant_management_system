@@ -152,9 +152,5 @@ public class WaiterClient extends UserClient
 		return context;
 	}
     
-    @ServiceActivator(inputChannel="processFinished")
-    public void messageReceived() {
-    	System.out.println("process complete");
-    }
     
 } // MyClientSocketClass

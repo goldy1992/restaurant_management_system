@@ -5,16 +5,13 @@
  */
 package com.mike.message.EventNotification;
 
-
-import java.net.InetAddress;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
+import com.mike.message.Message;
 
 /**
  *
  * @author Goldy
  */
-public abstract class EventNotification
+public abstract class EventNotification extends Message
 {
 
     /**

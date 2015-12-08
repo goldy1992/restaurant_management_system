@@ -5,12 +5,12 @@
  */
 package com.mike.client;
 
-import com.mike.message.Message;
+import java.util.Map;
+
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
-
-import java.util.Map;
+import com.mike.message.Message;
 
 /**
  *
@@ -22,12 +22,14 @@ public class MessageFilter {
     @Filter(inputChannel = "inputChannel", outputChannel="filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
         System.out.println("message received filter\nFilter headers: " + headerMap);
-        if (message instanceof Message) {
+        if (validMessage(message)) {
         	System.out.println("returning true");
         	return true; 
-        } 
-        
+        }  // if
     	return false;
-        
+    } // accept
+    
+    private boolean validMessage(Object message) {
+    	return message instanceof Message;
     }
 }

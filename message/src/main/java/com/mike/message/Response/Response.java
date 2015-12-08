@@ -13,9 +13,9 @@ import com.mike.message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class Response
+public abstract class Response extends Message
 {    
-    private Request request = null;
+	private Request request = null;
     private boolean parsedResponse;
 
     /**

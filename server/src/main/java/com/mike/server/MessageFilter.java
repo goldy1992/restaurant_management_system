@@ -5,12 +5,11 @@
  */
 package com.mike.server;
 
-import com.mike.message.EventNotification.EventNotification;
-import com.mike.message.Request.Request;
 import java.util.Map;
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
+import com.mike.message.Message;
 
 /**
  * @author Mike
@@ -29,7 +28,7 @@ public class MessageFilter {
     } // accept
     
     private boolean validMessage(Object message) {
-    	return (message instanceof Request || message instanceof EventNotification);
+    	return message instanceof Message;
     }
    
 }

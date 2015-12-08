@@ -45,6 +45,8 @@
     <int:channel id="outputChannel" />
     <int:channel id="filterToMessageTypeRouterChannel" />
     
-    <int:channel id="processFinished" />
-       
+    <int:channel id="typeRouterToResponseChannel" />
+    <int:channel id="typeRouterToEventNotificationChannel" /> 
+    
+    <int:channel id="registerClientResponseChannel" />
 </beans>
