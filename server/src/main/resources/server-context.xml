@@ -44,5 +44,20 @@
 	<int:channel id="messageRegisterClientRequestChannel" />   
 	
 	<!--  Response Channel -->
-	<int:channel id="messageResponseChannel" />    
+	<int:channel id="messageResponseChannel" />
+
+
+    <bean id="server" class="com.mike.server.Server">
+       <property name="waiterClient">
+            <bean id="waiterClient" class="java.util.HashSet" />
+        </property>
+        <property name="tillClient">
+            <bean id="tillClient" class="java.util.HashSet" />
+        </property>
+        <property name="tables">
+            <bean id="tables" class="java.util.HashMap" />
+        </property>
+
+    </bean>
+
 </beans>

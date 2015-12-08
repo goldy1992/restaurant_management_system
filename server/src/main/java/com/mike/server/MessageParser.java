@@ -2,8 +2,13 @@ package com.mike.server;
 
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Response.RegisterClientResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.ip.IpHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * Created by michaelg on 24/11/2015.
@@ -11,42 +16,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageParser {
 
+	@Autowired
+	private Server server;
+
 	@ServiceActivator(inputChannel="messageRegisterClientRequestChannel",  outputChannel="messageResponseChannel")
-	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request)
+	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request, @Header Map<String, Object> messageHeaders)
 	{
 		System.out.println("hit register client");
 		RegisterClientResponse response = new RegisterClientResponse(request);
-		boolean hasPermission;
+		String ipAddress = (String)messageHeaders.get(IpHeaders.CONNECTION_ID);
 
-//		switch(response.getClientType())
-//		{
-//			case BAR:
-//				hasPermission = server.getBarClient() == null;
-//				response.setPermission(hasPermission);
-//				System.out.println("dealing with bar req");
-//				if (hasPermission)
-//				{
-//					server.setBarClient(client);
-//				}
-//				break;
-//			case KITCHEN:
-//				hasPermission = server.getKitchenClient() == null;
-//				response.setPermission(hasPermission);
-//				System.out.println("dealing with kitchen req");
-//				if (hasPermission)
-//				{
-//					server.setKitchenClient(client);
-//				}
-//				break;
-//			case WAITER:
-//				response.setPermission(true);
-//				break;
-//			case TILL:
-//				response.setPermission(true);
-//				break;
-//			default: break;
-//		} // switch
-
+		response.setPermission(server.registerClient(request.getClientType(), ipAddress));
 		return response;
 	}
 }

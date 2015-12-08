@@ -1,3 +1,4 @@
+/*
 package com.mike.server;
 
 import com.mike.item.Item;
@@ -16,15 +17,16 @@ import org.springframework.stereotype.Component;
 
 import static com.mike.message.Request.TableStatusRequest.ALL;
 
+*/
 /**
  *
  * @author Terry
- */
+ *//*
+
 public class ParseMessage {
     private final Message message;
     private final ClientConnection client;
     private final Server server;
-    private final TableList tables;
     
     public ParseMessage(Message m, ClientConnection client)
     {
@@ -271,3 +273,4 @@ public class ParseMessage {
         return true;
     }
 }
+*/

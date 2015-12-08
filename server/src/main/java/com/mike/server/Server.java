@@ -1,148 +1,92 @@
 package com.mike.server;
 
-import com.mike.message.TableList;
+import com.mike.message.Request.RegisterClientRequest;
+import com.mike.message.Table;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  * @author Goldy
  */
 public class Server
-{    
-    private ServerSocket socket; 
-    private ServerRunThread listener;
-    private HashSet<ClientConnection> waiterClient;
-    private HashSet<ClientConnection> tillClient;   
-    private ClientConnection barClient = null;
-    private ClientConnection kitchenClient = null;
-    private TableList tables;
-    private boolean socketListening;
+{
+    private HashSet<String> waiterClient;
+    private HashSet<String> tillClient;
+    private String barClient = null;
+    private String kitchenClient = null;
+    private HashMap<Integer, Table> tables;
     
-    public Server(ServerSocket socket, HashSet<ClientConnection> waiterClient,
-                HashSet<ClientConnection> tillClient) throws IOException {
-        this.waiterClient = waiterClient;
-        this.tillClient = tillClient;
-        this.socket = socket;
+    public Server(ServerSocket socket, HashSet<String> waiterClient,
+                HashSet<String> tillClient) throws IOException {
+        this.setWaiterClient(waiterClient);
+        this.setTillClient(tillClient);
     } // myserver
     
     public Server() {         }
-    
-    public TableList getTables() {
-        return tables;
-    } // table
 
-    /**
-     * @return A HashSet of all the waiter clients
-     */
-    public HashSet<ClientConnection> getWaiterClients() {
-        synchronized(getWaiterClient()) {
-            return getWaiterClient();
-        } // sync
-    }
-    
-    /**
-     *
-     * @return A hash set of all the till clients
-     */
-    public HashSet<ClientConnection> getTillClients() {
-        synchronized(getTillClient()){
-            return getTillClient();
-        } // sync
-    }
-    
-    public ClientConnection getBarClient()  {
-        return barClient;
-    }
-    
-    public void setBarClient(ClientConnection client) {
-        synchronized(barClient) {
-            barClient = client;
-        }
-    }
-    
-    public ClientConnection getKitchenClient() {
-        return kitchenClient;
-    }
-    
-    public void setKitchenClient(ClientConnection client){
-        kitchenClient = client;
-    }
 
-    /**
-     * @return the listener
-     */
-    public ServerRunThread getListener() {
-        return listener;
-    }
+	public HashSet<String> getWaiterClient() {
+		return waiterClient;
+	}
 
-    /**
-     * @param listener the listener to set
-     */
-    public void setListener(ServerRunThread listener) {
-        this.listener = listener;
-    }
+	public void setWaiterClient(HashSet<String> waiterClient) {
+		this.waiterClient = waiterClient;
+	}
 
-    /**
-     * @return the socket
-     */
-    public ServerSocket getSocket() {
-        return socket;
-    }
+	public HashSet<String> getTillClient() {
+		return tillClient;
+	}
 
-    /**
-     * @param socket the socket to set
-     */
-    public void setSocket(ServerSocket socket) {
-        this.socket = socket;
-    }
+	public void setTillClient(HashSet<String> tillClient) {
+		this.tillClient = tillClient;
+	}
 
-    /**
-     * @return the waiterClient
-     */
-    public HashSet<ClientConnection> getWaiterClient() {
-        return waiterClient;
-    }
+	public String getBarClient() {
+		return barClient;
+	}
 
-    /**
-     * @param waiterClient the waiterClient to set
-     */
-    public void setWaiterClient(HashSet<ClientConnection> waiterClient) {
-        this.waiterClient = waiterClient;
-    }
+	public void setBarClient(String barClient) {
+		this.barClient = barClient;
+	}
 
-    /**
-     * @return the tillClient
-     */
-    public HashSet<ClientConnection> getTillClient() {
-        return tillClient;
-    }
+	public String getKitchenClient() {
+		return kitchenClient;
+	}
 
-    /**
-     * @param tillClient the tillClient to set
-     */
-    public void setTillClient(HashSet<ClientConnection> tillClient) {
-        this.tillClient = tillClient;
-    }
+	public void setKitchenClient(String kitchenClient) {
+		this.kitchenClient = kitchenClient;
+	}
 
-    /**
-     * @param tables the tables to set
-     */
-    public void setTables(TableList tables) {
-        this.tables = tables;
-    }
+	public HashMap<Integer, Table> getTables() {
+		return tables;
+	}
 
-    /**
-     * @return the socketListening
-     */
-    public boolean isSocketListening() {
-        return socketListening;
-    }
+	public void setTables(HashMap<Integer, Table> tables) {
+		this.tables = tables;
+	}
 
-    /**
-     * @param socketListening the socketListening to set
-     */
-    public void setSocketListening(boolean socketListening) {
-        this.socketListening = socketListening;
-    }
+	public boolean registerClient(RegisterClientRequest.ClientType clientType, String address) {
+		switch(clientType)
+		{
+			case BAR:
+				if (this.barClient == null) {
+					barClient = address;
+					return true;
+				}
+				return false;
+			case KITCHEN:
+				if (this.kitchenClient == null) {
+					kitchenClient = address;
+					return true;
+				}
+				return false;
+			case WAITER:
+				return waiterClient.add(address);
+			case TILL:
+				return tillClient.add(address);
+			default: return false;
+		} // switch
+	}
 } // MySocket class
