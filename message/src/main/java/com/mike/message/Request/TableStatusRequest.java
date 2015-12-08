@@ -30,9 +30,7 @@ public class TableStatusRequest extends Request
         super();
         this.tableList = tableList;
     } // constructor
-    
-    public static final int ALL = -1;
-    public static final int SELECTION = -2;
+   
     
     /**
      *

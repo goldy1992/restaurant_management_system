@@ -4,12 +4,14 @@ import com.mike.client.SelectTableMenu.SelectTableController;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
 import static com.mike.message.Request.RegisterClientRequest.ClientType.WAITER;
+import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TableStatusRequest;
-import static com.mike.message.Request.TableStatusRequest.ALL;
 import com.mike.message.Response.NumOfTablesResponse;
+import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.Response;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
+import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +32,6 @@ import org.springframework.util.SocketUtils;
 @Component
 public class WaiterClient extends UserClient
 {
-    public int numberOfTables = -1;
     public SelectTableController selectTable;  
     
     public WaiterClient() {
@@ -41,22 +42,9 @@ public class WaiterClient extends UserClient
         super(type);
     } // constructor
       
-    /**
-     * @return The number of tables in use.
-     */
-    public int getNumTables()
-    {
-         return numberOfTables;
-    }
+
    
-    /**
-     * A mutator method to set the number of tables.
-     * @param numTables the number of the tables to be run
-     */
-    public void setNumTables(int numTables)
-    {
-        numberOfTables = numTables;   
-   }
+ 
      
     /**
      * @param args
@@ -107,14 +95,7 @@ public class WaiterClient extends UserClient
         } // synchronized        
     }
     
-    private void parseNumOfTablesResponse(NumOfTablesResponse resp)
-    {       
-        synchronized(lock)
-        {
-            numberOfTables = resp.getNumOfTables();
-            lock.notifyAll();
-        } // sync
-    } // parseNumOfTablesResponse
+
      
 
     @Override
@@ -129,6 +110,34 @@ public class WaiterClient extends UserClient
         messageSender.send(request);
         return true;
     }
+    
+    @Override
+    @ServiceActivator(inputChannel="registerClientResponseChannel")
+    public void registerClientResponse(RegisterClientResponse registerClientResponse)
+    {
+        System.out.println("parse register client response");
+
+            
+        if (!registerClientResponse.hasPermission())
+        {
+           // debugGUI.addText("A client already exists!");
+            System.exit(0);                               
+        } // if
+        else { 
+        	if (selectTable == null) {
+        		sendTableStatusRequest(new ArrayList<>());
+        	}
+        	System.out.println("Client successfully registered as: " + registerClientResponse);        
+        }
+    } // regClientResp
+    
+    @ServiceActivator(inputChannel="tableStatusResponseChannel")
+    public void tableStatusResponse(TableStatusResponse tableStatusResponse)
+    {
+    	System.out.println("hit tablestatus response method");
+    }
+    
+
     
     public static GenericXmlApplicationContext setupContext() {
 		final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
@@ -151,6 +160,7 @@ public class WaiterClient extends UserClient
 
 		return context;
 	}
+    
     
     
 } // MyClientSocketClass

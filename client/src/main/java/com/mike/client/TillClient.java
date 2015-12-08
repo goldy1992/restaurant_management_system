@@ -92,6 +92,13 @@ public class TillClient extends UserClient
             this.gui.getMenu().selectorFrame.lock.notifyAll();
         }
     } // parseTabResponse
+
+
+	@Override
+	public void registerClientResponse(RegisterClientResponse registerClientResponse) {
+		// TODO Auto-generated method stub
+		
+	}
     
 
        

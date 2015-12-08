@@ -24,6 +24,8 @@ public class MessageRequestRouter {
         if (request instanceof RegisterClientRequest) {
 			System.out.println("return registerclient request router");
         	return "messageRegisterClientRequestChannel";
+        } else if (request instanceof TableStatusRequest) {
+        	return "messageTableStatusRequestChannel";
         }
         return "messageRequestChannel";}
 }

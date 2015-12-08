@@ -35,24 +35,7 @@ public abstract class UserClient extends Client
         super(type);
     }
     
-    protected void parseTableStatusResponse(TableStatusResponse resp)
-    {
-        System.out.println("table status response");
-       System.out.println(resp.getStatuses());
-       
-       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
-       
 
-       
-        synchronized(lock)
-        {
-            if (req.getTableList().size() == 1 && req.getTableList().get(0) == -1)
-                this.tableStatuses = resp.getStatuses();
-            else
-                setTableStatuses(resp);
-            lock.notifyAll();
-        }           
-    }
     
     public abstract void parseTabResponse(TabResponse resp);
     
@@ -64,12 +47,12 @@ public abstract class UserClient extends Client
      */
    public void setTableStatuses(TableStatusResponse resp)
    {
-       ArrayList<Table.TableStatus>  x = resp.getStatuses();
-       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
-       
-       for (int i = 0; i < req.getTableList().size(); i++)
-           tableStatuses.set(req.getTableList().get(i),
-                   x.get(i));
+//       ArrayList<Table.TableStatus>  x = resp.getStatuses();
+//       TableStatusRequest req = (TableStatusRequest)resp.getRequest();
+//       
+//       for (int i = 0; i < req.getTableList().size(); i++)
+//           tableStatuses.set(req.getTableList().get(i),
+//                   x.get(i));
       
        
    }

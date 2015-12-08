@@ -22,8 +22,7 @@ public class NumOfTablesRequest extends Request
      * @param from
      * @param to
      */
-    public NumOfTablesRequest(InetAddress from, 
-                              InetAddress to)
+    public NumOfTablesRequest()
     {
         super();
     } // constructor

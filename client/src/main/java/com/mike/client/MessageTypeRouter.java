@@ -24,7 +24,7 @@ public class MessageTypeRouter {
         System.out.println("reached message router");
         if (message instanceof Response) {
 			System.out.println("received a message response");
-        	return "processFinished";
+        	return "typeRouterToResponseChannel";
         }
 //		if (message instanceof EventNotification) {
 //			System.out.println("received a message response");

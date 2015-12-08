@@ -42,6 +42,7 @@
     
     <!-- Request channels -->
 	<int:channel id="messageRegisterClientRequestChannel" />   
+	<int:channel id="messageTableStatusRequestChannel" />   
 	
 	<!--  Response Channel -->
 	<int:channel id="messageResponseChannel" />

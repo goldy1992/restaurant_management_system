@@ -40,23 +40,10 @@ public abstract class Client
         this.type = type;
     }
     
-    @ServiceActivator(inputChannel="registerClientResponseChannel")
-    private void registerClientResponse(RegisterClientResponse resp)
-    {
-        System.out.println("parse register client response");
-        RegisterClientResponse rResponse = (RegisterClientResponse)resp;
-        RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
-            
-        if (!rResponse.hasPermission())
-        {
-           // debugGUI.addText("A client already exists!");
-            System.exit(0);                               
-        } // if
-        else { 
-        	
-        	System.out.println("Client successfully registered as: " + req);        
-        }
-    } // regClientResp
+    public abstract void registerClientResponse(RegisterClientResponse registerClientResponse);
+
+        
+    
       
    
    
