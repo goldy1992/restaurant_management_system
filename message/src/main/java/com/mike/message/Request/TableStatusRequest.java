@@ -25,9 +25,7 @@ public class TableStatusRequest extends Request
      * @param to
      * @param tableList
      */
-    public TableStatusRequest(InetAddress from, 
-                              InetAddress to, 
-                              ArrayList<Integer> tableList)
+    public TableStatusRequest(ArrayList<Integer> tableList)
     {
         super();
         this.tableList = tableList;

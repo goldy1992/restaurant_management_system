@@ -14,7 +14,7 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author Goldy
  */
-public abstract class EventNotification implements Message<EventNotification>
+public abstract class EventNotification
 {
 
     /**
@@ -39,14 +39,6 @@ public abstract class EventNotification implements Message<EventNotification>
         return "TYPE: Event Notification\n";
     }
 
-    @Override
-    public EventNotification getPayload() {
-        return this;
-    }
 
-    @Override
-    public MessageHeaders getHeaders() {
-        return null;
-    }
     
 }

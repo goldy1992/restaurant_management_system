@@ -21,39 +21,6 @@ import java.io.IOException;
 public class OutputClient extends Client implements Runnable
 {
 
-    @Override
-    public void parseResponse(Response response) 
-        throws IOException, ClassNotFoundException 
-    {
-        super.parseResponse(response);
-        System.out.println("parse response");
-        if (response instanceof RegisterClientResponse)
-        {
-                    System.out.println("parse register client response");
-            RegisterClientResponse rResponse = (RegisterClientResponse)response;
-            RegisterClientRequest req = (RegisterClientRequest)rResponse.getRequest();
-            
-            if (!rResponse.hasPermission())
-            {
-              //  debugGUI.addText("A client already exists!");
-                System.exit(0);                               
-            } // if
-                            
-           // else// debugGUI.addText("Client successfully registered as: " + req);
-        } // if   
-    }
-
-    @Override
-    public void parseEventNotification(EventNotification evntNfn) 
-        throws IOException, ClassNotFoundException 
-    {
-        super.parseEventNotification(evntNfn);
-        if (evntNfn instanceof NewItemNfn)
-        {
-            NewItemNfn newItemMessage = (NewItemNfn)evntNfn;
-            //debugGUI.addMessage(newItemMessage);
-        } // if
-    }
      
     public OutputClient(RegisterClientRequest.ClientType type)  
     {
@@ -93,6 +60,13 @@ public class OutputClient extends Client implements Runnable
         }
            
     } // main
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
     
     
 } // class

@@ -25,93 +25,21 @@ import org.springframework.stereotype.Component;
  * @author mbbx9mg3
  */
 @Component
-public abstract class Client implements Runnable
+public abstract class Client
 {
     @Autowired
     public MessageSender messageSender;
     
-    // localhost
-    public InetAddress serverAddress; 
-    public InetAddress address;
-    public int serverPort;  
-    public Socket client;
-    //public OutputGUI debugGUI;
-    public Thread responseThread;    
-    protected ObjectOutputStream out = null;
-    private ClientType type;
-    private static final long serialVersionUID = 1L;
     
-    // object classes
-    public boolean running = true;    
-    @Override
-    public void run()
-    {
-        try 
-        {   
-            //this.debugGUI.addText("thread running");
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            while(running)
-            {
-                Message response = (Message)in.readObject();      
-                //System.out.println();
-//                if (this instanceof OutputClient)
-//                {
-//                    OutputClient c = (OutputClient)this;
-//                    System.out.println("Message received: " + this.getClass() + ", " + response);
-//                }
-                if (response instanceof Response)
-                    parseResponse((Response)response);
-               // else if(response instanceof EventNotification)
-                 //   parseEventNotification((EventNotification)response);
-            } // while running
-        } // try
-        catch (IOException | ClassNotFoundException ex) {
-            System.out.println("error in run");
-           // Logger.getLogger(WaiterClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                catch (Exception ex) {
-            System.out.println("error thrown here!");
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("exiting thread");
-    }
-    public Client(){
-        this.serverAddress = null;
-        this.address = null;
-
-        this.type = ClientType.WAITER;
-    }
+    private final ClientType type;
+    private static final long serialVersionUID = 1L;
+       
     public Client(RegisterClientRequest.ClientType type)
     {
         this.type = type;
-        InetAddress serverAddress = null;
-        try
-        {
-            serverPort = StartServer.getPORT_NUMBER();
-            serverAddress  = InetAddress.getByName(null);
-            client = new Socket(serverAddress, serverPort);
-            out = new ObjectOutputStream(client.getOutputStream());
-           // this.debugGUI = null;
-            this.responseThread = null;
-            System.out.println("outputstream made");
-        } // try // try
-        catch (IOException e)
-        {
-            System.out.println("Could not connect to server");
-        } // catch
- // catch
-            this.address = client.getLocalAddress();
-            this.serverAddress = serverAddress;
     }
     
-        /**
-     * @return The output stream of the client.
-     */
-   public ObjectOutputStream getOutputStream()
-   {
-       return out;
-   }
-   
+    
     private void registerClientResponse(RegisterClientResponse resp)
     {
         System.out.println("parse register client response");
@@ -127,23 +55,6 @@ public abstract class Client implements Runnable
     } // regClientResp
       
    
-    public void parseResponse(Response response) throws IOException, ClassNotFoundException
-    {
-        if (response instanceof LeaveResponse)
-        {
-            LeaveResponse leaveR = (LeaveResponse)response;
-            if (leaveR.hasPermission())
-                System.exit(0);
-        } // if
-        if (response instanceof RegisterClientResponse)
-            registerClientResponse((RegisterClientResponse)response);
-        
-    }
-   
-    public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
-    {
-        
-    }
    
     public String sortTimeSyntax(int time)
     {        
@@ -191,10 +102,7 @@ public abstract class Client implements Runnable
     
     public final boolean registerClient()
     {
-        RegisterClientRequest rKitchenReq = new RegisterClientRequest(
-                this.address,
-                this.serverAddress,
-                type);
+        RegisterClientRequest rKitchenReq = new RegisterClientRequest(type);
         messageSender.send(rKitchenReq);
         System.out.println("message sent");
         //return writeMessage(rKitchenReq);
@@ -203,28 +111,12 @@ public abstract class Client implements Runnable
     
     public final boolean leaveRequest()
     {
-        LeaveRequest leaveRequest = new LeaveRequest(
-                this.address,
-                this.serverAddress
-        );
-       // return writeMessage(leaveRequest);
+        LeaveRequest leaveRequest = new LeaveRequest();
+       messageSender.send(leaveRequest);
         return true;
     } // registerClient
     
-    public <M extends Message> boolean writeMessage(M message)
-    {
-        try 
-        {           
-            out.writeObject(message);
-            out.reset();
-        } 
-        catch (IOException ex) 
-        {
-            System.out.println("failed to send message:" + message);
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        return true;
-    }
+   
     
     public void setMessageSender(MessageSender messageSender){ this.messageSender = messageSender; }
 

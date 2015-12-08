@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
  */
 public class TillGUI extends javax.swing.JFrame implements ActionListener
 {
-    private final TillClient parent;
-    private final TillMenu menu;
+    private  TillClient parent;
+    private  TillMenu menu;
     
     /**
      * Creates new form TillClient
@@ -30,8 +30,8 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     {
         super();
         this.parent = parent;
-        this.menu = TillMenu.makeMenu(parent, 
-                null, null, parent.getOutputStream(),  this);
+//        this.menu = TillMenu.makeMenu(parent, 
+ //               null, null, parent.getOutputStream(),  this);
         initComponents();
     }
 
@@ -101,24 +101,24 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
                 
         if (confirm == 0) 
         { 
-            try 
-            {
-                // TODO add your handling code here:
-                menu.con.close();
-                LeaveRequest leaveRequest = new LeaveRequest(
-                    InetAddress.getByName(
-                        parent.client.
-                    getLocalAddress().getHostName()),
-                    InetAddress.getByName(
-                        parent.serverAddress.getHostName()));
-                parent.getOutputStream().writeObject(leaveRequest);
-            } catch (SQLException ex) {
-                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try 
+//            {
+//                // TODO add your handling code here:
+//                menu.con.close();
+//                LeaveRequest leaveRequest = new LeaveRequest(
+//                    InetAddress.getByName(
+//                        parent.client.
+//                    getLocalAddress().getHostName()),
+//                    InetAddress.getByName(
+//                        parent.serverAddress.getHostName()));
+//                parent.getOutputStream().writeObject(leaveRequest);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (UnknownHostException ex) {
+//                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(TillGUI.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }//GEN-LAST:event_formWindowClosing
 

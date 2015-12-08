@@ -331,8 +331,7 @@ public class MenuCardPanel extends JPanel
                     } // if
                     else
                     {
-                        try 
-                        {
+                     
                             double change = (amount - menu.getTotalDouble());
                             DecimalFormat df = new DecimalFormat("0.00");
                             menu.lastReceipt = menu.calculateBill();
@@ -350,12 +349,12 @@ public class MenuCardPanel extends JPanel
                             if (menu.tabLoaded)
                             {
 
-                                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-                                    menu.parentClient.client.getLocalAddress().getHostName()),
-                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
-                                     menu.oldTab);
-                                menu.out.reset();
-                                menu.out.writeObject(newEvt);
+//                                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+//                                    menu.parentClient.client.getLocalAddress().getHostName()),
+//                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
+//                                     menu.oldTab);
+//                                menu.out.reset();
+//                                menu.out.writeObject(newEvt);
                                     
 //                                TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(menu.parentClient.client.getLocalAddress().getHostName()),
 //                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
@@ -366,11 +365,7 @@ public class MenuCardPanel extends JPanel
                                 menu.tabLoaded = false;
                             }
                             menu.dispose();
-                        } catch (UnknownHostException ex) {
-                            Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MenuCardPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                      
                         menu.outputTextPane.setText("");
                         menu.setTotal();
                         menu.quantitySelected = -1;  

@@ -70,19 +70,19 @@ public class TillMenu extends Menu
             /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
              Occupied */
             TableStatusEvtNfn newEvt;
-            try {
-                newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
-                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                         //newTab.getTable().getTableNumber()
-                        0, Table.TableStatus.OCCUPIED);
-
-                out.reset();
-                out.writeObject(newEvt);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+//                        InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                         //newTab.getTable().getTableNumber()
+//                        0, Table.TableStatus.OCCUPIED);
+//
+//                out.reset();
+//                out.writeObject(newEvt);
+//            } catch (UnknownHostException ex) {
+//                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
+//            }
             this.setUpTab(null);
             this.outputTextPane.setText("");
             this.tabLoaded = false;

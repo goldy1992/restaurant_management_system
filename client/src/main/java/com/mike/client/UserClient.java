@@ -32,8 +32,7 @@ public abstract class UserClient extends Client
 
     public UserClient(ClientType type) 
     {
-        super();
-        //super(type);
+        super(type);
     }
     
     protected void parseTableStatusResponse(TableStatusResponse resp)
@@ -58,19 +57,7 @@ public abstract class UserClient extends Client
     public abstract void parseTabResponse(TabResponse resp);
     
     
-    @Override
-    public void parseResponse(Response response) throws IOException, ClassNotFoundException 
-    {
-        super.parseResponse(response);
-        
 
-
-        if (response instanceof TabResponse) 
-            parseTabResponse((TabResponse)response);
-        if (response instanceof TableStatusResponse) 
-            parseTableStatusResponse((TableStatusResponse)response);
-              
-    } // parseResponse
 
     /**
      * @param resp
@@ -90,13 +77,7 @@ public abstract class UserClient extends Client
    protected abstract void parseTableStatusEvtNfn(TableStatusEvtNfn event);
    
    
-   @Override
-   public void parseEventNotification(EventNotification evntNfn) throws IOException, ClassNotFoundException
-   {
-        super.parseEventNotification(evntNfn);
-        if (evntNfn instanceof TableStatusEvtNfn)
-            parseTableStatusEvtNfn((TableStatusEvtNfn)evntNfn);                     
-   } // parseEventNot
+
    
    public Object getLock()
    {
@@ -106,19 +87,15 @@ public abstract class UserClient extends Client
     public boolean sendTableStatusEventNotification(int tableNumber, 
                                                      TableStatus status)
     {
-        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(address,
-            serverAddress,
-            tableNumber, status);
+        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(tableNumber, status);
      //   return writeMessage(newEvt);  
     return true;
     }
     
-    public boolean sendTabRequest(int table)
+    public boolean sendTabRequest(int tableNumber)
     {
-        TabRequest tabStatusRequest = new TabRequest(this.address,
-            this.serverAddress,
-            table);        
-       // return writeMessage(tabStatusRequest);
+        TabRequest tabStatusRequest = new TabRequest(tableNumber);        
+       messageSender.send(tabStatusRequest);
         return true;
     }
    

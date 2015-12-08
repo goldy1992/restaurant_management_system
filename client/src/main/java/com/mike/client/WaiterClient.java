@@ -116,17 +116,6 @@ public class WaiterClient extends UserClient
         } // sync
     } // parseNumOfTablesResponse
      
-   @Override
-   public void parseResponse(Response resp) throws IOException, ClassNotFoundException
-   {
-        System.out.println("response received");
-        super.parseResponse(resp);
-
-        if (resp instanceof TabResponse) 
-            parseTabResponse((TabResponse)resp);
-        if (resp instanceof TableStatusResponse) 
-            parseTableStatusResponse((TableStatusResponse)resp);
-   }
 
     @Override
     protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
@@ -136,11 +125,8 @@ public class WaiterClient extends UserClient
     
     public boolean sendTableStatusRequest(ArrayList<Integer> tables)
     {
-        TableStatusRequest request = new TableStatusRequest(
-            address,
-            serverAddress,
-            tables);            
-      //  return writeMessage(request);
+        TableStatusRequest request = new TableStatusRequest(tables);
+        messageSender.send(request);
         return true;
     }
     

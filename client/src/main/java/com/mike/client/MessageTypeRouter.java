@@ -20,7 +20,7 @@ import org.springframework.integration.annotation.Router;
 public class MessageTypeRouter {
     
     @Router(inputChannel = "filterToMessageTypeRouterChannel")
-    public String accept(Message message){
+    public String accept(Object message){
         System.out.println("reached message router");
         if (message instanceof Response) {
 			System.out.println("received a message response");

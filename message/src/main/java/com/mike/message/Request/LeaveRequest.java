@@ -21,8 +21,7 @@ public class LeaveRequest extends Request
      * @param from
      * @param to
      */
-    public LeaveRequest(InetAddress from, 
-                              InetAddress to)
+    public LeaveRequest()
     {
         super();
     } // constructor

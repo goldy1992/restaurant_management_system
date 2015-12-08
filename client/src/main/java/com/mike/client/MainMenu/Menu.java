@@ -432,12 +432,12 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 
         try 
         {
-            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-                parentClient.client.getLocalAddress().getHostName()),
-                InetAddress.getByName(parentClient.serverAddress.getHostName()),
-                 this.oldTab);
-            out.reset();
-            out.writeObject(newEvt);
+//            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+//                parentClient.client.getLocalAddress().getHostName()),
+//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                 this.oldTab);
+//            out.reset();
+//            out.writeObject(newEvt);
                 
             // send the new items to the bar or kitchen respectively
             if (this.newTab.getDrinks().size() > 0)
@@ -477,7 +477,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
             }    
                 con.close();
         } // try // try
-        catch (IOException | SQLException ex) 
+        catch ( SQLException ex) 
         { 
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }

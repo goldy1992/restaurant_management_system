@@ -26,10 +26,7 @@ public class TableStatusEvtNfn extends EventNotification
      * @param tableNumber
      * @param t
      */
-    public TableStatusEvtNfn(InetAddress from, 
-                                InetAddress to, 
-                                int tableNumber,
-                                Table.TableStatus t)
+    public TableStatusEvtNfn(int tableNumber, Table.TableStatus t)
     {
         super();
         this.tableNumber = tableNumber;

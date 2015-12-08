@@ -5,17 +5,14 @@
  */
 package com.mike.server;
 
-import com.mike.message.Message;
-import com.mike.message.Request.RegisterClientRequest;
-
+import com.mike.message.EventNotification.EventNotification;
+import com.mike.message.Request.Request;
 import java.util.Map;
-
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
 
 /**
- *
  * @author Mike
  */
 @MessageEndpoint
@@ -24,13 +21,15 @@ public class MessageFilter {
     @Filter(inputChannel = "inboundAdapterToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
         System.out.println("message received filter\nFilter headers: " + headerMap);
-        if (message instanceof Message) {
+        if (validMessage(message)) {
         	System.out.println("returning true");
         	return true; 
-        } 
-        
+        }  // if
     	return false;
-        
+    } // accept
+    
+    private boolean validMessage(Object message) {
+    	return (message instanceof Request || message instanceof EventNotification);
     }
    
 }

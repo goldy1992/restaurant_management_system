@@ -22,9 +22,7 @@ public class TabRequest extends Request
      * @param to
      * @param tableNumber
      */
-    public TabRequest(InetAddress from, 
-                              InetAddress to,  
-                              int tableNumber)
+    public TabRequest(int tableNumber)
     {
         super();
         this.tabNumber = tableNumber;

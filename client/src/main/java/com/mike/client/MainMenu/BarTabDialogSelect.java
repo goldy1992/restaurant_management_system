@@ -78,10 +78,10 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(parent, "Invalid Tab Number.");
                     else
                     {
-                        try
+                        /*try
                         {
-                            /*  SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE 
-                                IS NOW  IN USE */
+                              SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE 
+                                IS NOW  IN USE 
                             TableStatusEvtNfn newEvt = new TableStatusEvtNfn(
                                 InetAddress.getByName(
                                    tClient.client.getLocalAddress()
@@ -94,7 +94,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             tClient.getOutputStream().reset();
                             tClient.getOutputStream().writeObject(newEvt);
 
-                            /* Request the tab of this table from the server */
+                             Request the tab of this table from the server 
                             TabRequest tabStatusRequest = new TabRequest(
                                 InetAddress.getByName(tClient.client
                                     .getLocalAddress().getHostName()),
@@ -107,7 +107,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IOException ex) {
                             Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        }*/
 
                         synchronized(parent.lock)
                         {
@@ -130,7 +130,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             tGUI.tabLoaded = false;
                             tGUI.dispose();
                             TableStatusEvtNfn newEvt;
-                            try 
+                            /*try 
                             {
                                 newEvt = new TableStatusEvtNfn(InetAddress.getByName(tClient.client.getLocalAddress().getHostName()),
                                         InetAddress.getByName(tClient.serverAddress.getHostName()),
@@ -142,7 +142,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                                 Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IOException ex) {
                                 Logger.getLogger(TillMenu.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                            }*/
                         } //else
                 }
             });; // added action listener to new tab button
@@ -170,8 +170,8 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                 {
                     TillMenu menuParent = (TillMenu)parent.getParent();
                     TillClient parentClient = (TillClient)menuParent.parentClient;
-                    try 
-                    {
+//                    try 
+//                    {
                         if (pair.getSecond() == Table.TableStatus.IN_USE)
                         {
                             JOptionPane.showMessageDialog(parent, "Tab " + pair.getFirst() + " is currently in use!" );
@@ -180,24 +180,24 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                         
                         /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW 
                         IN USE */
-                        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+/*                        TableStatusEvtNfn newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                         InetAddress.getByName(parentClient.serverAddress.getHostName()),
                          pair.getFirst(), Table.TableStatus.IN_USE);
                         menuParent.out.reset();
-                        menuParent.out.writeObject(newEvt);
+                        menuParent.out.writeObject(newEvt);*/
                         
-                        TabRequest req = new TabRequest(                
+                       /* TabRequest req = new TabRequest(                
                             InetAddress.getByName(
                                 parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(
                                 parentClient.serverAddress.getHostName()),
                               pair.getFirst());
-                        parentClient.getOutputStream().writeObject(req);
+                        parentClient.getOutputStream().writeObject(req);*/
                         
                         synchronized(lock)
                         {      
-                            while(menuParent.selectorFrame.tabReceived == false)
-                                lock.wait();
+                            while(menuParent.selectorFrame.tabReceived == false);
+                           //     lock.wait();
                         } // sync
 
                         if (parent.func == Functionality.GET_TAB)
@@ -215,22 +215,22 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                             menuParent.setUpTab(null);
                             parent.dispose();
                           
-                            newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+                           /* newEvt = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
                             InetAddress.getByName(parentClient.serverAddress.getHostName()),
                              pair.getFirst(), Table.TableStatus.OCCUPIED);
                             menuParent.out.reset();
-                            menuParent.out.writeObject(newEvt);
+                            menuParent.out.writeObject(newEvt);*/
                             menuParent.dispose();
                         } // else if
-                    } 
-                    catch (UnknownHostException ex) 
-                    {
-                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
-                    catch (IOException | InterruptedException ex) 
-                    {
-                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+//                    } 
+//                    catch (UnknownHostException ex) 
+//                    {
+//                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+//                    } 
+//                    catch (IOException | InterruptedException ex) 
+//                    {
+//                        Logger.getLogger(BarTabDialogSelect.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
                     parent.dispose();
                 }
             }); // actionListener

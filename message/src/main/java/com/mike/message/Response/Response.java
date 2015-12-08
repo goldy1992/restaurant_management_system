@@ -13,7 +13,7 @@ import com.mike.message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message
+public abstract class Response
 {    
     private Request request = null;
     private boolean parsedResponse;
@@ -24,7 +24,7 @@ public abstract class Response extends Message
      */
     public Response(Request request)
     {
-       super(request.getToAddress(), request.getFromAddress());
+   
        this.request = request;
        parsedResponse = false;
     } // constructor

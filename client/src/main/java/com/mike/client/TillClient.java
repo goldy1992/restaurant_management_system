@@ -38,26 +38,19 @@ public class TillClient extends UserClient
     public static void main(String[] args)  
     {   
         final TillClient myClient;
-        try 
-        {
+      
             myClient = (TillClient)Client.makeClient(TILL);
             
             ArrayList<Integer> tables = new ArrayList<>();
             // add null because there's no table zero
             tables.add(-1);
-            TableStatusRequest request = new TableStatusRequest(
-                myClient.address,
-                myClient.serverAddress,
-                tables);
-            myClient.getOutputStream().writeObject(request);  
+            TableStatusRequest request = new TableStatusRequest(tables);
+           // myClient.getOutputStream().writeObject(request);  
             myClient.gui = new TillGUI(myClient);
             myClient.gui.setTitle("Till");
             myClient.gui.setVisible(true);
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(TillClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         
+       
         System.out.println("end of till client");
     } // main
       

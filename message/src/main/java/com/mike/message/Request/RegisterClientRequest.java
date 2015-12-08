@@ -5,16 +5,12 @@
  */
 package com.mike.message.Request;
 
-import com.mike.message.Message;
-
-import java.io.Serializable;
 import java.net.InetAddress;
-import org.springframework.messaging.MessageHeaders;
 /**
  *
  * @author mbbx9mg3
  */
-public class RegisterClientRequest extends Request implements Serializable
+public class RegisterClientRequest extends Request 
 {
 
     public static enum ClientType
@@ -48,9 +44,7 @@ public class RegisterClientRequest extends Request implements Serializable
      * @param to
      * @param clientType
      */
-    public RegisterClientRequest(InetAddress from, 
-                                InetAddress to, 
-                                ClientType clientType)
+    public RegisterClientRequest(ClientType clientType)
     {
         this.clientType = clientType;
     } // constructor
