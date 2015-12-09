@@ -1,24 +1,10 @@
 package com.mike.client;
 
-import com.mike.message.EventNotification.EventNotification;
-import com.mike.message.Message;
 import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
-import com.mike.message.Response.LeaveResponse;
 import com.mike.message.Response.RegisterClientResponse;
-import com.mike.message.Response.Response;
-import com.mike.server.StartServer;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
 
 /**
@@ -91,21 +77,9 @@ public abstract class Client
         return type;
     }
     
-    public final boolean registerClient()
-    {
-        RegisterClientRequest rKitchenReq = new RegisterClientRequest(type);
-        messageSender.send(rKitchenReq);
-        System.out.println("message sent");
-        //return writeMessage(rKitchenReq);
-        return true;
-    } // registerClient
+
     
-    public final boolean leaveRequest()
-    {
-        LeaveRequest leaveRequest = new LeaveRequest();
-       messageSender.send(leaveRequest);
-        return true;
-    } // registerClient
+
     
    
     

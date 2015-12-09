@@ -3,13 +3,10 @@ package com.mike.client;
 import com.mike.client.SelectTableMenu.SelectTableController;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
-import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
-
 import java.util.*;
-
 import com.mike.message.Table;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
@@ -43,8 +40,7 @@ public class WaiterClient extends UserClient
     {
     	GenericXmlApplicationContext context = setupContext();
         WaiterClient waiterClient = (WaiterClient)context.getBean("waiterClient");
-        //MessageSender messageSender = (MessageSender)context.getBean("messageSender");
-        waiterClient.registerClient();
+        waiterClient.messageSender.registerClient(waiterClient.getType());
         //WaiterClient client = (WaiterClient)Client.makeClient(WAITER);
    /*     ArrayList<Integer> tables = new ArrayList<>();
         tables.add(ALL); 
@@ -93,12 +89,7 @@ public class WaiterClient extends UserClient
         selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
     }
     
-    public boolean sendTableStatusRequest(ArrayList<Integer> tables)
-    {
-        TableStatusRequest request = new TableStatusRequest(tables);
-        messageSender.send(request);
-        return true;
-    }
+
     
     @Override
     @ServiceActivator(inputChannel="registerClientResponseChannel")
@@ -114,7 +105,7 @@ public class WaiterClient extends UserClient
         } // if
         else { 
         	if (selectTable == null) {
-        		sendTableStatusRequest(new ArrayList<>());
+        		this.messageSender.sendTableStatusRequest(new ArrayList<>());
         	}
         	System.out.println("Client successfully registered as: " + registerClientResponse);        
         }

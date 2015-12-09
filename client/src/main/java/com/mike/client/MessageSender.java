@@ -1,23 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mike.client;
 
+import com.mike.message.Request.LeaveRequest;
+import com.mike.message.Request.RegisterClientRequest;
+import com.mike.message.Request.TableStatusRequest;
+import com.mike.message.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mike.message.Message;
-import org.springframework.integration.annotation.Gateway;
-
+import java.util.ArrayList;
 
 /**
- *
- * @author Mike
+ * Created by michaelg on 09/12/2015.
  */
+public class MessageSender {
 
-public interface MessageSender {
+	@Autowired
+	SendGateway sendGateway;
 
-    @Gateway(requestChannel="outputChannel")
-    public void send(Object message);
-    
+	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
+
+	public boolean sendTableStatusRequest(ArrayList<Integer> tables) {
+		TableStatusRequest request = new TableStatusRequest(tables);
+		sendGateway.send(request);
+		return true;
+	}
+
+	public final boolean registerClient(RegisterClientRequest.ClientType type) {
+		RegisterClientRequest rKitchenReq = new RegisterClientRequest(type);
+		sendGateway.send(rKitchenReq);
+		System.out.println("message sent");
+		return true;
+	} // registerClient
+
+	public final boolean leaveRequest() {
+		LeaveRequest leaveRequest = new LeaveRequest();
+		sendGateway.send(leaveRequest);
+		return true;
+	} // registerClient
 }

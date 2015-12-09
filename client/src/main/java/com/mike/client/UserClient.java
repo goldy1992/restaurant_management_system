@@ -1,16 +1,13 @@
 package com.mike.client;
 
-import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
 import com.mike.message.Request.TabRequest;
-import com.mike.message.Request.TableStatusRequest;
-import com.mike.message.Response.Response;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table;
 import com.mike.message.Table.TableStatus;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +75,7 @@ public abstract class UserClient extends Client
     public boolean sendTabRequest(int tableNumber)
     {
         TabRequest tabStatusRequest = new TabRequest(tableNumber);        
-       messageSender.send(tabStatusRequest);
+       sendGateway.send(tabStatusRequest);
         return true;
     }
    
