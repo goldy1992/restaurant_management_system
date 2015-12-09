@@ -3,22 +3,14 @@ package com.mike.client;
 import com.mike.client.SelectTableMenu.SelectTableController;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
-import static com.mike.message.Request.RegisterClientRequest.ClientType.WAITER;
-import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TableStatusRequest;
-import com.mike.message.Response.NumOfTablesResponse;
 import com.mike.message.Response.RegisterClientResponse;
-import com.mike.message.Response.Response;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
-import java.awt.List;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import java.util.*;
+
+import com.mike.message.Table;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -41,11 +33,8 @@ public class WaiterClient extends UserClient
     {
         super(type);
     } // constructor
-      
+	private Map<Integer,Table> tableMap;
 
-   
- 
-     
     /**
      * @param args
      * @throws InterruptedException
@@ -134,11 +123,18 @@ public class WaiterClient extends UserClient
     @ServiceActivator(inputChannel="tableStatusResponseChannel")
     public void tableStatusResponse(TableStatusResponse tableStatusResponse)
     {
-    	System.out.println("hit tablestatus response method");
+		if (this.tableMap == null) {
+			tableMap = new HashMap<>();
+		}
+		for (Integer t : tableStatusResponse.getTableStatuses().keySet()) {
+			if (!tableMap.containsKey(t)) {
+				Table table = new Table(t);
+				tableMap.put(t, table);
+			}
+			tableMap.get(t).setTableStatus(tableStatusResponse.getTableStatuses().get(t));
+		}
     }
-    
 
-    
     public static GenericXmlApplicationContext setupContext() {
 		final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 
