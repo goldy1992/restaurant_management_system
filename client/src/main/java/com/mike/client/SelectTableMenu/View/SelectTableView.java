@@ -241,7 +241,7 @@ public class SelectTableView extends javax.swing.JFrame
                 
                 if (confirm == 0) 
                 {
-                    controller.parentClient.leaveRequest();
+                  //  controller.parentClient.leaveRequest();
                 } // if        
     } // exitCode
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

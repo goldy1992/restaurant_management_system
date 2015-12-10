@@ -8,6 +8,8 @@ import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import java.util.*;
 import com.mike.message.Table;
+import com.mike.message.Table.TableStatus;
+
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -32,41 +34,7 @@ public class WaiterClient extends UserClient
     } // constructor
 	private Map<Integer,Table> tableMap;
 
-    /**
-     * @param args
-     * @throws InterruptedException
-     */
-    public static void main(String[] args) throws InterruptedException
-    {
-    	GenericXmlApplicationContext context = setupContext();
-        WaiterClient waiterClient = (WaiterClient)context.getBean("waiterClient");
-        waiterClient.messageSender.registerClient(waiterClient.getType());
-        //WaiterClient client = (WaiterClient)Client.makeClient(WAITER);
-   /*     ArrayList<Integer> tables = new ArrayList<>();
-        tables.add(ALL); 
-        client.sendTableStatusRequest(tables);
-        
-        synchronized(client.lock)
-        {
-            while(client.tableStatuses == null)
-            {
-                try { client.lock.wait(); }
-                catch (InterruptedException e) 
-                { // treat interrupt as exit request
-                    break;
-                }
-            } // while
-        
-        } // synchronized
-        //client.debugGUI.addText("post while");
-        
-        client.selectTable = new SelectTableController(
-            client.tableStatuses, client);
-       
-
-        System.out.println("end of waiter client");
-           */
-    } // main
+ 
     
     @Override
     public void parseTabResponse(TabResponse resp)
@@ -79,75 +47,32 @@ public class WaiterClient extends UserClient
             selectTable.tabLock.notifyAll();
         } // synchronized        
     }
-    
-
-     
+        
 
     @Override
     protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
     {
         selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
     }
-    
 
-    
-    @Override
-    @ServiceActivator(inputChannel="registerClientResponseChannel")
-    public void registerClientResponse(RegisterClientResponse registerClientResponse)
-    {
-        System.out.println("parse register client response");
-
-            
-        if (!registerClientResponse.hasPermission())
-        {
-           // debugGUI.addText("A client already exists!");
-            System.exit(0);                               
-        } // if
-        else { 
-        	if (selectTable == null) {
-        		this.messageSender.sendTableStatusRequest(new ArrayList<>());
-        	}
-        	System.out.println("Client successfully registered as: " + registerClientResponse);        
-        }
-    } // regClientResp
-    
-    @ServiceActivator(inputChannel="tableStatusResponseChannel")
-    public void tableStatusResponse(TableStatusResponse tableStatusResponse)
-    {
+    public void setTableStatuses(Map<Integer, TableStatus> statusMap) {
 		if (this.tableMap == null) {
 			tableMap = new HashMap<>();
 		}
-		for (Integer t : tableStatusResponse.getTableStatuses().keySet()) {
+		for (Integer t : statusMap.keySet()) {
 			if (!tableMap.containsKey(t)) {
 				Table table = new Table(t);
+				table.setTableStatus(statusMap.get(t));
 				tableMap.put(t, table);
+			} else {
+				tableMap.get(t).setTableStatus(statusMap.get(t));
 			}
-			tableMap.get(t).setTableStatus(tableStatusResponse.getTableStatuses().get(t));
-		}
+			tableMap.get(t).setTableStatus(statusMap.get(t));
+		}    	
     }
-
-    public static GenericXmlApplicationContext setupContext() {
-		final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
-
-		System.out.print("Detect open server socket...");
-		int availableServerSocket = SocketUtils.findAvailableTcpPort();
-
-		final Map<String, Object> sockets = new HashMap<String, Object>();
-		sockets.put("availableServerSocket", availableServerSocket);
-
-		final MapPropertySource propertySource = new MapPropertySource("sockets", sockets);
-
-		context.getEnvironment().getPropertySources().addLast(propertySource);
-
-		System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
-
-		context.load("/META-INF/client-context.xml");
-		context.registerShutdownHook();
-		context.refresh();
-
-		return context;
-	}
     
+
+
     
     
 } // MyClientSocketClass

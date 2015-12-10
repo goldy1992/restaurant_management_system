@@ -95,8 +95,8 @@ public class SelectTableController implements ActionListener
             } // else if
             else
             {
-                parentClient.sendTableStatusEventNotification(tableSelected,  IN_USE);
-                parentClient.sendTabRequest(tableSelected);
+              //  parentClient.sendTableStatusEventNotification(tableSelected,  IN_USE);
+               // parentClient.sendTabRequest(tableSelected);
           
                 synchronized(tabReceived)
                 {

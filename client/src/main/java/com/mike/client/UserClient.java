@@ -72,11 +72,11 @@ public abstract class UserClient extends Client
     return true;
     }
     
-    public boolean sendTabRequest(int tableNumber)
-    {
-        TabRequest tabStatusRequest = new TabRequest(tableNumber);        
-       sendGateway.send(tabStatusRequest);
-        return true;
-    }
+//    public boolean sendTabRequest(int tableNumber)
+//    {
+//        TabRequest tabStatusRequest = new TabRequest(tableNumber);        
+//       sendGateway.send(tabStatusRequest);
+//        return true;
+//    }
    
 }

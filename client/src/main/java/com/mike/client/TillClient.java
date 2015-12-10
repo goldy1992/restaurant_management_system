@@ -94,12 +94,7 @@ public class TillClient extends UserClient
     } // parseTabResponse
 
 
-	@Override
-	public void registerClientResponse(RegisterClientResponse registerClientResponse) {
-		// TODO Auto-generated method stub
-		
-	}
-    
+
 
        
     

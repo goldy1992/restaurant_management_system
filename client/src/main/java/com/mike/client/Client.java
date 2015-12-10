@@ -13,27 +13,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public abstract class Client
-{
-    @Autowired
-    public MessageSender messageSender;
-    
-    
+{     
     private final ClientType type;
     private static final long serialVersionUID = 1L;
        
-    public Client(RegisterClientRequest.ClientType type)
-    {
+    public Client(RegisterClientRequest.ClientType type) {
         this.type = type;
     }
     
-    public abstract void registerClientResponse(RegisterClientResponse registerClientResponse);
-
-        
-    
-      
-   
-   
-    public String sortTimeSyntax(int time)
+     public String sortTimeSyntax(int time)
     {        
         if (time == 0) return "00";
         else if (time > 0 && time <= 9)
@@ -72,17 +60,9 @@ public abstract class Client
     } // makeClient
     
     
-    public ClientType getType()
-    {
+    public ClientType getType() {
         return type;
     }
     
-
-    
-
-    
-   
-    
-    public void setMessageSender(MessageSender messageSender){ this.messageSender = messageSender; }
 
 }

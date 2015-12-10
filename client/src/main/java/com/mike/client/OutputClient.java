@@ -69,11 +69,6 @@ public class OutputClient extends Client implements Runnable
 	}
 
 
-	@Override
-	public void registerClientResponse(RegisterClientResponse registerClientResponse) {
-		// TODO Auto-generated method stub
-		
-	}
     
     
 } // class
