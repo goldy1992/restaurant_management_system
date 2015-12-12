@@ -4,6 +4,8 @@ import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Table;
+import com.mike.message.Table.TableStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -36,4 +38,11 @@ public class MessageSender {
 		sendGateway.send(leaveRequest);
 		return true;
 	} // registerClient
+
+	public void sendTableStatusEventNotification(int tableSelected, TableStatus selectedTableStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

@@ -8,6 +8,8 @@ package com.mike.client.SelectTableMenu;
 import com.mike.client.SelectTableMenu.View.SelectTableView;
 import com.mike.client.MainMenu.Menu;
 import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
+
+import com.mike.client.MessageSender;
 import com.mike.client.WaiterClient;
 import com.mike.item.Tab;
 import com.mike.message.Table.TableStatus;
@@ -18,27 +20,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  *
  * @author Mike
  */
 public class SelectTableController implements ActionListener 
 {
+	@Autowired
+	MessageSender messageSender;
+	
+	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
+	
     public SelectTableModel model;
     public SelectTableView view;
-    public final WaiterClient parentClient;
-    public final Object tabLock = new Object();
+    public Object tabLock = new Object();
     public Boolean tabReceived = false;
-    public Menu menu; // the menu GUI
+    private boolean initialised = false;
     
-    public SelectTableController(ArrayList<TableStatus> tableStatuses,
-         WaiterClient parent)
-    {
+    public boolean isInitialised() {
+		return initialised;
+	}
+
+
+
+	public void setInitialised(boolean initialised) {
+		this.initialised = initialised;
+	}
+
+
+
+	public void init(ArrayList<TableStatus> tableStatuses) {
         this.model = new SelectTableModel(tableStatuses);
         this.view = new SelectTableView(this, tableStatuses);
-         view.setVisible(true);
-        this.parentClient = parent;
-    }    
+         view.setVisible(true);  	
+    }
+   
 
     
   /**
@@ -67,7 +85,6 @@ public class SelectTableController implements ActionListener
             {
                 view.getOutputLabel().setOutputLabelOpenQuery(i);
                 model.setTableSelected(i);
-                //parentClient.debugGUI.addText("select table " +  getTableSelected());
             } // if
         }
         
@@ -77,7 +94,7 @@ public class SelectTableController implements ActionListener
             TableStatus selectedTableStatus = model.getTableStatus(tableSelected);
             if (selectedTableStatus == DIRTY)
             {
-                parentClient.sendTableStatusEventNotification(tableSelected, 
+                messageSender.sendTableStatusEventNotification(tableSelected, 
                                                      selectedTableStatus);
             } // if
         } // if getSource
@@ -111,11 +128,10 @@ public class SelectTableController implements ActionListener
                     } // catch // catch
                 } // synchronized
                     
-                menu = Menu.makeMenu(parentClient, this.view, model.getTab());
-                //MyClient.debugGUI.addText("menu has been made");
+              //  menu = Menu.makeMenu(parentClient, this.view, model.getTab());
 
                 this.tabReceived = false;
-                parentClient.sendTableStatusEventNotification(tableSelected, OCCUPIED);
+                messageSender.sendTableStatusEventNotification(tableSelected, OCCUPIED);
 
                 tableSelected = NO_TABLE_SELECTED;
             } // else
