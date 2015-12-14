@@ -32,9 +32,6 @@ public abstract class UserClient extends Client
         super(type);
     }
     
-
-    
-    public abstract void parseTabResponse(TabResponse resp);
     
     
 
@@ -54,7 +51,6 @@ public abstract class UserClient extends Client
        
    }
    
-   protected abstract void parseTableStatusEvtNfn(TableStatusEvtNfn event);
    
    
 
@@ -72,11 +68,6 @@ public abstract class UserClient extends Client
     return true;
     }
     
-//    public boolean sendTabRequest(int tableNumber)
-//    {
-//        TabRequest tabStatusRequest = new TabRequest(tableNumber);        
-//       sendGateway.send(tabStatusRequest);
-//        return true;
-//    }
+
    
 }

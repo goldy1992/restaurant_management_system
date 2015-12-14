@@ -29,10 +29,10 @@ public class TableStatusResponse extends Response
      *
      * @param request
      */
-    public TableStatusResponse(TableStatusRequest request)
+    public TableStatusResponse(TableStatusRequest request, Map<Integer, Table.TableStatus> tableStatuses)
     {
         super(request);
-        tableStatuses = new HashMap<>();
+        this.tableStatuses = tableStatuses;
     } // contructor
        
        
@@ -51,6 +51,7 @@ public class TableStatusResponse extends Response
 	public Map<Integer, Table.TableStatus> getTableStatuses() {
 		return tableStatuses;
 	}
+	
 
 
 } // class

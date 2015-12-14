@@ -12,6 +12,8 @@ import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED
 import com.mike.client.MessageSender;
 import com.mike.client.WaiterClient;
 import com.mike.item.Tab;
+import com.mike.message.Response.TabResponse;
+import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table.TableStatus;
 import static com.mike.message.Table.TableStatus.DIRTY;
 import static com.mike.message.Table.TableStatus.IN_USE;
@@ -21,43 +23,42 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.annotation.MessageEndpoint;
+import org.springframework.integration.annotation.ServiceActivator;
 
 /**
  *
  * @author Mike
  */
+@MessageEndpoint
 public class SelectTableController implements ActionListener 
 {
 	@Autowired
-	MessageSender messageSender;
-	
-	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
-	
+	private MessageSender messageSender;
+	 
     public SelectTableModel model;
     public SelectTableView view;
-    public Object tabLock = new Object();
-    public Boolean tabReceived = false;
     private boolean initialised = false;
+    private ActionListener actionListener;
+	
+	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
+		
     
     public boolean isInitialised() {
 		return initialised;
 	}
 
-
-
 	public void setInitialised(boolean initialised) {
 		this.initialised = initialised;
 	}
 
-
-
 	public void init(ArrayList<TableStatus> tableStatuses) {
-        this.model = new SelectTableModel(tableStatuses);
-        this.view = new SelectTableView(this, tableStatuses);
-         view.setVisible(true);  	
+		if (!initialised) {
+			this.model = new SelectTableModel(tableStatuses);
+	        this.view = new SelectTableView(actionListener, tableStatuses);
+	        view.setVisible(true); 
+		} 	
     }
-   
-
     
   /**
      *
@@ -76,82 +77,61 @@ public class SelectTableController implements ActionListener
     }
     
     @Override
-    @SuppressWarnings("empty-statement")
-    public void actionPerformed(ActionEvent e) 
-    {
-        for (int i = 0; i <  view.getTableButtons().length; i++)
-        {
-            if (e.getSource() == view.getTableButtons()[i])
-            {
-                view.getOutputLabel().setOutputLabelOpenQuery(i);
-                model.setTableSelected(i);
-            } // if
-        }
-        
+    public void actionPerformed(ActionEvent event) {
+         
         int tableSelected = model.getTableSelected();
-        if (e.getSource() == view.cleanTable)
-        {
+        if (view.isCleanTableSelected(event)) {
             TableStatus selectedTableStatus = model.getTableStatus(tableSelected);
-            if (selectedTableStatus == DIRTY)
-            {
-                messageSender.sendTableStatusEventNotification(tableSelected, 
-                                                     selectedTableStatus);
+            if (selectedTableStatus == DIRTY) {
+                messageSender.sendTableStatusEventNotification(tableSelected, selectedTableStatus);
             } // if
+            return;
         } // if getSource
 
         
-        if (e.getSource() == view.openTable)
-        {
-            if (tableSelected == NO_TABLE_SELECTED)
-            {
+        if (view.isOpenTableSelected(event)) {
+            if (tableSelected == NO_TABLE_SELECTED) {
                 view.getOutputLabel().setOutputLabelNoTableSelected();
-            }
-            else if (model.getTableStatus(tableSelected) == IN_USE)
-            {
+            } else if (model.getTableStatus(tableSelected) == IN_USE) {
                 view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
-            } // else if
-            else
-            {
+            } else {
               //  parentClient.sendTableStatusEventNotification(tableSelected,  IN_USE);
-               // parentClient.sendTabRequest(tableSelected);
-          
-                synchronized(tabReceived)
-                {
-                    try
-                    {
-                        while(this.tabReceived == false)
-                            tabReceived.wait();
-                    }
-                    catch (InterruptedException ex) 
-                    {
-                        System.err.println(ex);
-                    } // catch // catch
-                } // synchronized
-                    
-              //  menu = Menu.makeMenu(parentClient, this.view, model.getTab());
-
-                this.tabReceived = false;
-                messageSender.sendTableStatusEventNotification(tableSelected, OCCUPIED);
-
-                tableSelected = NO_TABLE_SELECTED;
+             messageSender.sendTabRequest(tableSelected);
             } // else
-            
+            return;
         } // if open table
         
-        if(e.getSource() == view.moveTable)
-        {
-            
-        } // if
+        if(view.isMoveTableSelected(event)); // TODO: implement move table
+        
+    	for (int i = 1; i <= model.getNumberOfTables(); i++) {
+    		if (view.isTableXSelected(event, i)) {
+	            view.getOutputLabel().setOutputLabelOpenQuery(i);
+	            model.setTableSelected(i);    		
+	            return;
+    		}
+    	}
+    } // action performed
+    
+    
+
+    public void parseTabResponse(TabResponse resp)
+    {
+//            selectTable.setTab(resp.getTab());
+//            selectTable.setTabReceived(true);      
     }
     
-    public void setTabReceived(boolean received)
-    {
-        this.tabReceived = received;
-    }
     
-    public void setTab(Tab tab)
-    {
-        model.setTab(tab);
+    @ServiceActivator(inputChannel="tableStatusResponseChannel")
+    public void tableStatusResponse(TableStatusResponse tableStatusResponse) {    	
+    	System.out.println("response size: " + tableStatusResponse.getTableStatuses().keySet().size());
+    	if (!isInitialised()) {
+    		ArrayList<TableStatus> ts = new ArrayList<>();
+    		for(Integer i : tableStatusResponse.getTableStatuses().keySet()) {
+    			ts.add(tableStatusResponse.getTableStatuses().get(i));
+    		}
+    		init(ts);
+    	}
     }
+
     
 }

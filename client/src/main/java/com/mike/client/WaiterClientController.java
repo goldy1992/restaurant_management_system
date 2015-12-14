@@ -50,18 +50,6 @@ public class WaiterClientController {
         }
     } // regClientResp
 	    
-    @ServiceActivator(inputChannel="tableStatusResponseChannel")
-    public void tableStatusResponse(TableStatusResponse tableStatusResponse)
-    {
-    	waiterClient.setTableStatuses(tableStatusResponse.getTableStatuses());
-    	
-    	if (!selectTableController.isInitialised()) {
-    		ArrayList<TableStatus> ts = new ArrayList<>();
-    		for(Integer i : tableStatusResponse.getTableStatuses().keySet()) {
-    			ts.add(tableStatusResponse.getTableStatuses().get(i));
-    		}
-    		selectTableController.init(ts);
-    	}
-    }
+
 
 }

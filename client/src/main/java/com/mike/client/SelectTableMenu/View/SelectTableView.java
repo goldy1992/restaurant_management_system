@@ -2,47 +2,50 @@ package com.mike.client.SelectTableMenu.View;
 
 import com.mike.client.SelectTableMenu.SelectTableController;
 import com.mike.message.Table.TableStatus;
-import static com.mike.message.Table.TableStatus.FREE;
-import static com.mike.message.Table.TableStatus.IN_USE;
-import static com.mike.message.Table.TableStatus.OCCUPIED;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static java.awt.Color.YELLOW;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  * @author Goldy
  */
 public class SelectTableView extends javax.swing.JFrame
 {
-    private final SelectTableController controller;
-    private final JButton[] tableButtons;
-    public JButton openTable = new JButton("Open Table");
-    public JButton moveTable = new JButton("Move Table");
-    public JButton cleanTable = new JButton("Clean Table");    
+    private JButton[] tableButtons;
+    private JButton openTable = new JButton("Open Table");
+    private JButton moveTable = new JButton("Move Table");
+    private JButton cleanTable = new JButton("Clean Table");    
     private OutputLabel outputLabel;
+    private JPanel ExternalOptionsPanel;
+    private JPanel FormOutputPanel;
+    private JPanel FormPanel;
+    private JMenuBar MenuBar;
+    private JMenu MenuBarFile;
+    private JMenuItem MenuBarFileExit;
+    private JPanel TableNumPanel;
+    private JMenu jMenu2;
     
     /**
      * Creates new form SelectTable
      * @param controller
      * @param statuses
      */
-    public SelectTableView(SelectTableController controller, ArrayList<TableStatus> statuses) 
-    {
-        this.controller = controller;
+    public SelectTableView(ActionListener actionListener, ArrayList<TableStatus> statuses) {
         initComponents();
-        tableButtons = makeTableButtons(statuses);
+        makeTableButtons(statuses);
+        initListeners(actionListener);
     } 
     
     /**
      * @return
      */
-    public JButton[] getTableButtons()
-    {
+    public JButton[] getTableButtons() {
         return tableButtons;
     }
     
@@ -88,18 +91,24 @@ public class SelectTableView extends javax.swing.JFrame
         } // switch        
     }
     
-    private JButton[] makeTableButtons(ArrayList<TableStatus> statuses)
+    private void makeTableButtons(ArrayList<TableStatus> statuses)
     {
+    	System.out.println("make table buttons: size: " + statuses.size());
         JButton[] buttons = new JButton[statuses.size()]; 
         for(int i = 1; i < statuses.size(); i++)
         {
             buttons[i] = new JButton();
-            setTableStatus(i, statuses.get(i));
-            TableNumPanel.add(tableButtons[i]); 
-            buttons[i].addActionListener(controller);
+            TableNumPanel.add(buttons[i]); 
         } // for
         
-        return buttons;
+        tableButtons = buttons;
+        
+        for(int i = 1; i < statuses.size(); i++) {
+            setTableStatus(i, statuses.get(i));
+        } // for
+
+        
+
     }
 
     /**
@@ -180,11 +189,9 @@ public class SelectTableView extends javax.swing.JFrame
         gridBagConstraints.weighty = 0.8333;
         FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
         ExternalOptionsPanel.add(openTable);
-        openTable.addActionListener(controller);
         ExternalOptionsPanel.add(moveTable);
-        moveTable.addActionListener(controller);
         ExternalOptionsPanel.add(cleanTable);
-        cleanTable.addActionListener(controller);
+
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TableNumPanel.setMinimumSize(new java.awt.Dimension(400, 500));
@@ -197,7 +204,6 @@ public class SelectTableView extends javax.swing.JFrame
         FormPanel.add(TableNumPanel, gridBagConstraints);
 
         MenuBarFile.setText("File");
-
         MenuBarFileExit.setText("Exit");
         MenuBarFileExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,6 +233,16 @@ public class SelectTableView extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initListeners(ActionListener actionListener) {
+    	for(int i = 1; i < tableButtons.length; i++){
+    		tableButtons[i].addActionListener(actionListener);
+    	}
+        openTable.addActionListener(actionListener);
+        moveTable.addActionListener(actionListener);
+        cleanTable.addActionListener(actionListener);
+    	
+    }
+    
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
@@ -253,21 +269,37 @@ public class SelectTableView extends javax.swing.JFrame
                 exitCode();
     }//GEN-LAST:event_MenuBarFileExitActionPerformed
 
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel ExternalOptionsPanel;
-    private javax.swing.JPanel FormOutputPanel;
-    private javax.swing.JPanel FormPanel;
-    private javax.swing.JMenuBar MenuBar;
-    private javax.swing.JMenu MenuBarFile;
-    private javax.swing.JMenuItem MenuBarFileExit;
-    private javax.swing.JPanel TableNumPanel;
-    private javax.swing.JMenu jMenu2;
-    // End of variables declaration//GEN-END:variables
-
-    public OutputLabel getOutputLabel()
-    {
+    public OutputLabel getOutputLabel() {
         return outputLabel;
+    }
+    
+    public Integer getSelectedTable(ActionEvent event) {
+        for (int i = 0; i <  tableButtons.length; i++) {
+            if (event.getSource() == tableButtons[i]) {
+                return i;
+            } // if
+        }    	
+        return null;
+    }
+    
+    public boolean isTableXSelected(ActionEvent actionEvent, int x) {
+    	if(x < 1 || x > tableButtons.length) {
+    		return false;
+    	}
+    	
+    	return actionEvent.getSource() == tableButtons[x];
+    }
+    
+    public boolean isCleanTableSelected(ActionEvent actionEvent) {
+    	return actionEvent.getSource() == cleanTable;
+    }
+    
+    public boolean isOpenTableSelected(ActionEvent actionEvent) {
+    	return actionEvent.getSource() == openTable;
+    }
+    
+    public boolean isMoveTableSelected(ActionEvent actionEvent) {
+    	return actionEvent.getSource() == moveTable;
     }
        
 } // class

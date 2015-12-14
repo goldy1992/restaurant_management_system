@@ -60,7 +60,7 @@ public class TillClient extends UserClient
         return tableStatuses;
     }
 
-    @Override
+
     protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
     {
 
@@ -78,20 +78,20 @@ public class TillClient extends UserClient
         }
     } //  parseTableStatusEvtNfn
 
-    @Override
-    public void parseTabResponse(TabResponse resp) 
-    {
-        synchronized(this.gui.getMenu().selectorFrame.lock)
-        {            
-            Tab t = resp.getTab();
-            if(this.gui.getMenu().selectorFrame.getState() == BarTabDialogSelect.Functionality.GET_TAB)
-                gui.getMenu().setUpTab(t);
-            else
-                gui.getMenu().setOldTab(t);
-            gui.getMenu().selectorFrame.setTabReceived(true); 
-            this.gui.getMenu().selectorFrame.lock.notifyAll();
-        }
-    } // parseTabResponse
+//    @Override
+//    public void parseTabResponse(TabResponse resp) 
+//    {
+//        synchronized(this.gui.getMenu().selectorFrame.lock)
+//        {            
+//            Tab t = resp.getTab();
+//            if(this.gui.getMenu().selectorFrame.getState() == BarTabDialogSelect.Functionality.GET_TAB)
+//                gui.getMenu().setUpTab(t);
+//            else
+//                gui.getMenu().setOldTab(t);
+//            gui.getMenu().selectorFrame.setTabReceived(true); 
+//            this.gui.getMenu().selectorFrame.lock.notifyAll();
+//        }
+//    } // parseTabResponse
 
 
 

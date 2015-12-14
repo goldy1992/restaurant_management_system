@@ -39,10 +39,11 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messageTableStatusRequestChannel",  outputChannel="messageResponseChannel")
 	public TableStatusResponse parseTableStatusRequest(TableStatusRequest request)
 	{
-		TableStatusResponse response = new TableStatusResponse(request);
+		
 		Map<Integer, Table.TableStatus> tableStatuses = new HashMap<>();
 		
-		if (request.getTableList().isEmpty()) {	
+		if (request.getTableList().isEmpty()) {
+			System.out.println("tablesize " + server.getTables().keySet());
 			for (Integer i :  server.getTables().keySet()) {
 				tableStatuses.put(i, server.getTables().get(i).getStatus());
 			}
@@ -51,6 +52,7 @@ public class MessageParser {
 				tableStatuses.put(i, server.getTables().get(i).getStatus());
 			}			
 		}
+		TableStatusResponse response = new TableStatusResponse(request, tableStatuses);
 		return response;
 	}
 }

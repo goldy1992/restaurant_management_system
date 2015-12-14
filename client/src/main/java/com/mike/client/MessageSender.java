@@ -1,8 +1,6 @@
 package com.mike.client;
 
-import com.mike.message.Request.LeaveRequest;
-import com.mike.message.Request.RegisterClientRequest;
-import com.mike.message.Request.TableStatusRequest;
+import com.mike.message.Request.*;
 import com.mike.message.Table;
 import com.mike.message.Table.TableStatus;
 
@@ -37,7 +35,13 @@ public class MessageSender {
 		LeaveRequest leaveRequest = new LeaveRequest();
 		sendGateway.send(leaveRequest);
 		return true;
-	} // registerClient
+	} 
+	
+	public boolean sendTabRequest(int tableNumber) {
+		TabRequest tabStatusRequest = new TabRequest(tableNumber);        
+		sendGateway.send(tabStatusRequest);
+		return true;
+	}
 
 	public void sendTableStatusEventNotification(int tableSelected, TableStatus selectedTableStatus) {
 		// TODO Auto-generated method stub

@@ -36,40 +36,29 @@ public class WaiterClient extends UserClient
 
  
     
-    @Override
-    public void parseTabResponse(TabResponse resp)
-    {
-        //debugGUI.addText("Executing TabResponse's onreceiving");
-        synchronized(selectTable)
-        {
-            selectTable.setTab(resp.getTab());
-            selectTable.setTabReceived(true);      
-            selectTable.tabLock.notifyAll();
-        } // synchronized        
-    }
-        
+       
 
-    @Override
-    protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
-    {
-        selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
-    }
 
-    public void setTableStatuses(Map<Integer, TableStatus> statusMap) {
-		if (this.tableMap == null) {
-			tableMap = new HashMap<>();
-		}
-		for (Integer t : statusMap.keySet()) {
-			if (!tableMap.containsKey(t)) {
-				Table table = new Table(t);
-				table.setTableStatus(statusMap.get(t));
-				tableMap.put(t, table);
-			} else {
-				tableMap.get(t).setTableStatus(statusMap.get(t));
-			}
-			tableMap.get(t).setTableStatus(statusMap.get(t));
-		}    	
-    }
+//    protected void parseTableStatusEvtNfn(TableStatusEvtNfn event) 
+//    {
+//        selectTable.setTableStatus(event.getTableNumber(), event.getTableStatus());      
+//    }
+//
+//    public void setTableStatuses(Map<Integer, TableStatus> statusMap) {
+//		if (this.tableMap == null) {
+//			tableMap = new HashMap<>();
+//		}
+//		for (Integer t : statusMap.keySet()) {
+//			if (!tableMap.containsKey(t)) {
+//				Table table = new Table(t);
+//				table.setTableStatus(statusMap.get(t));
+//				tableMap.put(t, table);
+//			} else {
+//				tableMap.get(t).setTableStatus(statusMap.get(t));
+//			}
+//			tableMap.get(t).setTableStatus(statusMap.get(t));
+//		}    	
+//    }
     
 
 
