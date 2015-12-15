@@ -25,11 +25,10 @@ public class MessageTypeRouter {
         if (message instanceof Response) {
 			System.out.println("received a message response");
         	return "typeRouterToResponseChannel";
-        }
-//		if (message instanceof EventNotification) {
-//			System.out.println("received a message response");
-//			return "messageRequestChannel";
-//		}
+        } else if (message instanceof EventNotification) {
+			System.out.println("received a message response");
+			return "messageRequestChannel";
+		}
         
         return "messageRequestChannel";}
 }

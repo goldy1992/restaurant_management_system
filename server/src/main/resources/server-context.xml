@@ -43,9 +43,14 @@
     <!-- Request channels -->
 	<int:channel id="messageRegisterClientRequestChannel" />   
 	<int:channel id="messageTableStatusRequestChannel" />   
+	<int:channel id="messageTabRequestChannel" />
 	
 	<!--  Response Channel -->
 	<int:channel id="messageResponseChannel" />
+	
+    <int:gateway id="sendGateway"
+         service-interface="com.mike.server.SendGateway"
+         default-request-channel="messageResponseChannel" />
 
 
     <bean id="server" class="com.mike.server.Server">

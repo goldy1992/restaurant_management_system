@@ -1,16 +1,20 @@
 package com.mike.server;
 
 import com.mike.message.Table;
-import com.mike.message.Request.RegisterClientRequest;
-import com.mike.message.Request.TableStatusRequest;
-import com.mike.message.Response.RegisterClientResponse;
-import com.mike.message.Response.TableStatusResponse;
+import com.mike.message.Table.TableStatus;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
+import com.mike.message.Request.*;
+import com.mike.message.Response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.ip.IpHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import java.net.Authenticator.RequestorType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +28,11 @@ public class MessageParser {
 
 	@Autowired
 	private Server server;
+	@Autowired
+	private SendGateway sendGateway;
 
 	@ServiceActivator(inputChannel="messageRegisterClientRequestChannel",  outputChannel="messageResponseChannel")
-	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request,  @Headers Map<String, Object> headerMap)
-	{
+	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request,  @Headers Map<String, Object> headerMap) {
 		System.out.println("hit register client");
 		RegisterClientResponse response = new RegisterClientResponse(request);
 		String ipAddress = (String)headerMap.get(IpHeaders.CONNECTION_ID);
@@ -37,8 +42,7 @@ public class MessageParser {
 	}
 	
 	@ServiceActivator(inputChannel="messageTableStatusRequestChannel",  outputChannel="messageResponseChannel")
-	public TableStatusResponse parseTableStatusRequest(TableStatusRequest request)
-	{
+	public TableStatusResponse parseTableStatusRequest(TableStatusRequest request) {
 		
 		Map<Integer, Table.TableStatus> tableStatuses = new HashMap<>();
 		
@@ -55,4 +59,24 @@ public class MessageParser {
 		TableStatusResponse response = new TableStatusResponse(request, tableStatuses);
 		return response;
 	}
+	
+	@ServiceActivator(inputChannel="messageTabRequestChannel")
+	public TabResponse parseTabRequest(TabRequest tabRequest) {
+		
+		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(6, TableStatus.OCCUPIED);
+		for (String clients : server.getWaiterClient()) {
+			MessageHeaders mh = new MessageHeaders(null);
+			
+			//mh.put(IpHeaders.CONNECTION_ID, clients);
+			Message<TableStatusEvtNfn> m = MessageBuilder.createMessage(tableStatusEvtNfn, mh);
+			Message<TableStatusEvtNfn> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
+			sendGateway.send(mSend);
+		
+			
+		}
+		return null;
+	}
+	
+	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
+	public void setServer(Server server) { this.server = server; }
 }

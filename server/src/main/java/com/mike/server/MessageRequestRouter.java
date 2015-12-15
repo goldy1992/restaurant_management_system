@@ -26,6 +26,8 @@ public class MessageRequestRouter {
         	return "messageRegisterClientRequestChannel";
         } else if (request instanceof TableStatusRequest) {
         	return "messageTableStatusRequestChannel";
+        } else if (request instanceof TabRequest) {
+        	return "messageTabRequestChannel";
         }
         return "messageRequestChannel";}
 }

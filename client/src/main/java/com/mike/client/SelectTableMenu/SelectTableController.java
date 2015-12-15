@@ -39,7 +39,6 @@ public class SelectTableController implements ActionListener
     public SelectTableModel model;
     public SelectTableView view;
     private boolean initialised = false;
-    private ActionListener actionListener;
 	
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 		
@@ -55,7 +54,7 @@ public class SelectTableController implements ActionListener
 	public void init(ArrayList<TableStatus> tableStatuses) {
 		if (!initialised) {
 			this.model = new SelectTableModel(tableStatuses);
-	        this.view = new SelectTableView(actionListener, tableStatuses);
+	        this.view = new SelectTableView(this, tableStatuses);
 	        view.setVisible(true); 
 		} 	
     }
@@ -96,12 +95,17 @@ public class SelectTableController implements ActionListener
                 view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
             } else {
               //  parentClient.sendTableStatusEventNotification(tableSelected,  IN_USE);
-             messageSender.sendTabRequest(tableSelected);
+            // messageSender.sendTabRequest(tableSelected);
             } // else
             return;
         } // if open table
         
-        if(view.isMoveTableSelected(event)); // TODO: implement move table
+        if(view.isMoveTableSelected(event)) {
+         	 System.out.println("talble selected");
+        	 messageSender.sendTabRequest(tableSelected);
+        	 System.out.println("talble selected");
+        	 return;
+        } // TODO: implement move table
         
     	for (int i = 1; i <= model.getNumberOfTables(); i++) {
     		if (view.isTableXSelected(event, i)) {
