@@ -15,6 +15,8 @@ import com.mike.item.Tab;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table.TableStatus;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
+
 import static com.mike.message.Table.TableStatus.DIRTY;
 import static com.mike.message.Table.TableStatus.IN_USE;
 import static com.mike.message.Table.TableStatus.OCCUPIED;
@@ -94,16 +96,15 @@ public class SelectTableController implements ActionListener
             } else if (model.getTableStatus(tableSelected) == IN_USE) {
                 view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
             } else {
-              //  parentClient.sendTableStatusEventNotification(tableSelected,  IN_USE);
-            // messageSender.sendTabRequest(tableSelected);
+
+            	 messageSender.sendTabRequest(tableSelected);
+            	 System.out.println("talble selected");
             } // else
             return;
         } // if open table
         
         if(view.isMoveTableSelected(event)) {
-         	 System.out.println("talble selected");
-        	 messageSender.sendTabRequest(tableSelected);
-        	 System.out.println("talble selected");
+
         	 return;
         } // TODO: implement move table
         
@@ -135,6 +136,15 @@ public class SelectTableController implements ActionListener
     		}
     		init(ts);
     	}
+    	
+    	
+    }
+    
+    @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
+    public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
+    	int tableNumber = tableStatusEvtNfn.getTableNumber();
+    	TableStatus tableStatus = tableStatusEvtNfn.getTableStatus();
+    	view.setTableStatus(tableNumber, tableStatus);
     }
 
     

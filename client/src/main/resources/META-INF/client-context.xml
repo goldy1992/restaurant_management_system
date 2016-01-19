@@ -34,6 +34,7 @@
         host="localhost"
         deserializer="javaDeserializer"
         serializer="javaSerializer"
+        single-use="false"
 		port="1234" />
     
     <int-ip:tcp-outbound-channel-adapter id="outboundTcpAdapter"
@@ -53,4 +54,7 @@
     
     <int:channel id="registerClientResponseChannel" />
     <int:channel id="tableStatusResponseChannel" />
+ 
+     <int:channel id="tableStatusEvtNotificationChannel" />   
+    
 </beans>

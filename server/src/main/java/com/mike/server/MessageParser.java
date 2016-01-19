@@ -63,7 +63,7 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messageTabRequestChannel")
 	public TabResponse parseTabRequest(TabRequest tabRequest) {
 		
-		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(6, TableStatus.OCCUPIED);
+		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), TableStatus.OCCUPIED);
 		for (String clients : server.getWaiterClient()) {
 			MessageHeaders mh = new MessageHeaders(null);
 			

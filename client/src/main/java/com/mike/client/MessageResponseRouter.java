@@ -3,6 +3,7 @@ package com.mike.client;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
+import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.Response;
 import com.mike.message.Response.TableStatusResponse;
@@ -17,10 +18,6 @@ public class MessageResponseRouter {
 	        } else if (response instanceof TableStatusResponse) {
 	        	return "tableStatusResponseChannel";
 	        }
-//			if (message instanceof EventNotification) {
-//				System.out.println("received a message response");
-//				return "messageRequestChannel";
-//			}
 	        
 	        return "";}
 

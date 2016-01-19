@@ -26,8 +26,8 @@ public class MessageTypeRouter {
 			System.out.println("received a message response");
         	return "typeRouterToResponseChannel";
         } else if (message instanceof EventNotification) {
-			System.out.println("received a message response");
-			return "messageRequestChannel";
+			System.out.println("received a message event notification");
+			return "typeRouterToEventNotificationChannel";
 		}
         
         return "messageRequestChannel";}
