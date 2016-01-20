@@ -7,6 +7,8 @@ package com.mike.client.SelectTableMenu;
 
 import com.mike.client.SelectTableMenu.View.SelectTableView;
 import com.mike.client.MainMenu.Menu;
+import com.mike.client.MainMenu.MenuController;
+
 import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
 
 import com.mike.client.MessageSender;
@@ -37,12 +39,16 @@ public class SelectTableController implements ActionListener
 {
 	@Autowired
 	private MessageSender messageSender;
+	
+	@Autowired
+	private MenuController menuController;
 	 
     public SelectTableModel model;
     public SelectTableView view;
     private boolean initialised = false;
 	
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
+	public void setMenuController(MenuController menuController) {this.menuController = menuController; }
 		
     
     public boolean isInitialised() {
@@ -61,45 +67,37 @@ public class SelectTableController implements ActionListener
 		} 	
     }
     
-  /**
-     *
-     * @param index
-     * @param t
-     * @return 
-     */
-    public boolean setTableStatus(int index, TableStatus t)
-    {
-        if (index < 0 || index >= view.getTableButtons().length)
-            return false;    
-        
-        model.setTableStatus(index, t);
-        view.setTableStatus(index, t);
-        return true;
+    private void selectCleanTable(ActionEvent event) {
+        int tableSelected = model.getTableSelected();
+        TableStatus selectedTableStatus = model.getTableStatus(tableSelected);
+        if (selectedTableStatus == DIRTY) {
+            messageSender.sendTableStatusEventNotification(tableSelected, selectedTableStatus);
+        } // if    	
+    }
+    
+    private void selectOpenTable(ActionEvent event) {
+        int tableSelected = model.getTableSelected();
+        if (tableSelected == NO_TABLE_SELECTED) {
+            view.getOutputLabel().setOutputLabelNoTableSelected();
+        } else if (model.getTableStatus(tableSelected) == IN_USE) {
+            view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
+        } else {
+        	 messageSender.sendTabRequest(tableSelected);
+        	 System.out.println("talble selected");
+        } // else  	
     }
     
     @Override
     public void actionPerformed(ActionEvent event) {
-         
-        int tableSelected = model.getTableSelected();
+        
         if (view.isCleanTableSelected(event)) {
-            TableStatus selectedTableStatus = model.getTableStatus(tableSelected);
-            if (selectedTableStatus == DIRTY) {
-                messageSender.sendTableStatusEventNotification(tableSelected, selectedTableStatus);
-            } // if
-            return;
+        	selectCleanTable(event);
+        	return;
         } // if getSource
 
         
         if (view.isOpenTableSelected(event)) {
-            if (tableSelected == NO_TABLE_SELECTED) {
-                view.getOutputLabel().setOutputLabelNoTableSelected();
-            } else if (model.getTableStatus(tableSelected) == IN_USE) {
-                view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
-            } else {
-
-            	 messageSender.sendTabRequest(tableSelected);
-            	 System.out.println("talble selected");
-            } // else
+        	selectOpenTable(event);
             return;
         } // if open table
         
@@ -115,16 +113,7 @@ public class SelectTableController implements ActionListener
 	            return;
     		}
     	}
-    } // action performed
-    
-    
-
-    public void parseTabResponse(TabResponse resp)
-    {
-//            selectTable.setTab(resp.getTab());
-//            selectTable.setTabReceived(true);      
-    }
-    
+    } // action performed    
     
     @ServiceActivator(inputChannel="tableStatusResponseChannel")
     public void tableStatusResponse(TableStatusResponse tableStatusResponse) {    	
@@ -136,8 +125,6 @@ public class SelectTableController implements ActionListener
     		}
     		init(ts);
     	}
-    	
-    	
     }
     
     @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")

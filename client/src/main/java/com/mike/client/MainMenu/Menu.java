@@ -87,7 +87,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public JTextPane outputTextPane;
     public JTextPane quantityTextPane;
     public JTextPane totalCostTextPane;
-    protected final Client parentClient;
+
     
     protected String[] getOptionNames() { 
         
@@ -350,11 +350,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      * @param stream
      * @throws java.sql.SQLException
      */
-    public Menu(Client parentClient, java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
+    public Menu(java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
     {
         super(parent, modal);
         this.out = null;
-        this.parentClient = parentClient;
      
         // initialise the connection to the database
         con = DriverManager.getConnection("jdbc:mysql://sql4.freemysqlhosting.net:3306/sql482884", "sql482884", "aN9*kG1!");
@@ -865,39 +864,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      */
     public JPanel getCardPanel() { return CardPanel; } 
        
-    /**
-    *
-    * Factory method to make a new menu
-     * @param <T>
-     * @param cParent
-     * @param parent
-     * @param tab
-     * @param out
-     * @param type
-     * @return 
-    */
-    public static Menu makeMenu(Client cParent, JFrame parent, 
-            Tab tab)
-    {
-        
-        Menu newMenu = null;
-        try 
-        {
-            newMenu = new Menu(cParent, parent, true, tab);
-            newMenu.addMouseListener(newMenu);
-            newMenu.setTotal();
-            newMenu.setEnabled(true);
-            newMenu.setModal(true);
-            newMenu.setVisible(true);
-
-        } // try
-        catch (SQLException ex) 
-        {
-            //Logger.getLogger(SelectTableGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch // catch
-        
-        return newMenu;
-    } // makeMenu
         
     private ActionListener makeKeyActionListener(final String key, Menu menu)
     {

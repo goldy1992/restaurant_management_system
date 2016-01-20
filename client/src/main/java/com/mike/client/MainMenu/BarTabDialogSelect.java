@@ -72,9 +72,9 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                     final int chosenTable = chooseNewTab.getValue();
                     // EDITA ESA Mañana
                     TillMenu tGUI = (TillMenu) parent.getParent();
-                    TillClient tClient = (TillClient)tGUI.parentClient;
+                    //TillClient tClient = (TillClient)tGUI.parentClient;
 
-                    if (chosenTable <= 0 || chosenTable >= tClient.tableStatuses.size())
+                    if (chosenTable <= 0  /*chosenTable >= tClient.tableStatuses.size()*/)
                         JOptionPane.showMessageDialog(parent, "Invalid Tab Number.");
                     else
                     {
@@ -169,7 +169,7 @@ public class BarTabDialogSelect extends javax.swing.JDialog {
                 public void actionPerformed(ActionEvent e) 
                 {
                     TillMenu menuParent = (TillMenu)parent.getParent();
-                    TillClient parentClient = (TillClient)menuParent.parentClient;
+               //     TillClient parentClient = (TillClient)menuParent.parentClient;
 //                    try 
 //                    {
                         if (pair.getSecond() == Table.TableStatus.IN_USE)

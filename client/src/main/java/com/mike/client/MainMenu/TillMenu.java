@@ -39,10 +39,10 @@ public class TillMenu extends Menu
            "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Send Order"};
        return x;
     }
-    public TillMenu(Client client, java.awt.Frame parent, boolean modal, 
+    public TillMenu(java.awt.Frame parent, boolean modal, 
         Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
     {
-        super(client, parent, modal, tab);
+        super(parent, modal, tab);
         this.till = parentGUI;
     }
     
@@ -149,7 +149,7 @@ public class TillMenu extends Menu
         TillMenu newMenu = null;
         try 
         {
-            newMenu = new TillMenu(cParent, parent, true, tab, out, till);
+            newMenu = new TillMenu(parent, true, tab, out, till);
             newMenu.addMouseListener(newMenu);
             newMenu.setTotal();
             newMenu.setEnabled(true);
@@ -199,9 +199,9 @@ public class TillMenu extends Menu
     public BarTabDialogSelect makeBarTabSelector()
     {
 
-        TillClient c = (TillClient)parentClient;
-        ArrayList<Table.TableStatus> tableStatuses = 
-            (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
+        //TillClient c = (TillClient)parentClient;
+        ArrayList<Table.TableStatus> tableStatuses = null;
+//            (ArrayList<Table.TableStatus>) c.getTableStatuses().clone();
         
         HashMap<JButton, Pair<Integer, Table.TableStatus>> jbs = createJButtons(tableStatuses);
         BarTabDialogSelect newBTSelect = new BarTabDialogSelect((Dialog)this, true);

@@ -19,6 +19,7 @@
     
     <import resource="selectTable.xml"/>
    
+	<bean id="menuController" class="com.mike.client.MainMenu.MenuController"/>
     <bean id="waiterClientController" class="com.mike.client.WaiterClientController"/>
     <bean id="waiterClient" class="com.mike.client.WaiterClient" />
     <bean id="messageSender" class="com.mike.client.MessageSender" />
