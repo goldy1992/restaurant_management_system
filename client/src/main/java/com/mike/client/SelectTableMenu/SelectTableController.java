@@ -24,6 +24,7 @@ import static com.mike.message.Table.TableStatus.IN_USE;
 import static com.mike.message.Table.TableStatus.OCCUPIED;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,11 @@ public class SelectTableController implements ActionListener
     public boolean isInitialised() {
 		return initialised;
 	}
+    
+    @ServiceActivator(inputChannel="tabResponseChannel") 
+    public void tabResponse(TabResponse tabResponse) throws SQLException {
+    	menuController.init(view, tabResponse.getTab());
+    }
 
 	public void setInitialised(boolean initialised) {
 		this.initialised = initialised;

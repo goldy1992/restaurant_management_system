@@ -3,7 +3,7 @@ package com.mike.client.MainMenu;
 import com.mike.client.Client;
 import com.mike.client.DatabaseConnect;
 import com.mike.client.Pair;
-
+import com.mike.client.MainMenu.Model.MenuModel;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.message.EventNotification.*;
@@ -71,7 +71,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     protected final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
     protected Tab oldTab;
     protected Tab newTab;
-    protected final ObjectOutputStream out;
     protected final MenuCardPanel kitchenBarMsgPanel;
     public int quantitySelected = -1; // -1 defaults to 1
     public boolean messageForLatestItem = false;
@@ -79,6 +78,21 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public String lastReceipt = null;
     public String currentBill = null;    
     private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel CardPanel;
+    private javax.swing.JPanel FormPanel;
+    private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JTextPane OutputArea;
+    private javax.swing.JPanel OutputAreaPanel;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane ouputScrollPane;
+    private javax.swing.JTextPane quantityArea;
+    private javax.swing.JScrollPane quantityPane;
+    private javax.swing.JTextPane totalCostArea;
+    private javax.swing.JScrollPane totalCostPane;
+    // End of variables declaration//GEN-END:variables
 
     /**
      * Stores the reference to the JTextPane used on the output
@@ -87,6 +101,67 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public JTextPane outputTextPane;
     public JTextPane quantityTextPane;
     public JTextPane totalCostTextPane;
+    
+    /**
+ * Creates new form Menu
+ * @param parentClient
+ * @param parent
+ * @param modal
+ * @param tab
+ * @param stream
+ * @throws java.sql.SQLException
+ */
+public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) throws SQLException
+{
+    super(parent, modal);
+  
+    // initialises the part of the GUI made automatically by netbeans
+    initComponents();
+    
+    // create the kitchen/Bar message panel
+    kitchenBarMsgPanel = createKitchenBarMessageCard();
+    
+    // add the kitchen/Bar message panel to the card layout
+    CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
+
+    // prepare the rest of the cards and store in cardPanels arrayList
+    //cardPanelsList = getCards();
+    cardPanelsList = MenuViewBuilderHelper.createCardPanelsForView(this, menuModel);
+    
+    // initialise the cardLayout to show the main panel
+    cardPanelsList.set(0, initialiseMainCard(cardPanelsList.get(0)));
+            
+    for(MenuCardPanel p : cardPanelsList) {
+        CardPanel.add(p, p.getName());
+        p.add(p.createKeypadPanel());
+        
+    }
+    //MyClient.debugGUI.addText("show");
+    CardLayout cl = (CardLayout)(CardPanel.getLayout());
+    cl.show(CardPanel, cardPanelsList.get(0).getName());
+    currentCard = cardPanelsList.get(0);
+    
+    /* set the kitchen card's parent now so that it is not null when it's it
+    first selected */
+    kitchenBarMsgPanel.setParentPanel(currentCard);
+    
+    // this code only allows the output Area text pane to have key controls
+    components.addAll(buttons);
+    components.addAll(menuItemButtons);
+    components.addAll(cardPanelsList);
+    
+    for (JComponent t : components)
+    {
+        t.setFocusable(false);
+        t.requestFocus(false);
+    } // for   
+    
+    setUpTab(tab);
+    
+    con.close();
+    
+} // constructor
+
 
     
     protected String[] getOptionNames() { 
@@ -237,22 +312,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         switchToParentCard();
     }//GEN-LAST:event_OutputAreaMouseClicked
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel CardPanel;
-    private javax.swing.JPanel FormPanel;
-    private javax.swing.JMenuBar MenuBar;
-    private javax.swing.JTextPane OutputArea;
-    private javax.swing.JPanel OutputAreaPanel;
-    private javax.swing.JMenu editMenu;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane ouputScrollPane;
-    private javax.swing.JTextPane quantityArea;
-    private javax.swing.JScrollPane quantityPane;
-    private javax.swing.JTextPane totalCostArea;
-    private javax.swing.JScrollPane totalCostPane;
-    // End of variables declaration//GEN-END:variables
-    
+
     public static boolean isNumeric(String x)
     {
         try
@@ -273,7 +333,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
      */
     protected final MenuCardPanel createKitchenBarMessageCard()
     {
-        MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel(this);
+        MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel(this, null);
         containerPanel.setName("kitchenBarPanel");
         containerPanel.removeAll();
         
@@ -341,70 +401,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         return containerPanel;
     }
     
-        /**
-     * Creates new form Menu
-     * @param parentClient
-     * @param parent
-     * @param modal
-     * @param tab
-     * @param stream
-     * @throws java.sql.SQLException
-     */
-    public Menu(java.awt.Frame parent, boolean modal, Tab tab) throws SQLException
-    {
-        super(parent, modal);
-        this.out = null;
-     
-        // initialise the connection to the database
-        con = DriverManager.getConnection("jdbc:mysql://sql4.freemysqlhosting.net:3306/sql482884", "sql482884", "aN9*kG1!");
-      
-        // initialises the part of the GUI made automatically by netbeans
-        initComponents();
-        
-        // create the kitchen/Bar message panel
-        kitchenBarMsgPanel = createKitchenBarMessageCard();
-        
-        // add the kitchen/Bar message panel to the card layout
-        CardPanel.add(kitchenBarMsgPanel, kitchenBarMsgPanel.getName());   
-
-        // prepare the rest of the cards and store in cardPanels arrayList
-        cardPanelsList = getCards();
-        
-        // initialise the cardLayout to show the main panel
-        cardPanelsList.set(0, initialiseMainCard(cardPanelsList.get(0)));
-                
-        for(MenuCardPanel p : cardPanelsList)
-        {
-            CardPanel.add(p, p.getName());
-            p.add(p.createKeypadPanel());
-            
-        }
-        //MyClient.debugGUI.addText("show");
-        CardLayout cl = (CardLayout)(CardPanel.getLayout());
-        cl.show(CardPanel, cardPanelsList.get(0).getName());
-        currentCard = cardPanelsList.get(0);
-        
-        /* set the kitchen card's parent now so that it is not null when it's it
-        first selected */
-        kitchenBarMsgPanel.setParentPanel(currentCard);
-        
-        // this code only allows the output Area text pane to have key controls
-        components.addAll(buttons);
-        components.addAll(menuItemButtons);
-        components.addAll(cardPanelsList);
-        
-        for (JComponent t : components)
-        {
-            t.setFocusable(false);
-            t.requestFocus(false);
-        } // for   
-        
-        setUpTab(tab);
-        
-        con.close();
-        
-    } // constructor
-    
+   
     public final void setUpTab(Tab tab)
     {
         if (tab != null)
@@ -459,7 +456,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
 //                    Item.Type.FOOD, 
 //                    this.newTab.getFood(),
 //                    newTab.getTable());
-//                out.reset();
+//               out.reset();
 //                out.writeObject(newEvt1);
             } // if                
                 
@@ -704,104 +701,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
         return panel;       
     } // initialiseCards    
     
-    private ArrayList<MenuCardPanel> getCards()
-    {
-        ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
-
-        try 
-        {
-            // PREPARE SELECT STATEMENT TO SELECT MENU PAGES TABLE
-            PreparedStatement numberOfButtonsQuery = null;
-            String query =  "SELECT * \n" +
-                        "FROM `3YP_MENU_PAGES`";
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeQuery();
-            ResultSet results = numberOfButtonsQuery.getResultSet();
-
-            // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
-            while (results.next())
-            {
-                MenuCardPanel panel = MenuCardPanel.createMenuCardPanel(this);
-                panel.setName(results.getString(1));
-                cardPanelsList.add(panel);
-                
-                // ADD the kitchen message card option to EVERY card's children
-                panel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(kitchenBarMsgPanel, "Kitchen/Bar Message", this));
-            } // while
-                            
-             // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
-            int count = 0; // keeps count to remember current panel
-            results.first(); // uses same resultsSet and goes to the first row
-            do
-            {
-                MenuCardPanel currentPanel = cardPanelsList.get(count);
-                MenuCardPanel parentPanel = null;
-                
-                // for loop to find parent panel
-                for (MenuCardPanel c : cardPanelsList )
-                    if (c.getName().equals(results.getString(2))) // 2 is column index of PARENT_PAGE_ID
-                        parentPanel = c;
-                
-                // set currentPanels Parent {COULD BE NULL}
-                currentPanel.setParentPanel(parentPanel);  
-                
-                // if not null take the parent and create a child button and reference it to panel
-                if (parentPanel != null)
-                    parentPanel.addChildCardButton(MenuCardLinkJButton.createMenuCardLinkButton(currentPanel, 
-                            results.getString(3), this));
-                
-                count++;
-            }  while (results.next());
-            
-            // adds all c
-            for (MenuCardPanel c1 : cardPanelsList)
-                c1.addAllChildCardButtonsToPanel();
-            
-                
-            
-            // FIND ALL BUTTONS FOR EACH PANEL
-            for (MenuCardPanel c : cardPanelsList )
-            {
-                query = "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, "
-                    + "`FOOD_OR_DRINK`, `NEED_AGE_CHECK`, `STOCK_COUNT_ON` "
-                    + "FROM `3YP_ITEMS` " 
-                    + "LEFT JOIN `3YP_POS_IN_MENU` ON "
-                    + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
-                    + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" 
-                    + c.getName() + "\" ";
-                
-                numberOfButtonsQuery = con.prepareStatement(query);
-                numberOfButtonsQuery.executeQuery();
-                results = numberOfButtonsQuery.getResultSet();
-                
-                while(results.next())
-                {
-                    MenuItemJButton newButton = MenuItemJButton.
-                        createMenuItemJButton(results.getString(1), 
-                            results.getInt(2), results.getDouble(3), 
-                            results.getString(4), c, this, 
-                            results.getBoolean(5), results.getBoolean(6));
-                    c.addMenuItemButton(newButton);          
-                } // while
-                
-                c.addAllItemsToPanel();
-            } // for each
-  
-            // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
-            for (int i = 1; i < cardPanelsList.size(); i++)
-                if (cardPanelsList.get(i).getName().equals("MAIN_PAGE"))
-                    Collections.swap(cardPanelsList, i, 0);
-                
-           // for (MenuCardPanel c : cardPanelsList )
-                //MyClient.debugGUI.addText(c);            
-        } // try // try
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DatabaseConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
-                
-        return cardPanelsList;      
-    } // getCards
+ 
     
     /**
      *

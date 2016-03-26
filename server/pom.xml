@@ -16,6 +16,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+    	<hsqldb.version>2.3.2</hsqldb.version>
     </properties>
     
    <dependencies>
@@ -41,5 +42,11 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <artifactId>spring-integration-ip</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        		<!-- HyperSQL DB -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>${hsqldb.version}</version>
+		</dependency>
     </dependencies>
 </project>

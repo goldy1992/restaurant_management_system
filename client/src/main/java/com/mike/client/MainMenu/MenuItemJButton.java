@@ -65,6 +65,13 @@ public class MenuItemJButton extends JButton implements ActionListener
         } // switch
         
     } // constructor 
+    
+    public MenuItemJButton(String name, int id, 
+            double price, String type, JComponent parent, 
+             boolean needAgeCheck, boolean stockCount)
+    {
+    	this(name, id, price, type, parent, null, needAgeCheck, stockCount);
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) 

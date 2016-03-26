@@ -6,6 +6,7 @@ import org.springframework.integration.annotation.Router;
 import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.Response;
+import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 
 @MessageEndpoint
@@ -17,6 +18,8 @@ public class MessageResponseRouter {
 	        	return "registerClientResponseChannel";
 	        } else if (response instanceof TableStatusResponse) {
 	        	return "tableStatusResponseChannel";
+	        } else if (response instanceof TabResponse) {
+	        	return "tabResponseChannel";
 	        }
 	        
 	        return "";}

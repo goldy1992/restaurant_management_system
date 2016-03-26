@@ -42,7 +42,7 @@ public class TillMenu extends Menu
     public TillMenu(java.awt.Frame parent, boolean modal, 
         Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
     {
-        super(parent, modal, tab);
+        super(parent, null, modal, tab);
         this.till = parentGUI;
     }
     

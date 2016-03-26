@@ -7,6 +7,7 @@ package com.mike.client.MainMenu;
 
 import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
+import com.mike.client.MainMenu.Model.MenuPage;
 import com.mike.message.Message;
 import com.mike.message.Table;
 import java.awt.GridLayout;
@@ -28,32 +29,30 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
  *
  * @author mbbx9mg3
  */
-public class MenuCardPanel extends JPanel
-{
+public class MenuCardPanel extends JPanel {
     private MenuCardPanel parentPanel;
     private final Menu belongsToMenu;
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private final JPanel itemsPanel;    
-
+    private final MenuPage menuPage;
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private final JPanel menuSelectPanel;
     private JPanel keypadPanel;
-    
-    
    
     /**
      *
      * @param parentMenu
      */
-    public MenuCardPanel(Menu parentMenu)
-    {
+    public MenuCardPanel(Menu parentMenu, MenuPage menuPage) {
         super();
+        this.menuPage = menuPage;
         cardMenuItems = new ArrayList<>();
 
         childCardButtons = new ArrayList<>();
@@ -64,6 +63,9 @@ public class MenuCardPanel extends JPanel
         this.belongsToMenu = parentMenu;
     }
     
+    public MenuCardPanel() {
+    	this(null, null);
+    }
     
     /**
      *
@@ -388,9 +390,9 @@ public class MenuCardPanel extends JPanel
      * @param parentMenu
     * @return a new Menu Card Panel
     */
-    public static MenuCardPanel createMenuCardPanel(Menu parentMenu)
+    public static MenuCardPanel createMenuCardPanel(JDialog parentMenu, MenuPage menuPage)
     {
-        MenuCardPanel x = new MenuCardPanel(parentMenu);
+        MenuCardPanel x = new MenuCardPanel((Menu)parentMenu, menuPage);
         x.setLayout(new GridLayout(1,0));
         x.add(x.getMenuSelectPanel());
         x.add(x.getItemsPanel());
@@ -413,6 +415,10 @@ public class MenuCardPanel extends JPanel
         m.quantitySelected = quantity;
         System.out.println("new quantity: " + m.quantitySelected);
     } // addNumberToQUantity
+
+	public MenuPage getMenuPage() {
+		return menuPage;
+	}
     
 } // class
 

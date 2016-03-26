@@ -60,7 +60,7 @@ public class MessageParser {
 		return response;
 	}
 	
-	@ServiceActivator(inputChannel="messageTabRequestChannel")
+	@ServiceActivator(inputChannel="messageTabRequestChannel", outputChannel="messageResponseChannel")
 	public TabResponse parseTabRequest(TabRequest tabRequest) {
 		
 		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), TableStatus.OCCUPIED);
@@ -74,7 +74,9 @@ public class MessageParser {
 		
 			
 		}
-		return null;
+		TabResponse tabResponse = new TabResponse(tabRequest);
+		tabResponse.setTab(server.getTables().get(tabRequest.getTabNumber()).getCurrentTab());
+		return tabResponse;
 	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
