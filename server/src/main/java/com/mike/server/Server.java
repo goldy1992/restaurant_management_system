@@ -1,6 +1,7 @@
 package com.mike.server;
 
 import com.mike.message.Request.RegisterClientRequest;
+import com.mike.server.database.InitialiseDatabase;
 import com.mike.message.Table;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,6 +23,7 @@ public class Server
                 HashSet<String> tillClient) throws IOException {
         this.setWaiterClient(waiterClient);
         this.setTillClient(tillClient);
+        
     } // myserver
     
     public Server() {         }
@@ -89,4 +91,5 @@ public class Server
 			default: return false;
 		} // switch
 	}
+	
 } // MySocket class

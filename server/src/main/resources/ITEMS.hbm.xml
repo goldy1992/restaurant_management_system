@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+ 	<class name="com.mike.server.database.tables.ITEMS" table="ITEMS">
+     	<meta attribute="class-description">
+         	This class contains the employee detail. 
+      	</meta>
+      	<id name="id" type="long" column="id">
+         	<generator class="native"/>
+      	</id>
+      	<property name="name" column="name" type="string" not-null="true" unique="true" />
+      	<property name="price" column="price" type="float" not-null="true"/>
+      	<property name="quantity" column="quantity" type="int" not-null="true" />
+      	<property name="stockCountOn" column="stockCountOn" type="boolean" not-null="true" />
+      	<property name="needAgeCheck"  type="boolean" > 
+      		<column name="needAgeCheck" not-null="true" default="0"/>
+      	</property>
+		<property name="foodOrDrink" column="foodOrDrink" not-null="true" >
+		 	<type name="org.hibernate.type.EnumType">
+         		<param name="enumClass">com.mike.server.database.tables.FOOD_OR_DRINK</param>
+         		<param name="type">12</param>
+      		</type>
+    	</property>
+
+   </class>
+</hibernate-mapping>

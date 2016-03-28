@@ -1,6 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
     xmlns:int="http://www.springframework.org/schema/integration"
     xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -9,14 +10,45 @@
         http://www.springframework.org/schema/integration/spring-integration.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jdbc     
+        http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
 		http://www.springframework.org/schema/integration/ip 
         http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
-
+ 
     <int:annotation-config />
     <context:component-scan base-package="com.mike.server"/>
+    
+    
+    <bean id="server" class="com.mike.server.Server">
+       <property name="waiterClient">
+            <bean id="waiterClient" class="java.util.HashSet" />
+        </property>
+        <property name="tillClient">
+            <bean id="tillClient" class="java.util.HashSet" />
+        </property>
+        <property name="tables">
+            <bean id="tables" class="java.util.HashMap" />
+        </property>
+
+    </bean>
+ 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    	<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+	</bean>   
+	<bean id="initialiseDatabase" class="com.mike.server.database.InitialiseDatabase" >
+	<property name="dbCon" ref="databaseConnector"/>
+	</bean>
+    <bean id="databaseConnector" class="com.mike.server.database.DatabaseConnector">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+ 
+
     <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
     <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
+
+
+	
     <int-ip:tcp-connection-factory id="serverFactory"
         type="server"
         deserializer="javaDeserializer"
@@ -53,17 +85,6 @@
          default-request-channel="messageResponseChannel" />
 
 
-    <bean id="server" class="com.mike.server.Server">
-       <property name="waiterClient">
-            <bean id="waiterClient" class="java.util.HashSet" />
-        </property>
-        <property name="tillClient">
-            <bean id="tillClient" class="java.util.HashSet" />
-        </property>
-        <property name="tables">
-            <bean id="tables" class="java.util.HashMap" />
-        </property>
-
-    </bean>
+    
 
 </beans>

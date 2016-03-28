@@ -16,7 +16,9 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-    	<hsqldb.version>2.3.2</hsqldb.version>
+
+        <!-- Hibernate / JPA -->
+       <hibernate.version>4.3.5.Final</hibernate.version>
     </properties>
     
    <dependencies>
@@ -42,11 +44,27 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <artifactId>spring-integration-ip</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        		<!-- HyperSQL DB -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>${hsqldb.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+       	<dependency>  
+        	<groupId>org.hsqldb</groupId>  
+        	<artifactId>hsqldb</artifactId>  
+        	<version>2.3.2</version>  
+    	</dependency>
     </dependencies>
 </project>

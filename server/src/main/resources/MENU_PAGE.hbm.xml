@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+ 	<class name="com.mike.server.database.tables.MENU_PAGE" table="MENU_PAGE">
+     	<meta attribute="class-description">
+         	This class contains the employee detail. 
+      	</meta>
+      	<id name="name" type="string" column="name" />
+      	
+      	<property name="buttonName" column="buttonName" type="string" not-null="true" />
+    	<property name="parentPageId"  type="string" >
+    		<column name="parentPageId" default="null" />
+    	</property>
+
+   </class>
+</hibernate-mapping>
