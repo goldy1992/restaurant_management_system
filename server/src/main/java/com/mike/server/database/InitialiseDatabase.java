@@ -66,44 +66,28 @@ public class InitialiseDatabase {
 		mp = MENU_PAGE.createMenuPage("TRAGO_PAGE", "MAIN_PAGE", "Spirits/Liqueurs");
 		menuPages.put(dbCon.insert(mp), mp);
 		
-		mp = menuPages.get("MAIN_PAGE");
+		mp = menuPages.get("MAIN_PAGE");		
+		List<ITEMS> newItems = new ArrayList<>();
 		String query = "FROM ITEMS i where i.name = '14oz Cola'";
-		ITEMS result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
+		dbCon.updatePosInMenuTable(newItems, "MAIN_PAGE");
 		
-		dbCon.update(mp);
-		
-		mp = dbCon.get(MENU_PAGE.class, "MIN_MIX_PAGE");
-		System.out.println("current items: " + mp.getItems());
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-		
+		newItems = new ArrayList<>();
+		query = "FROM ITEMS i where i.name = '14oz Cola'";
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = '14oz Diet Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-		
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = '4oz Dash Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-		
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = '4oz Dash Diet Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = '4oz Dash Diet Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = 'Pint Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = 'Pint Diet Cola'";
-		result = dbCon.getFirst(ITEMS.class, query);
-		mp.getItems().add(result);
-		
-		dbCon.update(mp);
-		
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
+		dbCon.updatePosInMenuTable(newItems, "MIN_MIX_PAGE");
 		
 //		insertPosInMenu(19L, "FOOD_PAGE");
 //		insertPosInMenu(27L, "BURGER_PAGE");

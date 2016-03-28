@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mike.server.database.tables.FOOD_OR_DRINK;
 import com.mike.server.database.tables.ITEMS;
+import com.mike.server.database.tables.MENU_PAGE;
 
 
 @Transactional
@@ -86,7 +87,6 @@ public class DatabaseConnector {
     	try  {
     		tx = currentSession.beginTransaction();
 			results = (List<T>)currentSession.createQuery(query).list();
-			
         	tx.commit();
     	}catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -114,6 +114,24 @@ public class DatabaseConnector {
             currentSession.close(); 
          }
         return result;
+	}
+	
+	public void updatePosInMenuTable(List<ITEMS> newItems, String id) {
+		Session currentSession = sessionFactory.openSession();
+    	Transaction tx = null;
+    	MENU_PAGE result = null;
+    	try  {
+    		tx = currentSession.beginTransaction();
+			result = (MENU_PAGE)currentSession.get(MENU_PAGE.class, id);
+			result.getItems().addAll(newItems);
+			currentSession.update(result);
+        	tx.commit();
+    	} catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+         } finally {
+            currentSession.close(); 
+         }		
 	}
 	
 	public SessionFactory getSessionFactory() {
