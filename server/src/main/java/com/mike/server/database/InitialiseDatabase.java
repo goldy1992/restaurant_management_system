@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.mike.server.database.tables.FOOD_OR_DRINK;
 import com.mike.server.database.tables.ITEMS;
 import com.mike.server.database.tables.MENU_PAGE;
+import com.mike.server.database.tables.POS_IN_MENU;
 
 public class InitialiseDatabase {
 	
@@ -42,6 +43,21 @@ public class InitialiseDatabase {
 		insertMenuPage("MAIN_PAGE", null, "Main Page");
 		insertMenuPage("MIN_MIX_PAGE", "MAIN_PAGE", "Minerals/Mixers");
 		insertMenuPage("TRAGO_PAGE", "MAIN_PAGE", "Spirits/Liqueurs");
+
+		String query="FROM ITEMS I WHERE I.id = 3";
+		List<ITEMS> res = dbCon.query(query);
+		ITEMS i = res.get(0);
+		System.out.println(i.getId() + "\nname: " + i.getName());
+		insertPosInMenu(i.getId(), "MAIN_PAGE");
+//		insertPosInMenu(3L, "MIN_MIX_PAGE");
+//		insertPosInMenu(4L, "MIN_MIX_PAGE");
+//		insertPosInMenu(5L, "MIN_MIX_PAGE");
+//		insertPosInMenu(6L, "MIN_MIX_PAGE");
+//		insertPosInMenu(7L, "MIN_MIX_PAGE");
+//		insertPosInMenu(8L, "MIN_MIX_PAGE");
+//		insertPosInMenu(19L, "FOOD_PAGE");
+//		insertPosInMenu(27L, "BURGER_PAGE");
+//		insertPosInMenu(29L, "FOOD_PAGE");
 	}
 	
 	private void insertItem(String name, float price, int quantity, boolean stockCountOn, boolean needsAgeCheck, FOOD_OR_DRINK foodOrDrink) {
@@ -52,6 +68,11 @@ public class InitialiseDatabase {
 	private void insertMenuPage(String name, String parentPageId, String buttonName) {
 		MENU_PAGE menuPage = MENU_PAGE.createMenuPage(name, parentPageId, buttonName);
 		dbCon.insert(menuPage);
+	}
+	
+	private void insertPosInMenu(Long id, String location) {
+		POS_IN_MENU posInMenu = POS_IN_MENU.createMenuPage(id, location);
+		dbCon.insert(posInMenu);
 	}
 
 }

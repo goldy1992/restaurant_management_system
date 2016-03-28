@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class POS_IN_MENU implements Serializable {
 
-	private Long id;
+	private long id;
 	private String location;
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getLocation() {
@@ -19,4 +19,11 @@ public class POS_IN_MENU implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public static POS_IN_MENU createMenuPage(Long id, String location) {
+		POS_IN_MENU posInMenu = new POS_IN_MENU();
+		posInMenu.setId(id);
+		posInMenu.setLocation(location);
+		return posInMenu;
+}
 }

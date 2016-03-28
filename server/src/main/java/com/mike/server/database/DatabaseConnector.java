@@ -1,5 +1,7 @@
 package com.mike.server.database;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -42,6 +44,23 @@ public class DatabaseConnector {
          }
 	}
 
+	public List query(String query) {
+		Session currentSession = sessionFactory.openSession();
+    	Transaction tx = null;
+    	List results = null;
+    	try  {
+    		tx = currentSession.beginTransaction();
+			results = currentSession.createQuery(query).list();
+        	tx.commit();
+    	}catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+         }finally {
+            currentSession.close(); 
+         }
+        return results;
+		
+	}
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
