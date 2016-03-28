@@ -1,5 +1,6 @@
 package com.mike.server.database;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -28,13 +29,13 @@ public class DatabaseConnector {
 		
 	}
 	
-	public <T> void insert(T item) {
+	public <T, R> R insert(T item) {
 		Session currentSession = sessionFactory.openSession();
     	Transaction tx = null;
-    	Long id = null;
+    	R id = null;
     	try  {
     		tx = currentSession.beginTransaction();
-			currentSession.save(item);
+			id = (R) currentSession.save(item);
         	tx.commit();
     	}catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -42,6 +43,23 @@ public class DatabaseConnector {
          }finally {
             currentSession.close(); 
          }
+    	
+    	return id;
+	}
+	
+	public <T> void update(T item) {
+		Session currentSession = sessionFactory.openSession();
+    	Transaction tx = null;
+    	try  {
+    		tx = currentSession.beginTransaction();
+			currentSession.update(item);
+        	tx.commit();
+    	}catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+         }finally {
+            currentSession.close(); 
+         }		
 	}
 
 	public List query(String query) {
@@ -59,8 +77,45 @@ public class DatabaseConnector {
             currentSession.close(); 
          }
         return results;
-		
 	}
+	
+	public <T> T getFirst(Class<T> t, String query) {
+		Session currentSession = sessionFactory.openSession();
+    	Transaction tx = null;
+    	List<T> results = null;
+    	try  {
+    		tx = currentSession.beginTransaction();
+			results = (List<T>)currentSession.createQuery(query).list();
+			
+        	tx.commit();
+    	}catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+         }finally {
+            currentSession.close(); 
+         }
+
+        return (results == null || results.size() < 1) ? null : results.get(0);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T, X extends Serializable> T get(@SuppressWarnings("rawtypes") Class t, X id) {
+		Session currentSession = sessionFactory.openSession();
+    	Transaction tx = null;
+    	T result = null;
+    	try  {
+    		tx = currentSession.beginTransaction();
+			result = (T) currentSession.get(t, id);
+        	tx.commit();
+    	} catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+         } finally {
+            currentSession.close(); 
+         }
+        return result;
+	}
+	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}

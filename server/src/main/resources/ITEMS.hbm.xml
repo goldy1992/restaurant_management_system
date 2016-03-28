@@ -24,6 +24,11 @@
          		<param name="type">12</param>
       		</type>
     	</property>
+    	
+ 	   	<set name="menuPages" table="POS_IN_MENU" cascade="save-update" fetch="join" lazy="false">
+            <key column="id" not-null="true" />
+            <many-to-many column="name" entity-name="com.mike.server.database.tables.MENU_PAGE" />
+        </set>
 
    </class>
 </hibernate-mapping>

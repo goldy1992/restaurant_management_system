@@ -1,10 +1,15 @@
 package com.mike.server.database.tables;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MENU_PAGE {
 
 	private String name;
 	private String parentPageId;
 	private String buttonName;
+	
+	private Set<ITEMS> items = new HashSet<>(0);
 	
 	public String getName() {
 		return name;
@@ -31,5 +36,11 @@ public class MENU_PAGE {
 		menuPage.setButtonName(buttonName);
 		menuPage.setParentPageId(parentPageId);
 		return menuPage;
+	}
+	public Set<ITEMS> getItems() {
+		return items;
+	}
+	public void setItems(Set<ITEMS> items) {
+		this.items = items;
 	}
 }

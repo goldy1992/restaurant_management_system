@@ -1,5 +1,7 @@
 package com.mike.server.database.tables;
 
+import java.util.HashSet;
+import java.util.Set;
 
 public class ITEMS {
 	
@@ -10,6 +12,8 @@ public class ITEMS {
 	private boolean stockCountOn;
 	private boolean needAgeCheck;
 	private FOOD_OR_DRINK foodOrDrink;
+	
+	private Set<MENU_PAGE> menuPages = new HashSet<>(0);
 	
 	public static ITEMS createItem(String name, float price, int quantity, boolean stockCountOn, 
 			boolean needAgeCheck, FOOD_OR_DRINK foodOrDrink) {
@@ -79,6 +83,16 @@ public class ITEMS {
 
 	public void setFoodOrDrink(FOOD_OR_DRINK foodOrDrink) {
 		this.foodOrDrink = foodOrDrink;
+	}
+
+
+	public Set<MENU_PAGE> getMenuPages() {
+		return menuPages;
+	}
+
+
+	public void setMenuPages(Set<MENU_PAGE> menuPages) {
+		this.menuPages = menuPages;
 	}
 	
 }

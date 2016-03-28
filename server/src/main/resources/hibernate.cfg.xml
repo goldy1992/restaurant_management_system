@@ -14,8 +14,7 @@
 
    		<!-- List of XML mapping files -->
    		<mapping resource="ITEMS.hbm.xml"/>
-	  	<mapping resource="MENU_PAGE.hbm.xml"/>
-	  	<mapping resource="POS_IN_MENU.hbm.xml"/>	  	
+	  	<mapping resource="MENU_PAGE.hbm.xml"/>	  	
 
 	</session-factory>
 </hibernate-configuration>
