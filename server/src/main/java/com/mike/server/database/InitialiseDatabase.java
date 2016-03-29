@@ -1,16 +1,14 @@
 package com.mike.server.database;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.mike.server.database.tables.FOOD_OR_DRINK;
 import com.mike.server.database.tables.ITEMS;
 import com.mike.server.database.tables.MENU_PAGE;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class InitialiseDatabase {
@@ -65,8 +63,7 @@ public class InitialiseDatabase {
 		menuPages.put(dbCon.insert(mp), mp);
 		mp = MENU_PAGE.createMenuPage("TRAGO_PAGE", "MAIN_PAGE", "Spirits/Liqueurs");
 		menuPages.put(dbCon.insert(mp), mp);
-		
-		mp = menuPages.get("MAIN_PAGE");		
+
 		List<ITEMS> newItems = new ArrayList<>();
 		String query = "FROM ITEMS i where i.name = '14oz Cola'";
 		newItems.add(dbCon.getFirst(ITEMS.class, query));
@@ -81,16 +78,24 @@ public class InitialiseDatabase {
 		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = '4oz Dash Diet Cola'";
 		newItems.add(dbCon.getFirst(ITEMS.class, query));
-		query = "FROM ITEMS i where i.name = '4oz Dash Diet Cola'";
-		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = 'Pint Cola'";
 		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		query = "FROM ITEMS i where i.name = 'Pint Diet Cola'";
 		newItems.add(dbCon.getFirst(ITEMS.class, query));
 		dbCon.updatePosInMenuTable(newItems, "MIN_MIX_PAGE");
-		
-//		insertPosInMenu(19L, "FOOD_PAGE");
-//		insertPosInMenu(27L, "BURGER_PAGE");
+
+		newItems = new ArrayList<>();
+		query = "FROM ITEMS i where i.name = 'Cheese Pie'";
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
+		query = "FROM ITEMS i where i.name = 'Beef Lasagne'";
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
+		dbCon.updatePosInMenuTable(newItems, "FOOD_PAGE");
+
+		newItems = new ArrayList<>();
+		query = "FROM ITEMS i where i.name = 'Beef Burger'";
+		newItems.add(dbCon.getFirst(ITEMS.class, query));
+		dbCon.updatePosInMenuTable(newItems, "BURGER_PAGE");
+
 //		insertPosInMenu(29L, "FOOD_PAGE");
 	}
 	
