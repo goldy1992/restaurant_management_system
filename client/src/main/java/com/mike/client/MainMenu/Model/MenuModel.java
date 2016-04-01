@@ -53,47 +53,34 @@ public class MenuModel {
 		menuPagesList.size();
 
     	for (MenuPageDAO mp : menuPages) {
-    		menuPagesList.add(new MenuPage(mp.getButtonName()));
+    		MenuPage menuPage = new MenuPage(mp.getName());
+    		menuPage.setButtonName(mp.getButtonName());
+    		menuPagesList.add(menuPage);
     	}
                             
-//         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
-//        int count = 0; // keeps count to remember current panel
-//        results.first(); // uses same resultsSet and goes to the first row
-//        do
-//        {
-//        	MenuPage currentMenuPage = menuPagesList.get(count);
-//            MenuPage parentMenuPage = null;
-//            
-//            // for loop to find parent panel
-//            for (MenuPage c : menuPagesList ) {
-//                if (c.getName().equals(results.getString(2))) { // 2 is column index of PARENT_PAGE_ID
-//                    parentMenuPage = c;
-//                    break;
-//                }
-//            }
-//            
-//            // set currentPanels Parent {COULD BE NULL}
-//            currentMenuPage.setParentPage(parentMenuPage);  
-//            
-//            // if not null take the parent and create a child button and reference it to panel
-//            if (parentMenuPage != null) {
-//                parentMenuPage.getChildMenuPages().add(currentMenuPage);
-//            }
-//            
-//            count++;
-//        }  while (results.next());
-               
-        //return menuPagesList;
-		return null;
+         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
+    	for (MenuPage mp : menuPagesList) {
+            for (MenuPage c : menuPagesList ) {
+            	if (mp.getParentPage().equals(c.getButtonName())) {
+            		mp.setParentPage(c);
+            	}
+            	
+            	if (c.getParentPage().equals(mp.getName()) ) {
+            		mp.getChildMenuPages().add(c);
+            	}
+            }
+    	}
+                    
+    	return menuPagesList;
     }
 	
 	private static String buildFindButtonsForMenuPanelQuery(String menuPanelName) {
-		return "SELECT `NAME`, `3YP_ITEMS`.`ID`, `PRICE`, "
+		return "SELECT `NAME`, `ITEMS`.`ID`, `PRICE`, "
                 + "`FOOD_OR_DRINK`, `NEED_AGE_CHECK`, `STOCK_COUNT_ON` "
-                + "FROM `3YP_ITEMS` " 
-                + "LEFT JOIN `3YP_POS_IN_MENU` ON "
-                + "`3YP_ITEMS`.`ID` = `3YP_POS_IN_MENU`.`ID` "
-                + "WHERE `3YP_POS_IN_MENU`.`LOCATION` = \"" 
+                + "FROM `ITEMS` " 
+                + "LEFT JOIN `POS_IN_MENU` ON "
+                + "`3YP_ITEMS`.`ID` = `POS_IN_MENU`.`ID` "
+                + "WHERE `POS_IN_MENU`.`LOCATION` = \"" 
                 + menuPanelName + "\" ";
 	}
 
