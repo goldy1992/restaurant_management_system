@@ -1,9 +1,10 @@
-package com.mike.server.database.tables;
+package com.mike.item.dbItem;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ITEMS {
+public class ITEMS implements Serializable {
 	
 	private long id;
 	private String name;
@@ -13,7 +14,7 @@ public class ITEMS {
 	private boolean needAgeCheck;
 	private FOOD_OR_DRINK foodOrDrink;
 	
-	private Set<MENU_PAGE> menuPages = new HashSet<>(0);
+	private Set<MenuPageDAO> menuPages = new HashSet<>(0);
 	
 	public static ITEMS createItem(String name, float price, int quantity, boolean stockCountOn, 
 			boolean needAgeCheck, FOOD_OR_DRINK foodOrDrink) {
@@ -86,12 +87,12 @@ public class ITEMS {
 	}
 
 
-	public Set<MENU_PAGE> getMenuPages() {
+	public Set<MenuPageDAO> getMenuPages() {
 		return menuPages;
 	}
 
 
-	public void setMenuPages(Set<MENU_PAGE> menuPages) {
+	public void setMenuPages(Set<MenuPageDAO> menuPages) {
 		this.menuPages = menuPages;
 	}
 	

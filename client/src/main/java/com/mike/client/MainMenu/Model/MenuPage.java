@@ -5,6 +5,7 @@ import java.util.List;
 public class MenuPage {
 
 	private final String name;
+	private String buttonName;
 	private MenuPage parentPage;
 	private List<MenuItem> menuItems;
 	private List<MenuPage> childMenuPages;
@@ -32,5 +33,11 @@ public class MenuPage {
 
 	public String getName() {
 		return name;
+	}
+	public String getButtonName() {
+		return buttonName;
+	}
+	public void setButtonName(String buttonName) {
+		this.buttonName = buttonName;
 	}
 }

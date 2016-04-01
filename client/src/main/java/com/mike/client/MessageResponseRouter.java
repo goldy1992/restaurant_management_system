@@ -8,6 +8,7 @@ import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.Response;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
+import com.mike.message.Response.databaseResponse.QueryResponse;
 
 @MessageEndpoint
 public class MessageResponseRouter {
@@ -20,7 +21,10 @@ public class MessageResponseRouter {
 	        	return "tableStatusResponseChannel";
 	        } else if (response instanceof TabResponse) {
 	        	return "tabResponseChannel";
+	        } else if (response instanceof QueryResponse) {
+	        	return "dbQueryResponseChannel";
 	        }
+	        
 	        
 	        return "";}
 

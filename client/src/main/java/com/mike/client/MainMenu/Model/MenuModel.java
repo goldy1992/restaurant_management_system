@@ -1,56 +1,42 @@
 package com.mike.client.MainMenu.Model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import com.mike.client.MainMenu.Menu;
-import com.mike.client.MainMenu.MenuCardPanel;
-import com.mike.client.MainMenu.MenuItemJButton;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mike.client.MessageSender;
+import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.Response.databaseResponse.QueryResponse;
 
 public class MenuModel {
 	
+	@Autowired
+	private MessageSender messageSender;
 	
-    /**
-     * The reference to the object that stores the database connection
-     */
-    public static Connection con ;
-    
-    static {
-    	try
-    	{
-    		con = DriverManager.getConnection("jdbc:mysql://sql4.freemysqlhosting.net:3306/sql482884", "sql482884", "aN9*kG1!");
-    	} catch (SQLException e) {
-    		
-    	}
-    }
-    private final String SELECT_MENU_PAGES_QUERY =  "SELECT * \n" +
-            "FROM `3YP_MENU_PAGES`";
-    
-	private static ResultSet query(String query) {
-		try {
-			PreparedStatement numberOfButtonsQuery = null;	
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeQuery();
-            return numberOfButtonsQuery.getResultSet();
-		} catch(SQLException exception) {
-			return null;
-		}
+    public void setMessageSender(MessageSender messageSender) {
+		this.messageSender = messageSender;
 	}
-	
+
+	private final String SELECT_MENU_PAGES_QUERY =  "FROM MENU_PAGE";
+    
+	private List query(String query) {
+		QueryResponse response = messageSender.sendDbQuery(query);
+		return response.getResultSet();
+	}
 	private List<MenuPage> menuPages;
 	
 	public MenuModel() {
 	}
 	
-	public void initialise() throws SQLException {
-		ResultSet results = query(SELECT_MENU_PAGES_QUERY);
-		this.setMenuPages(buildMenuPages(results));
-		this.setMenuPages(populateMenuPages(getMenuPages()));
+	public void initialise()  {		
+			@SuppressWarnings("unused")
+			List<MenuPageDAO> results = query(SELECT_MENU_PAGES_QUERY);
+			this.setMenuPages(buildMenuPages(results));
+			this.setMenuPages(populateMenuPages(getMenuPages()));	
 	}
 
 
@@ -62,44 +48,43 @@ public class MenuModel {
 		this.menuPages = menuPages;
 	}
 	
-	public static List<MenuPage> buildMenuPages(ResultSet results) throws SQLException {
+	public static List<MenuPage> buildMenuPages(List<MenuPageDAO> menuPages) {
 		List<MenuPage> menuPagesList = new ArrayList<>();
+		menuPagesList.size();
 
-    	// MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
-        while (results.next())
-        {
-            MenuPage menuPage = new MenuPage(results.getString(1));
-            menuPagesList.add(menuPage);    
-        } // while
+    	for (MenuPageDAO mp : menuPages) {
+    		menuPagesList.add(new MenuPage(mp.getButtonName()));
+    	}
                             
-         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
-        int count = 0; // keeps count to remember current panel
-        results.first(); // uses same resultsSet and goes to the first row
-        do
-        {
-        	MenuPage currentMenuPage = menuPagesList.get(count);
-            MenuPage parentMenuPage = null;
-            
-            // for loop to find parent panel
-            for (MenuPage c : menuPagesList ) {
-                if (c.getName().equals(results.getString(2))) { // 2 is column index of PARENT_PAGE_ID
-                    parentMenuPage = c;
-                    break;
-                }
-            }
-            
-            // set currentPanels Parent {COULD BE NULL}
-            currentMenuPage.setParentPage(parentMenuPage);  
-            
-            // if not null take the parent and create a child button and reference it to panel
-            if (parentMenuPage != null) {
-                parentMenuPage.getChildMenuPages().add(currentMenuPage);
-            }
-            
-            count++;
-        }  while (results.next());
+//         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
+//        int count = 0; // keeps count to remember current panel
+//        results.first(); // uses same resultsSet and goes to the first row
+//        do
+//        {
+//        	MenuPage currentMenuPage = menuPagesList.get(count);
+//            MenuPage parentMenuPage = null;
+//            
+//            // for loop to find parent panel
+//            for (MenuPage c : menuPagesList ) {
+//                if (c.getName().equals(results.getString(2))) { // 2 is column index of PARENT_PAGE_ID
+//                    parentMenuPage = c;
+//                    break;
+//                }
+//            }
+//            
+//            // set currentPanels Parent {COULD BE NULL}
+//            currentMenuPage.setParentPage(parentMenuPage);  
+//            
+//            // if not null take the parent and create a child button and reference it to panel
+//            if (parentMenuPage != null) {
+//                parentMenuPage.getChildMenuPages().add(currentMenuPage);
+//            }
+//            
+//            count++;
+//        }  while (results.next());
                
-        return menuPagesList;
+        //return menuPagesList;
+		return null;
     }
 	
 	private static String buildFindButtonsForMenuPanelQuery(String menuPanelName) {
@@ -117,7 +102,7 @@ public class MenuModel {
 		try {
             // FIND ALL BUTTONS FOR EACH PANEL
             for (MenuPage c : menuPageList ) {
-            	ResultSet results = query(buildFindButtonsForMenuPanelQuery(c.getName()));
+            	ResultSet results = null;//query(buildFindButtonsForMenuPanelQuery(c.getName()));
             	
             	c = addButtonsToCard(c, results);	
             } // for each

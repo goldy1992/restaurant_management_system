@@ -1,9 +1,10 @@
-package com.mike.server.database.tables;
+package com.mike.item.dbItem;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MENU_PAGE {
+public class MenuPageDAO implements Serializable {
 
 	private String name;
 	private String parentPageId;
@@ -30,8 +31,8 @@ public class MENU_PAGE {
 		this.buttonName = buttonName;
 	}	
 	
-	public static MENU_PAGE createMenuPage(String name, String parentPageId, String buttonName) {
-		MENU_PAGE menuPage = new MENU_PAGE();
+	public static MenuPageDAO createMenuPage(String name, String parentPageId, String buttonName) {
+		MenuPageDAO menuPage = new MenuPageDAO();
 		menuPage.setName(name);
 		menuPage.setButtonName(buttonName);
 		menuPage.setParentPageId(parentPageId);

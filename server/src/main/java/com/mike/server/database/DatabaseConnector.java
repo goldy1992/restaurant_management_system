@@ -2,7 +2,6 @@ package com.mike.server.database;
 
 import java.io.Serializable;
 import java.util.List;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mike.server.database.tables.FOOD_OR_DRINK;
-import com.mike.server.database.tables.ITEMS;
-import com.mike.server.database.tables.MENU_PAGE;
+import com.mike.item.dbItem.ITEMS;
+import com.mike.item.dbItem.MenuPageDAO;
+
 
 
 @Transactional
@@ -119,10 +118,10 @@ public class DatabaseConnector {
 	public void updatePosInMenuTable(List<ITEMS> newItems, String id) {
 		Session currentSession = sessionFactory.openSession();
     	Transaction tx = null;
-    	MENU_PAGE result = null;
+    	MenuPageDAO result = null;
     	try  {
     		tx = currentSession.beginTransaction();
-			result = (MENU_PAGE)currentSession.get(MENU_PAGE.class, id);
+			result = (MenuPageDAO)currentSession.get(MenuPageDAO.class, id);
 			result.getItems().addAll(newItems);
 			currentSession.update(result);
         	tx.commit();

@@ -19,7 +19,11 @@
     
     <import resource="selectTable.xml"/>
    
-	<bean id="menuController" class="com.mike.client.MainMenu.MenuController"/>
+	<bean id="menuController" class="com.mike.client.MainMenu.MenuController">
+		<property name="model">
+			<bean id="model" class="com.mike.client.MainMenu.Model.MenuModel" />
+		</property>
+	</bean>
     <bean id="waiterClientController" class="com.mike.client.WaiterClientController"/>
     <bean id="waiterClient" class="com.mike.client.WaiterClient" />
     <bean id="messageSender" class="com.mike.client.MessageSender" />
@@ -45,6 +49,7 @@
     <int-ip:tcp-inbound-channel-adapter id="inboundTcpAdapter"
         channel="inputChannel"
         connection-factory="clientFactory"/>
+        
     
     <int:channel id="inputChannel" />
     <int:channel id="outputChannel" />
@@ -53,10 +58,21 @@
     <int:channel id="typeRouterToResponseChannel" />
     <int:channel id="typeRouterToEventNotificationChannel" /> 
     
-    <int:channel id="registerClientResponseChannel" />
-    <int:channel id="tableStatusResponseChannel" />
-    <int:channel id="tabResponseChannel" /> 
+    <int:channel id="registerClientResponseChannel" >
+     	<int:queue capacity="2" />
+   	</int:channel>
     
+    <int:channel id="tableStatusResponseChannel" >
+         <int:queue capacity="2" />
+     </int:channel>
+     
+    <int:channel id="tabResponseChannel" > 
+         <int:queue capacity="2" />
+     </int:channel>      
+
+     <int:channel id="dbQueryResponseChannel" > 
+         <int:queue capacity="2" />
+     </int:channel>    
     
      <int:channel id="tableStatusEvtNotificationChannel" />   
     

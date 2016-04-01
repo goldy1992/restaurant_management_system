@@ -13,6 +13,7 @@ import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED
 
 import com.mike.client.MessageSender;
 import com.mike.client.WaiterClient;
+import com.mike.client.WaiterClientController;
 import com.mike.item.Tab;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
@@ -56,21 +57,21 @@ public class SelectTableController implements ActionListener
 		return initialised;
 	}
     
-    @ServiceActivator(inputChannel="tabResponseChannel") 
-    public void tabResponse(TabResponse tabResponse) throws SQLException {
-    	menuController.init(view, tabResponse.getTab());
-    }
 
 	public void setInitialised(boolean initialised) {
 		this.initialised = initialised;
 	}
 
-	public void init(ArrayList<TableStatus> tableStatuses) {
-		if (!initialised) {
-			this.model = new SelectTableModel(tableStatuses);
-	        this.view = new SelectTableView(this, tableStatuses);
-	        view.setVisible(true); 
-		} 	
+	public void init() {
+		TableStatusResponse response =  this.messageSender.sendTableStatusRequest(new ArrayList<>());
+		ArrayList<TableStatus> ts = new ArrayList<>();
+		for(Integer i : response.getTableStatuses().keySet()) {
+    			ts.add(response.getTableStatuses().get(i));
+		}
+		this.model = new SelectTableModel(ts);
+        this.view = new SelectTableView(this, ts);
+        view.setVisible(true); 
+		 
     }
     
     private void selectCleanTable(ActionEvent event) {
@@ -88,8 +89,9 @@ public class SelectTableController implements ActionListener
         } else if (model.getTableStatus(tableSelected) == IN_USE) {
             view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
         } else {
-        	 messageSender.sendTabRequest(tableSelected);
-        	 System.out.println("talble selected");
+        	 TabResponse response = messageSender.sendTabRequest(tableSelected);
+        	 menuController.init(this.view, response.getTab());
+        	 System.out.println("table selected");
         } // else  	
     }
     
@@ -121,17 +123,6 @@ public class SelectTableController implements ActionListener
     	}
     } // action performed    
     
-    @ServiceActivator(inputChannel="tableStatusResponseChannel")
-    public void tableStatusResponse(TableStatusResponse tableStatusResponse) {    	
-    	System.out.println("response size: " + tableStatusResponse.getTableStatuses().keySet().size());
-    	if (!isInitialised()) {
-    		ArrayList<TableStatus> ts = new ArrayList<>();
-    		for(Integer i : tableStatusResponse.getTableStatuses().keySet()) {
-    			ts.add(tableStatusResponse.getTableStatuses().get(i));
-    		}
-    		init(ts);
-    	}
-    }
     
     @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
     public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {

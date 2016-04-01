@@ -15,7 +15,7 @@ public class StartWaiterClient {
     public static void main(String[] args) throws InterruptedException
     {
     	GenericXmlApplicationContext context = setupContext();
-        WaiterClientController waiterClientController = (WaiterClientController)context.getBean("waiterClientController");
+        WaiterClientController waiterClientController = (WaiterClientController) context.getBean("waiterClientController");
         waiterClientController.init();
     } // main
     

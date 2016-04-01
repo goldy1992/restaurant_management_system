@@ -111,7 +111,7 @@ public class Menu extends JDialog implements ActionListener, MouseListener
  * @param stream
  * @throws java.sql.SQLException
  */
-public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) throws SQLException
+public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) 
 {
     super(parent, modal);
   
@@ -158,7 +158,7 @@ public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) 
     
     setUpTab(tab);
     
-    con.close();
+    
     
 } // constructor
 

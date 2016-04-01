@@ -6,26 +6,11 @@
 package com.mike.server;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-
-import org.hibernate.Transaction;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.mike.message.Table;
 import com.mike.server.database.InitialiseDatabase;
-import com.mike.server.database.tables.FOOD_OR_DRINK;
-import com.mike.server.database.tables.ITEMS;
 
 /**
  * @author Mike

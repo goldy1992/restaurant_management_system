@@ -30,25 +30,22 @@ public class WaiterClientController {
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	
 	public void init() {
-		messageSender.registerClient(ClientType.WAITER);
-	}
-	
-    @ServiceActivator(inputChannel="registerClientResponseChannel")
-    public void registerClientResponse(RegisterClientResponse registerClientResponse)
-    {
-        System.out.println("parse register client response");
-
-	            
+		RegisterClientResponse registerClientResponse = messageSender.registerClient(ClientType.WAITER);
+		
         if (!registerClientResponse.hasPermission()) {
         	System.exit(0);                               
     	} // if
-        else { 
-    		if (waiterClient.selectTable == null) {
-        		this.messageSender.sendTableStatusRequest(new ArrayList<>());
-        	}
-        	System.out.println("Client successfully registered as: " + registerClientResponse);        
-        }
-    } // regClientResp
+        selectTableController.init();
+	}
+	
+//    @ServiceActivator(inputChannel="registerClientResponseChannel")
+//    public void registerClientResponse(RegisterClientResponse registerClientResponse)
+//    {
+//        System.out.println("parse register client response");
+//
+//	            
+//
+//    } // regClientResp
 	    
 
 

@@ -4,7 +4,11 @@ import com.mike.message.Table;
 import com.mike.message.Table.TableStatus;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.*;
+import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Response.*;
+import com.mike.message.Response.databaseResponse.QueryResponse;
+import com.mike.server.database.DatabaseConnector;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.ip.IpHeaders;
@@ -26,6 +30,9 @@ import java.util.Set;
 @Component
 public class MessageParser {
 
+	@Autowired
+	private DatabaseConnector dbCon;
+	
 	@Autowired
 	private Server server;
 	@Autowired
@@ -79,6 +86,23 @@ public class MessageParser {
 		return tabResponse;
 	}
 	
+	@ServiceActivator(inputChannel="messageQueryChannel", outputChannel="messageResponseChannel")
+	public QueryResponse parseQuery(Query query) {
+		System.out.println("performing query");
+		List resultSet = dbCon.query(query.getQuery());
+		QueryResponse queryResponse = new QueryResponse(query, resultSet);
+		return queryResponse;
+	}
+	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
+	
 	public void setServer(Server server) { this.server = server; }
+
+	public DatabaseConnector getDbCon() {
+		return dbCon;
+	}
+
+	public void setDbCon(DatabaseConnector dbCon) {
+		this.dbCon = dbCon;
+	}
 }

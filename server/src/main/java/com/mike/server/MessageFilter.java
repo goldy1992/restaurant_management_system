@@ -19,7 +19,7 @@ public class MessageFilter {
     
     @Filter(inputChannel = "inboundAdapterToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
-        System.out.println("message received filter\nFilter headers: " + headerMap);
+        System.out.println("message received class type " + message.getClass());
         if (validMessage(message)) {
         	System.out.println("returning true");
         	return true; 

@@ -1,8 +1,8 @@
 package com.mike.server.database;
 
-import com.mike.server.database.tables.FOOD_OR_DRINK;
-import com.mike.server.database.tables.ITEMS;
-import com.mike.server.database.tables.MENU_PAGE;
+import com.mike.item.dbItem.FOOD_OR_DRINK;
+import com.mike.item.dbItem.ITEMS;
+import com.mike.item.dbItem.MenuPageDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -50,18 +50,18 @@ public class InitialiseDatabase {
 		i = ITEMS.createItem("Beef Lasagne", 8.95f, 150, false, false, FOOD_OR_DRINK.FOOD);
 		items.put(dbCon.insert(i), i);
 
-		Map<String, MENU_PAGE> menuPages = new HashMap<>();
-		MENU_PAGE mp = MENU_PAGE.createMenuPage("BURGER_PAGE", "FOOD_PAGE", "Burgers");
+		Map<String, MenuPageDAO> menuPages = new HashMap<>();
+		MenuPageDAO mp = MenuPageDAO.createMenuPage("BURGER_PAGE", "FOOD_PAGE", "Burgers");
 		menuPages.put(dbCon.insert(mp), mp);
-		mp = MENU_PAGE.createMenuPage("FOOD_PAGE", "MAIN_PAGE", "Food Menu");
+		mp = MenuPageDAO.createMenuPage("FOOD_PAGE", "MAIN_PAGE", "Food Menu");
 		menuPages.put(dbCon.insert(mp), mp);
-		mp = MENU_PAGE.createMenuPage("GRILLS_PAGE", "FOOD_PAGE", "Grills");
+		mp = MenuPageDAO.createMenuPage("GRILLS_PAGE", "FOOD_PAGE", "Grills");
 		menuPages.put(dbCon.insert(mp), mp);
-		mp = MENU_PAGE.createMenuPage("MAIN_PAGE", null, "Main Page");
+		mp = MenuPageDAO.createMenuPage("MAIN_PAGE", null, "Main Page");
 		menuPages.put(dbCon.insert(mp), mp);
-		mp = MENU_PAGE.createMenuPage("MIN_MIX_PAGE", "MAIN_PAGE", "Minerals/Mixers");
+		mp = MenuPageDAO.createMenuPage("MIN_MIX_PAGE", "MAIN_PAGE", "Minerals/Mixers");
 		menuPages.put(dbCon.insert(mp), mp);
-		mp = MENU_PAGE.createMenuPage("TRAGO_PAGE", "MAIN_PAGE", "Spirits/Liqueurs");
+		mp = MenuPageDAO.createMenuPage("TRAGO_PAGE", "MAIN_PAGE", "Spirits/Liqueurs");
 		menuPages.put(dbCon.insert(mp), mp);
 
 		List<ITEMS> newItems = new ArrayList<>();
