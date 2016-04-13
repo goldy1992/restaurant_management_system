@@ -2,7 +2,10 @@ package com.mike.server.database;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mike.item.dbItem.ITEMS;
+import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 
 
@@ -62,13 +65,19 @@ public class DatabaseConnector {
          }		
 	}
 
-	public List query(String query) {
+	public List query(String queryString, Map<String, ?> params) {
 		Session currentSession = sessionFactory.openSession();
     	Transaction tx = null;
     	List results = null;
     	try  {
     		tx = currentSession.beginTransaction();
-			results = currentSession.createQuery(query).list();
+    		Query query = currentSession.createQuery(queryString);
+    		if (params != null && !params.keySet().isEmpty()) {
+    			for (String param : params.keySet()) {
+    				query.setParameter(param, params.get(param));
+    			}
+    		}
+			results = query.list();
         	tx.commit();
     	}catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -115,7 +124,7 @@ public class DatabaseConnector {
         return result;
 	}
 	
-	public void updatePosInMenuTable(List<ITEMS> newItems, String id) {
+	public void updatePosInMenuTable(List<ItemDAO> newItems, String id) {
 		Session currentSession = sessionFactory.openSession();
     	Transaction tx = null;
     	MenuPageDAO result = null;

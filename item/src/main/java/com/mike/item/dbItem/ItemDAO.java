@@ -1,10 +1,11 @@
 package com.mike.item.dbItem;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ITEMS implements Serializable {
+public class ItemDAO implements Serializable {
 	
 	private long id;
 	private String name;
@@ -14,11 +15,11 @@ public class ITEMS implements Serializable {
 	private boolean needAgeCheck;
 	private FOOD_OR_DRINK foodOrDrink;
 	
-	private Set<MenuPageDAO> menuPages = new HashSet<>(0);
+	private Collection<MenuPageDAO> menuPages;
 	
-	public static ITEMS createItem(String name, float price, int quantity, boolean stockCountOn, 
+	public static ItemDAO createItem(String name, float price, int quantity, boolean stockCountOn, 
 			boolean needAgeCheck, FOOD_OR_DRINK foodOrDrink) {
-		ITEMS item = new ITEMS();
+		ItemDAO item = new ItemDAO();
 		item.name = name;
 		item.price = price;
 		item.quantity = quantity;
@@ -87,12 +88,12 @@ public class ITEMS implements Serializable {
 	}
 
 
-	public Set<MenuPageDAO> getMenuPages() {
+	public Collection<MenuPageDAO> getMenuPages() {
 		return menuPages;
 	}
 
 
-	public void setMenuPages(Set<MenuPageDAO> menuPages) {
+	public void setMenuPages(Collection<MenuPageDAO> menuPages) {
 		this.menuPages = menuPages;
 	}
 	

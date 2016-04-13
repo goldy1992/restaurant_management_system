@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mike.client.MessageSender;
+import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 import com.mike.message.Response.databaseResponse.QueryResponse;
 
@@ -48,7 +49,7 @@ public class MenuModel {
 		this.menuPages = menuPages;
 	}
 	
-	public static List<MenuPage> buildMenuPages(List<MenuPageDAO> menuPages) {
+	public List<MenuPage> buildMenuPages(List<MenuPageDAO> menuPages) {
 		List<MenuPage> menuPagesList = new ArrayList<>();
 		menuPagesList.size();
 
@@ -75,34 +76,25 @@ public class MenuModel {
     }
 	
 	private static String buildFindButtonsForMenuPanelQuery(String menuPanelName) {
-		return "SELECT `NAME`, `ITEMS`.`ID`, `PRICE`, "
-                + "`FOOD_OR_DRINK`, `NEED_AGE_CHECK`, `STOCK_COUNT_ON` "
-                + "FROM `ITEMS` " 
-                + "LEFT JOIN `POS_IN_MENU` ON "
-                + "`3YP_ITEMS`.`ID` = `POS_IN_MENU`.`ID` "
-                + "WHERE `POS_IN_MENU`.`LOCATION` = \"" 
-                + menuPanelName + "\" ";
+		return 	 "SELECT i FROM ItemDAO i " 
+			      + "JOIN i.menuPages p "
+			      + "WHERE p.name = " 
+			      + "'" + menuPanelName + "'";	
 	}
 
-	private static List<MenuPage> populateMenuPages(List<MenuPage> menuPageList) {
-	
-		try {
-            // FIND ALL BUTTONS FOR EACH PANEL
-            for (MenuPage c : menuPageList ) {
-            	ResultSet results = null;//query(buildFindButtonsForMenuPanelQuery(c.getName()));
-            	
-            	c = addButtonsToCard(c, results);	
-            } // for each
+	private List<MenuPage> populateMenuPages(List<MenuPage> menuPageList) {
+	    // FIND ALL BUTTONS FOR EACH PANEL
+	    for (MenuPage c : menuPageList ) {
+	    	List<ItemDAO> itemsOnMenuPage =  query(buildFindButtonsForMenuPanelQuery(c.getName()));    	
+	    	//c = addButtonsToCard(c, results);	
+	    } // for each
 	  
-            // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
-            for (int i = 1; i < menuPageList.size(); i++) {
-                if (menuPageList.get(i).getName().equals("MAIN_PAGE")) {
-                    Collections.swap(menuPageList, i, 0);
-                }
-            }    
-		} catch (SQLException e) {
-			return null;
-		}
+	        // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
+	    for (int i = 1; i < menuPageList.size(); i++) {
+	        if (menuPageList.get(i).getName().equals("MAIN_PAGE")) {
+	            Collections.swap(menuPageList, i, 0);
+	        }
+	    }    
 		
 		return menuPageList;
 	}

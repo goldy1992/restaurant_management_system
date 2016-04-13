@@ -4,7 +4,7 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
- 	<class name="com.mike.item.dbItem.MENU_PAGE" table="MENU_PAGE">
+ 	<class name="com.mike.item.dbItem.MenuPageDAO" table="MENU_PAGE">
      	<meta attribute="class-description">
          	This class contains the employee detail. 
       	</meta>
@@ -15,10 +15,10 @@
     		<column name="parentPageId" default="null" />
     	</property>
     	
-    	<set name="items" table="POS_IN_MENU" cascade="all" fetch="join" lazy="false" >
+    	<bag name="items" table="POS_IN_MENU" cascade="all" fetch="join" lazy="false" >
             <key column="name" not-null="true" />
-            <many-to-many column="id" entity-name="com.mike.item.dbItem.ITEMS" lazy="false" />
-        </set>
+            <many-to-many column="id" entity-name="com.mike.item.dbItem.ItemDAO" lazy="false" />
+        </bag>
 
    </class>
 </hibernate-mapping>

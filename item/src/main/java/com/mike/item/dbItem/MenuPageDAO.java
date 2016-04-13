@@ -1,6 +1,7 @@
 package com.mike.item.dbItem;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class MenuPageDAO implements Serializable {
 	private String parentPageId;
 	private String buttonName;
 	
-	private Set<ITEMS> items = new HashSet<>(0);
+	private Collection<ItemDAO> itemDAO;
 	
 	public String getName() {
 		return name;
@@ -38,10 +39,10 @@ public class MenuPageDAO implements Serializable {
 		menuPage.setParentPageId(parentPageId);
 		return menuPage;
 	}
-	public Set<ITEMS> getItems() {
-		return items;
+	public Collection<ItemDAO> getItems() {
+		return itemDAO;
 	}
-	public void setItems(Set<ITEMS> items) {
-		this.items = items;
+	public void setItems(Collection<ItemDAO> itemDAO) {
+		this.itemDAO = itemDAO;
 	}
 }

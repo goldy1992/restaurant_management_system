@@ -89,9 +89,10 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messageQueryChannel", outputChannel="messageResponseChannel")
 	public QueryResponse parseQuery(Query query) {
 		System.out.println("performing query");
-		List resultSet = dbCon.query(query.getQuery());
-		QueryResponse queryResponse = new QueryResponse(query, resultSet);
-		return queryResponse;
+		//List resultSet = dbCon.query(query.getQuery());
+//		QueryResponse queryResponse = new QueryResponse(query, resultSet);
+	//	return queryResponse;
+		return null;
 	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
