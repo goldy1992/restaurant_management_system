@@ -1,23 +1,18 @@
 package com.mike.server.database;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
+import com.mike.item.dbItem.ItemDAO;
+import com.mike.item.dbItem.MenuPageDAO;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mike.item.dbItem.ItemDAO;
-import com.mike.item.dbItem.MenuPageDAO;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -71,7 +66,7 @@ public class DatabaseConnector {
     	List results = null;
     	try  {
     		tx = currentSession.beginTransaction();
-    		Query query = currentSession.createQuery(queryString);
+    		Query query = (Query) currentSession.createQuery(queryString);
     		if (params != null && !params.keySet().isEmpty()) {
     			for (String param : params.keySet()) {
     				query.setParameter(param, params.get(param));

@@ -1,14 +1,17 @@
 package com.mike.server;
 
+import com.mike.message.EventNotification.TableStatusEvtNfn;
+import com.mike.message.Request.RegisterClientRequest;
+import com.mike.message.Request.TabRequest;
+import com.mike.message.Request.TableStatusRequest;
+import com.mike.message.Request.databaseRequest.Query;
+import com.mike.message.Response.RegisterClientResponse;
+import com.mike.message.Response.TabResponse;
+import com.mike.message.Response.TableStatusResponse;
+import com.mike.message.Response.databaseResponse.QueryResponse;
 import com.mike.message.Table;
 import com.mike.message.Table.TableStatus;
-import com.mike.message.EventNotification.TableStatusEvtNfn;
-import com.mike.message.Request.*;
-import com.mike.message.Request.databaseRequest.Query;
-import com.mike.message.Response.*;
-import com.mike.message.Response.databaseResponse.QueryResponse;
 import com.mike.server.database.DatabaseConnector;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.ip.IpHeaders;
@@ -18,11 +21,9 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import java.net.Authenticator.RequestorType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by michaelg on 24/11/2015.
@@ -89,10 +90,10 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messageQueryChannel", outputChannel="messageResponseChannel")
 	public QueryResponse parseQuery(Query query) {
 		System.out.println("performing query");
-		//List resultSet = dbCon.query(query.getQuery());
-//		QueryResponse queryResponse = new QueryResponse(query, resultSet);
-	//	return queryResponse;
-		return null;
+		List resultSet = dbCon.query(query.getQuery(), null);
+		QueryResponse queryResponse = new QueryResponse(query, resultSet);
+		return queryResponse;
+	//	return null;
 	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }

@@ -1,17 +1,16 @@
 package com.mike.client.MainMenu.Model;
 
+import com.mike.client.MessageSender;
+import com.mike.item.dbItem.ItemDAO;
+import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.Response.databaseResponse.QueryResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.mike.client.MessageSender;
-import com.mike.item.dbItem.ItemDAO;
-import com.mike.item.dbItem.MenuPageDAO;
-import com.mike.message.Response.databaseResponse.QueryResponse;
 
 public class MenuModel {
 	
@@ -22,7 +21,7 @@ public class MenuModel {
 		this.messageSender = messageSender;
 	}
 
-	private final String SELECT_MENU_PAGES_QUERY =  "FROM MENU_PAGE";
+	private final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
     
 	private List query(String query) {
 		QueryResponse response = messageSender.sendDbQuery(query);
