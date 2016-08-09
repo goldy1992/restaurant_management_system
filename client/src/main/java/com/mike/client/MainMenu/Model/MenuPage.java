@@ -7,6 +7,7 @@ public class MenuPage {
 	private final String name;
 	private String buttonName;
 	private MenuPage parentPage;
+	private String parentPageName;
 	private List<MenuItem> menuItems;
 	private List<MenuPage> childMenuPages;
 
@@ -39,5 +40,13 @@ public class MenuPage {
 	}
 	public void setButtonName(String buttonName) {
 		this.buttonName = buttonName;
+	}
+
+	public String getParentPageName() {
+		return parentPageName;
+	}
+
+	public void setParentPageName(String parentPageName) {
+		this.parentPageName = parentPageName;
 	}
 }

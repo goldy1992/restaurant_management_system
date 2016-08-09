@@ -11,7 +11,7 @@
       	<id name="name" type="string" column="name" />
       	
       	<property name="buttonName" column="buttonName" type="string" not-null="true" />
-    	<property name="parentPageId"  type="string" >
+    	<property name="parentPageId"  type="string" lazy="false" >
     		<column name="parentPageId" default="null" />
     	</property>
     	

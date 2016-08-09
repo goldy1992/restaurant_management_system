@@ -55,21 +55,29 @@ public class MenuModel {
     	for (MenuPageDAO mp : menuPages) {
     		MenuPage menuPage = new MenuPage(mp.getName());
     		menuPage.setButtonName(mp.getButtonName());
+			menuPage.setParentPageName(mp.getParentPageId());
+			menuPage.setChildMenuPages(new ArrayList<>());
+			menuPage.setMenuItems(new ArrayList<>());
     		menuPagesList.add(menuPage);
     	}
                             
          // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
     	for (MenuPage mp : menuPagesList) {
             for (MenuPage c : menuPagesList ) {
-            	if (mp.getParentPage().equals(c.getButtonName())) {
+            	if (mp.getName().equals(c.getParentPageName())) {
             		mp.setParentPage(c);
-            	}
-            	
-            	if (c.getParentPage().equals(mp.getName()) ) {
-            		mp.getChildMenuPages().add(c);
+
             	}
             }
     	}
+
+		for (MenuPage mp : menuPagesList) {
+			for (MenuPage c : menuPagesList) {
+				if (c.getParentPageName() != null && c.getParentPageName().equals(mp.getName())) {
+					mp.getChildMenuPages().add(c);
+				}
+			}
+		}
                     
     	return menuPagesList;
     }
