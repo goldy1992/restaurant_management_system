@@ -1,13 +1,10 @@
 package com.mike.client.MainMenu;
 
-import java.sql.SQLException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.mike.client.MessageSender;
 import com.mike.client.MainMenu.Model.MenuModel;
+import com.mike.client.MessageSender;
 import com.mike.client.SelectTableMenu.View.SelectTableView;
 import com.mike.item.Tab;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MenuController {
 	 
@@ -34,6 +31,7 @@ public class MenuController {
 		//this.model = new MenuModel();
 		this.model.initialise();
 		this.view = new Menu(tableView, model, true, tab);
+		view.setVisible(true);
 		
 	}
 	

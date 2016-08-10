@@ -409,6 +409,7 @@ public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab)
             outputTextPane.setText(tab.toString());
             // set up current tab
             this.oldTab = tab;
+			this.newTab = new Tab();
             // sets the table
       //      this.newTab = new Tab(oldTab.getParent());
 

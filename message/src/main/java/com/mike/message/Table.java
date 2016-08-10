@@ -6,8 +6,9 @@
 
 package com.mike.message;
 
-import java.io.Serializable;
 import com.mike.item.Tab;
+
+import java.io.Serializable;
 
 /**
  *
@@ -69,7 +70,8 @@ public class Table implements Serializable
      */
     public Table(int tableNumber) {
         this.tableNumber = tableNumber;
-        tableStatus = TableStatus.FREE;
+        this.tableStatus = TableStatus.FREE;
+		this.currentTab = new Tab();
         
     } // constructor
     
