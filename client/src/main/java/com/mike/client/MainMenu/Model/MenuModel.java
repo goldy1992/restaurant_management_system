@@ -1,7 +1,6 @@
 package com.mike.client.MainMenu.Model;
 
 import com.mike.client.MessageSender;
-import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 import com.mike.message.Response.databaseResponse.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,21 +59,21 @@ public class MenuModel {
 			menuPage.setMenuItems(new ArrayList<>());
     		menuPagesList.add(menuPage);
     	}
-                            
-         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
-    	for (MenuPage mp : menuPagesList) {
-            for (MenuPage c : menuPagesList ) {
-            	if (mp.getName().equals(c.getParentPageName())) {
-            		mp.setParentPage(c);
-
-            	}
-            }
-    	}
 
 		for (MenuPage mp : menuPagesList) {
+			if (mp.getParentPageName() != null) {
+				for (MenuPage c : menuPagesList) {
+					if (c.getName().equals(mp.getParentPageName())) {
+						mp.setParentPage(c);
+					}
+				}
+			}
+		}
+         // ADD EVERY CARD'S PARENT AND CHILDREN PANELS
+		for (MenuPage mp : menuPagesList) {
 			for (MenuPage c : menuPagesList) {
-				if (c.getParentPageName() != null && c.getParentPageName().equals(mp.getName())) {
-					mp.getChildMenuPages().add(c);
+				if (c.getName().equals(mp.getParentPageName())) {
+					c.getChildMenuPages().add(mp);
 				}
 			}
 		}
@@ -92,7 +91,7 @@ public class MenuModel {
 	private List<MenuPage> populateMenuPages(List<MenuPage> menuPageList) {
 	    // FIND ALL BUTTONS FOR EACH PANEL
 	    for (MenuPage c : menuPageList ) {
-	    	List<ItemDAO> itemsOnMenuPage =  query(buildFindButtonsForMenuPanelQuery(c.getName()));    	
+	    //	List<ItemDAO> itemsOnMenuPage =  query(buildFindButtonsForMenuPanelQuery(c.getName()));
 	    	//c = addButtonsToCard(c, results);	
 	    } // for each
 	  
@@ -100,6 +99,7 @@ public class MenuModel {
 	    for (int i = 1; i < menuPageList.size(); i++) {
 	        if (menuPageList.get(i).getName().equals("MAIN_PAGE")) {
 	            Collections.swap(menuPageList, i, 0);
+				break;
 	        }
 	    }    
 		
