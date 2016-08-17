@@ -1,8 +1,8 @@
 package com.mike.client.MainMenu.Model;
 
-public class MenuItem {
-	
+import com.mike.item.dbItem.ItemDAO;
 
+public class MenuItem {
 
 	private String name;
 	private int id;
@@ -20,6 +20,14 @@ public class MenuItem {
     	this.needAgeCheck = needAgeCheck;
     	this.stockCount = stockCount;
     }
+
+	public MenuItem(ItemDAO i) {
+		this.name = i.getName();
+		this.id = (int)i.getId();
+		this.type = i.getFoodOrDrink().toString();
+		this.needAgeCheck = i.isNeedAgeCheck();
+		this.stockCount = i.isStockCountOn();
+	}
     
 	public String getName() {
 		return name;

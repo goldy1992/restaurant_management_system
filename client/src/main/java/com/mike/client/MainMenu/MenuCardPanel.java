@@ -5,17 +5,12 @@
  */
 package com.mike.client.MainMenu;
 
-import com.mike.message.EventNotification.TabUpdateNfn;
-import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.client.MainMenu.Model.MenuPage;
-import com.mike.message.Message;
-import com.mike.message.Table;
-import java.awt.GridLayout;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 /**
  *
@@ -53,11 +45,29 @@ public class MenuCardPanel extends JPanel {
     public MenuCardPanel(Menu parentMenu, MenuPage menuPage) {
         super();
         this.menuPage = menuPage;
-        cardMenuItems = new ArrayList<>();
 
+		itemsPanel = new JPanel();
+		cardMenuItems = new ArrayList<>();
+//		if (null != menuPage && null != menuPage.getMenuItems()) {
+//			for (MenuItem menuItem : menuPage.getMenuItems()) {
+//				cardMenuItems.add(MenuItemJButton.createMenuItemJButton(menuItem, this, parentMenu));
+//			}
+//			for (MenuItemJButton mij : cardMenuItems) {
+//				itemsPanel.add(mij);
+//			}
+//		}
+
+		menuSelectPanel = new JPanel();
         childCardButtons = new ArrayList<>();
-        menuSelectPanel = new JPanel();
-        itemsPanel = new JPanel();      
+//		if (null != menuPage && null != menuPage.getChildMenuPages()) {
+//			for (MenuPage cardMenuPage : menuPage.getChildMenuPages()) {
+//				childCardButtons.add(MenuCardLinkJButton.createMenuCardLinkButton(this, cardMenuPage.getButtonName(), parentMenu));
+//			}
+//			for (MenuCardLinkJButton menuCardLinkJButton : childCardButtons) {
+//				menuSelectPanel.add(menuCardLinkJButton);
+//			}
+//		}
+
         // true because we want to use the keyboard to control the quantity
         keypadPanel = null;
         this.belongsToMenu = parentMenu;

@@ -1,6 +1,7 @@
 package com.mike.client.MainMenu.Model;
 
 import com.mike.client.MessageSender;
+import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 import com.mike.message.Response.databaseResponse.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,9 @@ public class MenuModel {
 	}
 	
 	public void initialise()  {		
-			@SuppressWarnings("unused")
-			List<MenuPageDAO> results = query(SELECT_MENU_PAGES_QUERY);
-			this.setMenuPages(buildMenuPages(results));
-			this.setMenuPages(populateMenuPages(getMenuPages()));	
+		@SuppressWarnings("unused")
+		List<MenuPageDAO> results = query(SELECT_MENU_PAGES_QUERY);
+		this.setMenuPages(buildMenuPages(results));
 	}
 
 
@@ -57,9 +57,15 @@ public class MenuModel {
 			menuPage.setParentPageName(mp.getParentPageId());
 			menuPage.setChildMenuPages(new ArrayList<>());
 			menuPage.setMenuItems(new ArrayList<>());
+
+			for (ItemDAO i : mp.getItems()) {
+				menuPage.getMenuItems().add(new MenuItem(i));
+			}
+
     		menuPagesList.add(menuPage);
     	}
 
+		// SET EVERY CARD'S PARENT
 		for (MenuPage mp : menuPagesList) {
 			if (mp.getParentPageName() != null) {
 				for (MenuPage c : menuPagesList) {
@@ -77,8 +83,16 @@ public class MenuModel {
 				}
 			}
 		}
-                    
-    	return menuPagesList;
+
+		// CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST
+		for (int i = 1; i < menuPagesList.size(); i++) {
+			if (menuPagesList.get(i).getName().equals("MAIN_PAGE")) {
+				Collections.swap(menuPagesList, i, 0);
+				break;
+			}
+		}
+
+		return menuPagesList;
     }
 	
 	private static String buildFindButtonsForMenuPanelQuery(String menuPanelName) {
@@ -88,24 +102,6 @@ public class MenuModel {
 			      + "'" + menuPanelName + "'";	
 	}
 
-	private List<MenuPage> populateMenuPages(List<MenuPage> menuPageList) {
-	    // FIND ALL BUTTONS FOR EACH PANEL
-	    for (MenuPage c : menuPageList ) {
-	    //	List<ItemDAO> itemsOnMenuPage =  query(buildFindButtonsForMenuPanelQuery(c.getName()));
-	    	//c = addButtonsToCard(c, results);	
-	    } // for each
-	  
-	        // CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST            
-	    for (int i = 1; i < menuPageList.size(); i++) {
-	        if (menuPageList.get(i).getName().equals("MAIN_PAGE")) {
-	            Collections.swap(menuPageList, i, 0);
-				break;
-	        }
-	    }    
-		
-		return menuPageList;
-	}
-	
     private static MenuPage addButtonsToCard(MenuPage c, ResultSet results) throws SQLException {
     	
         while(results.next())

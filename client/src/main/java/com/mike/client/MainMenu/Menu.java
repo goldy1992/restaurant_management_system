@@ -104,11 +104,9 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     
     /**
  * Creates new form Menu
- * @param parentClient
  * @param parent
  * @param modal
  * @param tab
- * @param stream
  * @throws java.sql.SQLException
  */
 public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) 

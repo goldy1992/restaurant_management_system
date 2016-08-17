@@ -5,8 +5,11 @@
  */
 package com.mike.client.MainMenu;
 
+import com.mike.client.MainMenu.Model.MenuItem;
 import com.mike.item.Item;
 import com.mike.item.Item.Type;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -16,9 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -191,4 +191,12 @@ public class MenuItemJButton extends JButton implements ActionListener
         x.addActionListener(x);
         return x;
     }
+
+	public static MenuItemJButton createMenuItemJButton(MenuItem menuItem, JComponent parent, Menu parentMenu)
+	{
+		MenuItemJButton x = new MenuItemJButton(menuItem.getName(), menuItem.getId(), menuItem.getPrice(), menuItem.getType(), parent,
+				parentMenu, menuItem.isNeedAgeCheck(), menuItem.isStockCount());
+		x.addActionListener(x);
+		return x;
+	}
 }
