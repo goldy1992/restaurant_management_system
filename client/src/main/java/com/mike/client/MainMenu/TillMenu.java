@@ -1,26 +1,23 @@
 package com.mike.client.MainMenu;
 
-import com.mike.client.Pair;
 import com.mike.client.Client;
-import com.mike.client.TillClient;
+import com.mike.client.Pair;
 import com.mike.client.TillGUI;
 import com.mike.item.Tab;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Table;
-import java.awt.Dialog;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 
 /**
  *
@@ -42,7 +39,7 @@ public class TillMenu extends Menu
     public TillMenu(java.awt.Frame parent, boolean modal, 
         Tab tab, ObjectOutputStream stream, TillGUI parentGUI) throws SQLException
     {
-        super(parent, null, modal, tab);
+        super(menuController, parent, null, modal, tab);
         this.till = parentGUI;
     }
     

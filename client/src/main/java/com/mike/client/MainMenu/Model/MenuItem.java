@@ -27,6 +27,7 @@ public class MenuItem {
 		this.type = i.getFoodOrDrink().toString();
 		this.needAgeCheck = i.isNeedAgeCheck();
 		this.stockCount = i.isStockCountOn();
+		this.price = i.getPrice();
 	}
     
 	public String getName() {

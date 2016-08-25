@@ -37,6 +37,8 @@ public class MenuCardPanel extends JPanel {
     private final ArrayList<MenuCardLinkJButton> childCardButtons;
     private final JPanel menuSelectPanel;
     private JPanel keypadPanel;
+
+
    
     /**
      *
@@ -261,7 +263,7 @@ public class MenuCardPanel extends JPanel {
                 if (belongsToMenu instanceof Menu)
                 {
                     Menu menu = (Menu)belongsToMenu;
-                    menu.quantitySelected = -1;
+   //                 menu.quantitySelected = -1;
                     menu.quantityTextPane.setText("");
                 }
 
@@ -334,12 +336,13 @@ public class MenuCardPanel extends JPanel {
                 public void actionPerformed(ActionEvent e) 
                 {
                     TillMenu menu = (TillMenu)belongsToMenu;
-                    double amount = menu.quantitySelected / 100.00;
+//                    double amount = menu.quantitySelected / 100.00;
+					double amount = menu.quantitySelected / 100.00;
                     System.out.println("current total: " + menu.getTotalDouble());
                     if (amount < menu.getTotalDouble())
                     {
                         menu.quantityTextPane.setText("Insufficient amount");
-                        menu.quantitySelected = 0;                        
+           //             menu.quantitySelected = 0;
                     } // if
                     else
                     {
@@ -380,7 +383,7 @@ public class MenuCardPanel extends JPanel {
                       
                         menu.outputTextPane.setText("");
                         menu.setTotal();
-                        menu.quantitySelected = -1;  
+                        menu.quantitySelected = -1;
                         menu.quantityTextPane.setText("");
             
                     } // else

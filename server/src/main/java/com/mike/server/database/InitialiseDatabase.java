@@ -30,7 +30,7 @@ public class InitialiseDatabase {
 	public void init() {
 		Map<Long, ItemDAO> items = new HashMap<>();
 		
-		ItemDAO i = ItemDAO.createItem("14oz Cola", 1.5f, 100, false, false, FOOD_OR_DRINK.FOOD);
+		ItemDAO i = ItemDAO.createItem("14oz Cola", 1.5f, 100, true, false, FOOD_OR_DRINK.DRINK);
 		items.put(dbCon.insert(i), i);
 		
 		i = ItemDAO.createItem("14oz Diet Cola", 1.5000f, 100, false, false, FOOD_OR_DRINK.DRINK);

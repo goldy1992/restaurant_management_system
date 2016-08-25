@@ -1,16 +1,12 @@
 package com.mike.client.MainMenu;
 
-import com.mike.client.Client;
-import com.mike.client.DatabaseConnect;
-import com.mike.client.Pair;
 import com.mike.client.MainMenu.Model.MenuModel;
+import com.mike.client.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
-import com.mike.message.EventNotification.*;
-import com.mike.message.Table;
-import java.awt.CardLayout;
-import java.awt.Container;
-import java.awt.GridLayout;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -18,25 +14,13 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JDialog;
-import java.sql.PreparedStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JTextPane;
 
 /**
  * <p>This class displays the Menu Dialog box of the restaurant management System.
@@ -72,7 +56,6 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     protected Tab oldTab;
     protected Tab newTab;
     protected final MenuCardPanel kitchenBarMsgPanel;
-    public int quantitySelected = -1; // -1 defaults to 1
     public boolean messageForLatestItem = false;
     public boolean seenID = false;
     public String lastReceipt = null;
@@ -101,7 +84,10 @@ public class Menu extends JDialog implements ActionListener, MouseListener
     public JTextPane outputTextPane;
     public JTextPane quantityTextPane;
     public JTextPane totalCostTextPane;
-    
+
+	public int quantitySelected;
+
+	public static MenuController menuController;
     /**
  * Creates new form Menu
  * @param parent
@@ -109,10 +95,12 @@ public class Menu extends JDialog implements ActionListener, MouseListener
  * @param tab
  * @throws java.sql.SQLException
  */
-public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab) 
+public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab)
 {
+
     super(parent, modal);
-  
+
+	Menu.menuController = menuController;
     // initialises the part of the GUI made automatically by netbeans
     initComponents();
     
@@ -668,7 +656,6 @@ public Menu(java.awt.Frame parent, MenuModel menuModel, boolean modal, Tab tab)
     /**
      * Adds the functional features to the main panel
      * @param panel
-     * @param the main panel in the set of panels
      * @return the main panel with the extra buttons added to it
      */
     protected final MenuCardPanel initialiseMainCard(MenuCardPanel panel)

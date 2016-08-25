@@ -14,7 +14,7 @@ public class MenuViewBuilderHelper {
 		ArrayList<MenuCardPanel> cardPanelsList = buildMenuCardStructure(menuModel, parent);
 		// FIND ALL BUTTONS FOR EACH PANEL
 		for (MenuCardPanel c : cardPanelsList ) {
-			c = addButtonsToCard(c);
+			c = addButtonsToCard(c, parent);
 		} // for each
 
 		// CODE TO MOVE MAIN PAGE TO THE FRONT OF THE ARRAYLIST
@@ -69,12 +69,9 @@ public class MenuViewBuilderHelper {
 		return cardPanelsList;
     }
     
-    private static MenuCardPanel addButtonsToCard(MenuCardPanel c){
+    private static MenuCardPanel addButtonsToCard(MenuCardPanel c, Menu parent){
     	for (MenuItem menuItem : c.getMenuPage().getMenuItems()) {
-            MenuItemJButton newButton = new MenuItemJButton (menuItem.getName(), 
-                    menuItem.getId(), menuItem.getPrice(), 
-                    menuItem.getType(), c, 
-                    menuItem.isNeedAgeCheck(), menuItem.isStockCount());
+			MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(menuItem, c, parent);
             c.addMenuItemButton(newButton);          
         } // while
         

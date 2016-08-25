@@ -72,8 +72,12 @@
 
      <int:channel id="dbQueryResponseChannel" > 
          <int:queue capacity="2" />
-     </int:channel>    
-    
-     <int:channel id="tableStatusEvtNotificationChannel" />   
+     </int:channel>
+
+    <int:channel id="dbUpdateResponseChannel" >
+        <int:queue capacity="2" />
+    </int:channel>
+
+    <int:channel id="tableStatusEvtNotificationChannel" />
     
 </beans>

@@ -3,7 +3,6 @@ package com.mike.client.MainMenu.Model;
 import com.mike.client.MessageSender;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
-import com.mike.message.Response.databaseResponse.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.ResultSet;
@@ -22,19 +21,18 @@ public class MenuModel {
 	}
 
 	private final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
-    
-	private List query(String query) {
-		QueryResponse response = messageSender.sendDbQuery(query);
-		return response.getResultSet();
-	}
 	private List<MenuPage> menuPages;
+
+	private boolean seenId;
+	private int quantitySelected = -1; // -1 defaults to 1
 	
 	public MenuModel() {
+		this.setSeenId(false);
 	}
 	
 	public void initialise()  {		
 		@SuppressWarnings("unused")
-		List<MenuPageDAO> results = query(SELECT_MENU_PAGES_QUERY);
+		List<MenuPageDAO> results = messageSender.query(SELECT_MENU_PAGES_QUERY);
 		this.setMenuPages(buildMenuPages(results));
 	}
 
@@ -115,4 +113,20 @@ public class MenuModel {
         return c;
         
     }
+
+	public boolean isSeenId() {
+		return seenId;
+	}
+
+	public void setSeenId(boolean seenId) {
+		this.seenId = seenId;
+	}
+
+	public int getQuantitySelected() {
+		return quantitySelected;
+	}
+
+	public void setQuantitySelected(int quantitySelected) {
+		this.quantitySelected = quantitySelected;
+	}
 }

@@ -4,10 +4,12 @@ import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
+import com.mike.message.Request.databaseRequest.Update;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Response.databaseResponse.QueryResponse;
+import com.mike.message.Response.databaseResponse.UpdateResponse;
 import com.mike.message.Table;
 import com.mike.server.database.DatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +90,12 @@ public class MessageParser {
 		List resultSet = dbCon.query(query.getQuery(), null);
 		QueryResponse queryResponse = new QueryResponse(query, resultSet);
 		return queryResponse;
-	//	return null;
+	}
+
+	@ServiceActivator(inputChannel="messageUpdateChannel", outputChannel="messageResponseChannel")
+	public UpdateResponse parseUpdate(Update update) {
+		System.out.println("performing update");
+		return new UpdateResponse(update, dbCon.update(update.getItem()));
 	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }

@@ -1,18 +1,23 @@
 package com.mike.client;
 
-import com.mike.message.Request.*;
+import com.mike.message.Request.LeaveRequest;
+import com.mike.message.Request.RegisterClientRequest;
+import com.mike.message.Request.TabRequest;
+import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
+import com.mike.message.Request.databaseRequest.Update;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Response.databaseResponse.QueryResponse;
-import com.mike.message.Table;
+import com.mike.message.Response.databaseResponse.UpdateResponse;
 import com.mike.message.Table.TableStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.PollableChannel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by michaelg on 09/12/2015.
@@ -30,27 +35,22 @@ public class MessageSender {
 	
 	@Autowired
 	private PollableChannel dbQueryResponseChannel;
+
+	@Autowired
+	private PollableChannel dbUpdateResponseChannel;
 	
-	public void setDbQueryResponseChannel(PollableChannel dbQueryResponseChannel) {
-		this.dbQueryResponseChannel = dbQueryResponseChannel;
-	}
+	public void setDbQueryResponseChannel(PollableChannel dbQueryResponseChannel) { this.dbQueryResponseChannel = dbQueryResponseChannel; }
+	public void setTabResponseChannel(PollableChannel tabResponseChannel) { this.tabResponseChannel = tabResponseChannel; }
+	public void setTableStatusResponseChannel(PollableChannel tableStatusResponseChannel) { this.tableStatusResponseChannel = tableStatusResponseChannel; }
+	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
+	public void setRegisterClientResponseChannel(PollableChannel registerClientResponseChannel) { this.registerClientResponseChannel = registerClientResponseChannel; }
 
-	public void setTabResponseChannel(PollableChannel tabResponseChannel) {
-		this.tabResponseChannel = tabResponseChannel;
-	}
-
-	public PollableChannel getTableStatusResponseChannel() {
-		return tableStatusResponseChannel;
-	}
-
-	public void setTableStatusResponseChannel(PollableChannel tableStatusResponseChannel) {
-		this.tableStatusResponseChannel = tableStatusResponseChannel;
-	}
+	public PollableChannel getTableStatusResponseChannel() { return tableStatusResponseChannel; }
 
 	@Autowired
 	SendGateway sendGateway;
 
-	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
+
 
 	public TableStatusResponse sendTableStatusRequest(ArrayList<Integer> tables) {
 		TableStatusRequest request = new TableStatusRequest(tables);
@@ -87,7 +87,18 @@ public class MessageSender {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+	public List query(String query) {
+		QueryResponse response = sendDbQuery(query);
+		return response.getResultSet();
+	}
+
+	public <T extends Serializable> UpdateResponse update(T item) {
+		Update update = new Update(item);
+		sendGateway.send(update);
+		return (UpdateResponse)dbUpdateResponseChannel.receive().getPayload();
+	}
+
 	public QueryResponse sendDbQuery(String query) {
 		Query queryRequest = new Query(query);
 		System.out.println("sending db query");
@@ -96,9 +107,7 @@ public class MessageSender {
 	}
 
 
-	public void setRegisterClientResponseChannel(PollableChannel registerClientResponseChannel) {
-		this.registerClientResponseChannel = registerClientResponseChannel;
-	}
+
 
 
 }

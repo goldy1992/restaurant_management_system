@@ -45,7 +45,8 @@ public class DatabaseConnector {
     	return id;
 	}
 	
-	public <T> void update(T item) {
+	public <T> boolean update(T item) {
+		boolean success = true;
 		Session currentSession = sessionFactory.openSession();
     	Transaction tx = null;
     	try  {
@@ -53,11 +54,13 @@ public class DatabaseConnector {
 			currentSession.update(item);
         	tx.commit();
     	}catch (HibernateException e) {
+			success = false;
             if (tx!=null) tx.rollback();
             e.printStackTrace(); 
          }finally {
             currentSession.close(); 
-         }		
+         }
+		return success;
 	}
 
 	public List query(String queryString, Map<String, ?> params) {
