@@ -1,28 +1,22 @@
 package com.mike.client.MainMenu.Model;
 
-import com.mike.client.MessageSender;
+import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MenuModel {
-	
-	@Autowired
-	private MessageSender messageSender;
-	
-    public void setMessageSender(MessageSender messageSender) {
-		this.messageSender = messageSender;
-	}
 
-	private final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
 	private List<MenuPage> menuPages;
-
+	private Tab oldTab;
+	private Tab newTab;
+	protected double total;
 	private boolean seenId;
 	private int quantitySelected = -1; // -1 defaults to 1
 	
@@ -30,12 +24,51 @@ public class MenuModel {
 		this.setSeenId(false);
 	}
 	
-	public void initialise()  {		
-		@SuppressWarnings("unused")
-		List<MenuPageDAO> results = messageSender.query(SELECT_MENU_PAGES_QUERY);
-		this.setMenuPages(buildMenuPages(results));
+	public void initialise(List<MenuPageDAO> menuPageDAOs, Tab tab)  {
+
+		this.setMenuPages(buildMenuPages(menuPageDAOs));
 	}
 
+
+	public final void setUpTab(Tab tab) {
+		if (tab != null)  {
+			// set up current tab
+			this.setOldTab(tab);
+			this.setNewTab(new Tab());
+			// sets the table
+			//      this.newTab = new Tab(oldTab.getParent());
+		} else {
+			//  this.oldTab = new Tab(new Table(0));
+			//  this.newTab = new Tab(new Table(0));
+		}
+		setTotal();
+	}
+
+	public void setTotal()
+	{
+		double total = getOldTab().getTotal();
+		System.out.println("old tab total: " + getOldTab().getTotal());
+		System.out.println("new tab total: " + getNewTab().getTotal());
+		total += getNewTab().getTotal();
+
+		DecimalFormat df = new DecimalFormat("0.00");
+		String totalAsString = df.format(total);
+
+		System.out.println(total);
+		this.totalCostArea.setText("Total: £" + totalAsString);
+	}
+
+	public double getTotal()
+	{
+		double total = getOldTab().getTotal();
+		total += getNewTab().getTotal();
+		return total;
+	} // getTotal
+
+	public double getTotalDouble()
+	{
+		return getTotal();
+	} // getTotal
 
 	public List<MenuPage> getMenuPages() {
 		return menuPages;
@@ -128,5 +161,21 @@ public class MenuModel {
 
 	public void setQuantitySelected(int quantitySelected) {
 		this.quantitySelected = quantitySelected;
+	}
+
+	public Tab getOldTab() {
+		return oldTab;
+	}
+
+	public void setOldTab(Tab oldTab) {
+		this.oldTab = oldTab;
+	}
+
+	public Tab getNewTab() {
+		return newTab;
+	}
+
+	public void setNewTab(Tab newTab) {
+		this.newTab = newTab;
 	}
 }

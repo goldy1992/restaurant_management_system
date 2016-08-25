@@ -47,17 +47,15 @@ import java.util.logging.Logger;
  * 
  * 
  */
-public class Menu extends JDialog implements ActionListener, MouseListener
+public class Menu extends JDialog implements MouseListener
 {
     protected final ArrayList<JComponent> components = new ArrayList<>();
     protected final ArrayList<JButton> buttons = new ArrayList<>();
     protected final ArrayList<JPanel> panels = new ArrayList<>();  
     protected final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
-    protected Tab oldTab;
-    protected Tab newTab;
+
     protected final MenuCardPanel kitchenBarMsgPanel;
     public boolean messageForLatestItem = false;
-    public boolean seenID = false;
     public String lastReceipt = null;
     public String currentBill = null;    
     private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
@@ -383,104 +381,32 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         
         return containerPanel;
     }
-    
-   
-    public final void setUpTab(Tab tab)
-    {
-        if (tab != null)
-        {
+
+    public final void setUpTab(Tab tab) {
+        if (tab != null) {
             outputTextPane.setText(tab.toString());
-            // set up current tab
-            this.oldTab = tab;
-			this.newTab = new Tab();
-            // sets the table
-      //      this.newTab = new Tab(oldTab.getParent());
-
         }
-        else
-        {
-          //  this.oldTab = new Tab(new Table(0));
-          //  this.newTab = new Tab(new Table(0));
-        }       
-        setTotal();
     }
-    
-    public void sendOrder()
-    {  
-        System.out.println("called send order");
-        this.oldTab.mergeTabs(newTab);
 
-        try 
-        {
-//            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-//                parentClient.client.getLocalAddress().getHostName()),
-//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
-//                 this.oldTab);
-//            out.reset();
-//            out.writeObject(newEvt);
-                
-            // send the new items to the bar or kitchen respectively
-            if (this.newTab.getDrinks().size() > 0)
-            {
-//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-//                    parentClient.client.getLocalAddress().getHostName()),
-//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
-//                    Item.Type.DRINK, 
-//                    this.newTab.getDrinks(),
-//          //          newTab.getTable());
-//                    out.reset();
-//                    out.writeObject(newEvt1);
-            } // if
-                
-            if (this.newTab.getFood().size() > 0)
-            {
-//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
-//                    parentClient.client.getLocalAddress().getHostName()),
-//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
-//                    Item.Type.FOOD, 
-//                    this.newTab.getFood(),
-//                    newTab.getTable());
-//               out.reset();
-//                out.writeObject(newEvt1);
-            } // if                
-                
-            this.seenID = false;
-            
-            if (!(this instanceof TillMenu))
-            {
-                TableStatusEvtNfn newEvt1;
-//                newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
-//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
-//                oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
-//                out.reset();
-//                out.writeObject(newEvt1);
-            }    
-                con.close();
-        } // try // try
-        catch ( SQLException ex) 
-        { 
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        // catch
-         // catch
-        
-     //   this.newTab = new Tab(oldTab.getTable());
-    
-    } // sendOrder
-    
+    public void setTotal(double total) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        String totalAsString = df.format(total);
+        this.totalCostArea.setText("Total: £" + totalAsString);
+    }
+
     public String calculateBill()
     {
         Tab methodOldTab = null;   
         Tab methodNewTab = null;
-        try 
-        {
-            methodOldTab = Tab.cloneTab(getOldTab());
-            methodNewTab = Tab.cloneTab(getNewTab());    
-        } // try
-        catch (IOException | ClassNotFoundException ex) 
-        {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
+//        try
+//        {
+//       //     methodOldTab = Tab.cloneTab(getOldTab());
+//         //   methodNewTab = Tab.cloneTab(getNewTab());
+//        } // try
+//        catch (IOException | ClassNotFoundException ex)
+//        {
+//            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+//        } // catch
         
         if (methodOldTab == null || methodNewTab == null)
             return "";
@@ -542,83 +468,11 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}    
     } // writeBill
     
-    public void printBill()
-    {
-        this.currentBill = calculateBill();
-        try 
-        {            
-            writeBill();
-                      
-            if (this instanceof TillMenu)
-            {
-                this.setVisible(false);
-                con.close();
-            } // if      
-            else
-            {
-                this.dispose();
-            }
-        } // try 
-        catch (IOException | SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } // catch
-    } // printBill
-    
-    private void voidItem()
-    {
-        VoidItemsDialog vItem = new VoidItemsDialog(this, true, new Pair<>(oldTab, newTab));
-        
-        Pair<Tab, Tab> result = vItem.startDialog();
-        oldTab = result.getFirst();
-        newTab = result.getSecond();
-        
-        this.setTotal();
-        this.outputTextPane.setText(oldTab.toString() + newTab.toString());
-    }
-    
-    private void voidLastItem()
-    {
-        if (newTab.getItems().isEmpty())
-            return;       
-        newTab.removeItem(newTab.getItems().get(newTab.getItems().size() - 1));
-        this.outputTextPane.setText(oldTab.toString() + newTab.toString());
-        this.setTotal();
-    }
-    
-    public void dealWithButtons(Object source) throws SQLException
-    {
-        JButton button = (JButton)source;
-        switch(button.getText())
-        {
-            case "Send Order":  sendOrder();  this.dispose(); break;
-            case "Print Bill":  printBill(); break;
-            case "Void": voidItem(); break;
-            case "Void Last Item": voidLastItem(); break;
-            default: break;
-        } // switch 
-    } // dealWithButtons()
-
-    @Override
-    public void actionPerformed(ActionEvent ae) 
-    {        
-        if (ae.getSource() instanceof JButton)
-        {
-            try { dealWithButtons(ae.getSource());} 
-            catch (SQLException ex) {Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
-        } // if
-  
-    } // actionPerformed
-    
     public MenuCardPanel getKitchenBarMsgPanel()
     {
         return kitchenBarMsgPanel;
     }
-    
-    public Tab getTab()
-    {
-        return oldTab;
-        
-    }
+
 
     @Override
     public void mouseClicked(MouseEvent me) 
@@ -672,7 +526,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         {
             JButton newButton = new JButton(); 
             newButton.setText(s);
-            newButton.addActionListener(this);
+            newButton.addActionListener(menuController);
             BillHandlePanel.add(newButton);
             buttons.add(newButton);           
         } // for
@@ -694,14 +548,10 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
     /**
      * Should be called when the screen detects a click that is not on an item
      */ 
-    public void switchToParentCard()
-    {
-        if(this.currentCard.hasParent())
-        {
-
-
-                if (currentCard.getName().equals("kitchenBarPanel") && newTab.getNumberOfItems() > 0)
-                {
+    public void switchToParentCard() {
+        if(this.currentCard.hasParent()) {
+ //             if (currentCard.getName().equals("kitchenBarPanel") && newTab.getNumberOfItems() > 0)
+            if (currentCard.getName().equals("kitchenBarPanel") ) {
                     
                     // detects to see if a number has been pressed and if so removes it
                     String currentTab1 = outputTextPane.getText();
@@ -709,9 +559,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
     
                     //if (!isNumeric(array[array.length-1]))
                       //  this.newItems.get(newItems.size()-1).setMessage(array[array.length-1]);            
-                }
-                else
-                {
+            } else {
                     // detects to see if a number has been pressed and if so removes it
                     String currentTab1 = outputTextPane.getText();
                     String[] array = currentTab1.split("\n");
@@ -748,31 +596,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
     public JPanel getCardPanel() { return CardPanel; } 
 
        
-    public void setTotal()
-    {
-        double total = oldTab.getTotal();
-        System.out.println("old tab total: " + oldTab.getTotal());
-        System.out.println("new tab total: " + newTab.getTotal());
-        total += newTab.getTotal();
-        
-        DecimalFormat df = new DecimalFormat("0.00");
-        String totalAsString = df.format(total);
-        
-        System.out.println(total);
-        this.totalCostArea.setText("Total: £" + totalAsString);
-    }
-    
-    public double getTotal()
-    {
-        double total = oldTab.getTotal();
-        total += newTab.getTotal(); 
-        return total;
-    } // getTotal
-    
-    public double getTotalDouble()
-    {
-        return getTotal();
-    } // getTotal
+
     
     public static Class<?> findTypeOfParentMenu(Container cont)
     {
@@ -808,32 +632,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         }
         return null;
     }
-    
-    public Tab getOldTab()
-    {
-        return oldTab;
-    }
-    
-    public void setOldTab(Tab tab)
-    {
-        this.oldTab = tab;
-    }
-    
-    public Tab getNewTab()
-    {
-        return newTab;
-    }
-    
-    public void setNewTab(Tab tab)
-    {
-        this.newTab = tab;
-    }
 
-    public JTextPane getOutputArea() {
-        return OutputArea;
-    }
-
-    public void setOutputArea(JTextPane outputArea) {
-        OutputArea = outputArea;
-    }
+    public JTextPane getOutputArea() { return OutputArea; }
+    public void setOutputArea(JTextPane outputArea) { OutputArea = outputArea;    }
 } // class

@@ -2,16 +2,23 @@ package com.mike.client.MainMenu;
 
 import com.mike.client.MainMenu.Model.MenuModel;
 import com.mike.client.MessageSender;
+import com.mike.client.Pair;
 import com.mike.client.SelectTableMenu.View.SelectTableView;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
+import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuController extends JComponent implements ActionListener {
 	 
@@ -34,9 +41,10 @@ public class MenuController extends JComponent implements ActionListener {
 	
 	public void init(SelectTableView tableView, Tab tab) {
 		 // initialise the connection to the database
-     
 		//this.model = new MenuModel();
-		this.model.initialise();
+		final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
+		List<MenuPageDAO> results = messageSender.query(SELECT_MENU_PAGES_QUERY);
+		this.model.initialise(results, tab);
 		this.view = new Menu(this, tableView, model, true, tab);
 		view.setVisible(true);
 		
@@ -48,16 +56,19 @@ public class MenuController extends JComponent implements ActionListener {
 			parseMenuItem((MenuItemJButton)(ae.getSource()));
 		} else if (ae.getSource() instanceof KeyJButton) {
 			parseKeyJButton((KeyJButton)(ae.getSource()));
+		} else if (ae.getSource() instanceof JButton) {
+			dealWithButtons((JButton)ae.getSource());
 		}
+
 	}
 
 	private void parseKeyJButton(KeyJButton keyJButton) {
-		if (view.newTab.getNumberOfItems() > 0)
+		if (model.getNewTab().getNumberOfItems() > 0)
 		{
 			String currentText = view.getOutputArea().getText();
 			currentText += keyJButton.getKey();
 			view.getOutputArea().setText(currentText);
-			Tab newT = view.newTab;
+			Tab newT = model.getNewTab();
 			newT.getItems().get(newT.getItems().size() - 1).appendCharacter(keyJButton.getKey());
 			view.messageForLatestItem = true;
 		} // if
@@ -108,7 +119,7 @@ public class MenuController extends JComponent implements ActionListener {
 
 		// CODE TO ADD TO TAB SHOULD BE PUT HERE
 		Item newItem = new Item(menuItemJButton.getId(), menuItemJButton.getText(), menuItemJButton.getPrice(), menuItemJButton.getType(), quantity, menuItemJButton.isStockCount());
-		view.newTab.addItem(newItem);
+		model.getNewTab().addItem(newItem);
 
 		model.setQuantitySelected(-1);
 		view.quantityTextPane.setText("");
@@ -126,4 +137,122 @@ public class MenuController extends JComponent implements ActionListener {
 		// ADD TOTAL
 		view.setTotal();
 	} // parseMenuItem
+
+	private void dealWithButtons(JButton button)
+	{
+		switch(button.getText())
+		{
+			case "Send Order":  sendOrder();  view.dispose(); break;
+			case "Print Bill":  printBill(); break;
+			case "Void": voidItem(); break;
+			case "Void Last Item": voidLastItem(); break;
+			default: break;
+		} // switch
+	} // dealWithButtons()
+
+	private void sendOrder() {
+		System.out.println("called send order");
+		this.oldTab.mergeTabs(newTab);
+
+		try
+		{
+//            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+//                parentClient.client.getLocalAddress().getHostName()),
+//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                 this.oldTab);
+//            out.reset();
+//            out.writeObject(newEvt);
+
+			// send the new items to the bar or kitchen respectively
+			if (this.newTab.getDrinks().size() > 0)
+			{
+//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+//                    parentClient.client.getLocalAddress().getHostName()),
+//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                    Item.Type.DRINK,
+//                    this.newTab.getDrinks(),
+//          //          newTab.getTable());
+//                    out.reset();
+//                    out.writeObject(newEvt1);
+			} // if
+
+			if (this.newTab.getFood().size() > 0)
+			{
+//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+//                    parentClient.client.getLocalAddress().getHostName()),
+//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                    Item.Type.FOOD,
+//                    this.newTab.getFood(),
+//                    newTab.getTable());
+//               out.reset();
+//                out.writeObject(newEvt1);
+			} // if
+
+			this.seenID = false;
+
+			if (!(this instanceof TillMenu))
+			{
+				TableStatusEvtNfn newEvt1;
+//                newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
+//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
+//                out.reset();
+//                out.writeObject(newEvt1);
+			}
+			con.close();
+		} // try // try
+		catch ( SQLException ex)
+		{
+			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		// catch
+		// catch
+
+		//   this.newTab = new Tab(oldTab.getTable());
+
+	} // sendOrder
+
+	public void printBill()
+	{
+		this.currentBill = calculateBill();
+		try
+		{
+			writeBill();
+
+			if (this instanceof TillMenu)
+			{
+				this.setVisible(false);
+				con.close();
+			} // if
+			else
+			{
+				this.dispose();
+			}
+		} // try
+		catch (IOException | SQLException ex) {
+			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+		} // catch
+	} // printBill
+
+	private void voidItem()
+	{
+		VoidItemsDialog vItem = new VoidItemsDialog(this, true, new Pair<>(oldTab, newTab));
+
+		Pair<Tab, Tab> result = vItem.startDialog();
+		oldTab = result.getFirst();
+		newTab = result.getSecond();
+
+		this.setTotal();
+		this.outputTextPane.setText(oldTab.toString() + newTab.toString());
+	}
+
+	private void voidLastItem()
+	{
+		if (newTab.getItems().isEmpty())
+			return;
+		newTab.removeItem(newTab.getItems().get(newTab.getItems().size() - 1));
+		this.outputTextPane.setText(oldTab.toString() + newTab.toString());
+		this.setTotal();
+	}
+
 } // class
