@@ -46,7 +46,21 @@ public class MenuController extends JComponent implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof MenuItemJButton) {
 			parseMenuItem((MenuItemJButton)(ae.getSource()));
+		} else if (ae.getSource() instanceof KeyJButton) {
+			parseKeyJButton((KeyJButton)(ae.getSource()));
 		}
+	}
+
+	private void parseKeyJButton(KeyJButton keyJButton) {
+		if (view.newTab.getNumberOfItems() > 0)
+		{
+			String currentText = view.getOutputArea().getText();
+			currentText += keyJButton.getKey();
+			view.getOutputArea().setText(currentText);
+			Tab newT = view.newTab;
+			newT.getItems().get(newT.getItems().size() - 1).appendCharacter(keyJButton.getKey());
+			view.messageForLatestItem = true;
+		} // if
 	}
 
 	private void parseMenuItem(MenuItemJButton menuItemJButton) {

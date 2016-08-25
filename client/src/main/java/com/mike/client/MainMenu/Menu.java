@@ -167,7 +167,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         FormPanel = new javax.swing.JPanel();
         OutputAreaPanel = new javax.swing.JPanel();
         ouputScrollPane = new javax.swing.JScrollPane();
-        OutputArea = new javax.swing.JTextPane();
+        setOutputArea(new JTextPane());
         quantityPane = new javax.swing.JScrollPane();
         quantityArea = new javax.swing.JTextPane();
         totalCostPane = new javax.swing.JScrollPane();
@@ -199,19 +199,19 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         OutputAreaPanel.setPreferredSize(new java.awt.Dimension(400, 150));
         OutputAreaPanel.setLayout(new java.awt.GridBagLayout());
 
-        outputTextPane = OutputArea;
-        OutputArea.setEditable(false);
-        OutputArea.addMouseListener(new java.awt.event.MouseAdapter() {
+        outputTextPane = getOutputArea();
+        getOutputArea().setEditable(false);
+        getOutputArea().addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 OutputAreaMouseClicked(evt);
             }
         });
-        OutputArea.addKeyListener(new java.awt.event.KeyAdapter() {
+        getOutputArea().addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 OutputAreaKeyPressed(evt);
             }
         });
-        ouputScrollPane.setViewportView(OutputArea);
+        ouputScrollPane.setViewportView(getOutputArea());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -317,8 +317,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
      * 
      * @return the newly created card
      */
-    protected final MenuCardPanel createKitchenBarMessageCard()
-    {
+    protected final MenuCardPanel createKitchenBarMessageCard() {
         MenuCardPanel containerPanel = MenuCardPanel.createMenuCardPanel(this, null);
         containerPanel.setName("kitchenBarPanel");
         containerPanel.removeAll();
@@ -338,8 +337,8 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         {
             Integer x = i;
             if (x == 10) x = 0;
-            JButton key = new JButton(x.toString());
-            key.addActionListener(makeKeyActionListener(x.toString(), this));
+            KeyJButton key = new KeyJButton(x.toString(), x.toString().charAt(0));
+            key.addActionListener(menuController);
             numberLine.add(key);
         }
                    
@@ -347,10 +346,9 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         JPanel line1 = new JPanel();
         line1.setLayout(new GridLayout(1,10));
         containerPanel.add(line1);        
-        for(int i = 0; i <= 9; i++)
-        {
-            JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i], this));
+        for(int i = 0; i <= 9; i++) {
+            KeyJButton key = new KeyJButton(ch[i], ch[i].charAt(0));
+            key.addActionListener(menuController);
             line1.add(key);
         } // for 
        
@@ -358,10 +356,9 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         JPanel line2 = new JPanel();
         line2.setLayout(new GridLayout(1,10));
         containerPanel.add(line2);
-        for(int i = 10; i <= 18; i++)
-        {
-            JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i], this));
+        for(int i = 10; i <= 18; i++) {
+            KeyJButton key = new KeyJButton(ch[i], ch[i].charAt(0));
+            key.addActionListener(menuController);
             line2.add(key);
         }
                
@@ -371,8 +368,8 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         containerPanel.add(line3);
         for(int i = 19; i <= 25; i++)
         {
-            JButton key = new JButton(ch[i]);
-            key.addActionListener(makeKeyActionListener(ch[i], this));            
+            KeyJButton key = new KeyJButton(ch[i], ch[i].charAt(0));
+            key.addActionListener(menuController);
             line3.add(key);
         }
  
@@ -380,8 +377,8 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
         line4.setLayout(new GridLayout(1,1));
         containerPanel.add(line4);
         // La ultima en la colección
-        JButton key = new JButton("SPACE");
-        key.addActionListener(makeKeyActionListener(" ", this));
+        JButton key = new KeyJButton("SPACE", ' ');
+        key.addActionListener(menuController);
         line4.add(key);
         
         return containerPanel;
@@ -749,33 +746,7 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
      * @return the JPanel that stores all the cards
      */
     public JPanel getCardPanel() { return CardPanel; } 
-       
-        
-    private ActionListener makeKeyActionListener(final String key, Menu menu)
-    {
-        final Menu m = menu;
-    
-        ActionListener toReturn = new ActionListener(){
 
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {      
-                if (newTab.getNumberOfItems() > 0)
-                {
-        
-                    Menu menu = m;
-                    String currentText = menu.OutputArea.getText();
-                    currentText += key;
-                    menu.OutputArea.setText(currentText);
-                    Tab newT = menu.newTab;
-                    newT.getItems().get(newT.getItems().size() - 1).setMessage(key);
-                    menu.messageForLatestItem = true;       
-                } // if 
-            } // actionPerformed
-        };
-        return toReturn;
-        
-    }
        
     public void setTotal()
     {
@@ -857,5 +828,12 @@ public Menu(MenuController menuController, java.awt.Frame parent, MenuModel menu
     {
         this.newTab = tab;
     }
-    
+
+    public JTextPane getOutputArea() {
+        return OutputArea;
+    }
+
+    public void setOutputArea(JTextPane outputArea) {
+        OutputArea = outputArea;
+    }
 } // class

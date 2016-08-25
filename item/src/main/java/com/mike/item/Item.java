@@ -81,9 +81,9 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         this.stockCount = i.stockCount;
     }
     
-    public void setMessage(String message)
+    public void appendCharacter(char key)
     {
-        this.message += message;
+        this.message += key;
     } // setMessage
     
     
