@@ -85,7 +85,6 @@ public class MessageSender {
 	}
 
 	public void sendTableStatusEventNotification(int tableSelected, TableStatus selectedTableStatus) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -143,7 +142,6 @@ public class MessageSender {
 
 
 	}
-
 
 
 }

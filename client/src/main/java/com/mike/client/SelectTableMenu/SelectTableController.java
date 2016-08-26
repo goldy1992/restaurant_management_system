@@ -5,32 +5,24 @@
  */
 package com.mike.client.SelectTableMenu;
 
-import com.mike.client.SelectTableMenu.View.SelectTableView;
-import com.mike.client.MainMenu.Menu;
 import com.mike.client.MainMenu.MenuController;
-
-import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
-
 import com.mike.client.MessageSender;
-import com.mike.client.WaiterClient;
-import com.mike.client.WaiterClientController;
-import com.mike.item.Tab;
+import com.mike.client.SelectTableMenu.View.SelectTableView;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table.TableStatus;
-import com.mike.message.EventNotification.TableStatusEvtNfn;
-
-import static com.mike.message.Table.TableStatus.DIRTY;
-import static com.mike.message.Table.TableStatus.IN_USE;
-import static com.mike.message.Table.TableStatus.OCCUPIED;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import static com.mike.client.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
+import static com.mike.message.Table.TableStatus.DIRTY;
+import static com.mike.message.Table.TableStatus.IN_USE;
 
 /**
  *
@@ -81,21 +73,23 @@ public class SelectTableController implements ActionListener
             messageSender.sendTableStatusEventNotification(tableSelected, selectedTableStatus);
         } // if    	
     }
-    
-    private void selectOpenTable(ActionEvent event) {
-        int tableSelected = model.getTableSelected();
-        if (tableSelected == NO_TABLE_SELECTED) {
-            view.getOutputLabel().setOutputLabelNoTableSelected();
-        } else if (model.getTableStatus(tableSelected) == IN_USE) {
-            view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
-        } else {
-        	 TabResponse response = messageSender.sendTabRequest(tableSelected);
-        	 menuController.init(this.view, response.getTab());
-        	 System.out.println("table selected");
-        } // else  	
-    }
-    
-    @Override
+
+	private void selectOpenTable(ActionEvent event) {
+		int tableSelected = model.getTableSelected();
+		if (tableSelected == NO_TABLE_SELECTED) {
+			view.getOutputLabel().setOutputLabelNoTableSelected();
+		} else if (model.getTableStatus(tableSelected) == IN_USE) {
+			view.getOutputLabel().setOutputLabelTableInUse(tableSelected);
+		} else {
+			view.setTableStatus(tableSelected, IN_USE);
+			messageSender.sendTableStatusEventNotification(tableSelected, IN_USE);
+			TabResponse response = messageSender.sendTabRequest(tableSelected);
+			menuController.init(this.view, response.getTab());
+			System.out.println("table selected");
+		} // else
+	}
+
+	@Override
     public void actionPerformed(ActionEvent event) {
         
         if (view.isCleanTableSelected(event)) {
@@ -110,7 +104,6 @@ public class SelectTableController implements ActionListener
         } // if open table
         
         if(view.isMoveTableSelected(event)) {
-
         	 return;
         } // TODO: implement move table
         
@@ -128,6 +121,7 @@ public class SelectTableController implements ActionListener
     public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
     	int tableNumber = tableStatusEvtNfn.getTableNumber();
     	TableStatus tableStatus = tableStatusEvtNfn.getTableStatus();
+		model.setTableStatus(tableNumber, tableStatus);
     	view.setTableStatus(tableNumber, tableStatus);
     }
 

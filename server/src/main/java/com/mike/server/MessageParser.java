@@ -1,5 +1,6 @@
 package com.mike.server;
 
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
@@ -15,7 +16,10 @@ import com.mike.server.database.DatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.ip.IpHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -68,17 +72,14 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messageTabRequestChannel", outputChannel="messageResponseChannel")
 	public TabResponse parseTabRequest(TabRequest tabRequest) {
 		
-//		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), TableStatus.OCCUPIED);
-//		for (String clients : server.getWaiterClient()) {
-//			MessageHeaders mh = new MessageHeaders(null);
-//
-//			//mh.put(IpHeaders.CONNECTION_ID, clients);
-//			Message<TableStatusEvtNfn> m = MessageBuilder.createMessage(tableStatusEvtNfn, mh);
-//			Message<TableStatusEvtNfn> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
-//			sendGateway.send(mSend);
-//
-//
-//		}
+		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), Table.TableStatus.IN_USE);
+		for (String clients : server.getWaiterClient()) {
+			MessageHeaders mh = new MessageHeaders(null);
+		//mh.put(IpHeaders.CONNECTION_ID, clients);
+			Message<TableStatusEvtNfn> m = MessageBuilder.createMessage(tableStatusEvtNfn, mh);
+			Message<TableStatusEvtNfn> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
+			sendGateway.send(mSend);
+		}
 		TabResponse tabResponse = new TabResponse(tabRequest);
 		tabResponse.setTab(server.getTables().get(tabRequest.getTabNumber()).getCurrentTab());
 		return tabResponse;
