@@ -75,7 +75,6 @@ public class MessageParser {
 		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), Table.TableStatus.IN_USE);
 		for (String clients : server.getWaiterClient()) {
 			MessageHeaders mh = new MessageHeaders(null);
-		//mh.put(IpHeaders.CONNECTION_ID, clients);
 			Message<TableStatusEvtNfn> m = MessageBuilder.createMessage(tableStatusEvtNfn, mh);
 			Message<TableStatusEvtNfn> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
 			sendGateway.send(mSend);
