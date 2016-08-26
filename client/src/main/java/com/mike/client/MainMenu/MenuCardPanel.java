@@ -17,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -335,58 +334,58 @@ public class MenuCardPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) 
                 {
-                    TillMenu menu = (TillMenu)belongsToMenu;
-//                    double amount = menu.quantitySelected / 100.00;
-					double amount = menu.quantitySelected / 100.00;
-                    System.out.println("current total: " + menu.getTotalDouble());
-                    if (amount < menu.getTotalDouble())
-                    {
-                        menu.quantityTextPane.setText("Insufficient amount");
-           //             menu.quantitySelected = 0;
-                    } // if
-                    else
-                    {
-                     
-                            double change = (amount - menu.getTotalDouble());
-                            DecimalFormat df = new DecimalFormat("0.00");
-                            menu.lastReceipt = menu.calculateBill();
-                            menu.lastReceipt += "Amount given: \t\t£" + df.format(amount) + "\n";
-                            menu.lastReceipt += "Change: \t\t£" + df.format(change);
-                            String changeString = df.format(change);
-                            menu.getTill().getChangeOutputLabel().setText("£" + changeString ); 
-                            menu.oldTab.mergeTabs(menu.newTab);
-                            boolean x = menu.oldTab.removeAll();
-                            menu.newTab.removeAll();
-                            System.out.println("got here in cash off: " + x);      
-                            
-                            updateTakings(menu.getTotalDouble());
-
-                            if (menu.tabLoaded)
-                            {
-
-//                                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
-//                                    menu.parentClient.client.getLocalAddress().getHostName()),
-//                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
-//                                     menu.oldTab);
-//                                menu.out.reset();
-//                                menu.out.writeObject(newEvt);
-                                    
-//                                TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(menu.parentClient.client.getLocalAddress().getHostName()),
-//                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
-//                                    menu.oldTab.getTable().getTableNumber(), Table.TableStatus.DIRTY);
-//               
-//                                menu.out.reset();
-//                                menu.out.writeObject(newEvt1);
-                                menu.tabLoaded = false;
-                            }
-                            menu.dispose();
-                      
-                        menu.outputTextPane.setText("");
-                        menu.setTotal();
-                        menu.quantitySelected = -1;
-                        menu.quantityTextPane.setText("");
-            
-                    } // else
+//                    TillMenu menu = (TillMenu)belongsToMenu;
+////                    double amount = menu.quantitySelected / 100.00;
+//					double amount = menu.quantitySelected / 100.00;
+//                    System.out.println("current total: " + menu.getTotalDouble());
+//                    if (amount < menu.getTotalDouble())
+//                    {
+//                        menu.quantityTextPane.setText("Insufficient amount");
+//           //             menu.quantitySelected = 0;
+//                    } // if
+//                    else
+//                    {
+//
+//                            double change = (amount - menu.getTotalDouble());
+//                            DecimalFormat df = new DecimalFormat("0.00");
+//                            menu.lastReceipt = menu.calculateBill();
+//                            menu.lastReceipt += "Amount given: \t\t£" + df.format(amount) + "\n";
+//                            menu.lastReceipt += "Change: \t\t£" + df.format(change);
+//                            String changeString = df.format(change);
+//                            menu.getTill().getChangeOutputLabel().setText("£" + changeString );
+//                            menu.oldTab.mergeTabs(menu.newTab);
+//                            boolean x = menu.oldTab.removeAll();
+//                            menu.newTab.removeAll();
+//                            System.out.println("got here in cash off: " + x);
+//
+//                            updateTakings(menu.getTotalDouble());
+//
+//                            if (menu.tabLoaded)
+//                            {
+//
+////                                TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+////                                    menu.parentClient.client.getLocalAddress().getHostName()),
+////                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
+////                                     menu.oldTab);
+////                                menu.out.reset();
+////                                menu.out.writeObject(newEvt);
+//
+////                                TableStatusEvtNfn newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(menu.parentClient.client.getLocalAddress().getHostName()),
+////                                    InetAddress.getByName(menu.parentClient.serverAddress.getHostName()),
+////                                    menu.oldTab.getTable().getTableNumber(), Table.TableStatus.DIRTY);
+////
+////                                menu.out.reset();
+////                                menu.out.writeObject(newEvt1);
+//                                menu.tabLoaded = false;
+//                            }
+//                            menu.dispose();
+//
+//                        menu.outputTextPane.setText("");
+//                        menu.setTotal();
+//                        menu.quantitySelected = -1;
+//                        menu.quantityTextPane.setText("");
+//
+//                    } // else
                 } // actionPerformed
             });
             newKeypadPanel.add(cashPay);      

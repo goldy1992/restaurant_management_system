@@ -5,18 +5,14 @@
  */
 package com.mike.client;
 
-import com.mike.client.MainMenu.BarTabDialogSelect;
-import com.mike.item.Tab;
-import com.mike.message.EventNotification.*;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
-import static com.mike.message.Request.RegisterClientRequest.ClientType.TILL;
 import com.mike.message.Request.TableStatusRequest;
-import com.mike.message.Response.*;
 import com.mike.message.Table;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static com.mike.message.Request.RegisterClientRequest.ClientType.TILL;
 
 /**
  *
@@ -71,7 +67,7 @@ public class TillClient extends UserClient
             if (this.gui.getMenu() != null)
             {
                 System.out.println("updating buttons");
-                this.gui.getMenu().updateButtons((ArrayList<Table.TableStatus>)tableStatuses.clone());
+        //        this.gui.getMenu().updateButtons((ArrayList<Table.TableStatus>)tableStatuses.clone());
             }
             else
               System.out.println("gui is null");

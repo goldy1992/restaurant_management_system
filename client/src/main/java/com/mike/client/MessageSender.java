@@ -1,5 +1,6 @@
 package com.mike.client;
 
+import com.mike.item.Tab;
 import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
@@ -106,7 +107,42 @@ public class MessageSender {
 		return (QueryResponse)dbQueryResponseChannel.receive().getPayload();
 	}
 
+	public void sendOrder(Tab updatedTab, Tab tabWithNewItemsOnly) {
 
+//            TabUpdateNfn newEvt = new TabUpdateNfn(InetAddress.getByName(
+//                parentClient.client.getLocalAddress().getHostName()),
+//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                 this.oldTab);
+//            out.reset();
+//            out.writeObject(newEvt);
+
+		// send the new items to the bar or kitchen respectively
+//			if (this.newTab.getDrinks().size() > 0)
+		{
+//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+//                    parentClient.client.getLocalAddress().getHostName()),
+//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                    Item.Type.DRINK,
+//                    this.newTab.getDrinks(),
+//          //          newTab.getTable());
+//                    out.reset();
+//                    out.writeObject(newEvt1);
+		} // if
+
+		//		if (this.newTab.getFood().size() > 0)
+		{
+//                NewItemNfn newEvt1 = new NewItemNfn(InetAddress.getByName(
+//                    parentClient.client.getLocalAddress().getHostName()),
+//                    InetAddress.getByName(parentClient.serverAddress.getHostName()),
+//                    Item.Type.FOOD,
+//                    this.newTab.getFood(),
+//                    newTab.getTable());
+//               out.reset();
+//                out.writeObject(newEvt1);
+		} // if
+
+
+	}
 
 
 

@@ -1,15 +1,22 @@
 package com.mike.client.MainMenu.Model;
 
+import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuModel {
 
@@ -19,16 +26,18 @@ public class MenuModel {
 	protected double total;
 	private boolean seenId;
 	private int quantitySelected = -1; // -1 defaults to 1
+	private boolean messageForLatestItem = false;
+	public String lastReceipt = null;
+	private String currentBill = null;
 	
 	public MenuModel() {
 		this.setSeenId(false);
 	}
 	
 	public void initialise(List<MenuPageDAO> menuPageDAOs, Tab tab)  {
-
 		this.setMenuPages(buildMenuPages(menuPageDAOs));
+		this.setUpTab(tab);
 	}
-
 
 	public final void setUpTab(Tab tab) {
 		if (tab != null)  {
@@ -36,39 +45,29 @@ public class MenuModel {
 			this.setOldTab(tab);
 			this.setNewTab(new Tab());
 			// sets the table
-			//      this.newTab = new Tab(oldTab.getParent());
+			//   this.newTab = new Tab(oldTab.getParent());
 		} else {
 			//  this.oldTab = new Tab(new Table(0));
 			//  this.newTab = new Tab(new Table(0));
 		}
-		setTotal();
 	}
 
-	public void setTotal()
-	{
-		double total = getOldTab().getTotal();
-		System.out.println("old tab total: " + getOldTab().getTotal());
-		System.out.println("new tab total: " + getNewTab().getTotal());
-		total += getNewTab().getTotal();
-
-		DecimalFormat df = new DecimalFormat("0.00");
-		String totalAsString = df.format(total);
-
-		System.out.println(total);
-		this.totalCostArea.setText("Total: £" + totalAsString);
-	}
-
-	public double getTotal()
-	{
+	public double getTotal() {
 		double total = getOldTab().getTotal();
 		total += getNewTab().getTotal();
 		return total;
 	} // getTotal
 
-	public double getTotalDouble()
-	{
-		return getTotal();
-	} // getTotal
+	public void resetSeenId(){
+		seenId = false;
+	}
+
+	/*
+	 * Merges all items from the new tab into the old tab
+	 */
+	public void mergeTabs() {
+		this.oldTab.mergeTabs(newTab);
+	}
 
 	public List<MenuPage> getMenuPages() {
 		return menuPages;
@@ -178,4 +177,74 @@ public class MenuModel {
 	public void setNewTab(Tab newTab) {
 		this.newTab = newTab;
 	}
+
+	public String calculateBill() {
+		Tab methodOldTab = null;
+		Tab methodNewTab = null;
+        try {
+            methodOldTab = Tab.cloneTab(getOldTab());
+            methodNewTab = Tab.cloneTab(getNewTab());
+        } // try
+        catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(MenuModel.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
+
+		if (methodOldTab == null || methodNewTab == null)
+			return "";
+
+		methodOldTab.mergeTabs(methodNewTab);
+		System.out.println("methodOldtab: " + methodOldTab.getItems());
+
+		HashMap<String, Item> billFormat = new HashMap();
+
+		for (Item i : methodOldTab.getItems()) {
+			if (billFormat.containsKey(i.getName())) {
+				Item item = billFormat.get(i.getName());
+				item.setQuantity(item.getQuantity() + i.getQuantity());
+			}  // if
+			else
+				billFormat.put(i.getName(), new Item(i));
+		} // for
+
+		String bill = "";
+		double total = 0;
+		for (Item item : billFormat.values()) {
+			total += item.getTotalPrice();
+			bill += item.firstLineScreenOutput();
+		}
+
+		DecimalFormat df = new DecimalFormat("0.00");
+		bill += "\nTotal: £" + df.format(total) + "\n";
+		return bill;
+	} // calculateBill
+
+	public void writeBill() throws IOException {
+
+		File file = new File("Bill_Table_"
+				//+ oldTab.getTable().getTableNumber()
+				+ ".txt");
+		int i = 1;
+		while (file.exists()) {
+			file = new File("Bill_Table_" +
+					//oldTab.getTable().getTableNumber()
+					"(" + i + ")" + ".txt");
+			i++;
+		}
+
+		// creates the file
+		file.createNewFile();
+		// Writes the content to the file
+		try (FileWriter writer = new FileWriter(file)) {
+			// Writes the content to the file
+			writer.write(this.getCurrentBill());
+			writer.flush();
+
+		} catch (IOException ex) {
+			Logger.getLogger(MenuModel.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	} // writeBill
+
+	public String getCurrentBill() { return calculateBill(); }
+	public boolean isMessageForLatestItem() { return messageForLatestItem; }
+	public void setMessageForLatestItem(boolean messageForLatestItem) { this.messageForLatestItem = messageForLatestItem; }
 }
