@@ -173,16 +173,6 @@ public class Menu extends JDialog implements MouseListener {
 
 		setOutputTextPane(getOutputArea());
 		getOutputArea().setEditable(false);
-		getOutputArea().addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				OutputAreaMouseClicked(evt);
-			}
-		});
-		getOutputArea().addKeyListener(new java.awt.event.KeyAdapter() {
-			public void keyPressed(java.awt.event.KeyEvent evt) {
-				OutputAreaKeyPressed(evt);
-			}
-		});
 		ouputScrollPane.setViewportView(getOutputArea());
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -260,25 +250,6 @@ public class Menu extends JDialog implements MouseListener {
 
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
-
-
-	private void OutputAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_OutputAreaKeyPressed
-		//parentClient.debugGUI.addText("pressed");
-	}//GEN-LAST:event_OutputAreaKeyPressed
-
-	private void OutputAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OutputAreaMouseClicked
-		switchToParentCard();
-	}//GEN-LAST:event_OutputAreaMouseClicked
-
-
-	public static boolean isNumeric(String x) {
-		try {
-			Integer.parseInt(x);
-			return true;
-		} catch (NumberFormatException nfe) {
-			return false;
-		}
-	} // isNumeric
 
 	/**
 	 * The method that makes the Kitchen/Bar message card with the keyboard
@@ -464,10 +435,6 @@ public class Menu extends JDialog implements MouseListener {
 		} // if
 	} // switchToParentCard
 
-
-	public JPanel getCardPanel() { return CardPanel; }
-
-
 	public static Class<?> findTypeOfParentMenu(Container cont) {
 		int i = 1;
 		while (cont.getParent() != null) {
@@ -496,6 +463,7 @@ public class Menu extends JDialog implements MouseListener {
 		return null;
 	}
 
+	public JPanel getCardPanel() { return CardPanel; }
 	public JTextPane getOutputArea() { return OutputArea; }
 	public void setOutputArea(JTextPane outputArea) { OutputArea = outputArea; }
 	public JTextPane getOutputTextPane() { return outputTextPane; }

@@ -133,8 +133,7 @@ public class MenuController extends JComponent implements ActionListener {
 		view.setTotal(model.getTotal());
 	} // parseMenuItem
 
-	private void dealWithButtons(JButton button)
-	{
+	private void dealWithButtons(JButton button) {
 		switch(button.getText())
 		{
 			case "Send Order":  sendOrder();  view.dispose(); break;
@@ -150,15 +149,14 @@ public class MenuController extends JComponent implements ActionListener {
 		model.mergeTabs();
 		model.resetSeenId();
 
-	//	if (!(this instanceof TillMenu))
-	 	{
+	//	if (!(this instanceof TillMenu)) {
 //			TableStatusEvtNfn newEvt1;
 //                newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
 //                InetAddress.getByName(parentClient.serverAddress.getHostName()),
 //                oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
 //                out.reset();
 //                out.writeObject(newEvt1);
-		}
+//		}
 
 		//   this.newTab = new Tab(oldTab.getTable());
 
