@@ -44,23 +44,28 @@ public class MenuController extends JComponent implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof MenuItemJButton) {
-			parseMenuItem((MenuItemJButton)(ae.getSource()));
+			parseMenuItem((MenuItemJButton) (ae.getSource()));
 		} else if (ae.getSource() instanceof KeyJButton) {
 			parseKeyJButton((KeyJButton)(ae.getSource()));
+		} else if (ae.getSource() instanceof KeypadPanelJButton) {
+			parseKeyPanelJButton((KeypadPanelJButton)(ae.getSource()));
 		} else if (ae.getSource() instanceof JButton) {
-			dealWithButtons((JButton)ae.getSource());
+			dealWithButtons((JButton) ae.getSource());
 		}
 	}
 
+	private void parseKeyPanelJButton(KeypadPanelJButton keypadPanelJButton) {
+		model.addDigitToQuantity(keypadPanelJButton.getNumber());
+		view.addNumberToQuantity(model.getQuantitySelected());
+	}
 	private void parseKeyJButton(KeyJButton keyJButton) {
-		if (model.getNewTab().getNumberOfItems() > 0)
-		{
+		if (model.getNewTab().getNumberOfItems() > 0) {
 			String currentText = view.getOutputArea().getText();
 			currentText += keyJButton.getKey();
 			view.getOutputArea().setText(currentText);
 			Tab newT = model.getNewTab();
 			newT.getItems().get(newT.getItems().size() - 1).appendCharacter(keyJButton.getKey());
-			view.messageForLatestItem = true;
+			model.setMessageForLatestItem(true);
 		} // if
 	}
 

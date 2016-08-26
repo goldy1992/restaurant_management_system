@@ -241,36 +241,15 @@ public class MenuCardPanel extends JPanel {
         for (int i= 1; i <= 10; i++)
         {
              final int x; if (i == 10)  x = 0; else x = i; // declared final so can be used in the actionlistener method
-            JButton number = new JButton(x + "");
-            number.addActionListener(new ActionListener() 
-            {
-                @Override
-                public void actionPerformed(ActionEvent e) 
-                {
-                    addNumberToQuantity(x);
-                } // act performed
-            });
-            newKeypadPanel.add(number);
+            KeypadPanelJButton number = new KeypadPanelJButton(x + "", x);
+            number.addActionListener(Menu.menuController);
+			newKeypadPanel.add(number);
         } // for
         /* Make the clear button */
-        JButton clear = new JButton("Clear");
-        clear.addActionListener(new ActionListener() 
-        {        
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                if (belongsToMenu instanceof Menu)
-                {
-                    Menu menu = (Menu)belongsToMenu;
-   //                 menu.quantitySelected = -1;
-                    menu.quantityTextPane.setText("");
-                }
+        KeypadPanelJButton clear = new KeypadPanelJButton("Clear", -1);
+        clear.addActionListener(Menu.menuController);
 
-                
-                
-            } // actionPerformed
-        });
-        newKeypadPanel.add(clear);    
+		newKeypadPanel.add(clear);
         
         if (belongsToMenu.getClass() == TillMenu.class)
         {
@@ -414,19 +393,7 @@ public class MenuCardPanel extends JPanel {
         return x;
     }
     
-    public void addNumberToQuantity(int number)
-    {       
-        Menu m = (Menu)belongsToMenu;
-        
-        Integer quantity  = m.quantitySelected;
-        if (quantity <= 0)
-            quantity = number;
-        else
-            quantity = (quantity * 10) + number;
-        m.quantityTextPane.setText(quantity.toString());        
-        m.quantitySelected = quantity;
-        System.out.println("new quantity: " + m.quantitySelected);
-    } // addNumberToQUantity
+
 
 	public MenuPage getMenuPage() {
 		return menuPage;

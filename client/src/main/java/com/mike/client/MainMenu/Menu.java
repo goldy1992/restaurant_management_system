@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -41,9 +40,6 @@ public class Menu extends JDialog implements MouseListener {
 	protected final ArrayList<MenuItemJButton> menuItemButtons = new ArrayList<>();
 
 	protected final MenuCardPanel kitchenBarMsgPanel;
-	public boolean messageForLatestItem = false;
-	public String lastReceipt = null;
-	public String currentBill = null;
 	private ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JPanel CardPanel;
@@ -66,7 +62,7 @@ public class Menu extends JDialog implements MouseListener {
 	public JTextPane totalCostTextPane;
 
 	public int quantitySelected;
-
+	public MenuCardPanel currentCard;
 	public static MenuController menuController;
 
 	/**
@@ -366,12 +362,13 @@ public class Menu extends JDialog implements MouseListener {
 		this.totalCostArea.setText("Total: £" + totalAsString);
 	}
 
-
-
-	public MenuCardPanel getKitchenBarMsgPanel() {
-		return kitchenBarMsgPanel;
-	}
-
+	public void addNumberToQuantity(int quantitySelected) {
+		if (quantitySelected >= 0) {
+			quantityTextPane.setText("" + quantitySelected);
+		} else {
+			quantityTextPane.setText("");
+		}
+	} // addNumberToQUantity
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
@@ -381,29 +378,16 @@ public class Menu extends JDialog implements MouseListener {
 			//MyClient.debugGUI.addText("found called panel");
 			switchToParentCard();
 		}
-	} // mouseClickeds
+	} // mouseClicked
 
 	@Override
-	public void mousePressed(MouseEvent me) {
-	}
-
+	public void mousePressed(MouseEvent me) {}
 	@Override
-	public void mouseReleased(MouseEvent me) {
-	}
-
+	public void mouseReleased(MouseEvent me) {}
 	@Override
-	public void mouseEntered(MouseEvent me) {
-	}
-
+	public void mouseEntered(MouseEvent me) {}
 	@Override
-	public void mouseExited(MouseEvent me) {
-	}
-
-
-	/**
-	 * The reference to the object that stores the database connection
-	 */
-	public Connection con = null;
+	public void mouseExited(MouseEvent me) {}
 
 	/**
 	 * Adds the functional features to the main panel
@@ -437,12 +421,6 @@ public class Menu extends JDialog implements MouseListener {
 		panels.add(panel);
 		return panel;
 	} // initialiseCards
-
-
-	/**
-	 *
-	 */
-	public MenuCardPanel currentCard;
 
 	/**
 	 * Should be called when the screen detects a click that is not on an item
@@ -486,12 +464,8 @@ public class Menu extends JDialog implements MouseListener {
 		} // if
 	} // switchToParentCard
 
-	/**
-	 * @return the JPanel that stores all the cards
-	 */
-	public JPanel getCardPanel() {
-		return CardPanel;
-	}
+
+	public JPanel getCardPanel() { return CardPanel; }
 
 
 	public static Class<?> findTypeOfParentMenu(Container cont) {
@@ -522,19 +496,9 @@ public class Menu extends JDialog implements MouseListener {
 		return null;
 	}
 
-	public JTextPane getOutputArea() {
-		return OutputArea;
-	}
-
-	public void setOutputArea(JTextPane outputArea) {
-		OutputArea = outputArea;
-	}
-
-	/**
-	 * Stores the reference to the JTextPane used on the output
-	 *
-	 * @see JTextPane
-	 */
+	public JTextPane getOutputArea() { return OutputArea; }
+	public void setOutputArea(JTextPane outputArea) { OutputArea = outputArea; }
 	public JTextPane getOutputTextPane() { return outputTextPane; }
 	public void setOutputTextPane(JTextPane outputTextPane) { this.outputTextPane = outputTextPane; }
+	public MenuCardPanel getKitchenBarMsgPanel() { return kitchenBarMsgPanel; }
 } // class

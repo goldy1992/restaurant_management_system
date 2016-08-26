@@ -244,6 +244,14 @@ public class MenuModel {
 		}
 	} // writeBill
 
+	public void addDigitToQuantity(int number) {
+		if (number < 0) {
+			quantitySelected = -1;
+		} else {
+			quantitySelected = (quantitySelected <= 0) ? number : (quantitySelected * 10) + number;
+		}
+	} // addDigitToQuantity
+
 	public String getCurrentBill() { return calculateBill(); }
 	public boolean isMessageForLatestItem() { return messageForLatestItem; }
 	public void setMessageForLatestItem(boolean messageForLatestItem) { this.messageForLatestItem = messageForLatestItem; }
