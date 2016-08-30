@@ -5,6 +5,7 @@
  */
 package com.mike.server;
 
+import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.Message;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.Request;
@@ -24,6 +25,8 @@ public class MessageTypeRouter {
         System.out.println("reached message router");
         if (message instanceof Request) {
         	return "messageRequestChannel";
+        } else if (message instanceof EventNotification) {
+            return "messageEventNotificationChannel";
         }
         
         return "messageRequestChannel";}

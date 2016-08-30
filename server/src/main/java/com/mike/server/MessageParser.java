@@ -1,5 +1,6 @@
 package com.mike.server;
 
+import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
@@ -97,10 +98,24 @@ public class MessageParser {
 		System.out.println("performing update");
 		return new UpdateResponse(update, dbCon.update(update.getItem()));
 	}
+
+	@ServiceActivator(inputChannel="messagetableStatusEventNotificationChannel", outputChannel="messageResponseChannel")
+	public void parseTableStatusEventNotification(TableStatusEvtNfn tableStatusEvtNfn) {
+		sendNotification(tableStatusEvtNfn);
+	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
 	
 	public void setServer(Server server) { this.server = server; }
+
+	private void sendNotification(EventNotification eventNotification) {
+		for (String clients : server.getWaiterClient()) {
+			MessageHeaders mh = new MessageHeaders(null);
+			Message<EventNotification> m = MessageBuilder.createMessage(eventNotification, mh);
+			Message<EventNotification> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
+			sendGateway.send(mSend);
+		}
+	}
 
 	public DatabaseConnector getDbCon() {
 		return dbCon;

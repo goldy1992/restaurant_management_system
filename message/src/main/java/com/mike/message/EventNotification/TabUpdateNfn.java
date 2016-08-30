@@ -15,20 +15,14 @@ import org.springframework.messaging.MessageHeaders;
  * @author mbbx9mg3
  */
 public class TabUpdateNfn extends EventNotification {
-   
 
     private final Tab tab;
     
     /**
      *
-     * @param from
-     * @param to
      * @param t the tab
      */
-    public TabUpdateNfn(InetAddress from, 
-                                InetAddress to, 
-                                Tab t)
-    {
+    public TabUpdateNfn(Tab t) {
         super();
         this.tab = t;
     }
@@ -41,6 +35,4 @@ public class TabUpdateNfn extends EventNotification {
     {
         return tab;
     }
-
-
 }

@@ -8,6 +8,7 @@ import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -146,16 +147,12 @@ public class MenuController extends JComponent implements ActionListener {
 
 	private void sendOrder() {
 		System.out.println("called send order");
-		model.mergeTabs();
+		Tab tab = model.mergeTabs();
 		model.resetSeenId();
 
 	//	if (!(this instanceof TillMenu)) {
-//			TableStatusEvtNfn newEvt1;
-//                newEvt1 = new TableStatusEvtNfn(InetAddress.getByName(parentClient.client.getLocalAddress().getHostName()),
-//                InetAddress.getByName(parentClient.serverAddress.getHostName()),
-//                oldTab.getTable().getTableNumber(), Table.TableStatus.OCCUPIED);
-//                out.reset();
-//                out.writeObject(newEvt1);
+		messageSender.sendTabUpdateNotification(tab);
+		messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.OCCUPIED);
 //		}
 
 		//   this.newTab = new Tab(oldTab.getTable());

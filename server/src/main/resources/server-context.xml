@@ -81,7 +81,10 @@
 	
 	<!--  Response Channel -->
 	<int:channel id="messageResponseChannel" />
-	
+
+    <!--  Event Notification Channels -->
+    <int:channel id="messagetableStatusEventNotificationChannel" />
+
     <int:gateway id="sendGateway"
          service-interface="com.mike.server.SendGateway"
          default-request-channel="messageResponseChannel" />

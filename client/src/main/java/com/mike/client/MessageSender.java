@@ -1,6 +1,8 @@
 package com.mike.client;
 
 import com.mike.item.Tab;
+import com.mike.message.EventNotification.TabUpdateNfn;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
@@ -85,7 +87,13 @@ public class MessageSender {
 	}
 
 	public void sendTableStatusEventNotification(int tableSelected, TableStatus selectedTableStatus) {
-		
+		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tableSelected, selectedTableStatus);
+		sendGateway.send(tableStatusEvtNfn);
+	}
+
+	public void sendTabUpdateNotification(Tab tab) {
+		TabUpdateNfn tabUpdateNfn = new TabUpdateNfn(tab);
+		sendGateway.send(tab);
 	}
 
 	public List query(String query) {

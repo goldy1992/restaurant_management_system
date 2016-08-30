@@ -65,8 +65,9 @@ public class MenuModel {
 	/*
 	 * Merges all items from the new tab into the old tab
 	 */
-	public void mergeTabs() {
+	public Tab mergeTabs() {
 		this.oldTab.mergeTabs(newTab);
+		return this.oldTab;
 	}
 
 	public List<MenuPage> getMenuPages() {

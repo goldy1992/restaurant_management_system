@@ -5,6 +5,8 @@
  */
 package com.mike.server;
 
+import com.mike.message.EventNotification.EventNotification;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Message;
 import com.mike.message.Request.RegisterClientRequest;
 
@@ -18,9 +20,13 @@ import org.springframework.integration.annotation.Router;
 @MessageEndpoint
 public class MessageEventNotificationRouter {
     
-    @Router(inputChannel = "filterToMessageTypeRouterChannel")
-    public String accept(Message message){
-        System.out.println("reached message router");
-        return "messageRequestChannel";}
+    @Router(inputChannel = "messageEventNotificationChannel")
+    public String accept(EventNotification eventNotification){
+        System.out.println("reached event notification router");
+        if (eventNotification instanceof TableStatusEvtNfn) {
+            return "messagetableStatusEventNotificationChannel";
+        }
+        return null;
+    }
 }
 
