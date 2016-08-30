@@ -1,6 +1,7 @@
 package com.mike.server;
 
 import com.mike.message.EventNotification.EventNotification;
+import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
@@ -104,6 +105,12 @@ public class MessageParser {
 	public void parseTableStatusEventNotification(TableStatusEvtNfn tableStatusEvtNfn) {
 		server.getTables().get(tableStatusEvtNfn.getTableNumber()).setTableStatus(tableStatusEvtNfn.getTableStatus());
 		sendNotification(tableStatusEvtNfn);
+	}
+
+	@ServiceActivator(inputChannel="messagetabUpdateNotificationChannel", outputChannel="messageResponseChannel")
+	public void parseTabUpdateEventNotification(TabUpdateNfn tabUpdateNfn){
+		int tabNumber = tabUpdateNfn.getTab().getTabNumber();
+		server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getTab());
 	}
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }

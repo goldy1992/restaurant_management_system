@@ -115,8 +115,7 @@ public class Table implements Serializable
         tableStatus = status;
     }
     
-    public void updateTab(Tab tab)
-    {
+    public void updateTab(Tab tab) {
         this.setCurrentTab(tab);
     }
     

@@ -93,7 +93,7 @@ public class MessageSender {
 
 	public void sendTabUpdateNotification(Tab tab) {
 		TabUpdateNfn tabUpdateNfn = new TabUpdateNfn(tab);
-		sendGateway.send(tab);
+		sendGateway.send(tabUpdateNfn);
 	}
 
 	public List query(String query) {

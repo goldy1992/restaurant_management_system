@@ -84,6 +84,7 @@
 
     <!--  Event Notification Channels -->
     <int:channel id="messagetableStatusEventNotificationChannel" />
+    <int:channel id="messagetabUpdateNotificationChannel" />
 
     <int:gateway id="sendGateway"
          service-interface="com.mike.server.SendGateway"

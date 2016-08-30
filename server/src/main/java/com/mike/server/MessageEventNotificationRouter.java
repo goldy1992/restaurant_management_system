@@ -6,10 +6,8 @@
 package com.mike.server;
 
 import com.mike.message.EventNotification.EventNotification;
+import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
-import com.mike.message.Message;
-import com.mike.message.Request.RegisterClientRequest;
-
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
@@ -25,7 +23,9 @@ public class MessageEventNotificationRouter {
         System.out.println("reached event notification router");
         if (eventNotification instanceof TableStatusEvtNfn) {
             return "messagetableStatusEventNotificationChannel";
-        }
+        } else if (eventNotification instanceof TabUpdateNfn) {
+			return  "messagetabUpdateNotificationChannel";
+		}
         return null;
     }
 }
