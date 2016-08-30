@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class MenuController extends JComponent implements ActionListener, MouseListener {
 	 
-    public Menu view;
+    public MenuView view;
     private MenuModel model;
 
     public MenuModel getModel() { return model; }
@@ -39,7 +39,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
 		List<MenuPageDAO> results = messageSender.query(SELECT_MENU_PAGES_QUERY);
 		this.model.initialise(results, tab);
-		this.view = new Menu(this, tableView, model, true, tab);
+		this.view = new MenuView(this, tableView, model, true, tab);
 		view.setVisible(true);
 		
 	}
@@ -175,7 +175,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			}
 		} // try
 		catch (IOException ex) {
-			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE, null, ex);
 		} // catch
 	} // printBill
 

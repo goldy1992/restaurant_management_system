@@ -14,7 +14,7 @@ public class KeypadJPanel extends JPanel {
 
 	public static KeypadJPanel createKeypadPanel() {
 		KeypadJPanel newKeypadPanel = new KeypadJPanel();
-		newKeypadPanel.addMouseListener(Menu.menuController);
+		newKeypadPanel.addMouseListener(MenuView.menuController);
 		newKeypadPanel.setLayout(new GridLayout(4,3));
 
 		// makes the first 9 buttons
@@ -22,12 +22,12 @@ public class KeypadJPanel extends JPanel {
 		{
 			final int x; if (i == 10)  x = 0; else x = i; // declared final so can be used in the actionlistener method
 			KeypadPanelJButton number = new KeypadPanelJButton(x + "", x);
-			number.addActionListener(Menu.menuController);
+			number.addActionListener(MenuView.menuController);
 			newKeypadPanel.add(number);
 		} // for
         /* Make the clear button */
 		KeypadPanelJButton clear = new KeypadPanelJButton("Clear", -1);
-		clear.addActionListener(Menu.menuController);
+		clear.addActionListener(MenuView.menuController);
 
 		newKeypadPanel.add(clear);
 

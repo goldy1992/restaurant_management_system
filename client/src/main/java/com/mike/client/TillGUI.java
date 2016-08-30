@@ -1,16 +1,9 @@
 package com.mike.client;
 
-import com.mike.client.MainMenu.TillMenu;
-import com.mike.message.Request.LeaveRequest;
-import com.mike.message.Request.*;
+import com.mike.client.MainMenu.TillMenuView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -20,7 +13,7 @@ import javax.swing.JOptionPane;
 public class TillGUI extends javax.swing.JFrame implements ActionListener
 {
     private  TillClient parent;
-    private  TillMenu menu;
+    private TillMenuView menu;
     
     /**
      * Creates new form TillClient
@@ -142,7 +135,7 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
         return changeOutputLabel;
     }
     
-    public TillMenu getMenu()
+    public TillMenuView getMenu()
     {
         return menu;
     }

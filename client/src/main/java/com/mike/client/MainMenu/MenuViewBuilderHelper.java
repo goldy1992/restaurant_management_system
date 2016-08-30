@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class MenuViewBuilderHelper {
 
-	public static ArrayList<MenuCardPanel> createCardPanelsForView(Menu parent, MenuModel menuModel) {
+	public static ArrayList<MenuCardPanel> createCardPanelsForView(MenuView parent, MenuModel menuModel) {
 		
 		ArrayList<MenuCardPanel> cardPanelsList = buildMenuCardStructure(menuModel, parent);
 		// FIND ALL BUTTONS FOR EACH PANEL
@@ -27,7 +27,7 @@ public class MenuViewBuilderHelper {
 	}
 	
     
-    private static ArrayList<MenuCardPanel> buildMenuCardStructure(MenuModel model, Menu parent)  {
+    private static ArrayList<MenuCardPanel> buildMenuCardStructure(MenuModel model, MenuView parent)  {
         ArrayList<MenuCardPanel> cardPanelsList = new ArrayList<>();
 
         // MAKE AN OBJECT FOR EVERY VIEW CARD PANEL
@@ -69,7 +69,7 @@ public class MenuViewBuilderHelper {
 		return cardPanelsList;
     }
     
-    private static MenuCardPanel addButtonsToCard(MenuCardPanel c, Menu parent){
+    private static MenuCardPanel addButtonsToCard(MenuCardPanel c, MenuView parent){
     	for (MenuItem menuItem : c.getMenuPage().getMenuItems()) {
 			MenuItemJButton newButton = MenuItemJButton.createMenuItemJButton(menuItem, c, parent);
             c.addMenuItemButton(newButton);          

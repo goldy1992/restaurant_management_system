@@ -24,7 +24,7 @@ public class MenuItemJButton extends JButton {
 
     private MenuItemJButton(String name, int id,
             double price, String type, JComponent parent, 
-            Menu parentMenu, boolean needAgeCheck, boolean stockCount)
+            MenuView parentMenuView, boolean needAgeCheck, boolean stockCount)
     {
         super(name);    
         this.price = price;
@@ -42,11 +42,11 @@ public class MenuItemJButton extends JButton {
         
     } // constructor 
 
-	public static MenuItemJButton createMenuItemJButton(MenuItem menuItem, JComponent parent, Menu parentMenu)
+	public static MenuItemJButton createMenuItemJButton(MenuItem menuItem, JComponent parent, MenuView parentMenuView)
 	{
 		MenuItemJButton x = new MenuItemJButton(menuItem.getName(), menuItem.getId(), menuItem.getPrice(), menuItem.getType(), parent,
-				parentMenu, menuItem.isNeedAgeCheck(), menuItem.isStockCount());
-		x.addActionListener(Menu.menuController);
+				parentMenuView, menuItem.isNeedAgeCheck(), menuItem.isStockCount());
+		x.addActionListener(MenuView.menuController);
 		return x;
 	}
 

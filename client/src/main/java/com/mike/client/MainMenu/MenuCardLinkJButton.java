@@ -18,32 +18,32 @@ import javax.swing.JButton;
 public class MenuCardLinkJButton extends JButton implements ActionListener
 {
     private MenuCardPanel targetPanel;
-    private final Menu parentMenu;
+    private final MenuView parentMenuView;
     
     /**
      *
      * @param panel
      */
-    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText, Menu parentMenu)
+    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText, MenuView parentMenuView)
     {
         super();    
         this.targetPanel = panel;
         this.setText(buttonText);
-        this.parentMenu = parentMenu;
+        this.parentMenuView = parentMenuView;
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) 
     {  
-        MenuCardPanel kitchenBarMessage = parentMenu.getKitchenBarMsgPanel();
+        MenuCardPanel kitchenBarMessage = parentMenuView.getKitchenBarMsgPanel();
             
         // show the selected card.
-        CardLayout cl = (CardLayout)(parentMenu.getCardPanel().getLayout());
-        cl.show(parentMenu.getCardPanel(), targetPanel.getName());
-        parentMenu.currentCard = targetPanel;
+        CardLayout cl = (CardLayout)(parentMenuView.getCardPanel().getLayout());
+        cl.show(parentMenuView.getCardPanel(), targetPanel.getName());
+        parentMenuView.currentCard = targetPanel;
         
         // set the new parent for the kitchen bar message panel
-        if (!parentMenu.currentCard.equals(kitchenBarMessage))
+        if (!parentMenuView.currentCard.equals(kitchenBarMessage))
         {
                     System.out.println("called button");
             kitchenBarMessage.setParentPanel(targetPanel);
@@ -69,7 +69,7 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
     
     public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent,
                                                                 String buttonText,
-                                                            Menu parentPanel)
+                                                            MenuView parentPanel)
     {
         MenuCardLinkJButton x = new MenuCardLinkJButton(parent, buttonText, parentPanel);
         x.addActionListener(x);

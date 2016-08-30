@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MenuCardPanel extends JPanel {
     private MenuCardPanel parentPanel;
-    private final Menu belongsToMenu;
+    private final MenuView belongsToMenuView;
     private final ArrayList<MenuItemJButton> cardMenuItems;
     private final JPanel itemsPanel;    
     private final MenuPage menuPage;
@@ -29,9 +29,9 @@ public class MenuCardPanel extends JPanel {
    
     /**
      *
-     * @param parentMenu
+     * @param parentMenuView
      */
-    public MenuCardPanel(Menu parentMenu, MenuPage menuPage) {
+    public MenuCardPanel(MenuView parentMenuView, MenuPage menuPage) {
         super();
         this.menuPage = menuPage;
 
@@ -59,8 +59,8 @@ public class MenuCardPanel extends JPanel {
 
         // true because we want to use the keyboard to control the quantity
         keypadPanel = null;
-        this.belongsToMenu = parentMenu;
-		this.addMouseListener(Menu.menuController);
+        this.belongsToMenuView = parentMenuView;
+		this.addMouseListener(MenuView.menuController);
     }
     
     public MenuCardPanel() {
@@ -206,7 +206,7 @@ public class MenuCardPanel extends JPanel {
     */
     public static MenuCardPanel createMenuCardPanel(JDialog parentMenu, MenuPage menuPage)
     {
-        MenuCardPanel x = new MenuCardPanel((Menu)parentMenu, menuPage);
+        MenuCardPanel x = new MenuCardPanel((MenuView)parentMenu, menuPage);
         x.setLayout(new GridLayout(1,0));
         x.add(x.getMenuSelectPanel());
         x.add(x.getItemsPanel());
