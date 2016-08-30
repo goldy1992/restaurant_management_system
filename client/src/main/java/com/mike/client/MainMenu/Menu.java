@@ -80,6 +80,7 @@ public class Menu extends JDialog implements MouseListener {
 		Menu.menuController = menuController;
 		// initialises the part of the GUI made automatically by netbeans
 		initComponents();
+		outputTextPane.addMouseListener(menuController);
 
 		// create the kitchen/Bar message panel
 		kitchenBarMsgPanel = createKitchenBarMessageCard();
@@ -96,9 +97,9 @@ public class Menu extends JDialog implements MouseListener {
 
 		for (MenuCardPanel p : cardPanelsList) {
 			CardPanel.add(p, p.getName());
-			p.add(p.createKeypadPanel());
-
+			p.add(KeypadJPanel.createKeypadPanel());
 		}
+
 		//MyClient.debugGUI.addText("show");
 		CardLayout cl = (CardLayout) (CardPanel.getLayout());
 		cl.show(CardPanel, cardPanelsList.get(0).getName());
@@ -345,10 +346,7 @@ public class Menu extends JDialog implements MouseListener {
 	public void mouseClicked(MouseEvent me) {
 		//MyClient.debugGUI.addText("mouse clicked");
 		//MyClient.debugGUI.addText("source class: " +  me.getSource().getClass());
-		if (me.getSource() == this || me.getSource() == getOutputTextPane()) {
-			//MyClient.debugGUI.addText("found called panel");
-			switchToParentCard();
-		}
+
 	} // mouseClicked
 
 	@Override

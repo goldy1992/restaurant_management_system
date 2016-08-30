@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MenuController extends JComponent implements ActionListener {
+public class MenuController extends JComponent implements ActionListener, MouseListener {
 	 
     public Menu view;
     private MenuModel model;
@@ -201,4 +203,20 @@ public class MenuController extends JComponent implements ActionListener {
 		view.setTotal(model.getTotal());
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent me) {
+		if (me.getSource() == this || me.getSource() == view.getOutputTextPane() || me.getSource() instanceof MenuCardPanel
+				|| me.getSource() instanceof KeypadJPanel) {
+			view.switchToParentCard();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	@Override
+	public void mouseExited(MouseEvent e) {	}
 } // class
