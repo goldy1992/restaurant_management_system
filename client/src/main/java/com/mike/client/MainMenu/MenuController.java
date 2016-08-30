@@ -61,6 +61,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		model.addDigitToQuantity(keypadPanelJButton.getNumber());
 		view.addNumberToQuantity(model.getQuantitySelected());
 	}
+
 	private void parseKeyJButton(KeyJButton keyJButton) {
 		if (model.getNewTab().getNumberOfItems() > 0) {
 			String currentText = view.getOutputArea().getText();
@@ -156,9 +157,6 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		messageSender.sendTabUpdateNotification(tab);
 		messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.OCCUPIED);
 //		}
-
-		//   this.newTab = new Tab(oldTab.getTable());
-
 	} // sendOrder
 
 	public void printBill()

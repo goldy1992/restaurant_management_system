@@ -5,8 +5,6 @@ import com.mike.item.Tab;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -33,7 +31,7 @@ import java.util.ArrayList;
  *
  * @author mbbx9mg3
  */
-public class Menu extends JDialog implements MouseListener {
+public class Menu extends JDialog {
 	protected final ArrayList<JComponent> components = new ArrayList<>();
 	protected final ArrayList<JButton> buttons = new ArrayList<>();
 	protected final ArrayList<JPanel> panels = new ArrayList<>();
@@ -60,7 +58,6 @@ public class Menu extends JDialog implements MouseListener {
 	private JTextPane outputTextPane;
 	public JTextPane quantityTextPane;
 	public JTextPane totalCostTextPane;
-
 	public int quantitySelected;
 	public MenuCardPanel currentCard;
 	public static MenuController menuController;
@@ -121,7 +118,6 @@ public class Menu extends JDialog implements MouseListener {
 
 		setUpTab(tab);
 	} // constructor
-
 
 	protected String[] getOptionNames() {
 
@@ -341,22 +337,6 @@ public class Menu extends JDialog implements MouseListener {
 			quantityTextPane.setText("");
 		}
 	} // addNumberToQUantity
-
-	@Override
-	public void mouseClicked(MouseEvent me) {
-		//MyClient.debugGUI.addText("mouse clicked");
-		//MyClient.debugGUI.addText("source class: " +  me.getSource().getClass());
-
-	} // mouseClicked
-
-	@Override
-	public void mousePressed(MouseEvent me) {}
-	@Override
-	public void mouseReleased(MouseEvent me) {}
-	@Override
-	public void mouseEntered(MouseEvent me) {}
-	@Override
-	public void mouseExited(MouseEvent me) {}
 
 	/**
 	 * Adds the functional features to the main panel
