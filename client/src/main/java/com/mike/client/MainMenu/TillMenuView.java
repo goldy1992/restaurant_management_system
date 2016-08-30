@@ -1,6 +1,7 @@
 package com.mike.client.MainMenu;
 
 import com.mike.client.MainMenu.Model.MenuModel;
+import com.mike.client.MainMenu.View.MenuView;
 import com.mike.item.Tab;
 
 import java.awt.*;

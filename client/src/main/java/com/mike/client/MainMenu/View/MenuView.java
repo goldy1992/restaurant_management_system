@@ -1,6 +1,8 @@
-package com.mike.client.MainMenu;
+package com.mike.client.MainMenu.View;
 
+import com.mike.client.MainMenu.MenuController;
 import com.mike.client.MainMenu.Model.MenuModel;
+import com.mike.client.MainMenu.TillMenuView;
 import com.mike.item.Tab;
 
 import javax.swing.*;

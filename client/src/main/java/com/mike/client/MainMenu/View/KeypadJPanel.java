@@ -1,4 +1,4 @@
-package com.mike.client.MainMenu;
+package com.mike.client.MainMenu.View;
 
 import javax.swing.*;
 import java.awt.*;

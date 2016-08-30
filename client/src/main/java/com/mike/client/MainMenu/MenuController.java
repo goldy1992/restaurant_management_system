@@ -1,6 +1,12 @@
 package com.mike.client.MainMenu;
 
 import com.mike.client.MainMenu.Model.MenuModel;
+import com.mike.client.MainMenu.View.KeyJButton;
+import com.mike.client.MainMenu.View.KeypadJPanel;
+import com.mike.client.MainMenu.View.KeypadPanelJButton;
+import com.mike.client.MainMenu.View.MenuCardPanel;
+import com.mike.client.MainMenu.View.MenuItemJButton;
+import com.mike.client.MainMenu.View.MenuView;
 import com.mike.client.MessageSender;
 import com.mike.client.Pair;
 import com.mike.client.SelectTableMenu.View.SelectTableView;
