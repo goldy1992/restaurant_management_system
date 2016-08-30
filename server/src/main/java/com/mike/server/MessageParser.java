@@ -74,6 +74,7 @@ public class MessageParser {
 	public TabResponse parseTabRequest(TabRequest tabRequest) {
 		
 		TableStatusEvtNfn tableStatusEvtNfn = new TableStatusEvtNfn(tabRequest.getTabNumber(), Table.TableStatus.IN_USE);
+		server.getTables().get(tabRequest.getTabNumber()).setTableStatus(Table.TableStatus.IN_USE);
 		for (String clients : server.getWaiterClient()) {
 			MessageHeaders mh = new MessageHeaders(null);
 			Message<TableStatusEvtNfn> m = MessageBuilder.createMessage(tableStatusEvtNfn, mh);
@@ -101,6 +102,7 @@ public class MessageParser {
 
 	@ServiceActivator(inputChannel="messagetableStatusEventNotificationChannel", outputChannel="messageResponseChannel")
 	public void parseTableStatusEventNotification(TableStatusEvtNfn tableStatusEvtNfn) {
+		server.getTables().get(tableStatusEvtNfn.getTableNumber()).setTableStatus(tableStatusEvtNfn.getTableStatus());
 		sendNotification(tableStatusEvtNfn);
 	}
 	

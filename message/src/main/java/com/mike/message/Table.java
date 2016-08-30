@@ -71,7 +71,7 @@ public class Table implements Serializable
     public Table(int tableNumber) {
         this.tableNumber = tableNumber;
         this.tableStatus = TableStatus.FREE;
-		this.currentTab = new Tab();
+		this.currentTab = new Tab(tableNumber);
         
     } // constructor
     

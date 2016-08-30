@@ -5,7 +5,6 @@
  */
 package com.mike.item;
 
-import static com.mike.item.Item.Type.DRINK;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,6 +13,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static com.mike.item.Item.Type.DRINK;
+
 /**
  *
  * @author mbbx9mg3
@@ -21,31 +22,31 @@ import java.util.ArrayList;
 public class Tab implements Serializable, Cloneable
 {
     private int tabNumber;
-    private final ArrayList<Item> allItems;
-    private final ArrayList<Item> drinks;
-    private final ArrayList<Item> food;
-    private double total;
+    private final ArrayList<Item> allItems = new ArrayList<>();
+    private final ArrayList<Item> drinks = new ArrayList<>();
+    private final ArrayList<Item> food = new ArrayList<>();
+    private double total = 0;
     
-    public Tab()
-    {
-        this.allItems = new ArrayList<>();
-        this.drinks = new ArrayList<>();
-        this.food = new ArrayList<>();
-        this.total = 0;
+    public Tab() {
+		this.tabNumber = 0;
     } // tab
+
+	public Tab(int tabNumber) {
+		this.tabNumber = tabNumber;
+	} // tab
+
     
-    public Tab(Tab t)
-    {
+    public Tab(Tab t) {
         this.tabNumber = t.tabNumber;
-        this.allItems = new ArrayList<>();
+
         for (Item i : t.allItems) {
             this.allItems.add(new Item(i));
         }
-        this.drinks = new ArrayList<>();
+
         for (Item i : t.drinks) {
             this.drinks.add(new Item(i));
         }
-        this.food = new ArrayList<>();
+;
         for (Item i : t.food) {
             this.food.add(new Item(i)); 
         }
@@ -53,16 +54,14 @@ public class Tab implements Serializable, Cloneable
     } // tab
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         String sToReturn = "";
         for (Item i : allItems)
             sToReturn += i.outputToScreen();
         return sToReturn;
     } // toString
     
-    public void addItem(Item newItem)
-    {
+    public void addItem(Item newItem) {
         allItems.add(newItem);
         total += newItem.getTotalPrice();
       
@@ -73,8 +72,7 @@ public class Tab implements Serializable, Cloneable
         
     } // addItem
     
-    public boolean removeItem(Item newItem)
-    {
+    public boolean removeItem(Item newItem) {
         boolean removed = false;
         
         boolean removedFromAllItems = false;        
@@ -87,8 +85,7 @@ public class Tab implements Serializable, Cloneable
         
         boolean removedFromForDItems = false;
         
-        switch(newItem.type)
-        {
+        switch(newItem.type) {
             case FOOD:
                 for (int i = 0; i < food.size(); i++)
                     if (food.get(i).compareTo(newItem) == 0)
@@ -98,25 +95,24 @@ public class Tab implements Serializable, Cloneable
                     } // if
                 break;
             case DRINK:
-                for (int i = 0; i < drinks.size(); i++)
-                    if (drinks.get(i).compareTo(newItem) == 0)
-                    {
-                        drinks.remove(i);
-                        removedFromForDItems = true;
-                    } // if
+                for (int i = 0; i < drinks.size(); i++) {
+					if (drinks.get(i).compareTo(newItem) == 0) {
+						drinks.remove(i);
+						removedFromForDItems = true;
+					} // if
+				}
                 break;
         }
         
-        if (removedFromForDItems && removedFromAllItems)
-            removed = true;
+        if (removedFromForDItems && removedFromAllItems) {
+			removed = true;
+		}
         
         total = calculateTotal();
-        
         return removed;
     } // addItem
     
-    public boolean removeAll()
-    {
+    public boolean removeAll() {
         allItems.removeAll(allItems);
         drinks.removeAll(drinks);
         food.removeAll(food);
@@ -132,22 +128,20 @@ public class Tab implements Serializable, Cloneable
 
     }
     
-    public double calculateTotal()
-    {
+    public double calculateTotal() {
         double total = 0;
         
-        for (Item i : allItems)
-            total += i.getTotalPrice();
+        for (Item i : allItems) {
+			total += i.getTotalPrice();
+		}
         
         return total;
-                
     } // calc Total
     
-    public Tab mergeTabs(Tab otherTab)
-    {
-        for (Item i : otherTab.getItems())
-            addItem(i);
-        
+    public Tab mergeTabs(Tab otherTab) {
+        for (Item i : otherTab.getItems()) {
+			addItem(i);
+		}
         return this;
     }
     
@@ -157,8 +151,7 @@ public class Tab implements Serializable, Cloneable
         return getTabNumber();
     }
     
-    public double getTotal()
-    {
+    public double getTotal() {
         System.out.println(total + ": " + total);
         return total;
     }
@@ -167,30 +160,24 @@ public class Tab implements Serializable, Cloneable
     {
         return getTabNumber();
     }
-    
     public ArrayList<Item> getDrinks()
     {
         return drinks;
     }
-    
     public ArrayList<Item> getFood()
     {
         return food;
     }
-    
-    
     public int getNumberOfItems()
     {
         return allItems.size();
     }
-    
-    public ArrayList<Item> getItems()
+        public ArrayList<Item> getItems()
     {
         return allItems;
     }
     
-    public static Tab cloneTab(Tab tab) throws IOException, ClassNotFoundException
-    {
+    public static Tab cloneTab(Tab tab) throws IOException, ClassNotFoundException {
         Tab newTab = null;       
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectInputStream in1;
