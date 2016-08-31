@@ -112,6 +112,13 @@ public class MessageParser {
 		int tabNumber = tabUpdateNfn.getTab().getTabNumber();
 		server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getTab());
 	}
+
+	@ServiceActivator(inputChannel="customErrorChannel")
+	public void parseError(Message message, @Headers Map<String, Object> headerMap) {
+
+		System.out.println("hit error message");
+	}
+
 	
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
 	
