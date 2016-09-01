@@ -11,15 +11,17 @@ import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
+import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
 /**
  *
  * @author Mike
  */
+@MessageEndpoint
 public class MessageRequestRouter {
 
-    @Router(inputChannel = "messageRequestChannel")
+    @Router(inputChannel="messageRequestChannel")
     public String accept(Request request){
         System.out.println("reached message request router");
         if (request instanceof RegisterClientRequest) {

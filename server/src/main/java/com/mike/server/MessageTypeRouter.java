@@ -7,9 +7,7 @@ package com.mike.server;
 
 import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.Message;
-import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.Request;
-
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
@@ -20,7 +18,7 @@ import org.springframework.integration.annotation.Router;
 @MessageEndpoint
 public class MessageTypeRouter {
     
-    @Router(inputChannel = "filterToMessageTypeRouterChannel")
+    @Router(inputChannel="filterToMessageTypeRouterChannel")
     public String accept(Message message){
         System.out.println("reached message router");
         if (message instanceof Request) {
