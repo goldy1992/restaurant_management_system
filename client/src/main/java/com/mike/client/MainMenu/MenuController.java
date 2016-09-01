@@ -47,7 +47,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		this.model.initialise(results, tab);
 		this.view = new MenuView(this, tableView, model, true, tab);
 		view.setVisible(true);
-		
+
 	}
 
 	@Override
