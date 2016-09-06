@@ -1,8 +1,8 @@
 package com.mike.server;
 
 import com.mike.message.Request.RegisterClientRequest;
-import com.mike.server.database.InitialiseDatabase;
 import com.mike.message.Table;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -90,6 +90,32 @@ public class Server
 				return tillClient.add(address);
 			default: return false;
 		} // switch
+	}
+
+	public boolean removeClient(String ipAddress) {
+		for (String client : waiterClient) {
+			if (ipAddress.equals(client)) {
+				return waiterClient.remove(client);
+			}
+		}
+
+		for (String client : tillClient) {
+			if (ipAddress.equals(client)) {
+				return tillClient.remove(client);
+			}
+		}
+
+		if (ipAddress.equals(kitchenClient)) {
+			kitchenClient = null;
+			return true;
+		}
+
+		if (ipAddress.equals(barClient)) {
+			barClient = null;
+			return true;
+		}
+
+		return false;
 	}
 	
 } // MySocket class
