@@ -1,19 +1,10 @@
 package com.mike.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.annotation.MessageEndpoint;
-import org.springframework.integration.annotation.ServiceActivator;
-
 import com.mike.client.SelectTableMenu.SelectTableController;
-import com.mike.message.Table.TableStatus;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
 import com.mike.message.Response.RegisterClientResponse;
-import com.mike.message.Response.TableStatusResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@MessageEndpoint
 public class WaiterClientController {
 	
 	@Autowired

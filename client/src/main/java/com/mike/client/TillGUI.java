@@ -2,17 +2,16 @@ package com.mike.client;
 
 import com.mike.client.MainMenu.TillMenuView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 /**
  * @author mbbx9mg3
  */
 public class TillGUI extends javax.swing.JFrame implements ActionListener
 {
-    private  TillClient parent;
+    private TillClient parent;
     private TillMenuView menu;
     
     /**

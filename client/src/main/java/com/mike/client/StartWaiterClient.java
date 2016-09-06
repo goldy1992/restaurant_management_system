@@ -1,11 +1,11 @@
 package com.mike.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.SocketUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StartWaiterClient {
 	   /**
@@ -34,7 +34,7 @@ public class StartWaiterClient {
 
 		System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
 
-		context.load("/META-INF/client-context.xml");
+		context.load("/META-INF/waiter-client-context.xml");
 		context.registerShutdownHook();
 		context.refresh();
 
