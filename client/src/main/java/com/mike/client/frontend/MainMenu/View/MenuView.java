@@ -58,7 +58,7 @@ public class MenuView extends JDialog {
 	// End of variables declaration//GEN-END:variables
 
 	private JTextPane outputTextPane;
-	public JTextPane quantityTextPane;
+	private JTextPane quantityTextPane;
 	public JTextPane totalCostTextPane;
 	public int quantitySelected;
 	public MenuCardPanel currentCard;
@@ -187,7 +187,7 @@ public class MenuView extends JDialog {
 		gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
 		OutputAreaPanel.add(ouputScrollPane, gridBagConstraints);
 
-		quantityTextPane = quantityArea;
+		setQuantityTextPane(quantityArea);
 		quantityPane.setViewportView(quantityArea);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -334,9 +334,9 @@ public class MenuView extends JDialog {
 
 	public void addNumberToQuantity(int quantitySelected) {
 		if (quantitySelected >= 0) {
-			quantityTextPane.setText("" + quantitySelected);
+			getQuantityTextPane().setText("" + quantitySelected);
 		} else {
-			quantityTextPane.setText("");
+			getQuantityTextPane().setText("");
 		}
 	} // addNumberToQUantity
 
@@ -411,7 +411,7 @@ public class MenuView extends JDialog {
 			kitchenBarMsgPanel.setParentPanel(currentCard);
 
 			quantitySelected = -1;
-			this.quantityTextPane.setText("");
+			this.getQuantityTextPane().setText("");
 		} // if
 	} // switchToParentCard
 
@@ -449,4 +449,7 @@ public class MenuView extends JDialog {
 	public JTextPane getOutputTextPane() { return outputTextPane; }
 	public void setOutputTextPane(JTextPane outputTextPane) { this.outputTextPane = outputTextPane; }
 	public MenuCardPanel getKitchenBarMsgPanel() { return kitchenBarMsgPanel; }
+	public JTextPane getQuantityTextPane() { return quantityTextPane; }
+	public void setQuantityTextPane(JTextPane quantityTextPane) { this.quantityTextPane = quantityTextPane;	}
+
 } // class

@@ -11,11 +11,14 @@ public class TillClientController {
 	@Autowired
 	public MessageSender messageSender;
 
-	private TillGUI view;
+	private TillView view;
+
 	public void init() {
-		view = new TillGUI();
-		view.setVisible(true);
+		view = new TillView();
+		getView().setVisible(true);
 	}
 
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
+
+	public TillView getView() { return view; }
 }

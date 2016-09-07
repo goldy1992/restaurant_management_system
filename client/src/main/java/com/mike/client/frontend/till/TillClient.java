@@ -22,7 +22,7 @@ import static com.mike.message.Request.RegisterClientRequest.ClientType.TILL;
  */
 public class TillClient extends UserClient
 {
-    public TillGUI gui = null;
+    public TillView gui = null;
     
     public TillClient(ClientType  type) 
     {

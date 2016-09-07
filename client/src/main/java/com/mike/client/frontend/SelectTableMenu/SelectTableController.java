@@ -5,8 +5,8 @@
  */
 package com.mike.client.frontend.SelectTableMenu;
 
-import com.mike.client.frontend.SelectTableMenu.MainMenu.MenuController;
 import com.mike.client.backend.MessageSender;
+import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Response.TabResponse;

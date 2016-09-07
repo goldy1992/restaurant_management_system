@@ -5,7 +5,7 @@
  */
 package com.mike.client.frontend.MainMenu.View;
 
-import com.mike.client.frontend.MainMenu.View.Factors;
+import com.mike.client.frontend.MainMenu.Factors;
 import com.mike.client.frontend.MainMenu.Model.MenuPage;
 
 import javax.swing.*;

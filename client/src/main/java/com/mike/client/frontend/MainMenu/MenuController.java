@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 
 public class MenuController extends JComponent implements ActionListener, MouseListener {
 	 
-    public MenuView view;
-    private MenuModel model;
+    protected MenuView view;
+    protected MenuModel model;
 
     public MenuModel getModel() { return model; }
 	public void setModel(MenuModel model) { this.model = model; }
@@ -110,7 +110,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			if (quantity > amountInStock) {
 				JOptionPane.showMessageDialog(view, "Error: There's only " + amountInStock + " " + menuItemJButton.getText() + " available in stock");
 				model.setQuantitySelected(-1);
-				view.quantityTextPane.setText("");
+				view.getQuantityTextPane().setText("");
 				return;
 			} // if
 			else  { // remove from stock
@@ -126,7 +126,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		model.getNewTab().addItem(newItem);
 
 		model.setQuantitySelected(-1);
-		view.quantityTextPane.setText("");
+		view.getQuantityTextPane().setText("");
 
 
 		// MyClient.debugGUI.addText( newItem.toString() + "\n");
@@ -143,7 +143,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		view.setTotal(model.getTotal());
 	} // parseMenuItem
 
-	private void dealWithButtons(JButton button) {
+	protected void dealWithButtons(JButton button) {
 		switch(button.getText())
 		{
 			case "Send Order":  sendOrder();  view.dispose(); break;
@@ -154,7 +154,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		} // switch
 	} // dealWithButtons()
 
-	private void sendOrder() {
+	protected void sendOrder() {
 		System.out.println("called send order");
 		Tab tab = model.mergeTabs();
 		model.resetSeenId();
@@ -165,8 +165,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 //		}
 	} // sendOrder
 
-	public void printBill()
-	{
+	protected void printBill() {
 		model.calculateBill();
 		try {
 			model.writeBill();

@@ -14,8 +14,7 @@ import java.util.List;
  *
  * @author Mike
  */
-public class SelectTableModel 
-{
+public class SelectTableModel {
     public static final int NO_TABLE_SELECTED = -1;
     private int tableSelected = NO_TABLE_SELECTED;
     private List<Table.TableStatus> tableStatuses;
@@ -52,10 +51,11 @@ public class SelectTableModel
      * @return The status of table "i"
      */
     public Table.TableStatus getTableStatus(int i) {
-        if (i < 0 || i >= tableStatuses.size())
-            return null;       
-        else
-            return tableStatuses.get(i);
+        if (i < 0 || i >= tableStatuses.size()) {
+			return null;
+		} else {
+			return tableStatuses.get(i);
+		}
     }
     
  

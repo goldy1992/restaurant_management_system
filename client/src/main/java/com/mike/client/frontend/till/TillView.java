@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * @author mbbx9mg3
  */
-public class TillGUI extends javax.swing.JFrame implements ActionListener
+public class TillView extends javax.swing.JFrame implements ActionListener
 {
   //  private TillClient parent;
     private TillMenuView menu;
@@ -15,7 +15,7 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     /**
      * Creates new form TillClient
      */
-    public TillGUI()
+    public TillView()
     {
         super();
     //    this.parent = parent;
@@ -118,10 +118,8 @@ public class TillGUI extends javax.swing.JFrame implements ActionListener
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void actionPerformed(ActionEvent ae)
-    {
-        if (ae.getSource() == this.startClientButton)
-        {
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == this.startClientButton) {
                 menu.setVisible(true);
         } // if      
     } // actionPerformed
