@@ -9,14 +9,14 @@
 <!--   <message-bus />-->
 <context:property-placeholder />
 
-    <context:component-scan base-package="com.mike.client"/>
+    <context:component-scan base-package="com.mike.client.frontend.waiter com.mike.client.frontend.MainMenu"/>
 
     <import resource="spring-integration-setup.xml" />
     <import resource="selectTable.xml"/>
    
-	<bean id="menuController" class="com.mike.client.MainMenu.MenuController" />
-    <bean id="waiterClientController" class="com.mike.client.WaiterClientController"/>
-    <bean id="waiterClient" class="com.mike.client.WaiterClient" />
+	<bean id="menuController" class="com.mike.client.frontend.MainMenu.MenuController" />
+    <bean id="waiterClientController" class="com.mike.client.frontend.waiter.WaiterClientController"/>
+    <bean id="waiterClient" class="com.mike.client.frontend.waiter.WaiterClient" />
 
     
 </beans>

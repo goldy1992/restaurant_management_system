@@ -6,5 +6,5 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="selectTableController" class="com.mike.client.SelectTableMenu.SelectTableController" />
+	<bean id="selectTableController" class="com.mike.client.frontend.SelectTableMenu.SelectTableController" />
 </beans>

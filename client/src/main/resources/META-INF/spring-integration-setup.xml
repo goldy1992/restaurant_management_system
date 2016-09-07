@@ -12,12 +12,12 @@
 
     <int:annotation-config />
 
-    <bean id="messageSender" class="com.mike.client.MessageSender" />
+    <bean id="messageSender" class="com.mike.client.backend.MessageSender" />
     <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
     <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
     <int:gateway id="sendGateway"
-                 service-interface="com.mike.client.SendGateway"
+                 service-interface="com.mike.client.backend.SendGateway"
                  default-request-channel="inputChannel" />
 
     <int-ip:tcp-connection-factory id="clientFactory"
