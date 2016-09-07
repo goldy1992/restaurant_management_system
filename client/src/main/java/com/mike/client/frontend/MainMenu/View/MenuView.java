@@ -2,7 +2,7 @@ package com.mike.client.frontend.MainMenu.View;
 
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
-import com.mike.client.frontend.till.TillMenuView;
+import com.mike.client.frontend.till.tillMenu.TillMenuView;
 import com.mike.item.Tab;
 
 import javax.swing.*;

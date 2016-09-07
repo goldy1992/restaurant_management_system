@@ -1,4 +1,4 @@
-package com.mike.client.frontend.till;
+package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
 

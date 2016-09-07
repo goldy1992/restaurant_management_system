@@ -6,7 +6,7 @@
 package com.mike.client.frontend.MainMenu.View;
 
 import com.mike.client.frontend.Pair;
-import com.mike.client.frontend.till.TillMenuView;
+import com.mike.client.frontend.till.tillMenu.TillMenuView;
 import com.mike.message.Table;
 
 import javax.swing.*;

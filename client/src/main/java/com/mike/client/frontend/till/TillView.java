@@ -1,13 +1,13 @@
 package com.mike.client.frontend.till;
 
+import com.mike.client.frontend.till.tillMenu.TillMenuView;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author mbbx9mg3
  */
-public class TillView extends javax.swing.JFrame implements ActionListener
+public class TillView extends javax.swing.JFrame
 {
   //  private TillClient parent;
     private TillMenuView menu;
@@ -15,8 +15,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
     /**
      * Creates new form TillClient
      */
-    public TillView()
-    {
+    public TillView() {
         super();
     //    this.parent = parent;
 //        this.menu = TillMenu.makeMenu(parent, 
@@ -33,7 +32,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        startClientButton = new javax.swing.JButton();
+        setStartClientButton(new JButton());
         changeLabel = new javax.swing.JLabel();
         changeOutputLabel = new javax.swing.JLabel();
 
@@ -44,7 +43,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
             }
         });
 
-        startClientButton.setText("Start Till Client");
+        getStartClientButton().setText("Start Till Client");
 
         changeLabel.setText("Change:");
 
@@ -56,7 +55,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(137, 137, 137)
-                        .addComponent(startClientButton))
+                        .addComponent(getStartClientButton()))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(83, 83, 83)
                         .addComponent(changeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -68,7 +67,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(69, 69, 69)
-                .addComponent(startClientButton)
+                .addComponent(getStartClientButton())
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(changeLabel)
@@ -76,7 +75,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
                 .addContainerGap(140, Short.MAX_VALUE))
         );
 
-        startClientButton.addActionListener(this);
+//        getStartClientButton().addActionListener(this);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -117,12 +116,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
     private javax.swing.JButton startClientButton;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == this.startClientButton) {
-                menu.setVisible(true);
-        } // if      
-    } // actionPerformed
+
     
     public JLabel getChangeOutputLabel()
     {
@@ -133,4 +127,7 @@ public class TillView extends javax.swing.JFrame implements ActionListener
     {
         return menu;
     }
+
+	public JButton getStartClientButton() {return startClientButton;}
+	public void setStartClientButton(JButton startClientButton) {this.startClientButton = startClientButton;}
 }

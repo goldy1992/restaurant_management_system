@@ -1,7 +1,8 @@
-package com.mike.client.frontend.till;
+package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.MainMenu.View.BarTabDialogSelect;
+import com.mike.client.frontend.till.TillView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
