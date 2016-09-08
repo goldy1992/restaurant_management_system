@@ -91,7 +91,7 @@ public class MenuView extends JDialog {
 		//cardPanelsList = getCards();
 		cardPanelsList = MenuViewBuilderHelper.createCardPanelsForView(this, menuModel);
 
-		// initialise the cardLayout to show the main panel
+		// init the cardLayout to show the main panel
 		cardPanelsList.set(0, initialiseMainCard(cardPanelsList.get(0)));
 
 		for (MenuCardPanel p : cardPanelsList) {

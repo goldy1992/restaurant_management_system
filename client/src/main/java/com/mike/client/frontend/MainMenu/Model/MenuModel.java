@@ -34,7 +34,7 @@ public class MenuModel {
 		this.setSeenId(false);
 	}
 	
-	public void initialise(List<MenuPageDAO> menuPageDAOs, Tab tab)  {
+	public void init(List<MenuPageDAO> menuPageDAOs, Tab tab)  {
 		this.setMenuPages(buildMenuPages(menuPageDAOs));
 		this.setUpTab(tab);
 	}

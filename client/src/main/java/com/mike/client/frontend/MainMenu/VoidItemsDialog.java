@@ -155,7 +155,7 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                 try
                 {
                     Connection con;
-                    //initialise the connection to the database
+                    //init the connection to the database
                     con = DriverManager.getConnection(
                         "jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3", 
                         "mbbx9mg3",

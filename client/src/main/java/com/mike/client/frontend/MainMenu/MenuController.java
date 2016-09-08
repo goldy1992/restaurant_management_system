@@ -1,5 +1,6 @@
 package com.mike.client.frontend.MainMenu;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
 import com.mike.client.frontend.MainMenu.View.KeyJButton;
 import com.mike.client.frontend.MainMenu.View.KeypadJPanel;
@@ -7,9 +8,7 @@ import com.mike.client.frontend.MainMenu.View.KeypadPanelJButton;
 import com.mike.client.frontend.MainMenu.View.MenuCardPanel;
 import com.mike.client.frontend.MainMenu.View.MenuItemJButton;
 import com.mike.client.frontend.MainMenu.View.MenuView;
-import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.Pair;
-import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
@@ -39,15 +38,19 @@ public class MenuController extends JComponent implements ActionListener, MouseL
     public MessageSender messageSender;
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	
-	public void init(SelectTableView tableView, Tab tab) {
-		 // initialise the connection to the database
+	public <V extends JFrame> void init(V tableView, Tab tab) {
+		 // init the connection to the database
 		this.model = new MenuModel();
-		final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
-		List<MenuPageDAO> results = messageSender.query(SELECT_MENU_PAGES_QUERY);
-		this.model.initialise(results, tab);
+		List<MenuPageDAO> results = getMenuPageDAOs();
+		this.model.init(results, tab);
 		this.view = new MenuView(this, tableView, model, true, tab);
 		view.setVisible(true);
 
+	}
+
+	public List<MenuPageDAO> getMenuPageDAOs() {
+		final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
+		return messageSender.query(SELECT_MENU_PAGES_QUERY);
 	}
 
 	@Override
@@ -98,7 +101,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			quantity = 1;
 
 		if (menuItemJButton.isStockCount()) {
-			//initialise the connection to the database
+			//init the connection to the database
 
 			List<ItemDAO> response = messageSender.query("FROM ItemDAO i where i.id = " + menuItemJButton.getId());
 			if (response.size() != 1) {

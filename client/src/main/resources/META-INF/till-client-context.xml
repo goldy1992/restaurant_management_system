@@ -10,10 +10,12 @@
     <context:property-placeholder />
 
     <context:component-scan base-package="  com.mike.client.backend
-                                            com.mike.client.frontend.till"/>
+                                            com.mike.client.frontend.till
+                                            com.mike.client.frontend.MainMenu"/>
 
     <import resource="spring-integration-setup.xml" />
     <bean id="tillClientController" class="com.mike.client.frontend.till.TillClientController"/>
+    <bean id="tillMenuController" class="com.mike.client.frontend.till.tillMenu.TillMenuController"/>
 
 
 </beans>

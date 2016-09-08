@@ -2,10 +2,12 @@ package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.MainMenu.View.BarTabDialogSelect;
-import com.mike.client.frontend.till.TillView;
+import com.mike.item.Tab;
+import com.mike.item.dbItem.MenuPageDAO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 /**
  * Created by michaelg on 07/09/2016.
@@ -19,8 +21,11 @@ public class TillMenuController extends MenuController {
 		super();
 	}
 
-	public void init(TillView tillView) {
+	@Override
+	public <V extends JFrame> void init(V tillView, Tab tab) {
+		List<MenuPageDAO> menuPageDAOs = getMenuPageDAOs();
 		this.model = new TillMenuModel();
+		model.init(menuPageDAOs, null);
 		this.view = new TillMenuView(this, tillView, (TillMenuModel)model, true);
 	}
 
