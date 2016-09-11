@@ -4,6 +4,7 @@ import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.till.tillMenu.TillMenuController;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,8 +22,8 @@ public class TillClientController implements ActionListener {
 	private TillView view;
 
 	public void init() {
-		view = new TillView();
-		tillMenuController.init(view, null);
+		view = new TillView(this);
+		//tillMenuController.init(view, null);
 		getView().setVisible(true);
 	} // init
 
@@ -32,9 +33,11 @@ public class TillClientController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() == view.getStartClientButton()) {
-			view.setVisible(true);
-		} // if
+		if(ae.getSource() instanceof JButton) {
+			if (ae.getSource() == view.getStartClientButton()) {
+				tillMenuController.init(view, null);
+			} // if
+		}
 	} // actionPerformed
 
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }

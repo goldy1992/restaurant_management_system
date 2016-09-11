@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class TillMenuController extends MenuController {
 
-	private TillMenuModel model;
-	private TillMenuView view;
+//	private TillMenuModel model;
+//	private TillMenuView view;
 
 	public TillMenuController() {
 		super();
@@ -26,18 +26,22 @@ public class TillMenuController extends MenuController {
 		List<MenuPageDAO> menuPageDAOs = getMenuPageDAOs();
 		this.model = new TillMenuModel();
 		model.init(menuPageDAOs, null);
-		this.view = new TillMenuView(this, tillView, (TillMenuModel)model, true);
+		this.view = new TillMenuView(this, tillView, model, true);
+		this.view.setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		super.actionPerformed(ae);
 		if (ae.getSource() instanceof JButton) {
 			dealWithButtons((JButton)ae.getSource());
 		}
+		super.actionPerformed(ae);
+
 	}
 
 	private void barTabPressed() {
+		TillMenuModel model = (TillMenuModel)this.model;
+		TillMenuView view = (TillMenuView)this.view;
 		if (!model.isTabLoaded()) {
 			System.out.println("tabLoaded == false");
 			if (model.getOldTab().getNumberOfItems() + model.getNewTab().getNumberOfItems() <= 0) {
@@ -98,12 +102,18 @@ public class TillMenuController extends MenuController {
 //			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);}
 	} // writeBill
 
+	@Override
+	protected void sendOrder() {
+
+	}
+
 
 	@Override
 	public void dealWithButtons(JButton button) {
 		switch (button.getText()) {
 			case "Bar Tab": barTabPressed(); break;
 			case "Print Last Receipt": writeLastReceipt(); break;
+			case "Send Order": sendOrder(); break;
 			default: break;
 		} // switch
 	}

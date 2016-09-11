@@ -43,8 +43,6 @@ public class SelectTableController implements ActionListener
 	
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	public void setMenuController(MenuController menuController) {this.menuController = menuController; }
-		
-    
     public boolean isInitialised() {
 		return initialised;
 	}

@@ -47,8 +47,8 @@ public class MenuModel {
 			// sets the table
 			//   this.newTab = new Tab(oldTab.getParent());
 		} else {
-			//  this.oldTab = new Tab(new Table(0));
-			//  this.newTab = new Tab(new Table(0));
+			this.setOldTab(new Tab());
+			this.setNewTab(new Tab());
 		}
 	}
 

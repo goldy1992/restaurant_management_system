@@ -41,7 +41,7 @@ public class TillMenuView extends MenuView {
            "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Send Order"};
        return x;
     }
-    public TillMenuView(TillMenuController tillMenuController, java.awt.Frame parent, TillMenuModel tillMenuModel, boolean modal) {
+    public TillMenuView(TillMenuController tillMenuController, java.awt.Frame parent, MenuModel tillMenuModel, boolean modal) {
         super(tillMenuController, parent, tillMenuModel, modal, null);
     }
 

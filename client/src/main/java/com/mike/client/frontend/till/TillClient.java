@@ -66,8 +66,8 @@ public class TillClient extends UserClient
         {
                     System.out.println("notification for table status received");
             this.tableStatuses.set(event.getTableNumber(), event.getTableStatus());
-            if (this.gui.getMenu() != null)
-            {
+          //  if (this.gui.getMenu() != null)
+            if (true == true){
                 System.out.println("updating buttons");
         //        this.gui.getMenu().updateButtons((ArrayList<Table.TableStatus>)tableStatuses.clone());
             }

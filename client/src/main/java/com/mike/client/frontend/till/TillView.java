@@ -10,13 +10,14 @@ import javax.swing.*;
 public class TillView extends javax.swing.JFrame
 {
   //  private TillClient parent;
-    private TillMenuView menu;
+    private TillClientController tillClientController;
     
     /**
      * Creates new form TillClient
      */
-    public TillView() {
+    public TillView(TillClientController tillClientController) {
         super();
+        this.tillClientController = tillClientController;
     //    this.parent = parent;
 //        this.menu = TillMenu.makeMenu(parent, 
  //               null, null, parent.getOutputStream(),  this);
@@ -33,6 +34,7 @@ public class TillView extends javax.swing.JFrame
     private void initComponents() {
 
         setStartClientButton(new JButton());
+        startClientButton.addActionListener(tillClientController);
         changeLabel = new javax.swing.JLabel();
         changeOutputLabel = new javax.swing.JLabel();
 
@@ -122,12 +124,6 @@ public class TillView extends javax.swing.JFrame
     {
         return changeOutputLabel;
     }
-    
-    public TillMenuView getMenu()
-    {
-        return menu;
-    }
-
-	public JButton getStartClientButton() {return startClientButton;}
+    public JButton getStartClientButton() {return startClientButton;}
 	public void setStartClientButton(JButton startClientButton) {this.startClientButton = startClientButton;}
 }
