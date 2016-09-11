@@ -52,6 +52,10 @@
         <int:queue capacity="2" />
     </int:channel>
 
+    <int:channel id="leaveResponseChannel" >
+        <int:queue capacity="2" />
+    </int:channel>
+
     <int:channel id="tabResponseChannel" >
         <int:queue capacity="2" />
     </int:channel>

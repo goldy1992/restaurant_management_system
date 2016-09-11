@@ -79,6 +79,7 @@ http://www.springframework.org/schema/integration/event/spring-integration-event
 	<int:channel id="messageTabRequestChannel" />
 	<int:channel id="messageQueryChannel" />
     <int:channel id="messageUpdateChannel" />
+    <int:channel id="messageLeaveRequestChannel" />
 	
 	<!--  Response Channel -->
 	<int:channel id="messageResponseChannel" />

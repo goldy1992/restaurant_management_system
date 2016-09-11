@@ -30,16 +30,17 @@ public class SelectTableView extends javax.swing.JFrame
     private JMenuItem MenuBarFileExit;
     private JPanel TableNumPanel;
     private JMenu jMenu2;
+    private SelectTableController controller;
     
     /**
      * Creates new form SelectTable
-     * @param controller
+     * @param selectTableController
      * @param statuses
      */
-    public SelectTableView(ActionListener actionListener, ArrayList<TableStatus> statuses) {
+    public SelectTableView(SelectTableController selectTableController, ArrayList<TableStatus> statuses) {
         initComponents();
         makeTableButtons(statuses);
-        initListeners(actionListener);
+        initListeners(selectTableController);
     } 
     
     /**
@@ -138,11 +139,6 @@ public class SelectTableView extends javax.swing.JFrame
                 formComponentResized(evt);
             }
         });
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         java.awt.GridBagLayout jPanel3Layout = new java.awt.GridBagLayout();
         jPanel3Layout.columnWeights = new double[] {0.25};
@@ -233,13 +229,14 @@ public class SelectTableView extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initListeners(ActionListener actionListener) {
+    private void initListeners(SelectTableController selectTableController) {
     	for(int i = 1; i < tableButtons.length; i++){
-    		tableButtons[i].addActionListener(actionListener);
+    		tableButtons[i].addActionListener(selectTableController);
     	}
-        openTable.addActionListener(actionListener);
-        moveTable.addActionListener(actionListener);
-        cleanTable.addActionListener(actionListener);
+        openTable.addActionListener(selectTableController);
+        moveTable.addActionListener(selectTableController);
+        cleanTable.addActionListener(selectTableController);
+        this.addWindowListener(selectTableController);
     	
     }
     
@@ -247,18 +244,15 @@ public class SelectTableView extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
 
-    private void exitCode()
-    {
+    private void exitCode() {
         // TODO add your handling code here:
-        int confirm = JOptionPane.showOptionDialog(null, 
-            "Are You Sure to Close Application?", "Exit Confirmation", 
-            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
+        int confirm = JOptionPane.showOptionDialog(null,
+            "Are You Sure to Close Application?", "Exit Confirmation",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                    null, null, null);
-                
-                if (confirm == 0) 
-                {
+                if (confirm == 0) {
                   //  controller.parentClient.leaveRequest();
-                } // if        
+                } // if
     } // exitCode
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         exitCode();

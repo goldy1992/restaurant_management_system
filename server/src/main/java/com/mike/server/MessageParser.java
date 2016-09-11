@@ -3,11 +3,13 @@ package com.mike.server;
 import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
+import com.mike.message.Request.LeaveRequest;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
+import com.mike.message.Response.LeaveResponse;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
@@ -85,6 +87,15 @@ public class MessageParser {
 		TabResponse tabResponse = new TabResponse(tabRequest);
 		tabResponse.setTab(server.getTables().get(tabRequest.getTabNumber()).getCurrentTab());
 		return tabResponse;
+	}
+
+	@ServiceActivator(inputChannel="messageLeaveRequestChannel", outputChannel="messageResponseChannel")
+	public LeaveResponse parseLeaveRequest(LeaveRequest leaveRequest, @Headers Map<String, Object> headerMap) {
+		LeaveResponse response = new LeaveResponse(leaveRequest);
+		String ipAddress = (String)headerMap.get(IpHeaders.CONNECTION_ID);
+		server.removeClient(ipAddress);
+		response.setPermission(true);
+		return response;
 	}
 	
 	@ServiceActivator(inputChannel="messageQueryChannel", outputChannel="messageResponseChannel")

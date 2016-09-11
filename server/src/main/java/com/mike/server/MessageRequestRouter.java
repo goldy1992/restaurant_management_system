@@ -5,10 +5,7 @@
  */
 package com.mike.server;
 
-import com.mike.message.Request.RegisterClientRequest;
-import com.mike.message.Request.Request;
-import com.mike.message.Request.TabRequest;
-import com.mike.message.Request.TableStatusRequest;
+import com.mike.message.Request.*;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -35,7 +32,9 @@ public class MessageRequestRouter {
         	return "messageQueryChannel";
         } else if (request instanceof Update) {
 			return "messageUpdateChannel";
-		}
+		} else if (request instanceof LeaveRequest) {
+            return "messageLeaveRequestChannel";
+        }
         return "messageRequestChannel";}
 }
 

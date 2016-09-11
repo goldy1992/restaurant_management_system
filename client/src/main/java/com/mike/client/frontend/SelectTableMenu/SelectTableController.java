@@ -15,9 +15,13 @@ import com.mike.message.Table.TableStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
+import sun.awt.WindowClosingListener;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import static com.mike.client.frontend.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
@@ -29,7 +33,7 @@ import static com.mike.message.Table.TableStatus.IN_USE;
  * @author Mike
  */
 @MessageEndpoint
-public class SelectTableController implements ActionListener 
+public class SelectTableController implements ActionListener, WindowListener
 {
 	@Autowired
 	private MessageSender messageSender;
@@ -123,5 +127,32 @@ public class SelectTableController implements ActionListener
     	view.setTableStatus(tableNumber, tableStatus);
     }
 
-    
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+
+	@Override
+	public void windowOpened(WindowEvent e) {}
+	@Override
+	public void windowClosing(WindowEvent e) {
+		int confirm = JOptionPane.showOptionDialog(null,
+				"Are You Sure to Close Application?", "Exit Confirmation",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, null, null);
+
+		if (confirm == 0) {
+			if (messageSender.leaveRequest()) {
+				view.dispose();
+				System.exit(0);
+			}
+		}
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {}
+	@Override
+	public void windowDeiconified(WindowEvent e) {	}
+	@Override
+	public void windowActivated(WindowEvent e) {	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {	}
 }

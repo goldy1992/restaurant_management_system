@@ -9,6 +9,7 @@ import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
+import com.mike.message.Response.LeaveResponse;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
@@ -29,6 +30,9 @@ public class MessageSender {
 
 	@Autowired
 	private PollableChannel registerClientResponseChannel;
+
+	@Autowired
+	private PollableChannel leaveResponseChannel;
 	
 	@Autowired
 	private PollableChannel tableStatusResponseChannel;
@@ -47,13 +51,10 @@ public class MessageSender {
 	public void setTableStatusResponseChannel(PollableChannel tableStatusResponseChannel) { this.tableStatusResponseChannel = tableStatusResponseChannel; }
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
 	public void setRegisterClientResponseChannel(PollableChannel registerClientResponseChannel) { this.registerClientResponseChannel = registerClientResponseChannel; }
-
-	public PollableChannel getTableStatusResponseChannel() { return tableStatusResponseChannel; }
+	public void setLeaveResponseChannel(PollableChannel leaveResponseChannel) { this.leaveResponseChannel = leaveResponseChannel;}
 
 	@Autowired
 	SendGateway sendGateway;
-
-
 
 	public TableStatusResponse sendTableStatusRequest(ArrayList<Integer> tables) {
 		TableStatusRequest request = new TableStatusRequest(tables);
@@ -76,6 +77,8 @@ public class MessageSender {
 	public final boolean leaveRequest() {
 		LeaveRequest leaveRequest = new LeaveRequest();
 		sendGateway.send(leaveRequest);
+		LeaveResponse leaveResponse = (LeaveResponse)leaveResponseChannel.receive().getPayload();
+		System.out.println("leave response: " + leaveResponse.hasPermission());
 		return true;
 	} 
 	
@@ -150,6 +153,4 @@ public class MessageSender {
 
 
 	}
-
-
 }
