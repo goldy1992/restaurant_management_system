@@ -92,8 +92,7 @@ public class SelectTableView extends javax.swing.JFrame
         } // switch        
     }
     
-    private void makeTableButtons(ArrayList<TableStatus> statuses)
-    {
+    private void makeTableButtons(ArrayList<TableStatus> statuses) {
     	System.out.println("make table buttons: size: " + statuses.size());
         JButton[] buttons = new JButton[statuses.size()]; 
         for(int i = 1; i < statuses.size(); i++)

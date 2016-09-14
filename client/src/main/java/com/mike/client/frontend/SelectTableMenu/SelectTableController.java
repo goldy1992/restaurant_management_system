@@ -129,8 +129,6 @@ public class SelectTableController implements ActionListener, WindowListener
 
 	@Override
 	public void windowClosed(WindowEvent e) {}
-
-
 	@Override
 	public void windowOpened(WindowEvent e) {}
 	@Override

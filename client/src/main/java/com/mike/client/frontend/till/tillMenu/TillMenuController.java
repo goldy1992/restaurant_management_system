@@ -1,12 +1,18 @@
 package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.MenuController;
-import com.mike.client.frontend.MainMenu.View.BarTabDialogSelect;
+import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabDialogView;
+import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;
+import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuModel;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.Response.TableStatusResponse;
+import com.mike.message.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +20,8 @@ import java.util.List;
  */
 public class TillMenuController extends MenuController {
 
-//	private TillMenuModel model;
-//	private TillMenuView view;
+	@Autowired
+	private BarTabMenuController barTabMenuController;
 
 	public TillMenuController() {
 		super();
@@ -42,20 +48,28 @@ public class TillMenuController extends MenuController {
 	private void barTabPressed() {
 		TillMenuModel model = (TillMenuModel)this.model;
 		TillMenuView view = (TillMenuView)this.view;
+		Integer chosenTabNumber = null;
 		if (!model.isTabLoaded()) {
 			System.out.println("tabLoaded == false");
 			if (model.getOldTab().getNumberOfItems() + model.getNewTab().getNumberOfItems() <= 0) {
 				System.out.println("get tab selected");
-				view.getSelectorFrame().setState(BarTabDialogSelect.Functionality.GET_TAB);
-			} else {
-				view.getSelectorFrame().setState(BarTabDialogSelect.Functionality.ADD_TO_TAB);
-			}
+				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.GET_TAB);
 
-			if (view.getSelectorFrame().getState() == BarTabDialogSelect.Functionality.GET_TAB && view.getSelectorFrame().numberOfTabs <= 0) {
-				view.getQuantityTextPane().setText("there are no tabs to display!");
+				if (chosenTabNumber == null) {
+					view.getQuantityTextPane().setText("there are no tabs to display!");
+					return;
+				}
+
+				messageSender.sendTableStatusEventNotification(chosenTabNumber, Table.TableStatus.IN_USE);
+				//messageSender.sendOrder();
+//				tGUI.setUpTab(null);
+//				tGUI.outputTextPane.setText("");
+//				tGUI.tabLoaded = false;
+//				tGUI.dihisspose();
 			} else {
-				view.getSelectorFrame().setVisible(true);
+				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.ADD_TO_TAB);
 			}
+			model.setTabLoaded(true);
 		} else {
 			model.getOldTab().mergeTabs(model.getNewTab());
 			sendOrder();

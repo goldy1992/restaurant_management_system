@@ -16,6 +16,7 @@
     <import resource="spring-integration-setup.xml" />
     <bean id="tillClientController" class="com.mike.client.frontend.till.TillClientController"/>
     <bean id="tillMenuController" class="com.mike.client.frontend.till.tillMenu.TillMenuController"/>
+    <bean id="barTabMenuController" class="com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController" />
 
 
 </beans>

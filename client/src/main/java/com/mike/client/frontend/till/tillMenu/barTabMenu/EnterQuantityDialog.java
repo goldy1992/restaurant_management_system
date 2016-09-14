@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mike.client.frontend.MainMenu.View;
+package com.mike.client.frontend.till.tillMenu.barTabMenu;
 
 import javax.swing.*;
 import java.awt.*;
