@@ -2,6 +2,8 @@ package com.mike.client.frontend.till;
 
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.till.tillMenu.TillMenuController;
+import com.mike.message.Request.RegisterClientRequest;
+import com.mike.message.Response.RegisterClientResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -22,6 +24,12 @@ public class TillClientController implements ActionListener {
 	private TillView view;
 
 	public void init() {
+		RegisterClientResponse registerClientResponse = messageSender.registerClient(RegisterClientRequest.ClientType.TILL);
+
+		if (!registerClientResponse.hasPermission()) {
+			System.exit(0);
+		} // if
+
 		view = new TillView(this);
 		//tillMenuController.init(view, null);
 		getView().setVisible(true);

@@ -155,7 +155,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			case "Void Last Item": voidLastItem(); break;
 			default: break;
 		} // switch
-	} // dealWithButtons()
+	} // dealWithTillMenuButtons()
 
 	protected void sendOrder() {
 		System.out.println("called send order");

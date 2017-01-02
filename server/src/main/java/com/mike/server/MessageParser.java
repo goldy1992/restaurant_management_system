@@ -41,6 +41,7 @@ public class MessageParser {
 	
 	@Autowired
 	private Server server;
+
 	@Autowired
 	private SendGateway sendGateway;
 
@@ -136,7 +137,7 @@ public class MessageParser {
 	public void setServer(Server server) { this.server = server; }
 
 	private void sendNotification(EventNotification eventNotification) {
-		for (String clients : server.getWaiterClient()) {
+		for (String clients : server.getClients()) {
 			MessageHeaders mh = new MessageHeaders(null);
 			Message<EventNotification> m = MessageBuilder.createMessage(eventNotification, mh);
 			Message<EventNotification> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();

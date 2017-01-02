@@ -3,9 +3,13 @@ package com.mike.client.frontend.till.tillMenu.barTabMenu;
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.View.KeyJButton;
 import com.mike.client.frontend.till.tillMenu.TillMenuView;
+import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.annotation.MessageEndpoint;
+import org.springframework.integration.annotation.ServiceActivator;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by Mike on 12/09/2016.
  */
+@MessageEndpoint
 public class BarTabMenuController implements ActionListener {
 
     BarTabDialogView view;
@@ -31,9 +36,10 @@ public class BarTabMenuController implements ActionListener {
         }
 
         model = new BarTabMenuModel();
+        model.setFunctionality(functionality);
         model.init(response.getTableStatuses(), functionality);
-        view = new BarTabDialogView(this, tillMenuView, modal);
-        view.init(model.getCurrentStatuses(), functionality);
+        view = new BarTabDialogView(tillMenuView, modal);
+        view.init(model.getCurrentStatuses(), this, functionality);
         view.setVisible(true);
         return model.getChosenTab();
     }
@@ -51,6 +57,7 @@ public class BarTabMenuController implements ActionListener {
                 newTabAction();
             } else if (jButton.getText().equals("Cancel")) {
                 view.dispose();
+                view = null;
             } // else if
         }
     } // actionPerformed
@@ -78,6 +85,15 @@ public class BarTabMenuController implements ActionListener {
         messageSender.sendTableStatusEventNotification(tabJButton.getTabNumber(), Table.TableStatus.IN_USE);
         model.setChosenTab(tabJButton.getTabNumber());
         view.dispose();
+        view = null;
     } // keyTabJButtonAction
+
+    @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
+    public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
+        model.getCurrentStatuses().put(tableStatusEvtNfn.getTableNumber(), tableStatusEvtNfn.getTableStatus());
+        if (null != view) {
+            view.init(model.getCurrentStatuses(), this, model.getFunctionality());
+        }
+    }
 
 } // class

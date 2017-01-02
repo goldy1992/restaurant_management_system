@@ -1,18 +1,15 @@
 package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.MenuController;
-import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabDialogView;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuModel;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.MenuPageDAO;
-import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,10 +36,9 @@ public class TillMenuController extends MenuController {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof JButton) {
-			dealWithButtons((JButton)ae.getSource());
+			dealWithTillMenuButtons((JButton)ae.getSource());
 		}
 		super.actionPerformed(ae);
-
 	}
 
 	private void barTabPressed() {
@@ -122,8 +118,7 @@ public class TillMenuController extends MenuController {
 	}
 
 
-	@Override
-	public void dealWithButtons(JButton button) {
+	public void dealWithTillMenuButtons(JButton button) {
 		switch (button.getText()) {
 			case "Bar Tab": barTabPressed(); break;
 			case "Print Last Receipt": writeLastReceipt(); break;

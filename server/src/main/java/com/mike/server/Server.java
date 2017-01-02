@@ -117,5 +117,11 @@ public class Server
 
 		return false;
 	}
-	
+
+	public HashSet<String> getClients() {
+    	HashSet<String> toReturn = new HashSet<>();
+    	toReturn.addAll(getTillClient());
+    	toReturn.addAll(getWaiterClient());
+    	return toReturn;
+	}
 } // MySocket class

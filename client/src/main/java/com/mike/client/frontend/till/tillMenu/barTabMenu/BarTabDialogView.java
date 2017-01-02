@@ -20,32 +20,28 @@ import java.util.*;
  */
 public class BarTabDialogView extends javax.swing.JDialog {
 
-    private BarTabMenuController barTabMenuController;
-
     /**
      * Creates new form BarTabDialogView
      * @param parent
      * @param modal
      */
-    public BarTabDialogView(BarTabMenuController barTabMenuController,
-                            Dialog parent, boolean modal) {
+    public BarTabDialogView(Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.barTabMenuController = barTabMenuController;
-
     }
 
-    public void init(Map<Integer, Table.TableStatus> statuses, BarTabMenuModel.Functionality functionality) {
+    public void init(Map<Integer, Table.TableStatus> statuses, BarTabMenuController barTabMenuController,
+                     BarTabMenuModel.Functionality functionality) {
         this.getContentPane().removeAll();
         if (functionality == BarTabMenuModel.Functionality.ADD_TO_TAB) {
             JButton newTabButton = new JButton("New Tab");
             this.getContentPane().add(newTabButton);
             newTabButton.addActionListener(barTabMenuController);
         }
-        setButtons(statuses);
+        setButtons(statuses, barTabMenuController);
     }
 
-    public synchronized void setButtons(Map<Integer, Table.TableStatus> statuses) {
+    public synchronized void setButtons(Map<Integer, Table.TableStatus> statuses, BarTabMenuController barTabMenuController) {
         // SET UP NEW TAB BUTTON
         System.out.println("set buttons: " + statuses.size() + " buttons");
         for (Integer i : statuses.keySet()) {

@@ -5,10 +5,6 @@
  */
 package com.mike.message.Request;
 
-import com.mike.message.Message;
-import java.net.InetAddress;
-import org.springframework.messaging.MessageHeaders;
-
 /**
  *
  * @author mbbx9mg3
@@ -16,18 +12,11 @@ import org.springframework.messaging.MessageHeaders;
 public class LeaveRequest extends Request
 {
 
-    /**
-     *
-     * @param from
-     * @param to
-     */
     public LeaveRequest()
     {
         super();
     } // constructor
-    
 
-    
     public String toString()
     {
         String x = super.toString() + "SUBTYPE: Leave";
