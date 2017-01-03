@@ -4,7 +4,6 @@ import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Table;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -19,7 +18,7 @@ public class Server
     private String kitchenClient = null;
     private HashMap<Integer, Table> tables;
     
-    public Server(ServerSocket socket, HashSet<String> waiterClient,
+    public Server(HashSet<String> waiterClient,
                 HashSet<String> tillClient) throws IOException {
         this.setWaiterClient(waiterClient);
         this.setTillClient(tillClient);
@@ -32,7 +31,6 @@ public class Server
 	public HashSet<String> getWaiterClient() {
 		return waiterClient;
 	}
-
 	public void setWaiterClient(HashSet<String> waiterClient) {
 		this.waiterClient = waiterClient;
 	}
@@ -40,7 +38,6 @@ public class Server
 	public HashSet<String> getTillClient() {
 		return tillClient;
 	}
-
 	public void setTillClient(HashSet<String> tillClient) {
 		this.tillClient = tillClient;
 	}
@@ -48,7 +45,6 @@ public class Server
 	public String getBarClient() {
 		return barClient;
 	}
-
 	public void setBarClient(String barClient) {
 		this.barClient = barClient;
 	}
@@ -56,7 +52,6 @@ public class Server
 	public String getKitchenClient() {
 		return kitchenClient;
 	}
-
 	public void setKitchenClient(String kitchenClient) {
 		this.kitchenClient = kitchenClient;
 	}
@@ -64,7 +59,6 @@ public class Server
 	public HashMap<Integer, Table> getTables() {
 		return tables;
 	}
-
 	public void setTables(HashMap<Integer, Table> tables) {
 		this.tables = tables;
 	}

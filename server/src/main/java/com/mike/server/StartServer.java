@@ -23,16 +23,12 @@ public class StartServer {
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, SQLException {
         AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/server-context.xml", StartServer.class);
-        
         Server server = (Server) integrationContext.getBean("server");
-        
         InitialiseDatabase initDb = (InitialiseDatabase) integrationContext.getBean("initialiseDatabase");
         initDb.init();
-        
         for (int i = 1; i <= NUM_OF_TABLES; i++) {
         	server.getTables().put(i, new Table(i));
         }
-    
     } // main
 
     
