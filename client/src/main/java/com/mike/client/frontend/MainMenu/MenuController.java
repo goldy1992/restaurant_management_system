@@ -159,13 +159,11 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 
 	protected void sendOrder() {
 		System.out.println("called send order");
-		Tab tab = model.mergeTabs();
+		Tab newItems = model.getNewTab();
+		Tab updatedTab = model.mergeTabs();
 		model.resetSeenId();
-
-	//	if (!(this instanceof TillMenu)) {
-		messageSender.sendTabUpdateNotification(tab);
+		messageSender.sendTabUpdateNotification(updatedTab, newItems);
 		messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.OCCUPIED);
-//		}
 	} // sendOrder
 
 	protected void printBill() {

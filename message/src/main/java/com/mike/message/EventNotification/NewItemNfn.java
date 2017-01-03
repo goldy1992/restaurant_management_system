@@ -25,20 +25,16 @@ public class NewItemNfn extends EventNotification
     private final ArrayList<Item> items;
     private final int hours;
     private final int minutes;
-    private final Table table;
+    private final int table;
     
     /**
-     * @param from
-     * @param to
      * @param type
      * @param items
      * @param table
      */
-    public NewItemNfn(InetAddress from, 
-                      InetAddress to, 
-                      Type type,
+    public NewItemNfn( Type type,
                       ArrayList<Item> items,
-                      Table table)
+                      int table)
     {
         super();
         this.type = type;
@@ -47,9 +43,6 @@ public class NewItemNfn extends EventNotification
         
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-//        MyClient.debugGUI.addText("Making new item notification:\n" 
-  //                          + cal.get(Calendar.HOUR_OF_DAY) + ":" 
-    //                        + cal.get(Calendar.MINUTE));
         this.hours = cal.get(Calendar.HOUR_OF_DAY);
         this.minutes = cal.get(Calendar.MINUTE); 
     } // constructor
@@ -77,7 +70,7 @@ public class NewItemNfn extends EventNotification
         return minutes;
     }
     
-    public Table getTable()
+    public int getTable()
     {
         return table;
     }
@@ -86,7 +79,7 @@ public class NewItemNfn extends EventNotification
     @Override
     public String toString()
     {
-        String sToReturn = "Table " + table.getTableNumber() + "\n";
+        String sToReturn = "Table " + table + "\n";
         sToReturn += "Time: " + getHours() + ":" + getMinutes() + "\n";
         
         for(Item i : items)

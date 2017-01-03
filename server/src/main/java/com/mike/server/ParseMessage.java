@@ -208,11 +208,11 @@ public class ParseMessage {
     private void parseTabUpdateNfn(EventNotification message)
     {
         TabUpdateNfn event = (TabUpdateNfn)message;
-        Integer tableNumber = event.getTab().getTable();
+        Integer tableNumber = event.getUpdatedTab().getTable();
         
         if (tableNumber >= 1 && tableNumber <= tableNumber)
         {
-            tables.getTable(tableNumber).updateTab(event.getTab());
+            tables.getTable(tableNumber).updateTab(event.getUpdatedTab());
         }
         //gui.addText("Tab updated");          
     } // parseTabUpdateNfn

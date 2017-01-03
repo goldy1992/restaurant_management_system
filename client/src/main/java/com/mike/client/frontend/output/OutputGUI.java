@@ -5,7 +5,7 @@
  */
 package com.mike.client.frontend.output;
 
-import com.mike.client.frontend.Client;
+import com.mike.client.helpers.TimeHelper;
 import com.mike.item.Item;
 import com.mike.message.EventNotification.NewItemNfn;
 
@@ -15,20 +15,11 @@ import com.mike.message.EventNotification.NewItemNfn;
  */
 public class OutputGUI extends javax.swing.JFrame {
 
-    private final Client parent;
-    /**
-     * Creates new form KitchenGUI
-     * @param parent
-     */
-    public OutputGUI(Client parent) 
-    {
-        this.parent = parent;
+    public OutputGUI() {
         initComponents();
-
     }
    
-    public void addText(String msg)
-    {
+    public void addText(String msg) {
         String currentText = outputPanel.getText();       
         currentText += msg;                     
         currentText += "\n\n";
@@ -36,13 +27,11 @@ public class OutputGUI extends javax.swing.JFrame {
         outputPanel.setText(currentText);
     }
     
-    public void addMessage(NewItemNfn msg)
-    {
+    public void addMessage(NewItemNfn msg) {
         String currentText = outputPanel.getText();
-        currentText += "Table " +  msg.getTable().getTableNumber() + " - " + parent.timeToString(msg.getHours(), msg.getMinutes()) + "\n";
+        currentText += "Table " +  msg.getTable() + " - " + TimeHelper.timeToString(msg.getHours(), msg.getMinutes()) + "\n";
         
-        for (Item i : msg.getItems())
-        {
+        for (Item i : msg.getItems()) {
             currentText += i.getQuantity().toString() + "\t" + i.getName() + "\n";
             
             if (!i.getMessage().equals(""))
@@ -83,27 +72,9 @@ public class OutputGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane outputPanel;
     // End of variables declaration//GEN-END:variables
-
-    public static OutputGUI makeGUI(Client parent)
-    {
-        OutputGUI till = new OutputGUI(parent);
-        // if for each title
-        switch(parent.getType())
-        {
-            case TILL: till.setTitle("Till Client Output"); break;
-            case WAITER: till.setTitle("Waiter Client Output"); break;
-            case BAR: till.setTitle("Bar Client Output"); break;
-            case KITCHEN: till.setTitle("Kitchen Client Output"); break;
-        } // switch
-        System.out.println("make gui");
-        //till.addText("pre while");
-        return till;
-    }
     
 }

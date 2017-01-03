@@ -69,4 +69,5 @@
     </int:channel>
 
     <int:channel id="tableStatusEvtNotificationChannel" />
+    <int:channel id="NewItemNotificationChannel" />
 </beans>

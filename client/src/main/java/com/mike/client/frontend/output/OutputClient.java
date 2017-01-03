@@ -32,28 +32,7 @@ public class OutputClient extends Client implements Runnable
     {
 
         OutputClient client = null;
-        try
-        {
-            switch(args[0])
-            {
-                case "bar": System.out.println("making bar"); 
-                client = (OutputClient)Client.makeClient(BAR); 
-                System.out.println("made bar " + client);break;
-                case "kitchen": System.out.println("making kitchen"); 
-                client = (OutputClient)Client.makeClient(KITCHEN); 
-                System.out.println("made kitchen " + client); break;
-                default: System.out.println("invalid argument"); System.exit(0); 
-            }
-            System.out.println("end of switch");
 
-    //    client.debugGUI.setVisible(true);
-        System.out.println("got here");
-        while (true);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
            
     } // main
 

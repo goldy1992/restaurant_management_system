@@ -18,19 +18,7 @@ public abstract class Client
         this.type = type;
     }
     
-     public String sortTimeSyntax(int time)
-    {        
-        if (time == 0) return "00";
-        else if (time > 0 && time <= 9)
-            return "0" + time;
-        else return time + "";
-        
-    } // sortTimeSyntax
 
-    public String timeToString(int hours, int minutes)
-    {
-        return sortTimeSyntax(hours) + ":" + sortTimeSyntax(minutes);
-    }
    
     
     public static Client makeClient(ClientType clientType)

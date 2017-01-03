@@ -81,7 +81,7 @@ public class TillClient extends UserClient
 //    {
 //        synchronized(this.gui.getMenu().selectorFrame.lock)
 //        {            
-//            Tab t = resp.getTab();
+//            Tab t = resp.getUpdatedTab();
 //            if(this.gui.getMenu().selectorFrame.getState() == BarTabDialogView.Functionality.GET_TAB)
 //                gui.getMenu().setUpTab(t);
 //            else

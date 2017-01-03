@@ -1,6 +1,9 @@
 package com.mike.server;
 
+import com.mike.item.Item;
+import com.mike.item.Tab;
 import com.mike.message.EventNotification.EventNotification;
+import com.mike.message.EventNotification.NewItemNfn;
 import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Request.LeaveRequest;
@@ -121,8 +124,14 @@ public class MessageParser {
 
 	@ServiceActivator(inputChannel="messagetabUpdateNotificationChannel", outputChannel="messageResponseChannel")
 	public void parseTabUpdateEventNotification(TabUpdateNfn tabUpdateNfn){
-		int tabNumber = tabUpdateNfn.getTab().getTabNumber();
-		server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getTab());
+		int tabNumber = tabUpdateNfn.getUpdatedTab().getTabNumber();
+		server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getUpdatedTab());
+		Tab newItems = tabUpdateNfn.getNewItems();
+
+		NewItemNfn drinks = new NewItemNfn(Item.Type.DRINK, newItems.getDrinks(), tabNumber);
+		NewItemNfn food = new NewItemNfn(Item.Type.FOOD, newItems.getFood(), tabNumber);
+		sendItemNotification(drinks);
+		sendItemNotification(food);
 	}
 
 	@ServiceActivator(inputChannel="customErrorChannel")
@@ -141,6 +150,16 @@ public class MessageParser {
 			MessageHeaders mh = new MessageHeaders(null);
 			Message<EventNotification> m = MessageBuilder.createMessage(eventNotification, mh);
 			Message<EventNotification> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, clients).build();
+			sendGateway.send(mSend);
+		}
+	}
+
+	private void sendItemNotification(NewItemNfn newItemNfn) {
+		String destinationAddress = newItemNfn.getType() == Item.Type.FOOD ? server.getKitchenClient() : server.getBarClient();
+		if (null != destinationAddress) {
+			MessageHeaders mh = new MessageHeaders(null);
+			Message<EventNotification> m = MessageBuilder.createMessage(newItemNfn, mh);
+			Message<EventNotification> mSend = MessageBuilder.fromMessage(m).setHeader(IpHeaders.CONNECTION_ID, destinationAddress).build();
 			sendGateway.send(mSend);
 		}
 	}

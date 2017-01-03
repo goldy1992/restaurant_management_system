@@ -7,17 +7,13 @@ import com.mike.message.Response.RegisterClientResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class WaiterClientController {
-	
-	@Autowired
-	private WaiterClient waiterClient;
 
 	@Autowired
 	private SelectTableController selectTableController;
 	
     @Autowired
     public MessageSender messageSender;
-	
-	public void setWaiterClient(WaiterClient waiterClient) { this.waiterClient = waiterClient; }
+
 	public void setSelectTableController(SelectTableController selectTableController) { this.selectTableController = selectTableController; }
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	

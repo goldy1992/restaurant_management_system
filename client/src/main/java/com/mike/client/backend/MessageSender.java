@@ -94,8 +94,8 @@ public class MessageSender {
 		sendGateway.send(tableStatusEvtNfn);
 	}
 
-	public void sendTabUpdateNotification(Tab tab) {
-		TabUpdateNfn tabUpdateNfn = new TabUpdateNfn(tab);
+	public void sendTabUpdateNotification(Tab updatedTab, Tab newItems) {
+		TabUpdateNfn tabUpdateNfn = new TabUpdateNfn(updatedTab, newItems);
 		sendGateway.send(tabUpdateNfn);
 	}
 

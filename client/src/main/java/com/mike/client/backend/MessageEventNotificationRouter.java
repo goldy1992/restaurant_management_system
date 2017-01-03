@@ -1,5 +1,6 @@
 package com.mike.client.backend;
 
+import com.mike.message.EventNotification.NewItemNfn;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
@@ -11,12 +12,11 @@ public class MessageEventNotificationRouter {
 	 @Router(inputChannel = "typeRouterToEventNotificationChannel")
 	  public String accept(EventNotification notification){
 	        if (notification instanceof TableStatusEvtNfn) {
-	        	System.out.println("received table status event nfn");
 	        	return "tableStatusEvtNotificationChannel";
-	        
-	        }
+	        } else if (notification instanceof NewItemNfn) {
+			 	return "NewItemNotificationChannel";
+		 	}
 	        return "";
-	        
 	 }
 
 

@@ -6,9 +6,6 @@
 package com.mike.message.EventNotification;
 
 import com.mike.item.Tab;
-import com.mike.message.Message;
-import java.net.InetAddress;
-import org.springframework.messaging.MessageHeaders;
 
 /**
  *
@@ -16,23 +13,28 @@ import org.springframework.messaging.MessageHeaders;
  */
 public class TabUpdateNfn extends EventNotification {
 
-    private final Tab tab;
+    private final Tab updatedTab;
+    private Tab newItems;
     
     /**
      *
-     * @param t the tab
+     * @param updatedTab the new and the old tabbed merged
+     * @param newItems the new items that were added to the tab
      */
-    public TabUpdateNfn(Tab t) {
+    public TabUpdateNfn(Tab updatedTab, Tab newItems) {
         super();
-        this.tab = t;
+        this.updatedTab = updatedTab;
+        this.newItems = newItems;
     }
     
     /**
      *
      * @return
      */
-    public Tab getTab()
+    public Tab getUpdatedTab()
     {
-        return tab;
+        return updatedTab;
     }
+    public Tab getNewItems() { return newItems;    }
+    public void setNewItems(Tab newItems) { this.newItems = newItems; }
 }
