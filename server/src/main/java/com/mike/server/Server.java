@@ -12,8 +12,8 @@ import java.util.HashSet;
  */
 public class Server
 {
-    private HashSet<String> waiterClient;
-    private HashSet<String> tillClient;
+    private HashSet<String> waiterClient = new HashSet<>();
+    private HashSet<String> tillClient = new HashSet<>();
     private String barClient = null;
     private String kitchenClient = null;
     private HashMap<Integer, Table> tables;
