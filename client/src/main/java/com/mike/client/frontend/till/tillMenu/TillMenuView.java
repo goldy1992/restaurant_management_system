@@ -34,7 +34,7 @@ public class TillMenuView extends MenuView {
     protected String[] getOptionNames() {
        String[] x = {"Print Bill", "Print Last Receipt", "Void",
            "Void Last Item",  "Split Bill", "Order On Hold", "Delivered",
-           "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Send Order"};
+           "Bar Tab", "Other Payment Methods", "Debit Card Pay", "Cash Pay", "Send Order"};
        return x;
     }
 } // class

@@ -1,6 +1,7 @@
 package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.MenuController;
+import com.mike.client.frontend.till.TillClientController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuModel;
 import com.mike.item.Tab;
@@ -20,12 +21,14 @@ public class TillMenuController extends MenuController {
 	@Autowired
 	private BarTabMenuController barTabMenuController;
 
+	private TillClientController tillClientController;
 	public TillMenuController() {
 		super();
 	}
 
-	@Override
-	public <V extends JFrame> void init(V tillView, Tab tab) {
+
+	public <V extends JFrame> void initTillMenu(TillClientController tillClientController, V tillView, Tab tab) {
+		this.tillClientController = tillClientController;
 		List<MenuPageDAO> menuPageDAOs = getMenuPageDAOs();
 		this.model = new TillMenuModel();
 		model.init(menuPageDAOs, null);
@@ -113,8 +116,23 @@ public class TillMenuController extends MenuController {
 	} // writeBill
 
 	@Override
-	protected void sendOrder() {
+	protected void sendOrder() {	}
 
+	protected void cashPay() {
+		Float amount = null;
+		Float change = 0f;
+		try {
+			amount = Float.parseFloat(view.getQuantityTextPane().getText());
+			amount = amount * 0.01f;
+		} catch (Exception e) {
+			return;
+		}
+		if ((float)amount >= model.getTotal()) {
+			tillClientController.setChange(amount - (float)model.getTotal());
+		} else {
+			view.getQuantityTextPane().setText("");
+		}
+		view.dispose();
 	}
 
 
@@ -123,6 +141,7 @@ public class TillMenuController extends MenuController {
 			case "Bar Tab": barTabPressed(); break;
 			case "Print Last Receipt": writeLastReceipt(); break;
 			case "Send Order": sendOrder(); break;
+			case "Cash Pay": cashPay();
 			default: break;
 		} // switch
 	}

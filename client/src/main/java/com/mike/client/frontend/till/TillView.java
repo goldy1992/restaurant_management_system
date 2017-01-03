@@ -18,9 +18,6 @@ public class TillView extends javax.swing.JFrame
     public TillView(TillClientController tillClientController) {
         super();
         this.tillClientController = tillClientController;
-    //    this.parent = parent;
-//        this.menu = TillMenu.makeMenu(parent, 
- //               null, null, parent.getOutputStream(),  this);
         initComponents();
     }
 
@@ -89,9 +86,9 @@ public class TillView extends javax.swing.JFrame
             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, 
             null, null, null);
                 
-        if (confirm == 0) 
-        { 
-//            try 
+        if (confirm == 0) {
+
+//            try
 //            {
 //                // TODO add your handling code here:
 //                menu.con.close();
