@@ -6,6 +6,7 @@ import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuModel;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.message.Response.TabResponse;
 import com.mike.message.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,16 +58,21 @@ public class TillMenuController extends MenuController {
 				if (chosenTabNumber == null) {
 					view.getQuantityTextPane().setText("there are no tabs to display!");
 					return;
-				}
+				} else {
 
-				messageSender.sendTableStatusEventNotification(chosenTabNumber, Table.TableStatus.IN_USE);
-				//messageSender.sendOrder();
-//				tGUI.setUpTab(null);
-//				tGUI.outputTextPane.setText("");
-//				tGUI.tabLoaded = false;
-//				tGUI.dihisspose();
+					messageSender.sendTableStatusEventNotification(chosenTabNumber, Table.TableStatus.IN_USE);
+					TabResponse response = messageSender.sendTabRequest(chosenTabNumber);
+					this.model.setOldTab(response.getTab());
+					this.model.setNewTab(new Tab());
+					this.view.setUpTab(response.getTab());
+				}
 			} else {
 				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.ADD_TO_TAB);
+				messageSender.sendTableStatusEventNotification(chosenTabNumber, Table.TableStatus.IN_USE);
+				TabResponse response = messageSender.sendTabRequest(chosenTabNumber);
+				Tab updatedTab = response.getTab().mergeTabs(model.getNewTab());
+				updatedTab.setTabNumber(chosenTabNumber);
+				// TODO: send the orde after working on kitchen and bar client
 			}
 			model.setTabLoaded(true);
 		} else {
