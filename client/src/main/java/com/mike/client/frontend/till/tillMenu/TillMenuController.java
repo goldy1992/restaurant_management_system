@@ -34,7 +34,7 @@ public class TillMenuController extends MenuController {
 		this.model = new TillMenuModel();
 		model.init(menuPageDAOs, null);
 		this.view = new TillMenuView(this, tillView, model, true);
-		this.view.setVisible(true);
+		this.getView().setVisible(true);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class TillMenuController extends MenuController {
 
 	private void barTabPressed() {
 		TillMenuModel model = (TillMenuModel)this.model;
-		TillMenuView view = (TillMenuView)this.view;
+		TillMenuView view = (TillMenuView) this.getView();
 		Integer chosenTabNumber = null;
 		if (!model.isTabLoaded()) {
 			System.out.println("tabLoaded == false");
@@ -64,7 +64,7 @@ public class TillMenuController extends MenuController {
 					TabResponse response = messageSender.sendTabRequest(chosenTabNumber);
 					this.model.setOldTab(response.getTab());
 					this.model.setNewTab(new Tab());
-					this.view.setUpTab(response.getTab());
+					this.getView().setUpTab(response.getTab());
 				}
 			} else {
 				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.ADD_TO_TAB);
@@ -128,7 +128,7 @@ public class TillMenuController extends MenuController {
 		Float amount = null;
 		Float change = 0f;
 		try {
-			amount = Float.parseFloat(view.getQuantityTextPane().getText());
+			amount = Float.parseFloat(getView().getQuantityTextPane().getText());
 			amount = amount * 0.01f;
 		} catch (Exception e) {
 			return;
@@ -136,9 +136,9 @@ public class TillMenuController extends MenuController {
 		if ((float)amount >= model.getTotal()) {
 			tillClientController.setChange(amount - (float)model.getTotal());
 		} else {
-			view.getQuantityTextPane().setText("");
+			getView().getQuantityTextPane().setText("");
 		}
-		view.dispose();
+		getView().dispose();
 	}
 
 

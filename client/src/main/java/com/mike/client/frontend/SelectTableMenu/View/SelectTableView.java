@@ -4,7 +4,7 @@ import com.mike.client.frontend.SelectTableMenu.SelectTableController;
 import com.mike.message.Table.TableStatus;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import static java.awt.Color.BLACK;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
@@ -41,6 +41,7 @@ public class SelectTableView extends javax.swing.JFrame
         initComponents();
         makeTableButtons(statuses);
         initListeners(selectTableController);
+        openTable.setName("openTable");
     } 
     
     /**
@@ -77,8 +78,8 @@ public class SelectTableView extends javax.swing.JFrame
     
     private void setButton(int index, Color c, String msg)
     {
-        tableButtons[index].setBackground(c);
-        tableButtons[index].setText(msg);        
+        getTableButtons()[index].setBackground(c);
+        getTableButtons()[index].setText(msg);
     }
     
     private String getMessage(int index, TableStatus t)
@@ -98,6 +99,7 @@ public class SelectTableView extends javax.swing.JFrame
         for(int i = 1; i < statuses.size(); i++)
         {
             buttons[i] = new JButton();
+            buttons[i].setName("table" + i);
             TableNumPanel.add(buttons[i]); 
         } // for
         
@@ -183,9 +185,9 @@ public class SelectTableView extends javax.swing.JFrame
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.weighty = 0.8333;
         FormPanel.add(ExternalOptionsPanel, gridBagConstraints);
-        ExternalOptionsPanel.add(openTable);
-        ExternalOptionsPanel.add(moveTable);
-        ExternalOptionsPanel.add(cleanTable);
+        ExternalOptionsPanel.add(getOpenTable());
+        ExternalOptionsPanel.add(getMoveTable());
+        ExternalOptionsPanel.add(getCleanTable());
 
 
         TableNumPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -229,12 +231,12 @@ public class SelectTableView extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void initListeners(SelectTableController selectTableController) {
-    	for(int i = 1; i < tableButtons.length; i++){
-    		tableButtons[i].addActionListener(selectTableController);
+    	for(int i = 1; i < getTableButtons().length; i++){
+    		getTableButtons()[i].addActionListener(selectTableController);
     	}
-        openTable.addActionListener(selectTableController);
-        moveTable.addActionListener(selectTableController);
-        cleanTable.addActionListener(selectTableController);
+        getOpenTable().addActionListener(selectTableController);
+        getMoveTable().addActionListener(selectTableController);
+        getCleanTable().addActionListener(selectTableController);
         this.addWindowListener(selectTableController);
     	
     }
@@ -267,8 +269,8 @@ public class SelectTableView extends javax.swing.JFrame
     }
     
     public Integer getSelectedTable(ActionEvent event) {
-        for (int i = 0; i <  tableButtons.length; i++) {
-            if (event.getSource() == tableButtons[i]) {
+        for (int i = 0; i <  getTableButtons().length; i++) {
+            if (event.getSource() == getTableButtons()[i]) {
                 return i;
             } // if
         }    	
@@ -276,23 +278,26 @@ public class SelectTableView extends javax.swing.JFrame
     }
     
     public boolean isTableXSelected(ActionEvent actionEvent, int x) {
-    	if(x < 1 || x > tableButtons.length) {
+    	if(x < 1 || x > getTableButtons().length) {
     		return false;
     	}
     	
-    	return actionEvent.getSource() == tableButtons[x];
+    	return actionEvent.getSource() == getTableButtons()[x];
     }
     
     public boolean isCleanTableSelected(ActionEvent actionEvent) {
-    	return actionEvent.getSource() == cleanTable;
+    	return actionEvent.getSource() == getCleanTable();
     }
     
     public boolean isOpenTableSelected(ActionEvent actionEvent) {
-    	return actionEvent.getSource() == openTable;
+    	return actionEvent.getSource() == getOpenTable();
     }
     
     public boolean isMoveTableSelected(ActionEvent actionEvent) {
-    	return actionEvent.getSource() == moveTable;
+    	return actionEvent.getSource() == getMoveTable();
     }
-       
+
+    public JButton getOpenTable() { return openTable; }
+    public JButton getMoveTable() { return moveTable; }
+    public JButton getCleanTable() { return cleanTable; }
 } // class

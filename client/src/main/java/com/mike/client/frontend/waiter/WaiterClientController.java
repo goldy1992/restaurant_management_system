@@ -23,6 +23,8 @@ public class WaiterClientController {
         if (!registerClientResponse.hasPermission()) {
         	System.exit(0);                               
     	} // if
-        selectTableController.init();
+        getSelectTableController().init();
 	}
-	}
+
+	public SelectTableController getSelectTableController() { return selectTableController; }
+}

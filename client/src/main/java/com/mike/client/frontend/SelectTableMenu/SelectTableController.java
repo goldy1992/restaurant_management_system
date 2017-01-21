@@ -15,7 +15,6 @@ import com.mike.message.Table.TableStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
-import sun.awt.WindowClosingListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -64,8 +63,7 @@ public class SelectTableController implements ActionListener, WindowListener
 		}
 		this.model = new SelectTableModel(ts);
         this.view = new SelectTableView(this, ts);
-        view.setVisible(true); 
-		 
+        view.setVisible(true);
     }
     
     private void selectCleanTable(ActionEvent event) {
@@ -86,7 +84,7 @@ public class SelectTableController implements ActionListener, WindowListener
 			view.setTableStatus(tableSelected, IN_USE);
 			messageSender.sendTableStatusEventNotification(tableSelected, IN_USE);
 			TabResponse response = messageSender.sendTabRequest(tableSelected);
-			menuController.init(this.view, response.getTab());
+			getMenuController().init(this.view, response.getTab());
 			System.out.println("table selected");
 		} // else
 	}
@@ -153,4 +151,8 @@ public class SelectTableController implements ActionListener, WindowListener
 	public void windowActivated(WindowEvent e) {	}
 	@Override
 	public void windowDeactivated(WindowEvent e) {	}
+
+	public MenuController getMenuController() {
+		return menuController;
+	}
 }

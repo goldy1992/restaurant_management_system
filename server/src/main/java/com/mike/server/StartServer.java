@@ -19,7 +19,7 @@ public class StartServer {
     
     private static final int PORT_NUMBER = 11000;
     private static final int NUM_OF_TABLES = 44;
-    
+
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, SQLException {
         AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/server-context.xml", StartServer.class);
@@ -28,6 +28,11 @@ public class StartServer {
         initDb.init();
         for (int i = 1; i <= NUM_OF_TABLES; i++) {
         	server.getTables().put(i, new Table(i));
+        }
+        if (args.length < 1) {
+            System.out.println("Startup Complete");
+        } else {
+            System.out.println(args[0]);
         }
     } // main
 

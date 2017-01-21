@@ -360,6 +360,7 @@ public class MenuView extends JDialog {
 
 		for (String s : getOptionNames()) {
 			JButton newButton = new JButton();
+			newButton.setName(s);
 			newButton.setText(s);
 			newButton.addActionListener(menuController);
 			BillHandlePanel.add(newButton);
@@ -451,5 +452,6 @@ public class MenuView extends JDialog {
 	public MenuCardPanel getKitchenBarMsgPanel() { return kitchenBarMsgPanel; }
 	public JTextPane getQuantityTextPane() { return quantityTextPane; }
 	public void setQuantityTextPane(JTextPane quantityTextPane) { this.quantityTextPane = quantityTextPane;	}
+	public ArrayList<JButton> getButtons() { return buttons; }
 
 } // class

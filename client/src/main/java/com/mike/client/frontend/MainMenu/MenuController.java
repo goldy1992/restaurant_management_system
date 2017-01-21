@@ -68,14 +68,14 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 
 	private void parseKeyPanelJButton(KeypadPanelJButton keypadPanelJButton) {
 		model.addDigitToQuantity(keypadPanelJButton.getNumber());
-		view.addNumberToQuantity(model.getQuantitySelected());
+		getView().addNumberToQuantity(model.getQuantitySelected());
 	}
 
 	private void parseKeyJButton(KeyJButton keyJButton) {
 		if (model.getNewTab().getNumberOfItems() > 0) {
-			String currentText = view.getOutputArea().getText();
+			String currentText = getView().getOutputArea().getText();
 			currentText += keyJButton.getKey();
-			view.getOutputArea().setText(currentText);
+			getView().getOutputArea().setText(currentText);
 			Tab newT = model.getNewTab();
 			newT.getItems().get(newT.getItems().size() - 1).appendCharacter(keyJButton.getKey());
 			model.setMessageForLatestItem(true);
@@ -85,7 +85,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 	private void parseMenuItem(MenuItemJButton menuItemJButton) {
 		if (menuItemJButton.isNeedAgeCheck() && !model.isSeenId()) {
 			int number = JOptionPane.showConfirmDialog(
-					view, "Does the customer pass an ID Check?",
+					getView(), "Does the customer pass an ID Check?",
 					"ID Check", JOptionPane.YES_NO_OPTION);
 
 			if (number == 0) {
@@ -111,9 +111,9 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			int amountInStock = response.get(0).getQuantity();
 
 			if (quantity > amountInStock) {
-				JOptionPane.showMessageDialog(view, "Error: There's only " + amountInStock + " " + menuItemJButton.getText() + " available in stock");
+				JOptionPane.showMessageDialog(getView(), "Error: There's only " + amountInStock + " " + menuItemJButton.getText() + " available in stock");
 				model.setQuantitySelected(-1);
-				view.getQuantityTextPane().setText("");
+				getView().getQuantityTextPane().setText("");
 				return;
 			} // if
 			else  { // remove from stock
@@ -129,27 +129,27 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		model.getNewTab().addItem(newItem);
 
 		model.setQuantitySelected(-1);
-		view.getQuantityTextPane().setText("");
+		getView().getQuantityTextPane().setText("");
 
 
 		// MyClient.debugGUI.addText( newItem.toString() + "\n");
 		// CODE TO ADD SCREEN
 
-		String currentText = view.getOutputTextPane().getText();
+		String currentText = getView().getOutputTextPane().getText();
 		if (model.isMessageForLatestItem()) {
-			view.getOutputTextPane().setText(currentText + "\n" + newItem.outputToScreen());
+			getView().getOutputTextPane().setText(currentText + "\n" + newItem.outputToScreen());
 		} else {
-			view.getOutputTextPane().setText(currentText + newItem.outputToScreen());
+			getView().getOutputTextPane().setText(currentText + newItem.outputToScreen());
 			model.setMessageForLatestItem(false);
 		}
 		// ADD TOTAL
-		view.setTotal(model.getTotal());
+		getView().setTotal(model.getTotal());
 	} // parseMenuItem
 
 	protected void dealWithButtons(JButton button) {
 		switch(button.getText())
 		{
-			case "Send Order":  sendOrder();  view.dispose(); break;
+			case "Send Order":  sendOrder();  getView().dispose(); break;
 			case "Print Bill":  printBill(); break;
 			case "Void": voidItem(); break;
 			case "Void Last Item": voidLastItem(); break;
@@ -177,7 +177,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			} // if
 		//	else
 			{
-				view.dispose();
+				getView().dispose();
 			}
 		} // try
 		catch (IOException ex) {
@@ -187,14 +187,14 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 
 	private void voidItem()
 	{
-		VoidItemsDialog vItem = new VoidItemsDialog(view, true, new Pair<>(model.getOldTab(), model.getNewTab()));
+		VoidItemsDialog vItem = new VoidItemsDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
 
 		Pair<Tab, Tab> result = vItem.startDialog();
 		model.setOldTab(result.getFirst());
 		model.setNewTab(result.getSecond());
 
-		view.setTotal(model.getTotal());
-		view.getOutputTextPane().setText(model.getOldTab().toString() + model.getNewTab().toString());
+		getView().setTotal(model.getTotal());
+		getView().getOutputTextPane().setText(model.getOldTab().toString() + model.getNewTab().toString());
 	}
 
 	private void voidLastItem()
@@ -203,15 +203,15 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			return;
 		}
 		model.getNewTab().removeItem(model.getNewTab().getItems().get(model.getNewTab().getItems().size() - 1));
-		view.getOutputTextPane().setText(model.getOldTab().toString() + model.getNewTab().toString());
-		view.setTotal(model.getTotal());
+		getView().getOutputTextPane().setText(model.getOldTab().toString() + model.getNewTab().toString());
+		getView().setTotal(model.getTotal());
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		if (me.getSource() == this || me.getSource() == view.getOutputTextPane() || me.getSource() instanceof MenuCardPanel
+		if (me.getSource() == this || me.getSource() == getView().getOutputTextPane() || me.getSource() instanceof MenuCardPanel
 				|| me.getSource() instanceof KeypadJPanel) {
-			view.switchToParentCard();
+			getView().switchToParentCard();
 		}
 	}
 
@@ -223,4 +223,8 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {	}
+
+	public MenuView getView() {
+		return view;
+	}
 } // class
