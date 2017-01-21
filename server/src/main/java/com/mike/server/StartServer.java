@@ -7,6 +7,8 @@ package com.mike.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Scanner;
+
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.mike.message.Table;
@@ -34,6 +36,21 @@ public class StartServer {
         } else {
             System.out.println(args[0]);
         }
+
+        boolean exit = false;
+
+        while (!exit) {
+            Scanner sc = new Scanner(System.in);
+            String input = sc.next();
+            if (input.trim().toLowerCase().equals("exit")) {
+                exit = true;
+            }
+        }
+
+        integrationContext.close();
+        integrationContext.destroy();
+
+
     } // main
 
     
