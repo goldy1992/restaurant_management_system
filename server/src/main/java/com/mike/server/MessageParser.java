@@ -60,7 +60,7 @@ public class MessageParser {
 	
 	@ServiceActivator(inputChannel="messageTableStatusRequestChannel",  outputChannel="messageResponseChannel")
 	public TableStatusResponse parseTableStatusRequest(TableStatusRequest request) {
-		
+	System.out.println("hit table status request parse");
 		Map<Integer, Table.TableStatus> tableStatuses = new HashMap<>();
 		
 		if (request.getTableList().isEmpty()) {
@@ -74,6 +74,7 @@ public class MessageParser {
 			}			
 		}
 		TableStatusResponse response = new TableStatusResponse(request, tableStatuses);
+		System.out.println("sending tableresp");
 		return response;
 	}
 	

@@ -19,12 +19,14 @@ import com.mike.server.database.InitialiseDatabase;
  */
 public class StartServer {
     
-    private static final int PORT_NUMBER = 11000;
+
     private static final int NUM_OF_TABLES = 44;
 
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, SQLException {
         AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/server-context.xml", StartServer.class);
+        //integrationContext.registerShutdownHook();
+        //integrationContext.refresh();
         Server server = (Server) integrationContext.getBean("server");
         InitialiseDatabase initDb = (InitialiseDatabase) integrationContext.getBean("initialiseDatabase");
         initDb.init();

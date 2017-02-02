@@ -82,10 +82,8 @@ public class SelectTableView extends javax.swing.JFrame
         getTableButtons()[index].setText(msg);
     }
     
-    private String getMessage(int index, TableStatus t)
-    {
-        switch(t)
-        {
+    private String getMessage(int index, TableStatus t) {
+        switch(t) {
             case FREE: return "<html>Table " + index + "<br>Free</html>";
             case IN_USE: return"<html>Table " + index + "<br>Table in Use</html>";
             case OCCUPIED: return "<html>Table " + index + "<br>Occupied</html>";

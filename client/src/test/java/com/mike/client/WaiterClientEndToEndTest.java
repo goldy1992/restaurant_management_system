@@ -1,6 +1,5 @@
 package com.mike.client;
 
-import com.mike.client.frontend.MainMenu.View.MenuView;
 import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
 import com.mike.client.frontend.waiter.WaiterClientController;
 import org.fest.swing.timing.Condition;
@@ -15,10 +14,7 @@ import org.springframework.util.SocketUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -40,7 +36,7 @@ public class WaiterClientEndToEndTest {
     SelectTableView selectTableView;
     WaiterClientController waiterClientController;
     GenericXmlApplicationContext context;
-
+    OutputStream os;
     @Before
     public void setup() throws IOException, ClassNotFoundException, InterruptedException {
         deployServer();
@@ -58,10 +54,12 @@ public class WaiterClientEndToEndTest {
         errorFile = new File("error");
         pb = new ProcessBuilder();
         pb.directory(new File(System.getProperty("user.dir")));
-        pb.command(new String[]{"cmd.exe", "/c", "cd", "../server", "&", "mvn", "exec:java", "-Dexec.mainClass=\"com.mike.server.StartServer\"", "-Dexec.args=\"" +  randomString + "\""});
+        pb.command(new String[]{"cmd.exe", "/c", "cd", "..", "&", "mvn", "clean", "install", "-DskipTests=true", "&", "cd", "server", "&", "mvn", "exec:java", "-Dexec.mainClass=\"com.mike.server.StartServer\"", "-Dexec.args=\"" +  randomString + "\""});
         pb.redirectOutput(outputFile);
         pb.redirectError(errorFile);
+
         p = pb.start();
+        os = p.getOutputStream();
 
         boolean deploymentComplete = false;
         while(!deploymentComplete) {
@@ -86,7 +84,11 @@ public class WaiterClientEndToEndTest {
     } // deployServer
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
+        String exit = "exit";
+        os.write(exit.getBytes());
+        os.flush();
+        os.close();
         outputFile.delete();
         errorFile.delete();
         p.destroy();
@@ -94,13 +96,7 @@ public class WaiterClientEndToEndTest {
         context.destroy();
     }
 
-    @Test
-    public void firstTest() throws InterruptedException, AWTException, InvocationTargetException {
-
-        selectTableView.getTableButtons()[8].doClick();
-        assertThat(selectTableView.getOutputLabel().getText(), CoreMatchers.containsString("Would you like to open Table 8"));
-
-
+    private void openTable() {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,8 +118,23 @@ public class WaiterClientEndToEndTest {
                 return true;
             }
         });
+    }
 
+    @Test
+    public void changeTableStatusTest() throws InterruptedException, AWTException, InvocationTargetException {
+        // GIVEN: the user is on the select table menu and all of the tables a currently free
+        // WHEN: the user chooses to open table 8
+        selectTableView.getTableButtons()[8].doClick();
+        // THEN: a message appears saying: Would you like to open Table 8
+        assertThat(selectTableView.getOutputLabel().getText(), CoreMatchers.containsString("Would you like to open Table 8"));
+        // WHEN: the table is opened
+        openTable();
+        assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Table in Use"));
+        assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(true));
+        // AND: the order is sent
         getButton("Send Order").doClick();
+        // THEN: the status of the table is set to occupied
+        assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(false));
         assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
     }
 

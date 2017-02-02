@@ -21,21 +21,23 @@ public class TableStatusEvtNfn extends EventNotification
     
     /**
      *
-     * @param from
-     * @param to
      * @param tableNumber
      * @param t
      */
-    public TableStatusEvtNfn(int tableNumber, Table.TableStatus t)
-    {
+    public TableStatusEvtNfn(int tableNumber, Table.TableStatus t) {
         super();
         this.tableNumber = tableNumber;
         this.tStatus = t;
     }
+
+    @Override
+    public String toString() {
+        return "tableNumber: " + tableNumber + ", status: " + tStatus;
+    }
     
     /**
      *
-     * @return
+     * @return tableNumber
      */
     public int getTableNumber()
     {
@@ -44,7 +46,7 @@ public class TableStatusEvtNfn extends EventNotification
     
     /**
      *
-     * @return
+     * @return tableStatus
      */
     public Table.TableStatus getTableStatus()
     {

@@ -119,6 +119,7 @@ public class SelectTableController implements ActionListener, WindowListener
     
     @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
     public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
+		System.out.println(tableStatusEvtNfn);
     	int tableNumber = tableStatusEvtNfn.getTableNumber();
     	TableStatus tableStatus = tableStatusEvtNfn.getTableStatus();
 		model.setTableStatus(tableNumber, tableStatus);
