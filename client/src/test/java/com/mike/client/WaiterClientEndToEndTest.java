@@ -1,5 +1,6 @@
 package com.mike.client;
 
+import com.mike.client.frontend.MainMenu.View.*;
 import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
 import com.mike.client.frontend.waiter.WaiterClientController;
 import org.fest.swing.timing.Condition;
@@ -14,6 +15,7 @@ import org.springframework.util.SocketUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
@@ -21,8 +23,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -132,13 +133,13 @@ public class WaiterClientEndToEndTest {
         assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Table in Use"));
         assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(true));
         // AND: the order is sent
-        getButton("Send Order").doClick();
+        getOperationButton("Send Order").doClick();
         // THEN: the status of the table is set to occupied
         assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(false));
         assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
     }
 
-    private JButton getButton(String buttonName) {
+    private JButton getOperationButton(String buttonName) {
         ArrayList<JButton> buttons = waiterClientController.getSelectTableController().getMenuController().getView().getButtons();
         JButton sendOrderButton = null;
         for (JButton jb : buttons) {
@@ -149,12 +150,97 @@ public class WaiterClientEndToEndTest {
         return sendOrderButton;
     }
 
-    @Test
-    public void secondTest() {
-        Pattern p = Pattern.compile("Table 8");
-        Matcher m = p.matcher("<html>Table 8<br>Free</html>");
+    private void selectMenuItem(String buttonName, int quantity) {
+        MenuView mv = waiterClientController.getSelectTableController().getMenuController().getView();
 
-        assertTrue(m.find());
+        mv.getCardPanel().getName();
+        while (!mv.currentCard.getName().equals("MAIN_PAGE")) {
+            MouseEvent me = new MouseEvent((Component)mv.getOutputTextPane(), MouseEvent.MOUSE_CLICKED, 0, // no modifiers
+                    10, 10, // where: at (10, 10}
+                    1, 1, false, 0);
+            mv.getOutputTextPane().dispatchEvent(me);
+        }
+
+        MenuItemJButton buttonToSelect = null;
+
+        for (MenuItemJButton mib: mv.getMenuItemButtons()) {
+            if (mib.getText().equals(buttonName)) {
+                buttonToSelect = mib;
+                break;
+            }
+        }
+
+        List menuCardPanelList = new ArrayList<MenuCardPanel>();
+
+        for (MenuCardPanel mcp : mv.getCardPanelsList()) {
+            if (mcp.getCardMenuItems().contains(buttonToSelect)) {
+                MenuCardPanel currentPanel = mcp;
+                while (null != currentPanel.getParentPanel()){
+                    menuCardPanelList.add(currentPanel);
+                    currentPanel = currentPanel.getParentPanel();
+                }
+                break;
+            }
+        }
+
+        for (int i = menuCardPanelList.size() - 1; i >= 0; i-- ) {
+            List<MenuCardLinkJButton> menuCardLinkJButtonList = mv.currentCard.getChildCardButtons();
+            for (MenuCardLinkJButton mb : menuCardLinkJButtonList) {
+                MenuCardPanel mcp = (MenuCardPanel)menuCardPanelList.get(i);
+                if (mb.getTargetPanel().getName().equals(mcp.getName())) {
+                    mb.doClick();
+                    break;
+                }
+            }
+        }
+
+
+        List<MenuItemJButton> menuItemJButtonList = mv.currentCard.getCardMenuItems();
+
+        if (quantity > 1) {
+            String quantityy = Integer.toString(quantity);
+            for (char c : quantityy.toCharArray()) {
+                KeypadPanelJButton keypadPanelJButton = (KeypadPanelJButton) mv.currentCard.getKeypadPanel().getComponent(quantity-1);
+                keypadPanelJButton.doClick();
+            }
+        }
+
+        for (MenuItemJButton mij: menuItemJButtonList) {
+            if (mij.getText().equals(buttonName)) {
+                mij.doClick();
+            }
+        }
+
+    }
+
+    @Test
+    public void rememberTabTest() {
+        // GIVEN: the user is on the select table menu and all of the tables a currently free
+        // WHEN: the user chooses to open table 8
+        selectTableView.getTableButtons()[8].doClick();
+        // THEN: a message appears saying: Would you like to open Table 8
+        assertThat(selectTableView.getOutputLabel().getText(), CoreMatchers.containsString("Would you like to open Table 8"));
+        // WHEN: the table is opened
+        openTable();
+        MenuView menuView = waiterClientController.getSelectTableController().getMenuController().getView();
+        assertThat(menuView.isVisible(), CoreMatchers.is(true));
+        // AND: 2  beef burgers are selected
+        selectMenuItem("Beef Burger", 2);
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("Beef Burger"));
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("2"));
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
+        // AND: the order is sent
+        getOperationButton("Send Order").doClick();
+        // THEN: the status of the table is set to occupied
+        assertThat(menuView.isVisible(), CoreMatchers.is(false));
+        assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
+        //WHEN: The table is opened again
+        selectTableView.getTableButtons()[8].doClick();
+        openTable();
+        // THEN: the tab remains up to date
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("Beef Burger"));
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("2"));
+        assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
     }
 
     private GenericXmlApplicationContext setupContext() {

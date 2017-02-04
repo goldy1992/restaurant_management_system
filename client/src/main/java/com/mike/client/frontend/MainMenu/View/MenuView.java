@@ -92,17 +92,20 @@ public class MenuView extends JDialog {
 		cardPanelsList = MenuViewBuilderHelper.createCardPanelsForView(this, menuModel);
 
 		// init the cardLayout to show the main panel
-		cardPanelsList.set(0, initialiseMainCard(cardPanelsList.get(0)));
+		getCardPanelsList().set(0, initialiseMainCard(getCardPanelsList().get(0)));
 
-		for (MenuCardPanel p : cardPanelsList) {
+		for (MenuCardPanel p : getCardPanelsList()) {
 			CardPanel.add(p, p.getName());
-			p.add(KeypadJPanel.createKeypadPanel());
+			KeypadJPanel keypadJPanel = KeypadJPanel.createKeypadPanel();
+			p.setKeypadPanel(keypadJPanel);
+			p.add(keypadJPanel);
+			this.getMenuItemButtons().addAll(p.getCardMenuItems());
 		}
 
 		//MyClient.debugGUI.addText("show");
 		CardLayout cl = (CardLayout) (CardPanel.getLayout());
-		cl.show(CardPanel, cardPanelsList.get(0).getName());
-		currentCard = cardPanelsList.get(0);
+		cl.show(CardPanel, getCardPanelsList().get(0).getName());
+		currentCard = getCardPanelsList().get(0);
 
 		/* set the kitchen card's parent now so that it is not null when it's it
 		first selected */
@@ -110,8 +113,8 @@ public class MenuView extends JDialog {
 
 		// this code only allows the output Area text pane to have key controls
 		components.addAll(buttons);
-		components.addAll(menuItemButtons);
-		components.addAll(cardPanelsList);
+		components.addAll(getMenuItemButtons());
+		components.addAll(getCardPanelsList());
 
 		for (JComponent t : components) {
 			t.setFocusable(false);
@@ -402,10 +405,10 @@ public class MenuView extends JDialog {
 
 
 			//MyClient.debugGUI.addText("current panel " + this.currentCard.getName());
-			int parentIndex = cardPanelsList.indexOf(this.currentCard.getParentPanel());
+			int parentIndex = getCardPanelsList().indexOf(this.currentCard.getParentPanel());
 			CardLayout cl = (CardLayout) (CardPanel.getLayout());
-			cl.show(CardPanel, cardPanelsList.get(parentIndex).getName());
-			currentCard = cardPanelsList.get(parentIndex);
+			cl.show(CardPanel, getCardPanelsList().get(parentIndex).getName());
+			currentCard = getCardPanelsList().get(parentIndex);
 
 
 			// set the new Kitchen message parent to be the new card.
@@ -454,4 +457,11 @@ public class MenuView extends JDialog {
 	public void setQuantityTextPane(JTextPane quantityTextPane) { this.quantityTextPane = quantityTextPane;	}
 	public ArrayList<JButton> getButtons() { return buttons; }
 
+	public ArrayList<MenuItemJButton> getMenuItemButtons() {
+		return menuItemButtons;
+	}
+
+	public ArrayList<MenuCardPanel> getCardPanelsList() {
+		return cardPanelsList;
+	}
 } // class
