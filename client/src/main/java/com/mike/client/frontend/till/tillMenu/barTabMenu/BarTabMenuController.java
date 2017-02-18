@@ -1,7 +1,6 @@
 package com.mike.client.frontend.till.tillMenu.barTabMenu;
 
 import com.mike.client.backend.MessageSender;
-import com.mike.client.frontend.MainMenu.View.KeyJButton;
 import com.mike.client.frontend.till.tillMenu.TillMenuView;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Response.TableStatusResponse;
@@ -21,8 +20,8 @@ import java.util.ArrayList;
 @MessageEndpoint
 public class BarTabMenuController implements ActionListener {
 
-    BarTabDialogView view;
-    BarTabMenuModel model;
+    private BarTabDialogView view;
+    private BarTabMenuModel model;
 
     @Autowired
     private MessageSender messageSender;
@@ -36,12 +35,12 @@ public class BarTabMenuController implements ActionListener {
         }
 
         model = new BarTabMenuModel();
-        model.setFunctionality(functionality);
-        model.init(response.getTableStatuses(), functionality);
+        getModel().setFunctionality(functionality);
+        getModel().init(response.getTableStatuses(), functionality);
         view = new BarTabDialogView(tillMenuView, modal);
-        view.init(model.getCurrentStatuses(), this, functionality);
-        view.setVisible(true);
-        return model.getChosenTab();
+        getView().init(getModel().getCurrentStatuses(), this, functionality);
+        getView().setVisible(true);
+        return getModel().getChosenTab();
     }
 
     public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender;  }
@@ -56,44 +55,49 @@ public class BarTabMenuController implements ActionListener {
             if (jButton.getText().equals("New Tab")) {
                 newTabAction();
             } else if (jButton.getText().equals("Cancel")) {
-                view.dispose();
+                getView().dispose();
                 view = null;
             } // else if
         }
     } // actionPerformed
 
     private void newTabAction() {
-        EnterQuantityDialog chooseNewTab = new EnterQuantityDialog(view, true);
+        EnterQuantityDialog chooseNewTab = new EnterQuantityDialog(getView(), true);
         chooseNewTab.setVisible(true);
         final int chosenTable = chooseNewTab.getValue();
 
-        if (chosenTable <= 0  || model.getCurrentStatuses().containsKey(chosenTable)) {
-            JOptionPane.showMessageDialog(view, "Invalid Tab Number.");
+        if (chosenTable <= 0  || getModel().getCurrentStatuses().containsKey(chosenTable)) {
+            JOptionPane.showMessageDialog(getView(), "Invalid Tab Number.");
         } else {
-            model.setChosenTab(chosenTable);
-            view.dispose();
+            getModel().setChosenTab(chosenTable);
+            getView().dispose();
         } //else
     } // newTabAction
 
     private void keyTabJButtonAction(TabJButton tabJButton) {
-        if (model.getCurrentStatuses().get(tabJButton.getTabNumber()) == Table.TableStatus.IN_USE) {
-            JOptionPane.showMessageDialog(view, "Tab " + tabJButton.getTabNumber() + " is currently in use!" );
+        if (getModel().getCurrentStatuses().get(tabJButton.getTabNumber()) == Table.TableStatus.IN_USE) {
+            JOptionPane.showMessageDialog(getView(), "Tab " + tabJButton.getTabNumber() + " is currently in use!" );
             return;
         } // if
         /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW
         IN USE */
         messageSender.sendTableStatusEventNotification(tabJButton.getTabNumber(), Table.TableStatus.IN_USE);
-        model.setChosenTab(tabJButton.getTabNumber());
-        view.dispose();
+        getModel().setChosenTab(tabJButton.getTabNumber());
+        getView().dispose();
         view = null;
     } // keyTabJButtonAction
 
     @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
     public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
-        model.getCurrentStatuses().put(tableStatusEvtNfn.getTableNumber(), tableStatusEvtNfn.getTableStatus());
+        if (null != model) {
+            model.getCurrentStatuses().put(tableStatusEvtNfn.getTableNumber(), tableStatusEvtNfn.getTableStatus());
+        }
         if (null != view) {
-            view.init(model.getCurrentStatuses(), this, model.getFunctionality());
+            view.init(getModel().getCurrentStatuses(), this, getModel().getFunctionality());
         }
     }
 
+    public BarTabDialogView getView() { return view; }
+
+    public BarTabMenuModel getModel() {        return model; }
 } // class

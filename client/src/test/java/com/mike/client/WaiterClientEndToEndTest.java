@@ -2,7 +2,12 @@ package com.mike.client;
 
 import com.mike.client.frontend.MainMenu.View.*;
 import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
+import com.mike.client.frontend.till.TillClientController;
+import com.mike.client.frontend.till.tillMenu.TillMenuView;
 import com.mike.client.frontend.waiter.WaiterClientController;
+import com.mike.client.gui.MenuViewPage;
+import com.mike.client.gui.SelectTabPage;
+import com.mike.client.gui.SelectTableViewPage;
 import org.fest.swing.timing.Condition;
 import org.fest.swing.timing.Pause;
 import org.hamcrest.CoreMatchers;
@@ -13,22 +18,21 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.SocketUtils;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class WaiterClientEndToEndTest {
+
+    private enum ClientType {
+        WAITER,
+        TILL_CLIENT
+    };
 
     private ProcessBuilder pb;
     private Process p;
@@ -36,16 +40,16 @@ public class WaiterClientEndToEndTest {
     File errorFile;
     SelectTableView selectTableView;
     WaiterClientController waiterClientController;
-    GenericXmlApplicationContext context;
+    TillClientController tillClientController;
+    GenericXmlApplicationContext waiterClientcontext;
+    GenericXmlApplicationContext tillClientContext;
     OutputStream os;
+
     @Before
     public void setup() throws IOException, ClassNotFoundException, InterruptedException {
         deployServer();
-        context = setupContext();
-
-        waiterClientController = (WaiterClientController) context.getBean("waiterClientController");
-        waiterClientController.init();
-        selectTableView = waiterClientController.getSelectTableController().view;
+        deployWaiterClient();
+        deployTillClient();
     }
 
     private void deployServer() throws IOException {
@@ -84,6 +88,20 @@ public class WaiterClientEndToEndTest {
         }
     } // deployServer
 
+    private void deployWaiterClient() {
+        waiterClientcontext = setupContext(ClientType.WAITER);
+        waiterClientController = (WaiterClientController) waiterClientcontext.getBean("waiterClientController");
+        waiterClientController.init();
+        selectTableView = waiterClientController.getSelectTableController().view;
+    }
+
+    private void deployTillClient() {
+        tillClientContext = setupContext(ClientType.TILL_CLIENT);
+        tillClientController
+                = (TillClientController) tillClientContext.getBean("tillClientController");
+        tillClientController.init();
+    }
+
     @After
     public void tearDown() throws IOException {
         String exit = "exit";
@@ -94,14 +112,15 @@ public class WaiterClientEndToEndTest {
         errorFile.delete();
         p.destroy();
         System.out.println("p alive: " + p.isAlive());
-        context.destroy();
+        waiterClientcontext.destroy();
+        tillClientContext.destroy();
     }
 
-    private void openTable() {
+    private void openTillClientMenu(TillClientController methodTillClientController) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                selectTableView.getOpenTable().doClick();
+                methodTillClientController.getView().getStartClientButton().doClick();
             }
         });
         t.start();
@@ -109,11 +128,11 @@ public class WaiterClientEndToEndTest {
         Pause.pause(new Condition("waiting for view to appear") {
             @Override
             public boolean test() {
-                if (waiterClientController.getSelectTableController().getMenuController().getView() == null) {
+                if (methodTillClientController.getTillMenuController().getView() == null) {
                     return false;
                 }
 
-                if (!waiterClientController.getSelectTableController().getMenuController().getView().isVisible()) {
+                if (!methodTillClientController.getTillMenuController().getView().isVisible()) {
                     return false;
                 }
                 return true;
@@ -122,128 +141,77 @@ public class WaiterClientEndToEndTest {
     }
 
     @Test
-    public void changeTableStatusTest() throws InterruptedException, AWTException, InvocationTargetException {
+    public void createAndPayOffTabTest() {
         // GIVEN: the user is on the select table menu and all of the tables a currently free
         // WHEN: the user chooses to open table 8
-        selectTableView.getTableButtons()[8].doClick();
+        SelectTableViewPage selectTableViewPage = new SelectTableViewPage(selectTableView);
+        selectTableViewPage.clickTable(8);
         // THEN: a message appears saying: Would you like to open Table 8
         assertThat(selectTableView.getOutputLabel().getText(), CoreMatchers.containsString("Would you like to open Table 8"));
         // WHEN: the table is opened
-        openTable();
-        assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Table in Use"));
-        assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(true));
-        // AND: the order is sent
-        getOperationButton("Send Order").doClick();
-        // THEN: the status of the table is set to occupied
-        assertThat(waiterClientController.getSelectTableController().getMenuController().getView().isVisible(), CoreMatchers.is(false));
-        assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
-    }
-
-    private JButton getOperationButton(String buttonName) {
-        ArrayList<JButton> buttons = waiterClientController.getSelectTableController().getMenuController().getView().getButtons();
-        JButton sendOrderButton = null;
-        for (JButton jb : buttons) {
-            if (jb.getText().equals(buttonName)) {
-                sendOrderButton = jb;
-            }
-        }
-        return sendOrderButton;
-    }
-
-    private void selectMenuItem(String buttonName, int quantity) {
-        MenuView mv = waiterClientController.getSelectTableController().getMenuController().getView();
-
-        mv.getCardPanel().getName();
-        while (!mv.currentCard.getName().equals("MAIN_PAGE")) {
-            MouseEvent me = new MouseEvent((Component)mv.getOutputTextPane(), MouseEvent.MOUSE_CLICKED, 0, // no modifiers
-                    10, 10, // where: at (10, 10}
-                    1, 1, false, 0);
-            mv.getOutputTextPane().dispatchEvent(me);
-        }
-
-        MenuItemJButton buttonToSelect = null;
-
-        for (MenuItemJButton mib: mv.getMenuItemButtons()) {
-            if (mib.getText().equals(buttonName)) {
-                buttonToSelect = mib;
-                break;
-            }
-        }
-
-        List menuCardPanelList = new ArrayList<MenuCardPanel>();
-
-        for (MenuCardPanel mcp : mv.getCardPanelsList()) {
-            if (mcp.getCardMenuItems().contains(buttonToSelect)) {
-                MenuCardPanel currentPanel = mcp;
-                while (null != currentPanel.getParentPanel()){
-                    menuCardPanelList.add(currentPanel);
-                    currentPanel = currentPanel.getParentPanel();
-                }
-                break;
-            }
-        }
-
-        for (int i = menuCardPanelList.size() - 1; i >= 0; i-- ) {
-            List<MenuCardLinkJButton> menuCardLinkJButtonList = mv.currentCard.getChildCardButtons();
-            for (MenuCardLinkJButton mb : menuCardLinkJButtonList) {
-                MenuCardPanel mcp = (MenuCardPanel)menuCardPanelList.get(i);
-                if (mb.getTargetPanel().getName().equals(mcp.getName())) {
-                    mb.doClick();
-                    break;
-                }
-            }
-        }
-
-
-        List<MenuItemJButton> menuItemJButtonList = mv.currentCard.getCardMenuItems();
-
-        if (quantity > 1) {
-            String quantityy = Integer.toString(quantity);
-            for (char c : quantityy.toCharArray()) {
-                KeypadPanelJButton keypadPanelJButton = (KeypadPanelJButton) mv.currentCard.getKeypadPanel().getComponent(quantity-1);
-                keypadPanelJButton.doClick();
-            }
-        }
-
-        for (MenuItemJButton mij: menuItemJButtonList) {
-            if (mij.getText().equals(buttonName)) {
-                mij.doClick();
-            }
-        }
-
-    }
-
-    @Test
-    public void rememberTabTest() {
-        // GIVEN: the user is on the select table menu and all of the tables a currently free
-        // WHEN: the user chooses to open table 8
-        selectTableView.getTableButtons()[8].doClick();
-        // THEN: a message appears saying: Would you like to open Table 8
-        assertThat(selectTableView.getOutputLabel().getText(), CoreMatchers.containsString("Would you like to open Table 8"));
-        // WHEN: the table is opened
-        openTable();
+        selectTableViewPage.openTable(waiterClientController.getSelectTableController().getMenuController());
         MenuView menuView = waiterClientController.getSelectTableController().getMenuController().getView();
         assertThat(menuView.isVisible(), CoreMatchers.is(true));
+        MenuViewPage menuViewPage = new MenuViewPage(menuView);
         // AND: 2  beef burgers are selected
-        selectMenuItem("Beef Burger", 2);
+        menuViewPage.selectMenuItem("Beef Burger", 2);
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("Beef Burger"));
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("2"));
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
         // AND: the order is sent
-        getOperationButton("Send Order").doClick();
+        menuViewPage.getOperationButton("Send Order").doClick();
         // THEN: the status of the table is set to occupied
         assertThat(menuView.isVisible(), CoreMatchers.is(false));
-        assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
+
+        // assert commented out and replaced with pause and wait condition due to flakiness
+        // assertThat(selectTableView.getTableButtons()[8].getText(), CoreMatchers.containsString("Occupied"));
+        Pause.pause(new Condition("waiting for table status to cahnge") {
+            @Override
+            public boolean test() {
+                return selectTableView.getTableButtons()[8].getText().contains("Occupied");
+            }
+        });
+
         //WHEN: The table is opened again
         selectTableView.getTableButtons()[8].doClick();
-        openTable();
+        selectTableViewPage.openTable(waiterClientController.getSelectTableController().getMenuController());
         // THEN: the tab remains up to date
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("Beef Burger"));
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("2"));
         assertThat(menuView.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
+        menuViewPage.getOperationButton("Send Order").doClick();
+
+
+        // GIVEN: a till client
+        openTillClientMenu(tillClientController);
+
+        // WHEN: table tab 8 is loaded
+        TillMenuView menuViewTillClient = (TillMenuView)tillClientController.getTillMenuController().getView();
+        menuViewTillClient.getMenuItemButtons();
+        MenuViewPage tillMenuViewPage = new MenuViewPage(menuViewTillClient);
+        SelectTabPage selectTabPage = new SelectTabPage(tillClientController.getTillMenuController().getBarTabMenuController(), tillMenuViewPage.getOperationButton("Bar Tab"));
+        selectTabPage.getTable(8).doClick();
+
+        Pause.pause(new Condition("waiting for tab to load") {
+            @Override
+            public boolean test() {
+                return !menuViewTillClient.getOutputTextPane().getText().equals("");
+            }
+        });
+
+        // THEN: the items added to the menu by the waiter client appear on the output pane
+        assertThat(menuViewTillClient.getOutputTextPane().getText(), CoreMatchers.containsString("Beef Burger"));
+        assertThat(menuViewTillClient.getOutputTextPane().getText(), CoreMatchers.containsString("2"));
+        assertThat(menuViewTillClient.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
+
+        // TODO: add cash pay test functionality
     }
 
-    private GenericXmlApplicationContext setupContext() {
+
+
+
+
+    private GenericXmlApplicationContext setupContext(ClientType type) {
         final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 
         System.out.print("Detect open server socket...");
@@ -258,7 +226,11 @@ public class WaiterClientEndToEndTest {
 
         System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
 
-        context.load("/META-INF/waiter-client-context.xml");
+        if (type == ClientType.WAITER) {
+            context.load("/META-INF/waiter-client-context.xml");
+        } else {
+            context.load("/META-INF/till-client-context.xml");
+        }
         context.registerShutdownHook();
         context.refresh();
 

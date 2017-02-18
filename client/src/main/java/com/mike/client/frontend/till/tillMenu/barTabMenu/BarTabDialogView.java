@@ -14,17 +14,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author mbbx9mg3
  */
 public class BarTabDialogView extends javax.swing.JDialog {
 
-    /**
-     * Creates new form BarTabDialogView
-     * @param parent
-     * @param modal
-     */
+    private List<TabJButton> tabJButtons;
+
     public BarTabDialogView(Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -43,10 +41,12 @@ public class BarTabDialogView extends javax.swing.JDialog {
 
     public synchronized void setButtons(Map<Integer, Table.TableStatus> statuses, BarTabMenuController barTabMenuController) {
         // SET UP NEW TAB BUTTON
+        tabJButtons = new ArrayList<>();
         System.out.println("set buttons: " + statuses.size() + " buttons");
         for (Integer i : statuses.keySet()) {
             TabJButton jButton = new TabJButton(i);
             jButton.addActionListener(barTabMenuController);
+            tabJButtons.add(jButton);
             this.getContentPane().add(jButton);
         }
 
@@ -79,6 +79,10 @@ public class BarTabDialogView extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public List<TabJButton> getTabJButtons() { return tabJButtons; }
+
+    public void setTabJButtons(List<TabJButton> tabJButtons) { this.tabJButtons = tabJButtons;    }
     /**
      * @param args the command line arguments
      */

@@ -42,7 +42,7 @@ public class TillClientController implements ActionListener {
 		if(ae.getSource() instanceof JButton) {
 			if (ae.getSource() == view.getStartClientButton()) {
 				this.setChange(null);
-				tillMenuController.initTillMenu(this, view, null);
+				getTillMenuController().initTillMenu(this, view, null);
 			} // if
 		}
 	} // actionPerformed
@@ -63,4 +63,6 @@ public class TillClientController implements ActionListener {
 			this.change = change;
 		}
 	} // setChange
+
+	public TillMenuController getTillMenuController() { return tillMenuController; }
 }

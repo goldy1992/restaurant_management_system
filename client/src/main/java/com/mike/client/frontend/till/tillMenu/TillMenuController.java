@@ -53,7 +53,7 @@ public class TillMenuController extends MenuController {
 			System.out.println("tabLoaded == false");
 			if (model.getOldTab().getNumberOfItems() + model.getNewTab().getNumberOfItems() <= 0) {
 				System.out.println("get tab selected");
-				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.GET_TAB);
+				chosenTabNumber = getBarTabMenuController().getTabNumber(view, true, BarTabMenuModel.Functionality.GET_TAB);
 
 				if (chosenTabNumber == null) {
 					view.getQuantityTextPane().setText("there are no tabs to display!");
@@ -67,7 +67,7 @@ public class TillMenuController extends MenuController {
 					this.getView().setUpTab(response.getTab());
 				}
 			} else {
-				chosenTabNumber = barTabMenuController.getTabNumber(view, true, BarTabMenuModel.Functionality.ADD_TO_TAB);
+				chosenTabNumber = getBarTabMenuController().getTabNumber(view, true, BarTabMenuModel.Functionality.ADD_TO_TAB);
 				messageSender.sendTableStatusEventNotification(chosenTabNumber, Table.TableStatus.IN_USE);
 				TabResponse response = messageSender.sendTabRequest(chosenTabNumber);
 				Tab updatedTab = response.getTab().mergeTabs(model.getNewTab());
@@ -141,7 +141,6 @@ public class TillMenuController extends MenuController {
 		getView().dispose();
 	}
 
-
 	public void dealWithTillMenuButtons(JButton button) {
 		switch (button.getText()) {
 			case "Bar Tab": barTabPressed(); break;
@@ -152,4 +151,5 @@ public class TillMenuController extends MenuController {
 		} // switch
 	}
 
+	public BarTabMenuController getBarTabMenuController() { return barTabMenuController; }
 }
