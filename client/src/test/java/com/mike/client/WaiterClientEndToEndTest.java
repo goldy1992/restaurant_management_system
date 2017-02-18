@@ -205,6 +205,7 @@ public class WaiterClientEndToEndTest {
         assertThat(menuViewTillClient.getOutputTextPane().getText(), CoreMatchers.containsString("£11.80"));
 
         // TODO: add cash pay test functionality
+        menuViewPage.inputNumberOnMenuKeypad("2000");
     }
 
 

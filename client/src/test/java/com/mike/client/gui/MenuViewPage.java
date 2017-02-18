@@ -79,11 +79,8 @@ public class MenuViewPage {
         java.util.List<MenuItemJButton> menuItemJButtonList = mv.currentCard.getCardMenuItems();
 
         if (quantity > 1) {
-            String quantityy = Integer.toString(quantity);
-            for (char c : quantityy.toCharArray()) {
-                KeypadPanelJButton keypadPanelJButton = (KeypadPanelJButton) mv.currentCard.getKeypadPanel().getComponent(quantity-1);
-                keypadPanelJButton.doClick();
-            }
+            String quantityAsString = Integer.toString(quantity);
+            inputNumberOnMenuKeypad(quantityAsString);
         }
 
         for (MenuItemJButton mij: menuItemJButtonList) {
@@ -92,5 +89,18 @@ public class MenuViewPage {
             }
         }
 
+    }
+
+    public void inputNumberOnMenuKeypad(String number) {
+        for (char c : number.toCharArray()) {
+            // get char index
+            int charIndex = Integer.parseInt(Character.toString(c))-1;
+            if (c == '0') {
+                charIndex = 10;
+            }
+
+            KeypadPanelJButton keypadPanelJButton = (KeypadPanelJButton) menuView.currentCard.getKeypadPanel().getComponent(charIndex);
+            keypadPanelJButton.doClick();
+        }
     }
 }
