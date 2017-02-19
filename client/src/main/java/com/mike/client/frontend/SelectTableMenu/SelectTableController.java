@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import static com.mike.client.frontend.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
 import static com.mike.message.Table.TableStatus.DIRTY;
+import static com.mike.message.Table.TableStatus.FREE;
 import static com.mike.message.Table.TableStatus.IN_USE;
 
 /**
@@ -70,7 +71,7 @@ public class SelectTableController implements ActionListener, WindowListener
         int tableSelected = model.getTableSelected();
         TableStatus selectedTableStatus = model.getTableStatus(tableSelected);
         if (selectedTableStatus == DIRTY) {
-            messageSender.sendTableStatusEventNotification(tableSelected, selectedTableStatus);
+            messageSender.sendTableStatusEventNotification(tableSelected, FREE);
         } // if    	
     }
 

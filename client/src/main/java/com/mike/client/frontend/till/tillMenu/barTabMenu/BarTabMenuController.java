@@ -79,9 +79,6 @@ public class BarTabMenuController implements ActionListener {
             JOptionPane.showMessageDialog(getView(), "Tab " + tabJButton.getTabNumber() + " is currently in use!" );
             return;
         } // if
-        /* SEND A NOTIFICATION TO EVERYONE ELSE THAT TABLE IS NOW
-        IN USE */
-        messageSender.sendTableStatusEventNotification(tabJButton.getTabNumber(), Table.TableStatus.IN_USE);
         getModel().setChosenTab(tabJButton.getTabNumber());
         getView().dispose();
         view = null;
