@@ -110,9 +110,11 @@ public class Table implements Serializable
      *
      * @param status
      */
-    public void setTableStatus(TableStatus status)
-    {
+    public void setTableStatus(TableStatus status) {
         tableStatus = status;
+        if (status == TableStatus.DIRTY) {
+            this.currentTab = new Tab(tableNumber);
+        }
     }
     
     public void updateTab(Tab tab) {

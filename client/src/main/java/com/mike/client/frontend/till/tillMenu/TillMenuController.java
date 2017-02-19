@@ -135,6 +135,7 @@ public class TillMenuController extends MenuController {
 		}
 		if ((float)amount >= model.getTotal()) {
 			tillClientController.setChange(amount - (float)model.getTotal());
+			messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.DIRTY);
 		} else {
 			getView().getQuantityTextPane().setText("");
 		}
