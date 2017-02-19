@@ -64,6 +64,7 @@ public class TillMenuController extends MenuController {
 					TabResponse response = messageSender.sendTabRequest(chosenTabNumber);
 					this.model.setOldTab(response.getTab());
 					this.model.setNewTab(new Tab());
+					// must edit this
 					this.getView().setUpTab(response.getTab());
 				}
 			} else {
