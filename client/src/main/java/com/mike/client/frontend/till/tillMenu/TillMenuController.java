@@ -39,10 +39,9 @@ public class TillMenuController extends MenuController {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() instanceof JButton) {
-			dealWithTillMenuButtons((JButton)ae.getSource());
+		if (!dealWithTillMenuButtons((JButton)ae.getSource())) {
+			super.actionPerformed(ae);
 		}
-		super.actionPerformed(ae);
 	}
 
 	private void barTabPressed() {
@@ -122,7 +121,9 @@ public class TillMenuController extends MenuController {
 	} // writeBill
 
 	@Override
-	protected void sendOrder() {	}
+	protected void sendOrder() {
+		System.out.println("hit send order for till");
+	}
 
 	protected void cashPay() {
 		Float amount = null;
@@ -142,14 +143,15 @@ public class TillMenuController extends MenuController {
 		getView().dispose();
 	}
 
-	public void dealWithTillMenuButtons(JButton button) {
+	public boolean dealWithTillMenuButtons(JButton button) {
 		switch (button.getText()) {
-			case "Bar Tab": barTabPressed(); break;
-			case "Print Last Receipt": writeLastReceipt(); break;
-			case "Send Order": sendOrder(); break;
-			case "Cash Pay": cashPay();
+			case "Bar Tab": barTabPressed(); return true;
+			case "Print Last Receipt": writeLastReceipt(); return true;
+			case "Send Order": sendOrder(); return true;
+			case "Cash Pay": cashPay(); return true;
 			default: break;
 		} // switch
+		return false;
 	}
 
 	public BarTabMenuController getBarTabMenuController() { return barTabMenuController; }
