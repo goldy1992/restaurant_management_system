@@ -145,7 +145,7 @@ public class MenuView extends JDialog {
 		quantityPane = new javax.swing.JScrollPane();
 		quantityArea = new javax.swing.JTextPane();
 		totalCostPane = new javax.swing.JScrollPane();
-		totalCostArea = new javax.swing.JTextPane();
+		setTotalCostArea(new JTextPane());
 		CardPanel = new javax.swing.JPanel();
 		MenuBar = new javax.swing.JMenuBar();
 		fileMenu = new javax.swing.JMenu();
@@ -201,8 +201,8 @@ public class MenuView extends JDialog {
 		gridBagConstraints.weightx = 0.5;
 		OutputAreaPanel.add(quantityPane, gridBagConstraints);
 
-		totalCostTextPane = totalCostArea;
-		totalCostPane.setViewportView(totalCostArea);
+		totalCostTextPane = getTotalCostArea();
+		totalCostPane.setViewportView(getTotalCostArea());
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -326,13 +326,14 @@ public class MenuView extends JDialog {
 	public final void setUpTab(Tab tab) {
 		if (tab != null) {
 			getOutputTextPane().setText(tab.toString());
+			setTotal(tab.getTotal());
 		}
 	}
 
 	public void setTotal(double total) {
 		DecimalFormat df = new DecimalFormat("0.00");
 		String totalAsString = df.format(total);
-		this.totalCostArea.setText("Total: £" + totalAsString);
+		this.getTotalCostArea().setText("Total: £" + totalAsString);
 	}
 
 	public void addNumberToQuantity(int quantitySelected) {
@@ -457,11 +458,10 @@ public class MenuView extends JDialog {
 	public void setQuantityTextPane(JTextPane quantityTextPane) { this.quantityTextPane = quantityTextPane;	}
 	public ArrayList<JButton> getButtons() { return buttons; }
 
-	public ArrayList<MenuItemJButton> getMenuItemButtons() {
-		return menuItemButtons;
-	}
+	public ArrayList<MenuItemJButton> getMenuItemButtons() {return menuItemButtons; }
 
-	public ArrayList<MenuCardPanel> getCardPanelsList() {
-		return cardPanelsList;
-	}
+	public ArrayList<MenuCardPanel> getCardPanelsList() { return cardPanelsList; }
+
+	public JTextPane getTotalCostArea() { return totalCostArea; }
+	public void setTotalCostArea(JTextPane totalCostArea) { this.totalCostArea = totalCostArea; }
 } // class
