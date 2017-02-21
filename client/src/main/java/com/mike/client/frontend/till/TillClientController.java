@@ -2,6 +2,7 @@ package com.mike.client.frontend.till;
 
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.till.tillMenu.TillMenuController;
+import com.mike.item.Tab;
 import com.mike.message.Request.RegisterClientRequest;
 import com.mike.message.Response.RegisterClientResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class TillClientController implements ActionListener {
 	@Autowired
 	private TillMenuController tillMenuController;
 	private TillView view;
+	private TillModel model;
 	private Float change = null;
 
 	public void init() {
@@ -32,6 +34,7 @@ public class TillClientController implements ActionListener {
 		} // if
 
 		view = new TillView(this);
+		model = new TillModel();
 		getView().setVisible(true);
 	} // init
 
@@ -42,7 +45,7 @@ public class TillClientController implements ActionListener {
 		if(ae.getSource() instanceof JButton) {
 			if (ae.getSource() == view.getStartClientButton()) {
 				this.setChange(null);
-				getTillMenuController().initTillMenu(this, view, null);
+				getTillMenuController().initTillMenu(this, view, model.getCurrentTab());
 			} // if
 		}
 	} // actionPerformed
@@ -51,6 +54,7 @@ public class TillClientController implements ActionListener {
 	public void setTillMenuController(TillMenuController tillMenuController) { this.tillMenuController = tillMenuController; }
 
 	public Float getChange() {	return change; }
+
 	public void setChange(Float change) {
 		if (null == change) {
 			view.getChangeOutputLabel().setText("");
@@ -64,5 +68,14 @@ public class TillClientController implements ActionListener {
 		}
 	} // setChange
 
+	public void updateTab(Tab tab) {
+		model.setCurrentTab(tab);
+	}
+
+	public void setPreviousTab(Tab tab) {
+		model.setPreviousTab(tab);
+	}
+
 	public TillMenuController getTillMenuController() { return tillMenuController; }
+	public TillModel getTillModel() { return model; }
 }

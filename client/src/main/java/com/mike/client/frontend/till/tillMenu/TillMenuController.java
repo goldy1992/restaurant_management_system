@@ -31,9 +31,9 @@ public class TillMenuController extends MenuController {
 	public <V extends JFrame> void initTillMenu(TillClientController tillClientController, V tillView, Tab tab) {
 		this.tillClientController = tillClientController;
 		List<MenuPageDAO> menuPageDAOs = getMenuPageDAOs();
-		this.model = new TillMenuModel();
-		model.init(menuPageDAOs, null);
-		this.view = new TillMenuView(this, tillView, model, true);
+		this.model = new TillMenuModel(tab);
+		model.init(menuPageDAOs, tab);
+		this.view = new TillMenuView(this, tillView, model, true, tab);
 		this.getView().setVisible(true);
 	}
 
@@ -122,7 +122,10 @@ public class TillMenuController extends MenuController {
 
 	@Override
 	protected void sendOrder() {
-		System.out.println("hit send order for till");
+		Tab updatedTab = model.mergeTabs();
+		messageSender.sendTabUpdateNotification(updatedTab, model.getNewTab());
+		tillClientController.updateTab(updatedTab);
+		getView().dispose();
 	}
 
 	protected void cashPay() {
@@ -136,7 +139,14 @@ public class TillMenuController extends MenuController {
 		}
 		if ((float)amount >= model.getTotal()) {
 			tillClientController.setChange(amount - (float)model.getTotal());
-			messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.DIRTY);
+			if (model.getOldTab().getTable() == 0) {
+				Tab updatedTab = model.mergeTabs();
+				messageSender.sendTabUpdateNotification(updatedTab, model.getNewTab());
+				tillClientController.setPreviousTab(updatedTab);
+				tillClientController.updateTab(new Tab());
+			} else {
+				messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.DIRTY);
+			}
 		} else {
 			getView().getQuantityTextPane().setText("");
 		}
