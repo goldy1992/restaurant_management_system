@@ -1,22 +1,24 @@
 package com.mike.client.frontend.SelectTableMenu.View;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.SelectTableMenu.SelectTableController;
 import com.mike.message.Table.TableStatus;
+import org.apache.log4j.Logger;
+
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-
-import static java.awt.Color.BLACK;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static java.awt.Color.YELLOW;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import static java.awt.Color.*;
 
 /**
  * @author Goldy
  */
-public class SelectTableView extends javax.swing.JFrame
-{
+public class SelectTableView extends javax.swing.JFrame {
+
+    final static Logger logger = Logger.getLogger(SelectTableView.class);
+    
     private JButton[] tableButtons;
     private JButton openTable = new JButton("Open Table");
     private JButton moveTable = new JButton("Move Table");
@@ -90,7 +92,7 @@ public class SelectTableView extends javax.swing.JFrame
     }
     
     private void makeTableButtons(ArrayList<TableStatus> statuses) {
-    	System.out.println("make table buttons: size: " + statuses.size());
+    	logger.info("make table buttons: size: " + statuses.size());
         JButton[] buttons = new JButton[statuses.size()]; 
         for(int i = 1; i < statuses.size(); i++)
         {

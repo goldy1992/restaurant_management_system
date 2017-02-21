@@ -5,7 +5,7 @@
  */
 package com.mike.client.frontend.SelectTableMenu.View;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 /**
  *

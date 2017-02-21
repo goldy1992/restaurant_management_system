@@ -1,16 +1,8 @@
 package com.mike.client.frontend.till.tillMenu;
 
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
-import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabDialogView;
 import com.mike.client.frontend.MainMenu.View.MenuView;
-import com.mike.client.frontend.Pair;
 import com.mike.item.Tab;
-import com.mike.message.Table;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *

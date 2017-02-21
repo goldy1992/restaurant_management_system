@@ -5,7 +5,6 @@
  */
 package com.mike.message.Request;
 
-import java.net.InetAddress;
 /**
  *
  * @author mbbx9mg3

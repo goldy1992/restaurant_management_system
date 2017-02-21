@@ -5,10 +5,6 @@
  */
 package com.mike.message.Request;
 
-import com.mike.message.Message;
-import java.net.InetAddress;
-import org.springframework.messaging.MessageHeaders;
-
 /**
  *
  * @author mbbx9mg3

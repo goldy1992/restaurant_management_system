@@ -16,6 +16,7 @@ import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Response.databaseResponse.QueryResponse;
 import com.mike.message.Response.databaseResponse.UpdateResponse;
 import com.mike.message.Table.TableStatus;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.PollableChannel;
 
@@ -27,6 +28,8 @@ import java.util.List;
  * Created by michaelg on 09/12/2015.
  */
 public class MessageSender {
+
+	final static Logger logger = Logger.getLogger(MessageSender.class);
 
 	@Autowired
 	private PollableChannel registerClientResponseChannel;
@@ -66,10 +69,10 @@ public class MessageSender {
 	public final RegisterClientResponse registerClient(RegisterClientRequest.ClientType type) {
 		RegisterClientRequest rKitchenReq = new RegisterClientRequest(type);
 		sendGateway.send(rKitchenReq);
-		System.out.println("message sent");
+		logger.info("message sent");
 		
 		RegisterClientResponse registerClientResponse = (RegisterClientResponse)registerClientResponseChannel.receive().getPayload();
-        System.out.println("parse register client response");
+        logger.info("parse register client response");
 
         return registerClientResponse;
 	} // registerClient
@@ -78,7 +81,7 @@ public class MessageSender {
 		LeaveRequest leaveRequest = new LeaveRequest();
 		sendGateway.send(leaveRequest);
 		LeaveResponse leaveResponse = (LeaveResponse)leaveResponseChannel.receive().getPayload();
-		System.out.println("leave response: " + leaveResponse.hasPermission());
+		logger.info("leave response: " + leaveResponse.hasPermission());
 		return true;
 	} 
 	
@@ -112,7 +115,7 @@ public class MessageSender {
 
 	public QueryResponse sendDbQuery(String query) {
 		Query queryRequest = new Query(query);
-		System.out.println("sending db query");
+		logger.info("sending db query");
 		sendGateway.send(queryRequest);
 		return (QueryResponse)dbQueryResponseChannel.receive().getPayload();
 	}

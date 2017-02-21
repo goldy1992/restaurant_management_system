@@ -4,9 +4,8 @@ import com.mike.client.frontend.MainMenu.View.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by Mike on 2/12/2017.

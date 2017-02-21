@@ -6,7 +6,6 @@
 package com.mike.client.backend;
 
 
-import com.mike.message.Message;
 import org.springframework.integration.annotation.Gateway;
 
 

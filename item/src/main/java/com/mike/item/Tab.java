@@ -5,12 +5,9 @@
  */
 package com.mike.item;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import org.apache.log4j.Logger;
+
+import java.io.*;
 import java.util.ArrayList;
 
 import static com.mike.item.Item.Type.DRINK;
@@ -19,8 +16,10 @@ import static com.mike.item.Item.Type.DRINK;
  *
  * @author mbbx9mg3
  */
-public class Tab implements Serializable, Cloneable
-{
+public class Tab implements Serializable, Cloneable {
+
+    final static Logger logger = Logger.getLogger(Tab.class);
+    
     private int tabNumber;
     private final ArrayList<Item> allItems = new ArrayList<>();
     private final ArrayList<Item> drinks = new ArrayList<>();
@@ -118,7 +117,7 @@ public class Tab implements Serializable, Cloneable
         food.removeAll(food);
         
         this.total = calculateTotal();
-        System.out.println(allItems.isEmpty() + " " +
+        logger.info(allItems.isEmpty() + " " +
                food.isEmpty() + " " +
                drinks.isEmpty());
         
@@ -151,7 +150,7 @@ public class Tab implements Serializable, Cloneable
     }
     
     public double getTotal() {
-        System.out.println(total + ": " + total);
+        logger.info(total + ": " + total);
         return total;
     }
     

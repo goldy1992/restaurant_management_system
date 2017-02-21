@@ -1,5 +1,6 @@
 package com.mike.client.frontend.MainMenu.Model;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
@@ -19,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MenuModel {
+
+	final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MenuModel.class);
 
 	private List<MenuPage> menuPages;
 	private Tab oldTab;
@@ -194,7 +197,7 @@ public class MenuModel {
 			return "";
 
 		methodOldTab.mergeTabs(methodNewTab);
-		System.out.println("methodOldtab: " + methodOldTab.getItems());
+		logger.info("methodOldtab: " + methodOldTab.getItems());
 
 		HashMap<String, Item> billFormat = new HashMap();
 

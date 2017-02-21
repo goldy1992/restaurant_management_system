@@ -1,9 +1,9 @@
 package com.mike.message.Response.databaseResponse;
 
-import java.util.List;
-
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Response.Response;
+
+import java.util.List;
 
 public class QueryResponse extends Response {
 

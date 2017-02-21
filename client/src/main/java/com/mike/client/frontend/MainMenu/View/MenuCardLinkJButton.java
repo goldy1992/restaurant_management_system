@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mike.client.frontend.MainMenu.View;
 
-
+import org.apache.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,8 +10,10 @@ import java.awt.event.ActionListener;
  *
  * @author mbbx9mg3
  */
-public class MenuCardLinkJButton extends JButton implements ActionListener
-{
+public class MenuCardLinkJButton extends JButton implements ActionListener {
+    
+    final static Logger logger = Logger.getLogger(MenuCardLinkJButton.class);
+    
     private MenuCardPanel targetPanel;
     private final MenuView parentMenuView;
     
@@ -24,8 +21,7 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
      *
      * @param panel
      */
-    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText, MenuView parentMenuView)
-    {
+    private MenuCardLinkJButton(MenuCardPanel panel, String buttonText, MenuView parentMenuView) {
         super();    
         this.targetPanel = panel;
         this.setText(buttonText);
@@ -33,8 +29,7 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent ae) 
-    {  
+    public void actionPerformed(ActionEvent ae) {
         MenuCardPanel kitchenBarMessage = parentMenuView.getKitchenBarMsgPanel();
             
         // show the selected card.
@@ -43,17 +38,12 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
         parentMenuView.currentCard = targetPanel;
         
         // set the new parent for the kitchen bar message panel
-        if (!parentMenuView.currentCard.equals(kitchenBarMessage))
-        {
-                    System.out.println("called button");
+        if (!parentMenuView.currentCard.equals(kitchenBarMessage)) {
+            logger.info("called button");
             kitchenBarMessage.setParentPanel(targetPanel);
         }
     } // actionPerformed
-    
-    /**
-     *
-     * @return
-     */
+
     public MenuCardPanel getTargetPanel()
     {
         return targetPanel;
@@ -67,10 +57,7 @@ public class MenuCardLinkJButton extends JButton implements ActionListener
         targetPanel = x;
     }
     
-    public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent,
-                                                                String buttonText,
-                                                            MenuView parentPanel)
-    {
+    public static MenuCardLinkJButton createMenuCardLinkButton(MenuCardPanel parent, String buttonText, MenuView parentPanel) {
         MenuCardLinkJButton x = new MenuCardLinkJButton(parent, buttonText, parentPanel);
         x.addActionListener(x);
         return x;

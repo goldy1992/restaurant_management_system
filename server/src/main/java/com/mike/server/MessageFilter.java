@@ -5,13 +5,13 @@
  */
 package com.mike.server;
 
-import java.util.Map;
-
+import com.mike.message.Message;
 import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
-import com.mike.message.Message;
+
+import java.util.Map;
 
 /**
  * @author Mike
