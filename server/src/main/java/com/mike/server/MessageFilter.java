@@ -6,6 +6,8 @@
 package com.mike.server;
 
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -16,12 +18,13 @@ import com.mike.message.Message;
  */
 @MessageEndpoint
 public class MessageFilter {
-    
+
+    final static Logger logger = Logger.getLogger(MessageFilter.class);
     @Filter(inputChannel = "inboundAdapterToFilterChannel", outputChannel = "filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
-        System.out.println("message received class type " + message.getClass());
+        logger.debug("message received class type " + message.getClass());
         if (validMessage(message)) {
-        	System.out.println("returning true");
+        	logger.debug("returning true");
         	return true; 
         }  // if
     	return false;

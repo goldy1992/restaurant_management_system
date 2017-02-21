@@ -7,6 +7,8 @@ import java.net.Socket;
 
 /**
  * @author Mike
+ *
+ * LEGACY CODE
  */
 public class ServerRunThread extends Thread 
 {

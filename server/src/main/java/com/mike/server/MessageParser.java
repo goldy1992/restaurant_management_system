@@ -20,6 +20,7 @@ import com.mike.message.Response.databaseResponse.QueryResponse;
 import com.mike.message.Response.databaseResponse.UpdateResponse;
 import com.mike.message.Table;
 import com.mike.server.database.DatabaseConnector;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.ip.IpHeaders;
@@ -39,6 +40,8 @@ import java.util.Map;
 @Component
 public class MessageParser {
 
+	final static Logger logger = Logger.getLogger(MessageParser.class);
+
 	@Autowired
 	private DatabaseConnector dbCon;
 	
@@ -50,7 +53,7 @@ public class MessageParser {
 
 	@ServiceActivator(inputChannel="messageRegisterClientRequestChannel",  outputChannel="messageResponseChannel")
 	public RegisterClientResponse parseRegisterClientRequest(RegisterClientRequest request,  @Headers Map<String, Object> headerMap) {
-		System.out.println("hit register client");
+		logger.info("hit register client");
 		RegisterClientResponse response = new RegisterClientResponse(request);
 		String ipAddress = (String)headerMap.get(IpHeaders.CONNECTION_ID);
 
@@ -60,11 +63,11 @@ public class MessageParser {
 	
 	@ServiceActivator(inputChannel="messageTableStatusRequestChannel",  outputChannel="messageResponseChannel")
 	public TableStatusResponse parseTableStatusRequest(TableStatusRequest request) {
-	System.out.println("hit table status request parse");
+	logger.info("hit table status request parse");
 		Map<Integer, Table.TableStatus> tableStatuses = new HashMap<>();
 		
 		if (request.getTableList().isEmpty()) {
-			System.out.println("tablesize " + server.getTables().keySet());
+			logger.info("tablesize " + server.getTables().keySet());
 			for (Integer i :  server.getTables().keySet()) {
 				tableStatuses.put(i, server.getTables().get(i).getStatus());
 			}
@@ -74,7 +77,7 @@ public class MessageParser {
 			}			
 		}
 		TableStatusResponse response = new TableStatusResponse(request, tableStatuses);
-		System.out.println("sending tableresp");
+		logger.info("sending tableresp");
 		return response;
 	}
 	
@@ -105,7 +108,7 @@ public class MessageParser {
 	
 	@ServiceActivator(inputChannel="messageQueryChannel", outputChannel="messageResponseChannel")
 	public QueryResponse parseQuery(Query query) {
-		System.out.println("performing query");
+		logger.info("performing query");
 		List resultSet = dbCon.query(query.getQuery(), null);
 		QueryResponse queryResponse = new QueryResponse(query, resultSet);
 		return queryResponse;
@@ -113,7 +116,7 @@ public class MessageParser {
 
 	@ServiceActivator(inputChannel="messageUpdateChannel", outputChannel="messageResponseChannel")
 	public UpdateResponse parseUpdate(Update update) {
-		System.out.println("performing update");
+		logger.info("performing update");
 		return new UpdateResponse(update, dbCon.update(update.getItem()));
 	}
 
@@ -145,7 +148,7 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="customErrorChannel")
 	public void parseError(Message message, @Headers Map<String, Object> headerMap) {
 
-		System.out.println("hit error message");
+		logger.info("hit error message");
 	}
 
 	

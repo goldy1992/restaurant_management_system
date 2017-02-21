@@ -8,6 +8,7 @@ package com.mike.server;
 import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.EventNotification.TabUpdateNfn;
 import com.mike.message.EventNotification.TableStatusEvtNfn;
+import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
@@ -17,10 +18,12 @@ import org.springframework.integration.annotation.Router;
  */
 @MessageEndpoint
 public class MessageEventNotificationRouter {
+
+    final static Logger logger = Logger.getLogger(MessageEventNotificationRouter.class);
     
     @Router(inputChannel = "messageEventNotificationChannel")
     public String accept(EventNotification eventNotification){
-        System.out.println("reached event notification router");
+        logger.debug("reached event notification router");
         if (eventNotification instanceof TableStatusEvtNfn) {
             return "messagetableStatusEventNotificationChannel";
         } else if (eventNotification instanceof TabUpdateNfn) {

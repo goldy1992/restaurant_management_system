@@ -14,9 +14,10 @@ import java.util.logging.Logger;
 /**
  *
  * @author Goldy
+ *
+ * LEGACY CODE
  */
-public class ClientConnection implements Runnable
-{
+public class ClientConnection implements Runnable {
     private final Server parent;
     private final Socket socket;
     private Thread thread;

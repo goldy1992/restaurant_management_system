@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.mike.message.Table;
@@ -18,15 +19,13 @@ import com.mike.server.database.InitialiseDatabase;
  * @author Mike
  */
 public class StartServer {
-    
 
+    final static Logger logger = Logger.getLogger(StartServer.class);
     private static final int NUM_OF_TABLES = 44;
 
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, SQLException {
         AbstractApplicationContext integrationContext = new ClassPathXmlApplicationContext("/server-context.xml", StartServer.class);
-        //integrationContext.registerShutdownHook();
-        //integrationContext.refresh();
         Server server = (Server) integrationContext.getBean("server");
         InitialiseDatabase initDb = (InitialiseDatabase) integrationContext.getBean("initialiseDatabase");
         initDb.init();
@@ -34,9 +33,9 @@ public class StartServer {
         	server.getTables().put(i, new Table(i));
         }
         if (args.length < 1) {
-            System.out.println("Startup Complete");
+            logger.info("Startup Complete");
         } else {
-            System.out.println(args[0]);
+            logger.info(args[0]);
         }
 
         boolean exit = false;

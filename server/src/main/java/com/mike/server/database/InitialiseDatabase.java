@@ -3,6 +3,8 @@ package com.mike.server.database;
 import com.mike.item.dbItem.FOOD_OR_DRINK;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
+import com.mike.server.MessageRequestRouter;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -12,7 +14,8 @@ import java.util.Map;
 
 
 public class InitialiseDatabase {
-	
+
+	final static Logger logger = Logger.getLogger(InitialiseDatabase.class);
 	@Autowired
 	public DatabaseConnector dbCon;
 	
@@ -107,11 +110,10 @@ public class InitialiseDatabase {
 			//      + "WHERE i.name = " 
 			  //    + ":page";
 		
-		System.out.println(query);
+		logger.info(query);
 		Map<String, String> params = new HashMap<>();
 //		params.put("page", "FOOD_PAGE");
 		List<MenuPageDAO> item = dbCon.query(query, params);
-		System.out.println();
 	}
 	
 	

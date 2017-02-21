@@ -8,6 +8,7 @@ package com.mike.server;
 import com.mike.message.EventNotification.EventNotification;
 import com.mike.message.Message;
 import com.mike.message.Request.Request;
+import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
@@ -17,10 +18,11 @@ import org.springframework.integration.annotation.Router;
  */
 @MessageEndpoint
 public class MessageTypeRouter {
-    
+
+    final static Logger logger = Logger.getLogger(MessageTypeRouter.class);
     @Router(inputChannel="filterToMessageTypeRouterChannel")
     public String accept(Message message){
-        System.out.println("reached message router");
+        logger.info("reached message router");
         if (message instanceof Request) {
         	return "messageRequestChannel";
         } else if (message instanceof EventNotification) {
