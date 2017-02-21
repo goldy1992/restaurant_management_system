@@ -46,7 +46,7 @@ public class Tab implements Serializable, Cloneable
         for (Item i : t.drinks) {
             this.drinks.add(new Item(i));
         }
-;
+
         for (Item i : t.food) {
             this.food.add(new Item(i)); 
         }
@@ -146,8 +146,7 @@ public class Tab implements Serializable, Cloneable
     }
     
     
-    public int getTable()
-    {
+    public int getTable() {
         return getTabNumber();
     }
     

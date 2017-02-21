@@ -31,18 +31,17 @@ public class TillMenuController extends MenuController {
 	public <V extends JFrame> void initTillMenu(TillClientController tillClientController, V tillView, Tab tab) {
 		this.tillClientController = tillClientController;
 		List<MenuPageDAO> menuPageDAOs = getMenuPageDAOs();
-		this.model = new TillMenuModel();
-		model.init(menuPageDAOs, null);
-		this.view = new TillMenuView(this, tillView, model, true);
+		this.model = new TillMenuModel(tab);
+		model.init(menuPageDAOs, tab);
+		this.view = new TillMenuView(this, tillView, model, true, tab);
 		this.getView().setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() instanceof JButton) {
-			dealWithTillMenuButtons((JButton)ae.getSource());
+		if (!dealWithTillMenuButtons((JButton)ae.getSource())) {
+			super.actionPerformed(ae);
 		}
-		super.actionPerformed(ae);
 	}
 
 	private void barTabPressed() {
@@ -122,7 +121,12 @@ public class TillMenuController extends MenuController {
 	} // writeBill
 
 	@Override
-	protected void sendOrder() {	}
+	protected void sendOrder() {
+		Tab updatedTab = model.mergeTabs();
+		messageSender.sendTabUpdateNotification(updatedTab, model.getNewTab());
+		tillClientController.updateTab(updatedTab);
+		getView().dispose();
+	}
 
 	protected void cashPay() {
 		Float amount = null;
@@ -135,21 +139,29 @@ public class TillMenuController extends MenuController {
 		}
 		if ((float)amount >= model.getTotal()) {
 			tillClientController.setChange(amount - (float)model.getTotal());
-			messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.DIRTY);
+			if (model.getOldTab().getTable() == 0) {
+				Tab updatedTab = model.mergeTabs();
+				messageSender.sendTabUpdateNotification(updatedTab, model.getNewTab());
+				tillClientController.setPreviousTab(updatedTab);
+				tillClientController.updateTab(new Tab());
+			} else {
+				messageSender.sendTableStatusEventNotification(model.getOldTab().getTable(), Table.TableStatus.DIRTY);
+			}
 		} else {
 			getView().getQuantityTextPane().setText("");
 		}
 		getView().dispose();
 	}
 
-	public void dealWithTillMenuButtons(JButton button) {
+	public boolean dealWithTillMenuButtons(JButton button) {
 		switch (button.getText()) {
-			case "Bar Tab": barTabPressed(); break;
-			case "Print Last Receipt": writeLastReceipt(); break;
-			case "Send Order": sendOrder(); break;
-			case "Cash Pay": cashPay();
+			case "Bar Tab": barTabPressed(); return true;
+			case "Print Last Receipt": writeLastReceipt(); return true;
+			case "Send Order": sendOrder(); return true;
+			case "Cash Pay": cashPay(); return true;
 			default: break;
 		} // switch
+		return false;
 	}
 
 	public BarTabMenuController getBarTabMenuController() { return barTabMenuController; }

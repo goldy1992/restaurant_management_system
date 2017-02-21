@@ -13,7 +13,10 @@ public class TillMenuModel extends MenuModel {
 
 	private boolean tabLoaded = false;
 
-	public TillMenuModel() { super(); }
+	public TillMenuModel(Tab tab) {
+		super();
+		setUpTab(tab);
+	}
 
 	@Override
 	public void init(List<MenuPageDAO> menuPageDAOs, Tab tab) {

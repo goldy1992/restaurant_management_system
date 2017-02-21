@@ -4,6 +4,7 @@ import com.mike.client.frontend.MainMenu.Model.MenuModel;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabDialogView;
 import com.mike.client.frontend.MainMenu.View.MenuView;
 import com.mike.client.frontend.Pair;
+import com.mike.item.Tab;
 import com.mike.message.Table;
 
 import javax.swing.*;
@@ -26,6 +27,10 @@ public class TillMenuView extends MenuView {
 	 */
     public TillMenuView(TillMenuController tillMenuController, java.awt.Frame parent, MenuModel tillMenuModel, boolean modal) {
         super(tillMenuController, parent, tillMenuModel, modal, null);
+    }
+
+    public TillMenuView(TillMenuController tillMenuController, java.awt.Frame parent, MenuModel tillMenuModel, boolean modal, Tab tab) {
+        super(tillMenuController, parent, tillMenuModel, modal, tab);
     }
 
     public boolean tabLoaded = false;

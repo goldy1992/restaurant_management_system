@@ -126,13 +126,20 @@ public class MessageParser {
 	@ServiceActivator(inputChannel="messagetabUpdateNotificationChannel", outputChannel="messageResponseChannel")
 	public void parseTabUpdateEventNotification(TabUpdateNfn tabUpdateNfn){
 		int tabNumber = tabUpdateNfn.getUpdatedTab().getTabNumber();
-		server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getUpdatedTab());
+		if (tabNumber != 0) {
+			server.getTables().get(tabNumber).updateTab(tabUpdateNfn.getUpdatedTab());
+		}
 		Tab newItems = tabUpdateNfn.getNewItems();
 
-		NewItemNfn drinks = new NewItemNfn(Item.Type.DRINK, newItems.getDrinks(), tabNumber);
-		NewItemNfn food = new NewItemNfn(Item.Type.FOOD, newItems.getFood(), tabNumber);
-		sendItemNotification(drinks);
-		sendItemNotification(food);
+		if (!newItems.getDrinks().isEmpty()) {
+			NewItemNfn drinks = new NewItemNfn(Item.Type.DRINK, newItems.getDrinks(), tabNumber);
+			sendItemNotification(drinks);
+		}
+
+		if (!newItems.getFood().isEmpty()) {
+			NewItemNfn food = new NewItemNfn(Item.Type.FOOD, newItems.getFood(), tabNumber);
+			sendItemNotification(food);
+		}
 	}
 
 	@ServiceActivator(inputChannel="customErrorChannel")
