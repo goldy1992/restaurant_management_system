@@ -8,6 +8,7 @@ package com.mike.client.frontend.output;
 import com.mike.client.helpers.TimeHelper;
 import com.mike.item.Item;
 import com.mike.message.EventNotification.NewItemNfn;
+import com.mike.message.Request.RegisterClientRequest;
 
 /**
  *
@@ -15,8 +16,13 @@ import com.mike.message.EventNotification.NewItemNfn;
  */
 public class OutputGUI extends javax.swing.JFrame {
 
-    public OutputGUI() {
+    public OutputGUI(RegisterClientRequest.ClientType clientType) {
         initComponents();
+        if (clientType == RegisterClientRequest.ClientType.KITCHEN) {
+            this.setTitle("Kitchen Client");
+        } else if (clientType == RegisterClientRequest.ClientType.BAR) {
+            this.setTitle("Bar Client");
+        }
     }
    
     public void addText(String msg) {

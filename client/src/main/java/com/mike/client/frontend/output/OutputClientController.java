@@ -27,7 +27,7 @@ public class OutputClientController {
         if (!registerClientResponse.hasPermission()) {
             System.exit(0);
         } // if
-        this.view = new OutputGUI();
+        this.view = new OutputGUI(clientType);
         view.setVisible(true);
     }
 

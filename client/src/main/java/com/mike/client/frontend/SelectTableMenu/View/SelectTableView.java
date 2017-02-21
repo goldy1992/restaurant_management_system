@@ -56,10 +56,8 @@ public class SelectTableView extends javax.swing.JFrame
      * @param index
      * @param t
      */
-    public void setTableStatus(int index, TableStatus t)
-    {
-        switch(t)
-        {
+    public void setTableStatus(int index, TableStatus t) {
+        switch(t) {
             case FREE:
                 setButton(index, GREEN, getMessage(index, t));
                 break;
