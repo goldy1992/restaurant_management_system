@@ -1,6 +1,6 @@
 package com.mike.client;
 
-import com.mike.client.frontend.MainMenu.View.*;
+import com.mike.client.frontend.MainMenu.View.MenuView;
 import com.mike.client.frontend.SelectTableMenu.View.SelectTableView;
 import com.mike.client.frontend.till.TillClientController;
 import com.mike.client.frontend.till.tillMenu.TillMenuView;
@@ -8,6 +8,7 @@ import com.mike.client.frontend.waiter.WaiterClientController;
 import com.mike.client.gui.MenuViewPage;
 import com.mike.client.gui.SelectTabPage;
 import com.mike.client.gui.SelectTableViewPage;
+import org.apache.log4j.Logger;
 import org.fest.swing.timing.Condition;
 import org.fest.swing.timing.Pause;
 import org.hamcrest.CoreMatchers;
@@ -25,9 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class WaiterClientEndToEndTest {
+
+    final static Logger logger = Logger.getLogger(WaiterClientEndToEndTest.class);
 
     private enum ClientType {
         WAITER,
@@ -111,7 +113,7 @@ public class WaiterClientEndToEndTest {
         outputFile.delete();
         errorFile.delete();
         p.destroy();
-        System.out.println("p alive: " + p.isAlive());
+        logger.info("p alive: " + p.isAlive());
         waiterClientcontext.destroy();
         tillClientContext.destroy();
     }
@@ -208,14 +210,10 @@ public class WaiterClientEndToEndTest {
         menuViewPage.inputNumberOnMenuKeypad("2000");
     }
 
-
-
-
-
     private GenericXmlApplicationContext setupContext(ClientType type) {
         final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 
-        System.out.print("Detect open server socket...");
+        logger.info("Detect open server socket...");
         int availableServerSocket = SocketUtils.findAvailableTcpPort();
 
         final Map<String, Object> sockets = new HashMap<String, Object>();
@@ -225,7 +223,7 @@ public class WaiterClientEndToEndTest {
 
         context.getEnvironment().getPropertySources().addLast(propertySource);
 
-        System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
+        logger.info("using port " + context.getEnvironment().getProperty("availableServerSocket"));
 
         if (type == ClientType.WAITER) {
             context.load("/META-INF/waiter-client-context.xml");

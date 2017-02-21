@@ -5,12 +5,13 @@
  */
 package com.mike.client.backend;
 
-import java.util.Map;
-
+import com.mike.message.Message;
+import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.messaging.handler.annotation.Headers;
-import com.mike.message.Message;
+
+import java.util.Map;
 
 /**
  *
@@ -18,12 +19,14 @@ import com.mike.message.Message;
  */
 @MessageEndpoint
 public class MessageFilter {
+
+    final static Logger logger = Logger.getLogger(MessageFilter.class);
     
     @Filter(inputChannel = "inputChannel", outputChannel="filterToMessageTypeRouterChannel")
     public boolean accept(Object message, @Headers Map<String, Object> headerMap){
-        System.out.println("message received filter\nFilter headers: " + headerMap);
+        logger.info("message received filter\nFilter headers: " + headerMap);
         if (validMessage(message)) {
-        	System.out.println("returning true");
+        	logger.info("returning true");
         	return true; 
         }  // if
     	return false;

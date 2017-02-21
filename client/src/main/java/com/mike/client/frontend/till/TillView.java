@@ -1,7 +1,5 @@
 package com.mike.client.frontend.till;
 
-import com.mike.client.frontend.till.tillMenu.TillMenuView;
-
 import javax.swing.*;
 
 /**

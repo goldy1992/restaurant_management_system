@@ -1,7 +1,7 @@
 package com.mike.client.frontend.waiter;
 
-import com.mike.client.frontend.SelectTableMenu.SelectTableController;
 import com.mike.client.backend.MessageSender;
+import com.mike.client.frontend.SelectTableMenu.SelectTableController;
 import com.mike.message.Request.RegisterClientRequest.ClientType;
 import com.mike.message.Response.RegisterClientResponse;
 import org.springframework.beans.factory.annotation.Autowired;

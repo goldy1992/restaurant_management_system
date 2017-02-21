@@ -1,5 +1,6 @@
 package com.mike.client.frontend.till.tillMenu;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.till.TillClientController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;
@@ -8,6 +9,7 @@ import com.mike.item.Tab;
 import com.mike.item.dbItem.MenuPageDAO;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Table;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -18,6 +20,8 @@ import java.util.List;
  * Created by michaelg on 07/09/2016.
  */
 public class TillMenuController extends MenuController {
+
+	final static Logger logger = Logger.getLogger(TillMenuController.class);
 
 	@Autowired
 	private BarTabMenuController barTabMenuController;
@@ -49,9 +53,9 @@ public class TillMenuController extends MenuController {
 		TillMenuView view = (TillMenuView) this.getView();
 		Integer chosenTabNumber = null;
 		if (!model.isTabLoaded()) {
-			System.out.println("tabLoaded == false");
+			logger.info("tabLoaded == false");
 			if (model.getOldTab().getNumberOfItems() + model.getNewTab().getNumberOfItems() <= 0) {
-				System.out.println("get tab selected");
+				logger.info("get tab selected");
 				chosenTabNumber = getBarTabMenuController().getTabNumber(view, true, BarTabMenuModel.Functionality.GET_TAB);
 
 				if (chosenTabNumber == null) {
@@ -85,12 +89,12 @@ public class TillMenuController extends MenuController {
 	}
 
 	public void writeLastReceipt() {
-//		System.out.println("called last receipt");
+//		logger.info("called last receipt");
 //		if (this.lastReceipt == null)
 //			return;
 //		try
 //		{
-//			System.out.println("last receipt not null");
+//			logger.info("last receipt not null");
 //			File file = new File("Last _Bill_Receipt_"
 //					//+ oldTab.getTable().getTableNumber()
 //					+ ".txt");

@@ -1,37 +1,34 @@
 package com.mike.client.frontend.MainMenu;
 
+import com.mike.client.backend.MessageFilter;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author mbbx9mg3
  */
-public class Factors 
-{
+public class Factors {
 
+    final static Logger logger = Logger.getLogger(Factors.class);
+    
     /**
      *
      * @param n
      * @return
      */
-    public static int[] closestIntSquare(int n)
-    {
+    public static int[] closestIntSquare(int n) {
         TreeSet<Integer> factors = new TreeSet<Integer>();
         factors.add(n);
         factors.add(1);
-        for(int test = n - 1; test >= Math.sqrt(n); test--)
-            if(n % test == 0)
-            {
+        for(int test = n - 1; test >= Math.sqrt(n); test--) {
+            if (n % test == 0) {
                 factors.add(test);
                 factors.add(n / test);
             }
-        
+        }
         ArrayList<Integer> s = new ArrayList<Integer>(factors);
 
         int[] arrayToReturn = new int[2];
@@ -50,11 +47,10 @@ public class Factors
      *
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         int[] x = closestIntSquare(114);
         
         for (int t: x)
-        System.out.println(t);
+        logger.info(t);
     }
 }

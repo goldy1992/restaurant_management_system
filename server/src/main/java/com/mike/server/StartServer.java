@@ -5,15 +5,15 @@
  */
 package com.mike.server;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Scanner;
-
+import com.mike.message.Table;
+import com.mike.server.database.InitialiseDatabase;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.mike.message.Table;
-import com.mike.server.database.InitialiseDatabase;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Scanner;
 
 /**
  * @author Mike

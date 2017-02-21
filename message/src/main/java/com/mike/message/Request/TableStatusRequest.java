@@ -6,10 +6,7 @@
 
 package com.mike.message.Request;
 
-import com.mike.message.Message;
-import java.net.InetAddress;
 import java.util.ArrayList;
-import org.springframework.messaging.MessageHeaders;
 
 /**
  *

@@ -8,6 +8,7 @@ package com.mike.client.frontend.MainMenu;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,14 +20,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author mbbx9mg3
  */
 public class VoidItemsDialog extends javax.swing.JDialog {
+
+    final static Logger logger = Logger.getLogger(VoidItemsDialog.class);
 
     private final Tab oldTab;
     private final Tab newTab;  
@@ -92,45 +93,34 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
    
-    private ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> 
-        addCheckBoxes(Tab tab)
-    {
+    private ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> addCheckBoxes(Tab tab) {
         ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> 
             returnList = new ArrayList<>();
-        for (Item item : tab.getItems())    
-        {
+        for (Item item : tab.getItems()) {
             final Component first;
             final Component second;
 
-            if (item.stockCount)
-            {
+            if (item.stockCount) {
                 first = new JCheckBox("Wasted");
                 first.setEnabled(false);
-            } // if
-            else
+            } else {
                 first = new JLabel("Stock Count Off");
+            }
             
-            
-            if (item.getQuantity() > 1)
-            {
+            if (item.getQuantity() > 1) {
                 second = new JTextField("");
                 second.setEnabled(false);
-            } // if
-            else second = new JLabel("Only 1 Item");
-            
+            } else {
+                second = new JLabel("Only 1 Item");
+            }
             final JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            jcb.addActionListener(new ActionListener()
-            {
+            jcb.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) 
-                {
-                    if (jcb.isSelected())
-                    {
+                public void actionPerformed(ActionEvent e) {
+                    if (jcb.isSelected()) {
                         first.setEnabled(true);
                         second.setEnabled(true);
-                    } // if
-                    else
-                    {
+                    } else {
                         first.setEnabled(false);
                         second.setEnabled(false);                        
                     } // else
@@ -143,17 +133,13 @@ public class VoidItemsDialog extends javax.swing.JDialog {
         return returnList;
     }  // add check boxes
     
-    public Pair<Tab, Tab> startDialog()
-    {
+    public Pair<Tab, Tab> startDialog() {
         JPanel exitPanel = new JPanel();
         exitPanel.setLayout(new GridLayout(1,0));
         final VoidItemsDialog thisInstance = this;
-        submitButton.addActionListener(new ActionListener()
-        {
-            public void addToStock(Item item, int quantity) 
-            {
-                try
-                {
+        submitButton.addActionListener(new ActionListener() {
+            public void addToStock(Item item, int quantity) {
+                try {
                     Connection con;
                     //init the connection to the database
                     con = DriverManager.getConnection(
@@ -168,32 +154,26 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                         + "WHERE `3YP_ITEMS`.`ID` = \"" 
                         + item.getID() + "\"";
 
-                    System.out.println("Query: " + query);
+                    logger.info("Query: " + query);
 
                     numberOfButtonsQuery = con.prepareStatement(query);
                     numberOfButtonsQuery.executeUpdate();
 
                     con.close();    
                 }
-                catch (SQLException ex) 
-                {
-                    Logger.getLogger(VoidItemsDialog.class.getName()).log(Level.SEVERE, null, ex);
+                catch (SQLException ex) {
+                    logger.error(ex.getStackTrace().toString());
                 }
             } // addToStock
             
             public boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>, 
-                Pair<Component, Component>>> cBoxes, Tab tab)
-                    
-                   
-            {
+                Pair<Component, Component>>> cBoxes, Tab tab) {
                 CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();  
                 temp.addAll(tab.getItems());
  
                 // the first for check for errors
-                for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> jCB : cBoxes)
-                {
-                    if (jCB.getFirst().getFirst().isSelected() && (jCB.getSecond().getSecond() instanceof JTextField))
-                    {
+                for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> jCB : cBoxes) {
+                    if (jCB.getFirst().getFirst().isSelected() && (jCB.getSecond().getSecond() instanceof JTextField)) {
                         int amount = 0;
                         try
                         {
@@ -304,13 +284,13 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VoidItemsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VoidItemsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VoidItemsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VoidItemsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         //</editor-fold>
 

@@ -2,8 +2,6 @@ package com.mike.item.dbItem;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ItemDAO implements Serializable {
 	

@@ -12,6 +12,7 @@ import com.mike.message.EventNotification.TableStatusEvtNfn;
 import com.mike.message.Response.TabResponse;
 import com.mike.message.Response.TableStatusResponse;
 import com.mike.message.Table.TableStatus;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -24,17 +25,17 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import static com.mike.client.frontend.SelectTableMenu.SelectTableModel.NO_TABLE_SELECTED;
-import static com.mike.message.Table.TableStatus.DIRTY;
-import static com.mike.message.Table.TableStatus.FREE;
-import static com.mike.message.Table.TableStatus.IN_USE;
+import static com.mike.message.Table.TableStatus.*;
 
 /**
  *
  * @author Mike
  */
 @MessageEndpoint
-public class SelectTableController implements ActionListener, WindowListener
-{
+public class SelectTableController implements ActionListener, WindowListener {
+
+	final static Logger logger = Logger.getLogger(SelectTableController.class);
+	
 	@Autowired
 	private MessageSender messageSender;
 	
@@ -86,7 +87,7 @@ public class SelectTableController implements ActionListener, WindowListener
 			messageSender.sendTableStatusEventNotification(tableSelected, IN_USE);
 			TabResponse response = messageSender.sendTabRequest(tableSelected);
 			getMenuController().init(this.view, response.getTab());
-			System.out.println("table selected");
+			logger.info("table selected");
 		} // else
 	}
 
@@ -120,7 +121,7 @@ public class SelectTableController implements ActionListener, WindowListener
     
     @ServiceActivator(inputChannel="tableStatusEvtNotificationChannel")
     public void setTableStatus(TableStatusEvtNfn tableStatusEvtNfn) {
-		System.out.println(tableStatusEvtNfn);
+		logger.info(tableStatusEvtNfn);
     	int tableNumber = tableStatusEvtNfn.getTableNumber();
     	TableStatus tableStatus = tableStatusEvtNfn.getTableStatus();
 		model.setTableStatus(tableNumber, tableStatus);

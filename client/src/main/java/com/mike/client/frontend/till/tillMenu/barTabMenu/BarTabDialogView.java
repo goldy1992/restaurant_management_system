@@ -5,21 +5,22 @@
  */
 package com.mike.client.frontend.till.tillMenu.barTabMenu;
 
-import com.mike.client.frontend.Pair;
-import com.mike.client.frontend.till.tillMenu.TillMenuView;
+import com.mike.client.backend.MessageSender;
 import com.mike.message.Table;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mbbx9mg3
  */
 public class BarTabDialogView extends javax.swing.JDialog {
+
+    final static Logger logger = Logger.getLogger(BarTabDialogView.class);
 
     private List<TabJButton> tabJButtons;
 
@@ -42,7 +43,7 @@ public class BarTabDialogView extends javax.swing.JDialog {
     public synchronized void setButtons(Map<Integer, Table.TableStatus> statuses, BarTabMenuController barTabMenuController) {
         // SET UP NEW TAB BUTTON
         tabJButtons = new ArrayList<>();
-        System.out.println("set buttons: " + statuses.size() + " buttons");
+        logger.info("set buttons: " + statuses.size() + " buttons");
         for (Integer i : statuses.keySet()) {
             TabJButton jButton = new TabJButton(i);
             jButton.addActionListener(barTabMenuController);

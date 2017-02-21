@@ -5,8 +5,8 @@
  */
 package com.mike.message.Response;
 
-import com.mike.message.Request.Request;
 import com.mike.message.Message;
+import com.mike.message.Request.Request;
 
 
 /**

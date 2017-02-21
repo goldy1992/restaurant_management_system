@@ -1,5 +1,7 @@
 package com.mike.client.frontend.waiter;
 
+import com.mike.client.backend.MessageSender;
+import org.apache.log4j.Logger;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.SocketUtils;
@@ -8,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StartWaiterClient {
+
+	final static Logger logger = Logger.getLogger(StartWaiterClient.class);
+	
 	   /**
      * @param args
      * @throws InterruptedException
@@ -21,7 +26,7 @@ public class StartWaiterClient {
     private static GenericXmlApplicationContext setupContext() {
 		final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 
-		System.out.print("Detect open server socket...");
+		logger.info("Detect open server socket...");
 		int availableServerSocket = SocketUtils.findAvailableTcpPort();
 
 		final Map<String, Object> sockets = new HashMap<String, Object>();
@@ -31,7 +36,7 @@ public class StartWaiterClient {
 
 		context.getEnvironment().getPropertySources().addLast(propertySource);
 
-		System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
+		logger.info("using port " + context.getEnvironment().getProperty("availableServerSocket"));
 
 		context.load("/META-INF/waiter-client-context.xml");
 		context.registerShutdownHook();

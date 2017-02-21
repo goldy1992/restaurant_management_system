@@ -1,6 +1,8 @@
 package com.mike.client.frontend.output;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.message.Request.RegisterClientRequest;
+import org.apache.log4j.Logger;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.SocketUtils;
@@ -12,6 +14,9 @@ import static com.mike.message.Request.RegisterClientRequest.ClientType.BAR;
 import static com.mike.message.Request.RegisterClientRequest.ClientType.KITCHEN;
 
 public class StartOutputClient {
+
+    final static Logger logger = Logger.getLogger(StartOutputClient.class);
+    
     /**
      * @param args
      * @throws InterruptedException
@@ -22,7 +27,7 @@ public class StartOutputClient {
             switch(args[0]) {
                 case "bar": clientType = BAR; break;
                 case "kitchen": clientType = KITCHEN; break;
-                default: System.out.println("invalid argument"); System.exit(0);
+                default: logger.info("invalid argument"); System.exit(0);
             }
         } catch(Exception ex) {
             ex.printStackTrace();
@@ -36,7 +41,7 @@ public class StartOutputClient {
     private static GenericXmlApplicationContext setupContext() {
         final GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 
-        System.out.print("Detect open server socket...");
+        logger.info("Detect open server socket...");
         int availableServerSocket = SocketUtils.findAvailableTcpPort();
 
         final Map<String, Object> sockets = new HashMap<String, Object>();
@@ -46,7 +51,7 @@ public class StartOutputClient {
 
         context.getEnvironment().getPropertySources().addLast(propertySource);
 
-        System.out.println("using port " + context.getEnvironment().getProperty("availableServerSocket"));
+        logger.info("using port " + context.getEnvironment().getProperty("availableServerSocket"));
 
         context.load("/META-INF/output-client-context.xml");
         context.registerShutdownHook();

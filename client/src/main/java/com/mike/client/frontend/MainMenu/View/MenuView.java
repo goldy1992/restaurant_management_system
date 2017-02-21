@@ -1,9 +1,11 @@
 package com.mike.client.frontend.MainMenu.View;
 
+import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
 import com.mike.client.frontend.till.tillMenu.TillMenuView;
 import com.mike.item.Tab;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +36,9 @@ import java.util.ArrayList;
  * @author mbbx9mg3
  */
 public class MenuView extends JDialog {
+
+	final static Logger logger = Logger.getLogger(MenuView.class);
+	
 	protected final ArrayList<JComponent> components = new ArrayList<>();
 	protected final ArrayList<JButton> buttons = new ArrayList<>();
 	protected final ArrayList<JPanel> panels = new ArrayList<>();
@@ -359,7 +364,7 @@ public class MenuView extends JDialog {
 		BillHandlePanel.setRequestFocusEnabled(false);
 		// we just want one column, zero rows implies as many coulmns as we like
 		GridLayout layout = new java.awt.GridLayout(0, 1);
-		System.out.println(layout);
+		logger.info(layout);
 		BillHandlePanel.setLayout(layout);
 
 		for (String s : getOptionNames()) {
@@ -371,7 +376,7 @@ public class MenuView extends JDialog {
 			buttons.add(newButton);
 		} // for
 
-		System.out.println(layout);
+		logger.info(layout);
 		panel.add(BillHandlePanel);
 		CardPanel.add(panel, panel.getName());
 		panels.add(panel);
@@ -428,7 +433,7 @@ public class MenuView extends JDialog {
 				return TillMenuView.class;
 			if (cont instanceof MenuView)
 				return MenuView.class;
-			System.out.println("count: " + i);
+			logger.info("count: " + i);
 			i++;
 		}
 		return null;

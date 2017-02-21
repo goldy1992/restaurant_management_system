@@ -2,18 +2,14 @@ package com.mike.client.frontend.MainMenu;
 
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
-import com.mike.client.frontend.MainMenu.View.KeyJButton;
-import com.mike.client.frontend.MainMenu.View.KeypadJPanel;
-import com.mike.client.frontend.MainMenu.View.KeypadPanelJButton;
-import com.mike.client.frontend.MainMenu.View.MenuCardPanel;
-import com.mike.client.frontend.MainMenu.View.MenuItemJButton;
-import com.mike.client.frontend.MainMenu.View.MenuView;
+import com.mike.client.frontend.MainMenu.View.*;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;
 import com.mike.item.dbItem.MenuPageDAO;
 import com.mike.message.Table;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -23,10 +19,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MenuController extends JComponent implements ActionListener, MouseListener {
+
+	final static Logger logger = Logger.getLogger(MenuController.class);
 	 
     protected MenuView view;
     protected MenuModel model;
@@ -105,7 +101,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 
 			List<ItemDAO> response = messageSender.query("FROM ItemDAO i where i.id = " + menuItemJButton.getId());
 			if (response.size() != 1) {
-				System.out.println("incorrect number of items response");
+				logger.info("incorrect number of items response");
 			}
 
 			int amountInStock = response.get(0).getQuantity();
@@ -158,7 +154,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 	} // dealWithTillMenuButtons()
 
 	protected void sendOrder() {
-		System.out.println("called send order");
+		logger.info("called send order");
 		Tab newItems = model.getNewTab();
 		Tab updatedTab = model.mergeTabs();
 		model.resetSeenId();
@@ -181,7 +177,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 			}
 		} // try
 		catch (IOException ex) {
-			Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error(ex.getStackTrace().toString());
 		} // catch
 	} // printBill
 
