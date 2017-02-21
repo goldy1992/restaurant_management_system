@@ -217,6 +217,4 @@ public class Tab implements Serializable, Cloneable
     public void setTabNumber(int tabNumber) {
         this.tabNumber = tabNumber;
     }
-    
-    
 } // class

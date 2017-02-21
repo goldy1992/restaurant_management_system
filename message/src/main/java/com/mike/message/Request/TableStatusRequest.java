@@ -15,48 +15,32 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author Goldy
  */
-public class TableStatusRequest extends Request
-{
+public class TableStatusRequest extends Request {
+
     private final ArrayList<Integer> tableList;
-    
+
     /**
-     *
-     * @param from
-     * @param to
      * @param tableList
      */
-    public TableStatusRequest(ArrayList<Integer> tableList)
-    {
+    public TableStatusRequest(ArrayList<Integer> tableList) {
         super();
         this.tableList = tableList;
     } // constructor
-   
-    
-    /**
-     *
-     * @return
-     */
+
     @Override
-    public ArrayList<Integer> getTableList()
-    {
-        return tableList;
-    }
-    
-    public Integer getFirstValue()
-    {
-        return tableList.get(0);
-    }
-    
-    public String toString()
-    {
-        String x = super.toString() + "SUBTYPE: Table status\nTABLES: "; 
-         for (int i = 0; i < tableList.size(); i++)
+    public ArrayList<Integer> getTableList() { return tableList; }
+    public Integer getFirstValue() { return tableList.get(0); }
+
+    public String toString() {
+        String x = super.toString() + "SUBTYPE: Table status\nTABLES: ";
+        for (int i = 0; i < tableList.size(); i++) {
             x += (tableList.get(i) + " ");
+        }
         x+= "\n";
-        
+
         return x;
     }
 
-    
-    
+
+
 }

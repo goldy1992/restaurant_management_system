@@ -13,31 +13,17 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author mbbx9mg3
  */
-public class RegisterClientResponse extends Response
-{
+public class RegisterClientResponse extends Response {
+
     private boolean permissionGranted;
     private final RegisterClientRequest.ClientType clientType;
     
-    public RegisterClientResponse(RegisterClientRequest request)
-    {
+    public RegisterClientResponse(RegisterClientRequest request) {
         super(request);
         clientType = request.getClientType();
     } // constructor
 
-    
-    public boolean hasPermission()
-    {
-        return permissionGranted;
-    } // hasPermission
-    
-    public void setPermission(boolean permission)
-    {
-        permissionGranted = permission;
-    } // setPermission
-    
-    public RegisterClientRequest.ClientType getClientType()
-    {
-        return clientType;
-    }
-
+    public boolean hasPermission() { return permissionGranted; } // hasPermission
+    public void setPermission(boolean permission) { permissionGranted = permission; } // setPermission
+    public RegisterClientRequest.ClientType getClientType() { return clientType; }
 } // class

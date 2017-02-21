@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mike.message.Response;
-
 
 import com.mike.item.Tab;
 import com.mike.message.Message;
@@ -15,16 +9,15 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author mbbx9mg3
  */
-public class TabResponse extends Response
-{
+public class TabResponse extends Response {
+
     private Tab currentTab;
     
     /**
      *
      * @param request
      */
-    public TabResponse(TabRequest request)
-    {
+    public TabResponse(TabRequest request) {
         super(request);
 
     } // contructor
@@ -38,8 +31,4 @@ public class TabResponse extends Response
     {
         return currentTab;
     }
-
-
-
-    
 } // class

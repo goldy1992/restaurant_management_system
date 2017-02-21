@@ -13,8 +13,8 @@ import com.mike.message.Message;
  *
  * @author mbbx9mg3
  */
-public abstract class Response extends Message
-{    
+public abstract class Response extends Message {
+
 	private Request request = null;
     private boolean parsedResponse;
 
@@ -22,9 +22,7 @@ public abstract class Response extends Message
      *
      * @param request
      */
-    public Response(Request request)
-    {
-   
+    public Response(Request request) {
        this.request = request;
        parsedResponse = false;
     } // constructor
@@ -57,7 +55,5 @@ public abstract class Response extends Message
     {
         return "TYPE: Response\n";
     }
-    
 
-    
 } // class

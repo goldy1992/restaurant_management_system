@@ -10,29 +10,12 @@ import java.net.InetAddress;
  *
  * @author mbbx9mg3
  */
-public class RegisterClientRequest extends Request 
-{
+public class RegisterClientRequest extends Request {
 
-    public static enum ClientType
-    {
-        /**
-         *  Request registers the bar client.
-         */
+    public static enum ClientType {
         BAR,
-        
-        /**
-         *  Request registers the kitchen client.
-         */
         KITCHEN,
-        
-        /**
-         *  Request registers the waiter client.
-         */
         WAITER,
-        
-        /**
-         *  Request registers the till client.
-         */
         TILL
     } // register
     
@@ -40,27 +23,18 @@ public class RegisterClientRequest extends Request
     
     /**
      *
-     * @param from
-     * @param to
      * @param clientType
      */
-    public RegisterClientRequest(ClientType clientType)
-    {
+    public RegisterClientRequest(ClientType clientType) {
         this.clientType = clientType;
     } // constructor
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         String x = super.toString() + "SUBTYPE: " + clientType;
         x+= "\n";
-        
         return x;
     } // to String
     
-    public ClientType getClientType()
-    {
-        return clientType;
-    }
-    
-}
+    public ClientType getClientType() { return clientType; }
+} // class

@@ -1,40 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mike.item;
  
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
-
 /**
- *
  * @author mbbx9mg3
  */
-public class Item implements Serializable, Comparable, Cloneable, com.mike.item.Uniqueness
-{  
-    /**
-     *
-     */
-    public static enum Type 
-    {
+public class Item implements Serializable, Comparable, Cloneable, com.mike.item.Uniqueness {
 
-        /**
-         *
-         */
+    public static enum Type {
         DRINK,
-
-        /**
-         *
-         */
         FOOD
     }
     
-    /**
-     *
-     */
     public Type type;
     private final int id;
     private String message;
@@ -53,10 +31,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
      * @param type
      * @param quantity
      */
-    public Item(int id, String name, 
-                double price, Type type, 
-                int quantity, boolean stockCount) 
-    {
+    public Item(int id, String name, double price, Type type, int quantity, boolean stockCount) {
         this.id = id;
         this.message = "";
         this.name = name;
@@ -68,8 +43,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         this.stockCount = stockCount;
     } // item
     
-    public Item(Item i)
-    {
+    public Item(Item i) {
         this.type = i.type;
         this.id = i.id;
         this.message = i.message;
@@ -81,39 +55,31 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         this.stockCount = i.stockCount;
     }
     
-    public void appendCharacter(char key)
-    {
-        this.message += key;
-    } // setMessage
+    public void appendCharacter(char key) { this.message += key; } // setMessage
     
     
-    public String firstLineScreenOutput()
-    {
+    public String firstLineScreenOutput() {
         String stringToReturn = "";
         DecimalFormat df = new DecimalFormat("0.00");
         
         stringToReturn += this.getQuantity() + "\t" + this.getName() 
             + "\t\t\t£" + df.format(this.getTotalPrice()) + "\n";
-            
-        
+
         return stringToReturn;       
     }
     
-    public String secondLineScreenOutput()
-    {
+    public String secondLineScreenOutput() {
         String stringToReturn = "";
-            
-        if (!this.getMessage().equals(""))
+        if (!this.getMessage().equals("")) {
             stringToReturn += this.getMessage() + "\n";
-        
+        }
         return stringToReturn;       
     }
-    public String outputToScreen()
-    {
+
+    public String outputToScreen() {
         String stringToReturn = "";
         stringToReturn += this.firstLineScreenOutput();
         stringToReturn += this.secondLineScreenOutput();
-        
         return stringToReturn;
     } // outputToScreen
     
@@ -127,88 +93,35 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
                 "\nquantity " + quantity +
                 "\nmessage " + message;
     } // toString
-    
-    /**
-     *
-     * @return
-     */
-    public int getID()
-    {
-        return id;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public String getMessage()
-    {
-        return message;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public double getPricePerItem()
-    {
-        return pricePerItem;
-    }
-    
-    public double getTotalPrice()
-    {
-        return totalPrice;
-    }
-    
-    private void setTotalPrice()
-    {
+
+    private void setTotalPrice() {
         totalPrice = pricePerItem;
         totalPrice = totalPrice * quantity;
     }
     
-    public void setQuantity(int q)
-    {
+    public void setQuantity(int q) {
         this.quantity = q;
         setTotalPrice();
     }
-    
-    /**
-     *
-     * @return
-     */
-    public Integer getQuantity()
-    {
-        return quantity;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public String getName()
-    {
-        return name;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public Type getType()
-    {
-        return type;
-    }
+
+    public Integer getQuantity()  { return quantity; }
+    public String getName()  { return name; }
+    public Type getType() { return type; }
+    public int getID() { return id; }
+    public String getMessage() { return message; }
+    public double getPricePerItem()  { return pricePerItem; }
+    public double getTotalPrice()  { return totalPrice; }
     
     @Override
-    public int compareTo(Object obj)
-    {
-        if ((obj instanceof Item) == false )
+    public int compareTo(Object obj) {
+        if ((obj instanceof Item) == false ) {
             return -1;
+        }
    
         Item compareItem = (Item) obj;
-        if (this.uniqueID.equals(compareItem.uniqueID))
+        if (this.uniqueID.equals(compareItem.uniqueID)) {
             return 0;
-        
+        }
         return -1;
     }
     

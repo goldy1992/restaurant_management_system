@@ -14,43 +14,28 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author Goldy
  */
-public class NumOfTablesResponse extends Response
-{
+public class NumOfTablesResponse extends Response {
+
     private int numOfTables;
 
     /**
      *
      * @param request
      */
-    public NumOfTablesResponse(NumOfTablesRequest request)
-    {
+    public NumOfTablesResponse(NumOfTablesRequest request) {
         super(request);
-
     } // contructor
     
     /**
      *
      * @return
      */
-    public int getNumOfTables()
-    {
-        return numOfTables;
-    } // getTableStatuses
-    
-    public void setNumberOfTables(int numOfTables)
-    {
-        this.numOfTables = numOfTables;
-    }
+    public int getNumOfTables() { return numOfTables; } // getTableStatuses
+    public void setNumberOfTables(int numOfTables) {this.numOfTables = numOfTables;}
         
-    public String toString()
-    {
-        String x = super.toString() + "SUBTYPE: Number of Tables\ntotal: " + numOfTables; 
-
+    public String toString() {
+        String x = super.toString() + "SUBTYPE: Number of Tables\ntotal: " + numOfTables;
         x+= "\n";
-        
         return x;
     }
-
-
-
-}
+} // class

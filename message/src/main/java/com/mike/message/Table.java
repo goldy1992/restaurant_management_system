@@ -16,8 +16,7 @@ import java.io.Serializable;
  * 
  * The class to represent a table in the restaurant
  */
-public class Table implements Serializable 
-{
+public class Table implements Serializable {
 
     /**
      * @param tableNumber the tableNumber to set
@@ -33,27 +32,11 @@ public class Table implements Serializable
     public void setCurrentTab(Tab currentTab) {
         this.currentTab = currentTab;
     }
-    /**
-     *
-     */
-    public static enum TableStatus 
-    {
 
-        /**
-         *
-         */
-        FREE, 
-
-        /**
-         *
-         */
-        OCCUPIED, 
-
-        /**
-         *
-         */
-        IN_USE, 
-        
+    public static enum TableStatus {
+        FREE,
+        OCCUPIED,
+        IN_USE,
         DIRTY
     }
     /**
@@ -62,7 +45,6 @@ public class Table implements Serializable
     private int tableNumber;
     private TableStatus tableStatus;   
     private Tab currentTab;
- //s   private ServerSocket serverSocket;
     
     /**
      *
@@ -72,7 +54,6 @@ public class Table implements Serializable
         this.tableNumber = tableNumber;
         this.tableStatus = TableStatus.FREE;
 		this.currentTab = new Tab(tableNumber);
-        
     } // constructor
     
     /**
@@ -82,11 +63,6 @@ public class Table implements Serializable
     {
         return tableNumber;
     } // getTableNumber
-    
-    /**
-     * @return
-     */
-
     
     /**
      *
@@ -120,41 +96,4 @@ public class Table implements Serializable
     public void updateTab(Tab tab) {
         this.setCurrentTab(tab);
     }
-    
-/*    @Override
-    public void run() {
-        boolean socketListening = true;
-        System.out.println("Currently listening on port ");
-        while ( serverSocket!= null && socketListening) {
-            try (
-                Socket acceptSocket = serverSocket.accept();
-                PrintWriter out =
-                    new PrintWriter(acceptSocket.getOutputStream(), true);                   
-                BufferedReader in = new BufferedReader(
-                    new InputStreamReader(acceptSocket.getInputStream()));   
-            ) {
-                String inputLine;
-                if ((inputLine = in.readLine()) != null) 
-                {
-                    
-                } // if
-            } // TRY
-            catch (IOException e)
-            {
-                System.out.println("Failed to accept incoming socket");
-            } // catch            
-        } // while
-        try
-        {
-            if (serverSocket!= null)
-                serverSocket.close();
-        } // try
-        catch (IOException e)
-        {
-            System.out.println("Failed to accept incoming socket");
-        } // catch
-    } // run */
-    
-    
-    
 }

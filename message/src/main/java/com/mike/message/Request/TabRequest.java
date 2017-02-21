@@ -13,37 +13,23 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author mbbx9mg3
  */
-public class TabRequest extends Request
-{
+public class TabRequest extends Request {
     
    private final int tabNumber;
+
     /**
-     * @param from
-     * @param to
      * @param tableNumber
      */
-    public TabRequest(int tableNumber)
-    {
+    public TabRequest(int tableNumber) {
         super();
         this.tabNumber = tableNumber;
     } // constructor
-    
 
-    
-    public String toString()
-    {
+    public String toString() {
         String x = super.toString() + "SUBTYPE: Tab Request";
         x+= "\nTab Number: " + tabNumber + "\n";
-        
         return x;
     }   
     
-    public int getTabNumber()
-    {
-        return tabNumber;
-    }
-
-
-
-    
+    public int getTabNumber() { return tabNumber; }
 } // class

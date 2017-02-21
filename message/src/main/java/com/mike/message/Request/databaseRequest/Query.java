@@ -11,10 +11,5 @@ public class Query extends Request {
 		this.query = query;
 	}
 
-	public String getQuery() {
-		return query;
-	}
-	
-	
-
-}
+	public String getQuery() { return query; }
+} // class

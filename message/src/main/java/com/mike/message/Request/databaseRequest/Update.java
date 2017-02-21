@@ -16,10 +16,5 @@ public class Update<T extends Serializable> extends Request {
 		this.item = item;
 	}
 
-	public T getItem() {
-		return item;
-	}
-
-
-
-}
+	public T getItem() {return item; }
+} // class

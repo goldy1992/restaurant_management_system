@@ -14,30 +14,14 @@ import org.springframework.messaging.MessageHeaders;
  *
  * @author mbbx9mg3
  */
-public class LeaveResponse extends Response
-{
+public class LeaveResponse extends Response {
 
     private boolean permissionGranted = false;
-    /**
-     *
-     * @param request
-     */
-    
-    public LeaveResponse(LeaveRequest request)
-    {
-        super(request);
 
+    public LeaveResponse(LeaveRequest request) {
+        super(request);
     } // contructor
     
-    public boolean hasPermission()
-    {
-        return permissionGranted;
-    }
-
-    public void setPermission(boolean permission)
-    {
-        this.permissionGranted = permission;
-    }
-
-    
-}
+    public boolean hasPermission() { return permissionGranted; }
+    public void setPermission(boolean permission) { this.permissionGranted = permission; }
+} // class

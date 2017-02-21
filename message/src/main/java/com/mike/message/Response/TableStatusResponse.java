@@ -6,52 +6,41 @@
 
 package com.mike.message.Response;
 
-import com.mike.message.Message;
-import com.mike.message.Table;
-import com.mike.message.Table.TableStatus;
 import com.mike.message.Request.TableStatusRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import com.mike.message.Table;
 
-import org.springframework.messaging.MessageHeaders;
+import java.util.Map;
 
 /**
  *
  * @author Goldy
  */
-public class TableStatusResponse extends Response
-{
-    
+public class TableStatusResponse extends Response {
+
     private final Map<Integer, Table.TableStatus> tableStatuses;
 
     /**
      *
      * @param request
      */
-    public TableStatusResponse(TableStatusRequest request, Map<Integer, Table.TableStatus> tableStatuses)
-    {
+    public TableStatusResponse(TableStatusRequest request, Map<Integer, Table.TableStatus> tableStatuses) {
         super(request);
         this.tableStatuses = tableStatuses;
     } // contructor
-       
-       
+
+
     @Override
-    public String toString()
-    {
-        String x = super.toString() + "SUBTYPE: Table status\nTABLES: "; 
-         for (int i = 0; i < getTableStatuses().size(); i++)
+    public String toString() {
+        String x = super.toString() + "SUBTYPE: Table status\nTABLES: ";
+        for (int i = 0; i < getTableStatuses().size(); i++)
             x += (getTableStatuses().get(i) + " ");
         x+= "\n";
-        
+
         return x;
-    } // toString
+    }
 
-
-	public Map<Integer, Table.TableStatus> getTableStatuses() {
-		return tableStatuses;
-	}
-	
-
-
+// toString
+    public Map<Integer, Table.TableStatus> getTableStatuses() {
+        return tableStatuses;
+    }
 } // class
