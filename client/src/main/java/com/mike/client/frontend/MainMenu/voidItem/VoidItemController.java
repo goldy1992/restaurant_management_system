@@ -55,7 +55,7 @@ public class VoidItemController  implements ActionListener{
     }
 
 
-    public void addToStock(Item item, int quantity) {
+    private void addToStock(Item item, int quantity) {
         try {
             // TODO: change legacy connection code to perform a db query to the server
             Connection con;
@@ -84,7 +84,7 @@ public class VoidItemController  implements ActionListener{
         }
     } // addToStock
 
-    public boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>,
+    private boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>,
             Pair<Component, Component>>> cBoxes, Tab tab) {
         CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();
         temp.addAll(tab.getItems());
