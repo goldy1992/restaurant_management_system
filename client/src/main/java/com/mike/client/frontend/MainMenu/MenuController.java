@@ -3,6 +3,7 @@ package com.mike.client.frontend.MainMenu;
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
 import com.mike.client.frontend.MainMenu.View.*;
+import com.mike.client.frontend.MainMenu.voidItem.VoidItemController;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
@@ -32,6 +33,11 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 
 	@Autowired
     public MessageSender messageSender;
+
+    @Autowired
+	private VoidItemController voidItemController;
+
+    public void setVoidItemController(VoidItemController voidItemController) { this.voidItemController = voidItemController; }
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	
 	public <V extends JFrame> void init(V tableView, Tab tab) {
@@ -181,11 +187,11 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		} // catch
 	} // printBill
 
-	private void voidItem()
-	{
-		VoidItemsDialog vItem = new VoidItemsDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
+	private void voidItem() {
+		//VoidItemsDialog vItem = new VoidItemsDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
 
-		Pair<Tab, Tab> result = vItem.startDialog();
+
+		Pair<Tab, Tab> result = voidItemController.startDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
 		model.setOldTab(result.getFirst());
 		model.setNewTab(result.getSecond());
 
