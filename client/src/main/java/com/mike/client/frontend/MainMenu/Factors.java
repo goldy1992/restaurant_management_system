@@ -1,6 +1,5 @@
 package com.mike.client.frontend.MainMenu;
 
-import com.mike.client.backend.MessageFilter;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

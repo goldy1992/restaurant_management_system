@@ -1,6 +1,5 @@
 package com.mike.client.frontend.till.tillMenu;
 
-import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.MenuController;
 import com.mike.client.frontend.till.TillClientController;
 import com.mike.client.frontend.till.tillMenu.barTabMenu.BarTabMenuController;

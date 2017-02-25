@@ -1,6 +1,5 @@
 package com.mike.client.frontend.SelectTableMenu.View;
 
-import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.SelectTableMenu.SelectTableController;
 import com.mike.message.Table.TableStatus;
 import org.apache.log4j.Logger;

@@ -1,6 +1,5 @@
 package com.mike.client.frontend.waiter;
 
-import com.mike.client.backend.MessageSender;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
