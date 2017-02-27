@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mike.client.frontend.MainMenu.voidItem;
+package com.mike.client.frontend.MainMenu.voidItemMenu;
 
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;

@@ -1,9 +1,10 @@
-package com.mike.client.frontend.MainMenu.voidItem;
+package com.mike.client.frontend.MainMenu.voidItemMenu;
 
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
+import com.mike.message.Response.databaseResponse.QueryResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,33 +12,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Mike on 24/02/2017.
  */
-public class VoidItemController  implements ActionListener{
+public class VoidItemMenuController implements ActionListener{
 
-    final static Logger logger = Logger.getLogger(VoidItemController.class);
+    final static Logger logger = Logger.getLogger(VoidItemMenuController.class);
 
     @Autowired
     private MessageSender messageSender;
 
-    private VoidItemModel model;
-    private VoidItemView view;
+    private VoidItemMenuModel model;
+    private VoidItemMenuView view;
 
-    public VoidItemController(){}
+    public VoidItemMenuController(){}
 
     public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 
-    public Pair<Tab, Tab> startDialog(Dialog parent, boolean modal, Pair<Tab, Tab> tabPair) {
-        model = new VoidItemModel(tabPair);
-        view = new VoidItemView(parent, modal, model.getOldTab(), model.getNewTab());
+    public Pair<Tab, Tab> startDialog(Dialog parent, boolean modal, Tab oldTab, Tab newTab) {
+        model = new VoidItemMenuModel(oldTab, newTab);
+        view = new VoidItemMenuView(parent, modal, model.getOldTab(), model.getNewTab(), this, model.getVoidItems());
 
         view.startDialog();
         return new Pair<>(model.getOldTab(), model.getNewTab());
@@ -56,36 +53,15 @@ public class VoidItemController  implements ActionListener{
 
 
     private void addToStock(Item item, int quantity) {
-        try {
-            // TODO: change legacy connection code to perform a db query to the server
-            Connection con;
-            //init the connection to the database
-            con = DriverManager.getConnection(
-                    "jdbc:mysql://dbhost.cs.man.ac.uk:3306/mbbx9mg3",
-                    "mbbx9mg3",
-                    "Fincherz+2013");
-
-            // query: UPDATE `3YP_ITEMS` SET `QUANTITY` = `QUANTITY` - 1 WHERE ID = 27
-            PreparedStatement numberOfButtonsQuery = null;
-            String query = "UPDATE `3YP_ITEMS` "
-                    + "SET `QUANTITY` = `QUANTITY` + \"" + quantity + "\" "
-                    + "WHERE `3YP_ITEMS`.`ID` = \""
-                    + item.getID() + "\"";
-
-            logger.info("Query: " + query);
-
-            numberOfButtonsQuery = con.prepareStatement(query);
-            numberOfButtonsQuery.executeUpdate();
-
-            con.close();
-        }
-        catch (SQLException ex) {
-            logger.error(ex.getStackTrace().toString());
-        }
+        String query = "UPDATE `3YP_ITEMS` "
+                + "SET `QUANTITY` = `QUANTITY` + \"" + quantity + "\" "
+                + "WHERE `3YP_ITEMS`.`ID` = \""
+                + item.getID() + "\"";
+        QueryResponse response = messageSender.sendDbQuery(query);
+        logger.info(response);
     } // addToStock
 
-    private boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>,
-            Pair<Component, Component>>> cBoxes, Tab tab) {
+    private boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxes, Tab tab) {
         CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();
         temp.addAll(tab.getItems());
 

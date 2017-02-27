@@ -1,5 +1,6 @@
-package com.mike.client.frontend.MainMenu.voidItem;
+package com.mike.client.frontend.MainMenu.voidItemMenu;
 
+import com.mike.client.frontend.MainMenu.voidItemMenu.voidItem.VoidItem;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
@@ -9,24 +10,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 
 /**
  * Created by Mike on 24/02/2017.
  */
-public class VoidItemView extends javax.swing.JDialog {
+public class VoidItemMenuView extends JDialog {
 
-    final static Logger logger = Logger.getLogger(VoidItemView.class);
+    final static Logger logger = Logger.getLogger(VoidItemMenuView.class);
 
     private final JButton submitButton = new JButton("Submit");
     private final JButton cancelButton = new JButton("Cancel");
     private ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxesOldTab;
     private ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxesNewTab;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JScrollPane mainPanelScrollPane;
-    private javax.swing.JPanel titlePanel;
+    private JPanel mainPanel;
+    private JScrollPane mainPanelScrollPane;
+    private JPanel titlePanel;
+    private JPanel exitPanel;
+
     // End of variables declaration//GEN-END:variables
 
 
@@ -37,11 +41,19 @@ public class VoidItemView extends javax.swing.JDialog {
      * @param newTab
      * @param oldTab
      */
-    public VoidItemView(Dialog parent, boolean modal, Tab newTab, Tab oldTab) {
+    public VoidItemMenuView(Dialog parent, boolean modal, Tab newTab, Tab oldTab, ActionListener voidItemMenuController, List<VoidItem> voidItemList) {
         super(parent, modal);
         cBoxesOldTab = addCheckBoxes(oldTab);
         cBoxesNewTab = addCheckBoxes(newTab);
-        initComponents();
+        initComponents(voidItemList);
+        submitButton.addActionListener(voidItemMenuController);
+        cancelButton.addActionListener(voidItemMenuController);
+        exitPanel = new JPanel();
+        exitPanel.setLayout(new GridLayout(1,0));
+        getContentPane().add(exitPanel);
+        exitPanel.add(getSubmitButton());
+        exitPanel.add(getCancelButton());
+        pack();
     }
 
     /**
@@ -51,7 +63,7 @@ public class VoidItemView extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents(List<VoidItem> voidItems) {
 
         titlePanel = new javax.swing.JPanel();
         mainPanelScrollPane = new javax.swing.JScrollPane();
@@ -68,19 +80,12 @@ public class VoidItemView extends javax.swing.JDialog {
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
         mainPanelScrollPane.setViewportView(mainPanel);
         mainPanel.setLayout(new GridLayout(0, 3));
-        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> cb : getcBoxesOldTab())
-        {
-            mainPanel.add(cb.getFirst().getFirst());
-            mainPanel.add(cb.getSecond().getFirst());
-            mainPanel.add(cb.getSecond().getSecond());
-        }
-        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> cb : getcBoxesNewTab())
-        {
-            mainPanel.add(cb.getFirst().getFirst());
-            mainPanel.add(cb.getSecond().getFirst());
-            mainPanel.add(cb.getSecond().getSecond());
-        }
 
+        for (VoidItem i : voidItems) {
+            mainPanel.add(i.getVoidItemView().getCheckBox());
+            mainPanel.add(i.getVoidItemView().getWastageOption());
+            mainPanel.add(i.getVoidItemView().getAmountOption());
+        }
         getContentPane().add(mainPanelScrollPane);
 
         pack();
@@ -89,52 +94,10 @@ public class VoidItemView extends javax.swing.JDialog {
     private ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> addCheckBoxes(Tab tab) {
         ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>>
                 returnList = new ArrayList<>();
-        for (Item item : tab.getItems()) {
-            final Component first;
-            final Component second;
-
-            if (item.stockCount) {
-                first = new JCheckBox("Wasted");
-                first.setEnabled(false);
-            } else {
-                first = new JLabel("Stock Count Off");
-            }
-
-            if (item.getQuantity() > 1) {
-                second = new JTextField("");
-                second.setEnabled(false);
-            } else {
-                second = new JLabel("Only 1 Item");
-            }
-            final JCheckBox jcb = new JCheckBox(item.getQuantity() + " " + item.getName());
-            jcb.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (jcb.isSelected()) {
-                        first.setEnabled(true);
-                        second.setEnabled(true);
-                    } else {
-                        first.setEnabled(false);
-                        second.setEnabled(false);
-                    } // else
-                } // actionPerformed
-            });
-
-            returnList.add(new Pair(new Pair(jcb, item), new Pair(first, second)));
-        } // for
-
         return returnList;
     }  // add check boxes
 
     public void startDialog() {
-        JPanel exitPanel = new JPanel();
-        exitPanel.setLayout(new GridLayout(1,0));
-        getContentPane().add(exitPanel);
-        exitPanel.add(getSubmitButton());
-        exitPanel.add(getCancelButton());
-
-        pack();
-
         this.setVisible(true);
     }
 

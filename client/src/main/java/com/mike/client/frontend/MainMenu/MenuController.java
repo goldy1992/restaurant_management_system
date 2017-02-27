@@ -3,7 +3,7 @@ package com.mike.client.frontend.MainMenu;
 import com.mike.client.backend.MessageSender;
 import com.mike.client.frontend.MainMenu.Model.MenuModel;
 import com.mike.client.frontend.MainMenu.View.*;
-import com.mike.client.frontend.MainMenu.voidItem.VoidItemController;
+import com.mike.client.frontend.MainMenu.voidItemMenu.VoidItemMenuController;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
@@ -35,9 +35,9 @@ public class MenuController extends JComponent implements ActionListener, MouseL
     public MessageSender messageSender;
 
     @Autowired
-	private VoidItemController voidItemController;
+	private VoidItemMenuController voidItemMenuController;
 
-    public void setVoidItemController(VoidItemController voidItemController) { this.voidItemController = voidItemController; }
+    public void setVoidItemMenuController(VoidItemMenuController voidItemMenuController) { this.voidItemMenuController = voidItemMenuController; }
 	public void setMessageSender(MessageSender messageSender) { this.messageSender = messageSender; }
 	
 	public <V extends JFrame> void init(V tableView, Tab tab) {
@@ -191,7 +191,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		//VoidItemsDialog vItem = new VoidItemsDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
 
 
-		Pair<Tab, Tab> result = voidItemController.startDialog(getView(), true, new Pair<>(model.getOldTab(), model.getNewTab()));
+		Pair<Tab, Tab> result = voidItemMenuController.startDialog(getView(), true, model.getOldTab(), model.getNewTab());
 		model.setOldTab(result.getFirst());
 		model.setNewTab(result.getSecond());
 
@@ -199,8 +199,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 		getView().getOutputTextPane().setText(model.getOldTab().toString() + model.getNewTab().toString());
 	}
 
-	private void voidLastItem()
-	{
+	private void voidLastItem() {
 		if (model.getNewTab().getItems().isEmpty()) {
 			return;
 		}
