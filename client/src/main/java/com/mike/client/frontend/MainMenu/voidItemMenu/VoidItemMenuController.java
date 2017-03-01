@@ -1,6 +1,7 @@
 package com.mike.client.frontend.MainMenu.voidItemMenu;
 
 import com.mike.client.backend.MessageSender;
+import com.mike.client.frontend.MainMenu.voidItemMenu.voidItem.VoidItem;
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
 import com.mike.item.Tab;
@@ -13,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 
 /**
  * Created by Mike on 24/02/2017.
@@ -43,16 +44,26 @@ public class VoidItemMenuController implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getSubmitButton()) {
-            if (removeItems(view.getcBoxesOldTab(), model.getOldTab())
-                    &&  removeItems(view.getcBoxesNewTab(), model.getNewTab()))
+            if (!validAmounts(model.getVoidItems())) {
+                JOptionPane.showMessageDialog(view, "Incorrect number format! Please check your formatting!");
+            } else {
+                List<VoidItem> selectedVoidItems = new ArrayList<>();
+                for (VoidItem i : model.getVoidItems()) {
+                    if (i.getVoidItemModel().isSelected()) {
+                        selectedVoidItems.add(i);
+                    }
+                }
+                removeItems(selectedVoidItems, model.getOldTab(), model.getNewTab());
                 view.setVisible(false);
+            }
+
         } else if (e.getSource() == view.getCancelButton()) {
             view.dispose();
         }
     }
 
-
     private void addToStock(Item item, int quantity) {
+        // TODO; revise this method to make sure it works
         String query = "UPDATE `3YP_ITEMS` "
                 + "SET `QUANTITY` = `QUANTITY` + \"" + quantity + "\" "
                 + "WHERE `3YP_ITEMS`.`ID` = \""
@@ -61,68 +72,49 @@ public class VoidItemMenuController implements ActionListener{
         logger.info(response);
     } // addToStock
 
-    private boolean removeItems(ArrayList<Pair<Pair<JCheckBox, Item>, Pair<Component, Component>>> cBoxes, Tab tab) {
-        CopyOnWriteArrayList<Item> temp = new  CopyOnWriteArrayList<>();
-        temp.addAll(tab.getItems());
-
-        // the first for check for errors
-        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> jCB : cBoxes) {
-            if (jCB.getFirst().getFirst().isSelected() && (jCB.getSecond().getSecond() instanceof JTextField)) {
-                int amount = 0;
-                try {
-                    JTextField tf = (JTextField)jCB.getSecond().getSecond();
-                    amount = Integer.parseInt(tf.getText());
-                }
-                catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(view, "Incorrect number format! Please check your formatting!");
-                    return false;
-                }
-
-                if (amount >= jCB.getFirst().getSecond().getQuantity() || amount <= 0) {
-                    JOptionPane.showMessageDialog(view, "Incorrect number format! Please check your formatting!");
-                    return false;
-                }
+    private void removeItems(List<VoidItem> voidItems, Tab oldTab, Tab newTab) {
+        for (VoidItem voidItem : voidItems) {
+            if (!removeItemFromTab(voidItem, newTab)) {
+                removeItemFromTab(voidItem, oldTab);
             } // if
-        }  // for
+            oldTab.calculateTotal();
+            newTab.calculateTotal();
+        } // for each
+    } // removeItems
 
-
-        for (Pair<Pair<JCheckBox, Item>, Pair<Component, Component>> jCB : cBoxes) {
-            if (jCB.getFirst().getFirst().isSelected()) {
-                for (Item i : temp) {
-                    if (jCB.getFirst().getSecond() == i) {
-                        if (jCB.getFirst().getSecond().getQuantity() == 1) {
-                            temp.remove(i);
-                            if (i.stockCount) {
-                                JCheckBox tf = (JCheckBox) jCB.getSecond().getFirst();
-                                if (!tf.isSelected())
-                                    addToStock(i, 1);
-                            } // if
-                        } // if
-                        else {
-                            JTextField tf = (JTextField) jCB.getSecond().getSecond();
-                            int amount = Integer.parseInt(tf.getText());
-                            if (amount == jCB.getFirst().getSecond().getQuantity()) {
-                                temp.remove(i);
-                            } else {
-                                i.setQuantity(i.getQuantity() - amount);
-                            }
-
-                            if (i.stockCount) {
-                                JCheckBox tf1 = (JCheckBox) jCB.getSecond().getFirst();
-                                if (!tf1.isSelected()) {
-                                    addToStock(i, amount);
-                                }
-                            } // if
-                        } // else
-                    } // if
+    public boolean removeItemFromTab(VoidItem i, Tab tab) {
+        Item itemToRemove = i.getVoidItemModel().getItem();
+        int itemQuantity = itemToRemove.getQuantity();
+        int amountToRemove = i.getVoidItemModel().getAmountToVoid();
+        for (Item item : tab.getItems()) {
+            if (item.equals(i.getVoidItemModel().getItem())) {
+                if (itemToRemove.isStockCount() && !i.getVoidItemModel().isWasted()) {
+                    addToStock(itemToRemove, amountToRemove);
                 }
+                if (amountToRemove == itemQuantity) {
+                    return tab.removeItem(itemToRemove);
+                } else {
+                    tab.getItem(itemToRemove).setQuantity(itemQuantity - amountToRemove);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean validAmounts(List<VoidItem> voidItems) {
+        for (VoidItem i: voidItems) {
+            if (i.getVoidItemModel().isSelected() && !validVoidAmount(i)) {
+                return false;
             } // if
         } // for
-
-        tab.removeAll();
-        for (Item i :temp ) {
-            tab.addItem(i);
-        }
         return true;
     }
+
+    private boolean validVoidAmount(VoidItem voidItem) {
+        return  null != voidItem.getVoidItemModel().getAmountToVoid() &&
+                voidItem.getVoidItemModel().getAmountToVoid() >= 1 &&
+                voidItem.getVoidItemModel().getAmountToVoid() <= voidItem.getVoidItemModel().getItem().getQuantity();
+    }
+
 } // class

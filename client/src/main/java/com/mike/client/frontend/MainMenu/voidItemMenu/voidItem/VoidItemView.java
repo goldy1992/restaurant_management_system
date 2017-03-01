@@ -15,30 +15,27 @@ public class VoidItemView {
     private final Component wastageOption;
     private final Component amountOption;
 
-    public VoidItemView(ActionListener actionListener, Item item) {
+    public VoidItemView(VoidItem parent, Item item) {
 
         checkBox = new JCheckBox(item.getQuantity() + " " + item.getName());
+        checkBox.addActionListener(parent);
 
-        if (item.stockCount) {
+        if (item.isStockCount()) {
             wastageOption = new JCheckBox("Wasted");
             wastageOption.setEnabled(false);
+            ((JCheckBox) wastageOption).addActionListener(parent);
         } else {
             wastageOption = new JLabel("Stock Count Off");
         }
 
         if (item.getQuantity() > 1) {
             amountOption = new JTextField("");
+            JTextField amountOptionJTextField = (JTextField)amountOption;
+            amountOptionJTextField.getDocument().addDocumentListener(parent);
             amountOption.setEnabled(false);
         } else {
             amountOption = new JLabel("Only 1 Item");
         }
-
-        checkBox.addActionListener(actionListener);
-        if (wastageOption instanceof JCheckBox) {
-            ((JCheckBox) wastageOption).addActionListener(actionListener);
-        }
-
-
     } // constructor
 
     public void enableSubOptions(boolean option) {

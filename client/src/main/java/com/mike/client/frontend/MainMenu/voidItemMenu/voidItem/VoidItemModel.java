@@ -9,7 +9,7 @@ public class VoidItemModel {
 
     private Item item;
     private boolean isSelected;
-    private int amountToVoid;
+    private Integer amountToVoid;
     private boolean isWasted;
 
     public VoidItemModel(Item item) {
@@ -23,11 +23,10 @@ public class VoidItemModel {
     public void setItem(Item item) { this.item = item;    }
 
     public boolean isSelected() { return isSelected; }
-
     public void setSelected(boolean selected) { isSelected = selected; }
-    public int getAmountToVoid() { return amountToVoid; }
 
-    public void setAmountToVoid(int amountToVoid) { this.amountToVoid = amountToVoid; }
+    public Integer getAmountToVoid() { return amountToVoid; }
+    public void setAmountToVoid(Integer amountToVoid) { this.amountToVoid = amountToVoid; }
 
     public boolean isWasted() { return isWasted; }
 
