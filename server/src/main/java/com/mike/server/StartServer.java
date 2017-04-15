@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class StartServer {
 
-    final static Logger logger = Logger.getLogger(StartServer.class);
+    private final static Logger logger = Logger.getLogger(StartServer.class);
     private static final int NUM_OF_TABLES = 44;
 
     @SuppressWarnings("resource")

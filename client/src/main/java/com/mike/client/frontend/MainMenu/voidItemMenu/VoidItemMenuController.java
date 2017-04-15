@@ -14,7 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mike on 24/02/2017.
@@ -64,33 +66,35 @@ public class VoidItemMenuController implements ActionListener{
 
     private void addToStock(Item item, int quantity) {
         // TODO; revise this method to make sure it works
-        String query = "UPDATE `3YP_ITEMS` "
+        String query = "UPDATE `ITEMS` "
                 + "SET `QUANTITY` = `QUANTITY` + \"" + quantity + "\" "
-                + "WHERE `3YP_ITEMS`.`ID` = \""
+                + "WHERE `ITEMS`.`ID` = \""
                 + item.getID() + "\"";
         QueryResponse response = messageSender.sendDbQuery(query);
         logger.info(response);
     } // addToStock
 
     private void removeItems(List<VoidItem> voidItems, Tab oldTab, Tab newTab) {
+        Map<Integer, Integer> itemQuantityMapToAddToStock = new HashMap<>();
         for (VoidItem voidItem : voidItems) {
             if (!removeItemFromTab(voidItem, newTab)) {
                 removeItemFromTab(voidItem, oldTab);
             } // if
             oldTab.calculateTotal();
             newTab.calculateTotal();
+            if (voidItem.getVoidItemModel().getItem().isStockCount() && !voidItem.getVoidItemModel().isWasted()) {
+                itemQuantityMapToAddToStock.put(voidItem.getVoidItemModel().getItem().getID(), voidItem.getVoidItemModel().getAmountToVoid());
+            }
+            messageSender.addItemsToStock(itemQuantityMapToAddToStock);
         } // for each
     } // removeItems
 
-    public boolean removeItemFromTab(VoidItem i, Tab tab) {
+    private boolean removeItemFromTab(VoidItem i, Tab tab) {
         Item itemToRemove = i.getVoidItemModel().getItem();
         int itemQuantity = itemToRemove.getQuantity();
         int amountToRemove = i.getVoidItemModel().getAmountToVoid();
         for (Item item : tab.getItems()) {
             if (item.equals(i.getVoidItemModel().getItem())) {
-                if (itemToRemove.isStockCount() && !i.getVoidItemModel().isWasted()) {
-                    addToStock(itemToRemove, amountToRemove);
-                }
                 if (amountToRemove == itemQuantity) {
                     return tab.removeItem(itemToRemove);
                 } else {

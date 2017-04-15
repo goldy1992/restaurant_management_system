@@ -9,6 +9,7 @@ import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
+import com.mike.message.Request.databaseRequest.UpdateStock;
 import com.mike.message.Response.LeaveResponse;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
@@ -23,6 +24,7 @@ import org.springframework.messaging.PollableChannel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by michaelg on 09/12/2015.
@@ -48,13 +50,14 @@ public class MessageSender {
 
 	@Autowired
 	private PollableChannel dbUpdateResponseChannel;
-	
+
 	public void setDbQueryResponseChannel(PollableChannel dbQueryResponseChannel) { this.dbQueryResponseChannel = dbQueryResponseChannel; }
 	public void setTabResponseChannel(PollableChannel tabResponseChannel) { this.tabResponseChannel = tabResponseChannel; }
 	public void setTableStatusResponseChannel(PollableChannel tableStatusResponseChannel) { this.tableStatusResponseChannel = tableStatusResponseChannel; }
 	public void setSendGateway(SendGateway sendGateway) { this.sendGateway = sendGateway; }
 	public void setRegisterClientResponseChannel(PollableChannel registerClientResponseChannel) { this.registerClientResponseChannel = registerClientResponseChannel; }
 	public void setLeaveResponseChannel(PollableChannel leaveResponseChannel) { this.leaveResponseChannel = leaveResponseChannel;}
+	public void setDbUpdateResponseChannel(PollableChannel dbUpdateResponseChannel) { this.dbUpdateResponseChannel = dbUpdateResponseChannel; }
 
 	@Autowired
 	SendGateway sendGateway;
@@ -118,6 +121,11 @@ public class MessageSender {
 		logger.info("sending db query");
 		sendGateway.send(queryRequest);
 		return (QueryResponse)dbQueryResponseChannel.receive().getPayload();
+	}
+	public UpdateResponse addItemsToStock(Map<Integer, Integer> itemQuantityMap) {
+		UpdateStock updateStock = new UpdateStock(itemQuantityMap);
+		sendGateway.send(updateStock);
+		return (UpdateResponse)dbUpdateResponseChannel.receive().getPayload();
 	}
 
 	public void sendOrder(Tab updatedTab, Tab tabWithNewItemsOnly) {
