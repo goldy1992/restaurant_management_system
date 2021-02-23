@@ -1,0 +1,6 @@
+archivesBaseName = 'item'
+sourceCompatibility = '1.8'
+
+dependencies {
+
+  }

@@ -1,0 +1,7 @@
+archivesBaseName = 'message'
+sourceCompatibility = '1.8'
+
+dependencies {
+    implementation project(':item')
+   implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: spring_integration_version
+}

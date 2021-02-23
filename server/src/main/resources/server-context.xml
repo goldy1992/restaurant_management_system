@@ -50,7 +50,7 @@ http://www.springframework.org/schema/integration/event/spring-integration-event
         deserializer="javaDeserializer"
         serializer="javaSerializer"
         single-use="false"
-        port="1234"/>
+        port="11235"/>
             
     <int-ip:tcp-inbound-channel-adapter id="inboundCrLf"
         connection-factory="serverFactory"

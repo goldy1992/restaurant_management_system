@@ -1,0 +1,15 @@
+archivesBaseName = 'client'
+sourceCompatibility = '1.8'
+
+dependencies {
+    implementation project(':server')
+    implementation project(':message')
+    implementation project(':item')
+
+    implementation group: 'org.springframework', name: 'spring-context', version: spring_version
+    implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: spring_integration_version
+    implementation group: 'org.springframework.integration', name: 'spring-integration-ip', version: spring_integration_version
+
+    testImplementation group: 'org.easytesting', name: 'fest-assert-core', version: '2.0M10'
+    testImplementation group: 'org.easytesting', name: 'fest-swing', version: '1.2.1'
+}

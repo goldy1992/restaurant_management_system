@@ -23,7 +23,11 @@ public class StartOutputClient {
     public static void main(String[] args) throws InterruptedException {
         RegisterClientRequest.ClientType clientType = null;
         try {
-            switch(args[0]) {
+            String val = "bar";
+            if (args.length > 0) {
+                val = args[0];
+            }
+            switch(val) {
                 case "bar": clientType = BAR; break;
                 case "kitchen": clientType = KITCHEN; break;
                 default: logger.info("invalid argument"); System.exit(0);

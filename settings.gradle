@@ -1,0 +1,6 @@
+rootProject.name = 'restaurant-management-system'
+
+include(':client')
+include(':server')
+include(':message')
+include(':item')
