@@ -1,7 +1,7 @@
 /.idea/
 /.settings/
 /nbproject/private/
-/build/
+**/build/**
 /dist/
 /item/target/
 /client/target/
