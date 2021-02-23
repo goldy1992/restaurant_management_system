@@ -1,6 +1,7 @@
 package com.mike.client.frontend.MainMenu.View;
 
 import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

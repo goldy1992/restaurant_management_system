@@ -35,7 +35,7 @@ http://www.springframework.org/schema/integration/event/spring-integration-event
     	<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
 	</bean>   
 	<bean id="initialiseDatabase" class="com.mike.server.database.InitialiseDatabase" >
-	<property name="dbCon" ref="databaseConnector"/>
+	    <property name="dbCon" ref="databaseConnector"/>
 	</bean>
     <bean id="databaseConnector" class="com.mike.server.database.DatabaseConnector">
     	<property name="sessionFactory" ref="sessionFactory"/>

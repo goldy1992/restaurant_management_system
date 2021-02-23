@@ -5,7 +5,6 @@
  */
 package com.mike.client.frontend.till.tillMenu.barTabMenu;
 
-import com.mike.client.backend.MessageSender;
 import com.mike.message.Table;
 import org.apache.log4j.Logger;
 

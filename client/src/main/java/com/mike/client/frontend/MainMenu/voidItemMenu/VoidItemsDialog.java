@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mike.client.frontend.MainMenu;
+package com.mike.client.frontend.MainMenu.voidItemMenu;
 
 import com.mike.client.frontend.Pair;
 import com.mike.item.Item;
@@ -100,7 +100,7 @@ public class VoidItemsDialog extends javax.swing.JDialog {
             final Component first;
             final Component second;
 
-            if (item.stockCount) {
+            if (item.isStockCount()) {
                 first = new JCheckBox("Wasted");
                 first.setEnabled(false);
             } else {
@@ -206,7 +206,7 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                                 if (jCB.getFirst().getSecond().getQuantity() == 1)
                                 {
                                     temp.remove(i); 
-                                    if (i.stockCount)
+                                    if (i.isStockCount())
                                     {
                                         JCheckBox tf = (JCheckBox)jCB.getSecond().getFirst();
                                         if (!tf.isSelected())
@@ -222,7 +222,7 @@ public class VoidItemsDialog extends javax.swing.JDialog {
                                     else
                                         i.setQuantity(i.getQuantity() - amount);
                          
-                                    if (i.stockCount)
+                                    if (i.isStockCount())
                                     {
                                         JCheckBox tf1 = (JCheckBox)jCB.getSecond().getFirst();
                                         if (!tf1.isSelected())

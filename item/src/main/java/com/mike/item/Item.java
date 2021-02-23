@@ -21,7 +21,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
     private int quantity;
     private double totalPrice;    
     public final String uniqueID;
-    public final boolean stockCount;
+    private final boolean stockCount;
        
     /**
      *
@@ -52,7 +52,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         this.quantity = i.quantity;
         this.totalPrice = i.totalPrice;
         this.uniqueID = i.uniqueID;
-        this.stockCount = i.stockCount;
+        this.stockCount = i.isStockCount();
     }
     
     public void appendCharacter(char key) { this.message += key; } // setMessage
@@ -111,6 +111,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
     public String getMessage() { return message; }
     public double getPricePerItem()  { return pricePerItem; }
     public double getTotalPrice()  { return totalPrice; }
+    public boolean isStockCount() { return stockCount; }
     
     @Override
     public int compareTo(Object obj) {
@@ -124,7 +125,19 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         }
         return -1;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj instanceof Item) == false) {
+            return false;
+        }
+
+        Item compareItem = (Item) obj;
+        if (this.uniqueID.equals(compareItem.uniqueID)) {
+            return true;
+        }
+        return false;
+    }
     @Override
     public Item clone() throws CloneNotSupportedException {
         try {
@@ -132,7 +145,7 @@ public class Item implements Serializable, Comparable, Cloneable, com.mike.item.
         } catch (CloneNotSupportedException e) {
                 return null;
         }
-}   
+    }
 
               
 } // item

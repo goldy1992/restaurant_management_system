@@ -75,12 +75,12 @@ public class Tab implements Serializable, Cloneable {
         boolean removed = false;
         
         boolean removedFromAllItems = false;        
-        for (int i = 0; i < allItems.size(); i++)
-            if (allItems.get(i).compareTo(newItem) == 0)
-            {
+        for (int i = 0; i < allItems.size(); i++) {
+            if (allItems.get(i).compareTo(newItem) == 0) {
                 allItems.remove(i);
                 removedFromAllItems = true;
             } // if
+        }
         
         boolean removedFromForDItems = false;
         
@@ -133,9 +133,20 @@ public class Tab implements Serializable, Cloneable {
         for (Item i : allItems) {
 			total += i.getTotalPrice();
 		}
-        
+        // update the total value here
+        // TODO: make this method more autonomous
+        this.total = total;
         return total;
     } // calc Total
+
+    public Item getItem(Item i) {
+        for (Item item : allItems) {
+            if (item.equals(i)) {
+                return item;
+            } // if
+        } // for
+        return  null;
+    }
     
     public Tab mergeTabs(Tab otherTab) {
         for (Item i : otherTab.getItems()) {

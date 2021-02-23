@@ -1,6 +1,5 @@
 package com.mike.client.frontend.MainMenu.Model;
 
-import com.mike.client.backend.MessageSender;
 import com.mike.item.Item;
 import com.mike.item.Tab;
 import com.mike.item.dbItem.ItemDAO;

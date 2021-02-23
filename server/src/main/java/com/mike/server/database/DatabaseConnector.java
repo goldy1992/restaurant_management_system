@@ -135,6 +135,11 @@ public class DatabaseConnector {
             currentSession.close(); 
          }		
 	}
+
+	public boolean updateStock(Map<Integer, Integer> itemQuantityMap) {
+		// TODO: write code to take each item and add the relevant amount to stock
+		return true;
+	}
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

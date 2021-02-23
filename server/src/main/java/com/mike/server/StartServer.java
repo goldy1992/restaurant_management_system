@@ -8,6 +8,7 @@ package com.mike.server;
 import com.mike.message.Table;
 import com.mike.server.database.InitialiseDatabase;
 import org.apache.log4j.Logger;
+import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,7 +21,7 @@ import java.util.Scanner;
  */
 public class StartServer {
 
-    final static Logger logger = Logger.getLogger(StartServer.class);
+    private final static Logger logger = Logger.getLogger(StartServer.class);
     private static final int NUM_OF_TABLES = 44;
 
     @SuppressWarnings("resource")
@@ -38,6 +39,7 @@ public class StartServer {
             logger.info(args[0]);
         }
 
+        DatabaseManagerSwing.main(new String[] { "--url","jdbc:hsqldb:mem:dataSource", "--user", "root", "--password", "root123", "--noexit" });
         boolean exit = false;
 
         while (!exit) {

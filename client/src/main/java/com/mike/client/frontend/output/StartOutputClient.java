@@ -1,6 +1,5 @@
 package com.mike.client.frontend.output;
 
-import com.mike.client.backend.MessageSender;
 import com.mike.message.Request.RegisterClientRequest;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.GenericXmlApplicationContext;

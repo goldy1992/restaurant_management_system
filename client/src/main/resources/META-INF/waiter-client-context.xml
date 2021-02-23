@@ -19,6 +19,7 @@
    
 	<bean id="menuController" class="com.mike.client.frontend.MainMenu.MenuController" />
     <bean id="waiterClientController" class="com.mike.client.frontend.waiter.WaiterClientController"/>
+    <bean id="voidItemMenuController" class="com.mike.client.frontend.MainMenu.voidItemMenu.VoidItemMenuController" />
 
     
 </beans>

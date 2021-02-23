@@ -12,6 +12,7 @@ import com.mike.message.Request.TabRequest;
 import com.mike.message.Request.TableStatusRequest;
 import com.mike.message.Request.databaseRequest.Query;
 import com.mike.message.Request.databaseRequest.Update;
+import com.mike.message.Request.databaseRequest.UpdateStock;
 import com.mike.message.Response.LeaveResponse;
 import com.mike.message.Response.RegisterClientResponse;
 import com.mike.message.Response.TabResponse;
@@ -118,6 +119,12 @@ public class MessageParser {
 	public UpdateResponse parseUpdate(Update update) {
 		logger.info("performing update");
 		return new UpdateResponse(update, dbCon.update(update.getItem()));
+	}
+
+	@ServiceActivator(inputChannel="messageUpdateChannel", outputChannel="messageResponseChannel")
+	public UpdateResponse parseUpdate(UpdateStock update) {
+		logger.info("performing update");
+		return new UpdateResponse(update, dbCon.updateStock(update.getItemQuantityMap()));
 	}
 
 	@ServiceActivator(inputChannel="messagetableStatusEventNotificationChannel", outputChannel="messageResponseChannel")
