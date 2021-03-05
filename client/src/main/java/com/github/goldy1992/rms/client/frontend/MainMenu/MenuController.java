@@ -51,7 +51,7 @@ public class MenuController extends JComponent implements ActionListener, MouseL
 	}
 
 	public List<MenuPageDAO> getMenuPageDAOs() {
-		final String SELECT_MENU_PAGES_QUERY =  "FROM com.mike.item.dbItem.MenuPageDAO";
+		final String SELECT_MENU_PAGES_QUERY =  "FROM com.github.goldy1992.rms.item.dbItem.MenuPageDAO";
 		return messageSender.query(SELECT_MENU_PAGES_QUERY);
 	}
 

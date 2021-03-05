@@ -1,16 +1,35 @@
-archivesBaseName = 'server'
+plugins {
+    id 'org.springframework.boot' version '2.4.3'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'com.palantir.docker' version '0.26.0'
+}
+
+archivesBaseName = 'rms-server'
 sourceCompatibility = '1.8'
 
-dependencies {
-    def hibernate_version = '4.3.5.Final'
+def dockerImageTag = project.findProperty('docker.tag.latest') == 'true' ? 'latest' : project.version
 
+docker {
+    dependsOn bootJar
+    name "localhost:5000/rms-server:${dockerImageTag}"
+    copySpec
+            .from("${buildDir}/libs")
+            .exclude("**/*-sources.jar")
+            .rename {fileName -> fileName.endsWith(".jar") ? "rms-server.jar" : fileName }
+    dockerfile file('Dockerfile')
+}
+
+dependencies {
+    runtimeOnly 'com.h2database:h2'
     implementation project(':message')
     implementation project(':item')
-    implementation group: 'org.springframework.integration', name: 'spring-integration-event', version: spring_integration_version
-    implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: spring_integration_version
-    implementation group: 'org.springframework.integration', name: 'spring-integration-ip', version: spring_integration_version
     implementation group: 'org.springframework', name: 'spring-orm', version: spring_version
-    implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: hibernate_version
-    implementation group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation group: 'org.hsqldb', name: 'hsqldb', version: '2.3.2'
+    implementation('org.springframework.boot:spring-boot-starter')
+    implementation 'org.springframework.boot:spring-boot-starter-integration'
+    implementation group: 'org.springframework.integration', name: 'spring-integration-event', version: spring_integration_version
+    implementation group: 'org.springframework.integration', name: 'spring-integration-ip', version: spring_integration_version
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.springframework.integration:spring-integration-test'
 }

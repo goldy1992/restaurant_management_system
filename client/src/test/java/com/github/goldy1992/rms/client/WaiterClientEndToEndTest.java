@@ -61,7 +61,7 @@ public class WaiterClientEndToEndTest {
         errorFile = new File("error");
         pb = new ProcessBuilder();
         pb.directory(new File(System.getProperty("user.dir")));
-        pb.command(new String[]{"cmd.exe", "/c", "cd", "..", "&", "mvn", "clean", "install", "-DskipTests=true", "&", "cd", "server", "&", "mvn", "exec:java", "-Dexec.mainClass=\"com.mike.server.StartServer\"", "-Dexec.args=\"" +  randomString + "\""});
+        pb.command(new String[]{"cmd.exe", "/c", "cd", "..", "&", "mvn", "clean", "install", "-DskipTests=true", "&", "cd", "server", "&", "mvn", "exec:java", "-Dexec.mainClass=\"com.github.goldy1992.rms.server.StartServer\"", "-Dexec.args=\"" +  randomString + "\""});
         pb.redirectOutput(outputFile);
         pb.redirectError(errorFile);
 

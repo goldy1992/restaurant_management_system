@@ -9,11 +9,11 @@
 <!--   <message-bus />-->
 <context:property-placeholder />
 
-    <context:component-scan base-package="  com.mike.client.backend
-                                            com.mike.client.frontend.output"/>
+    <context:component-scan base-package="  com.github.goldy1992.rms.client.backend
+                                            com.github.goldy1992.rms.client.frontend.output"/>
 
     <import resource="spring-integration-setup.xml" />
-	<bean id="outputClientController" class="com.mike.client.frontend.output.OutputClientController" />
+	<bean id="outputClientController" class="com.github.goldy1992.rms.client.frontend.output.OutputClientController" />
 
     
 </beans>

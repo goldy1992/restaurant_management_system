@@ -4,7 +4,7 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
- 	<class name="com.mike.item.dbItem.ItemDAO" table="ITEMS">
+ 	<class name="com.github.goldy1992.rms.item.dbItem.ItemDAO" table="ITEMS">
      	<meta attribute="class-description">
          	This class contains the employee detail. 
       	</meta>
@@ -20,14 +20,14 @@
       	</property>
 		<property name="foodOrDrink" column="foodOrDrink" not-null="true" >
 		 	<type name="org.hibernate.type.EnumType">
-         		<param name="enumClass">com.mike.item.dbItem.FOOD_OR_DRINK</param>
+         		<param name="enumClass">com.github.goldy1992.rms.item.dbItem.FOOD_OR_DRINK</param>
          		<param name="type">12</param>
       		</type>
     	</property>
     	
  	   	<bag name="menuPages" table="POS_IN_MENU" cascade="save-update" fetch="join" lazy="false">
             <key column="id" not-null="true" />
-            <many-to-many column="name" entity-name="com.mike.item.dbItem.MenuPageDAO" />
+            <many-to-many column="name" entity-name="com.github.goldy1992.rms.item.dbItem.MenuPageDAO" />
         </bag>
 
    </class>

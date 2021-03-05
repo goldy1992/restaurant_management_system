@@ -3,5 +3,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="selectTableController" class="com.mike.client.frontend.SelectTableMenu.SelectTableController" />
+	<bean id="selectTableController" class="com.github.goldy1992.rms.client.frontend.SelectTableMenu.SelectTableController" />
 </beans>
